@@ -1,6 +1,38 @@
-# Group 04
+# Teilzeitrechner - Group 04
 
+Ein Rechner für Teilzeitbeschäftigungen.
 
+## Git Workflow
+
+Wir verwenden einen Git-Flow Workflow mit folgenden Branches:
+
+### Branch-Struktur
+- **`main`**: Produktionsreifer Code, stabil und getestet
+- **`develop`**: Integrationsbranch für alle Feature-Entwicklungen
+- **`group-04#XX`**: Feature-Branches für User Stories
+
+### Workflow
+1. **Feature-Entwicklung**: Arbeite in Feature-Branches (z.B. `group-04#38`)
+2. **Integration**: Merge Feature-Branches in `develop` für gemeinsames Testen
+3. **Release**: Wenn alles getestet ist, merge `develop` in `main`
+
+### Commands
+```bash
+# Neuen Feature-Branch erstellen
+git checkout develop
+git pull origin develop
+git checkout -b group-04#XX
+
+# Feature in develop mergen
+git checkout develop
+git merge group-04#XX
+git push origin develop
+
+# Release in main
+git checkout main
+git merge develop
+git push origin main
+```
 
 ## Getting started
 
