@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 """
 Manuelles Test-Script für die Berechnungslogik des Teilzeitrechners
+
+Testet die Implementierung mit verschiedenen Beispielen aus dem Gesetzestext
+und weiteren realistischen Szenarien.
 """
 
 from calculation_logic import calculate_gesamtdauer, format_ergebnis, calculate_teilzeit_prozent, calculate_teilzeit_stunden
 
 
 def test_beispiele_aus_gesetzestext():
-    """Testet die Beispiele aus der Empfehlung."""
+    """
+    Testet die Beispiele aus der Empfehlung des Bundesinstituts für Berufsbildung
+    """
     print("=" * 80)
     print("TESTE BEISPIELE AUS DEM GESETZESTEXT")
     print("=" * 80)
@@ -68,7 +73,9 @@ def test_beispiele_aus_gesetzestext():
 
 
 def test_verkuerzung_mit_teilzeit():
-    """Testet Verkürzung + Teilzeit."""
+    """
+    Testet die Kombination von Verkürzungsgründen mit Teilzeit
+    """
     print("\n" + "=" * 80)
     print("TESTE VERKÜRZUNG + TEILZEIT")
     print("=" * 80)
@@ -95,7 +102,9 @@ def test_verkuerzung_mit_teilzeit():
 
 
 def test_verschiedene_ausbildungsberufe():
-    """Testet verschiedene Ausbildungsberufe."""
+    """
+    Testet verschiedene Ausbildungsberufe mit unterschiedlichen Dauer
+    """
     print("\n" + "=" * 80)
     print("TESTE VERSCHIEDENE AUSBILDUNGSBERUFE")
     print("=" * 80)
@@ -131,7 +140,9 @@ def test_verschiedene_ausbildungsberufe():
 
 
 def test_grenzfaelle():
-    """Testet Grenzfälle."""
+    """
+    Testet Grenzfälle und Edge Cases
+    """
     print("\n" + "=" * 80)
     print("TESTE GRENZFÄLLE")
     print("=" * 80)
@@ -197,7 +208,9 @@ def test_grenzfaelle():
 
 
 def test_stunden_prozent_umrechnung():
-    """Testet Stunden-Prozentsatz Umrechnung."""
+    """
+    Testet die Umrechnung zwischen Stunden und Prozentsatz
+    """
     print("\n" + "=" * 80)
     print("TESTE STUNDEN/PROZENT-UMRECHNUNG")
     print("=" * 80)
@@ -246,7 +259,9 @@ def test_stunden_prozent_umrechnung():
 
 
 def test_gesamtdauer_mit_stunden():
-    """Testet Hauptfunktion mit Stunden-Input."""
+    """
+    Testet die Hauptfunktion mit Stunden-Input
+    """
     print("\n" + "=" * 80)
     print("TESTE GESAMTDAUER MIT STUNDEN-INPUT")
     print("=" * 80)
@@ -296,7 +311,9 @@ def test_gesamtdauer_mit_stunden():
 
 
 def test_realistische_szenarien():
-    """Testet realistische Szenarien."""
+    """
+    Testet realistische Szenarien aus der Praxis
+    """
     print("\n" + "=" * 80)
     print("TESTE REALISTISCHE SZENARIEN")
     print("=" * 80)
