@@ -1,5 +1,7 @@
 # Teilzeitrechner - Group 04
 
+> ⚠️ **Work in Progress** - Dieses Projekt befindet sich aktuell in Entwicklung.
+
 Ein Python-basierter Rechner für Teilzeitberufsausbildungen gemäß BBiG § 7a und § 8.
 
 ## 📋 Überblick
