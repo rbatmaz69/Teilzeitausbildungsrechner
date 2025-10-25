@@ -65,32 +65,14 @@
                 </div>
                 <div class="tooltip" role="tooltip"></div>
               </label>
-
-              <!-- Inline-Controls, die dein JS erwartet -->
-              <div class="inline-controls" id="vork-controls" aria-live="polite">
-                <label for="vork-monate" class="sr-only">Monate durch Vorkenntnisse</label>
-                <select id="vork-monate" aria-label="Monate durch Vorkenntnisse">
-                  <option value="0">Bitte wählen …</option>
-                  <option value="6">6 Monate</option>
-                  <option value="12">12 Monate</option>
-                </select>
-                <span>Hinweis: üblich sind 6 oder 12 Monate.</span>
-              </div>
             </div>
 
           </div>
         </fieldset>
-
-        <!-- Footer mit Buttons & JSON-Preview -->
-        <div class="footer">
-          <button id="btn-emit" class="btn btn-primary" type="button">Berechnen</button>
-          <button id="btn-reset" class="btn btn-outline" type="button">Zurücksetzen</button>
-          <pre id="json-out" class="json-preview" aria-live="polite"></pre>
-        </div>
       </form>
     </div>
   </div>
 
-  <script src="app.js" defer></script>
+  <script src="javascriptLogic.js" defer></script>
 </body>
 </html>
