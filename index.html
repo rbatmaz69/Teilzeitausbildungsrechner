@@ -1,35 +1,50 @@
 <!doctype html>
 <html lang="de">
 <head>
+  <!-- Zeichensatz und Responsive-Meta, wichtig für korrekte Darstellung -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Verkürzungsgründe auswählen</title>
+  <!-- externe CSS-Datei mit Styles -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
+    <!-- Hauptkarte, optisch hervorgehoben, über aria-labelledby mit der H1 verbunden -->
     <div class="card" aria-labelledby="vk-heading">
+      <!-- Überschrift des Formularbereichs -->
       <h1 id="vk-heading">Verkürzungsgründe auswählen</h1>
+      <!-- Kurze Anleitung für den Nutzer -->
       <p class="helper">Wähle alle Gründe aus, die auf dich zutreffen.</p>
 
+      <!-- Formular für die Auswahl der Verkürzungsgründe -->
       <form id="vk-form" aria-describedby="vk-heading">
+        <!-- fieldset ohne sichtbaren Rahmen für semantische Gruppierung -->
         <fieldset style="border:0;padding:0;margin:0">
+          <!-- Legende nur für Screenreader sichtbar, verbessert Barrierefreiheit -->
           <legend class="sr-only">Verkürzungsgründe</legend>
 
+          <!-- Grid-Layout für die einzelnen Auswahlkacheln -->
           <div class="grid">
-            <!-- Abitur -->
+
+            <!-- ====================== ABITUR ====================== -->
             <label class="tile" for="g-abitur">
+              <!-- Checkbox-Eingabe -->
               <input id="g-abitur" type="checkbox">
+              <!-- Inhalt der Kachel -->
               <div class="tile-body" style="flex:1">
                 <div class="tile-header">
+                  <!-- Titel + Badge mit Dauerangabe -->
                   <span>Abitur / Fachabitur <span class="badge">−12&nbsp;Monate</span></span>
+                  <!-- Info-Button mit Tooltip-Text im data-Attribut -->
                   <button type="button" class="info-btn" aria-label="Info Abitur" data-tooltip="Du hast (Fach-)Hochschulreife. Laut § 8 BBiG ist eine Verkürzung möglich.">ℹ️</button>
                 </div>
               </div>
+              <!-- Tooltip-Container, wird per JS ein-/ausgeblendet -->
               <div class="tooltip" role="tooltip"></div>
             </label>
 
-            <!-- Realschule -->
+            <!-- ====================== REALSCHULE ====================== -->
             <label class="tile" for="g-realschule">
               <input id="g-realschule" type="checkbox">
               <div class="tile-body" style="flex:1">
@@ -41,7 +56,7 @@
               <div class="tooltip" role="tooltip"></div>
             </label>
 
-            <!-- Alter >21 -->
+            <!-- ====================== ALTER ÜBER 21 ====================== -->
             <label class="tile" for="g-alter21">
               <input id="g-alter21" type="checkbox">
               <div class="tile-body" style="flex:1">
@@ -53,8 +68,9 @@
               <div class="tooltip" role="tooltip"></div>
             </label>
 
-            <!-- Vorkenntnisse -->
+            <!-- ====================== BERUFLICHE VORKENNTNISSE ====================== -->
             <div>
+              <!-- Die gesamte Kachel ist wieder ein Label; Input und Beschreibung zusammengefasst -->
               <label class="tile" for="g-vork">
                 <input id="g-vork" type="checkbox">
                 <div class="tile-body" style="flex:1">
@@ -67,12 +83,13 @@
               </label>
             </div>
 
-          </div>
+          </div> <!-- Ende grid -->
         </fieldset>
       </form>
     </div>
   </div>
 
+  <!-- Verknüpfung zur JavaScript-Datei; defer = nach dem Laden ausführen -->
   <script src="javascriptLogic.js" defer></script>
 </body>
 </html>
