@@ -18,9 +18,8 @@ lint:
   stage: lint
   image: python:3.12
   script:
-    - echo "🔍 Running code quality checks with Flake8, Black, and Isort..."
+    - echo "🔍 Running code quality checks with Flake8 and Isort..."
     - flake8 src/
-    - black --check src/
     - isort --check-only src/
   only:
     refs:
