@@ -57,7 +57,7 @@ def calculate_verkuerzung(base_duration_months, verkuerzungsgruende):
 
     Beispiel:
         >>> calculate_verkuerzung(36, {'abitur': True, 'realschule': False,
-        ...                             'alter_ueber_21': False, 'vorkenntnisse_monate': 0})
+        ...      'alter_ueber_21': False, 'vorkenntnisse_monate': 0})
         24  # 36 - 12 = 24 Monate
     """
     verkuerzung_gesamt = 0
@@ -122,7 +122,8 @@ def calculate_teilzeit_schritt1(verkuerzte_dauer_months, teilzeit_prozent):
     # Validierung: Mindestens 50% Teilzeit erforderlich
     if teilzeit_prozent < MIN_TEILZEIT_PROZENT:
         raise ValueError(
-            f"Teilzeit muss mindestens {MIN_TEILZEIT_PROZENT}% betragen (§ 7a Abs. 1 Satz 3 BBiG)"
+            f"Teilzeit muss mindestens {MIN_TEILZEIT_PROZENT}% betragen "
+            f"(§ 7a Abs. 1 Satz 3 BBiG)"
         )
 
     if teilzeit_prozent > 100:
@@ -336,7 +337,8 @@ def calculate_gesamtdauer(
         ...     vollzeit_stunden=40,
         ...     teilzeit_input=75,
         ...     verkuerzungsgruende={'abitur': True, 'realschule': False,
-        ...                          'alter_ueber_21': False, 'vorkenntnisse_monate': 0},
+        ...                          'alter_ueber_21': False,
+        ...                          'vorkenntnisse_monate': 0},
         ...     input_type='prozent'
         ... )
 
@@ -346,7 +348,8 @@ def calculate_gesamtdauer(
         ...     vollzeit_stunden=40,
         ...     teilzeit_input=30,
         ...     verkuerzungsgruende={'abitur': True, 'realschule': False,
-        ...                          'alter_ueber_21': False, 'vorkenntnisse_monate': 0},
+        ...                          'alter_ueber_21': False,
+        ...                          'vorkenntnisse_monate': 0},
         ...     input_type='stunden'
         ... )
     """
@@ -414,41 +417,52 @@ def format_ergebnis(ergebnis):
     output.append("")
     output.append("EINGABEWERTE:")
     output.append(
-        f"  • Reguläre Ausbildungsdauer (AO):  {ergebnis['original_dauer_monate']} Monate"
+        f"  • Reguläre Ausbildungsdauer (AO):  "
+        f"{ergebnis['original_dauer_monate']} Monate"
     )
     output.append(
-        f"  • Teilzeit-Prozentsatz:            {ergebnis['teilzeit_prozent']:.1f}%"
+        f"  • Teilzeit-Prozentsatz:            "
+        f"{ergebnis['teilzeit_prozent']:.1f}%"
     )
     output.append(
-        f"  • Teilzeitstunden:                 {ergebnis['teilzeit_stunden']:.1f} Stunden"
+        f"  • Teilzeitstunden:                 "
+        f"{ergebnis['teilzeit_stunden']:.1f} Stunden"
     )
     output.append("")
     output.append("BERECHNUNGSSCHRITTE:")
     output.append(
-        f"  1. Nach Verkürzung:                {ergebnis['verkuerzte_dauer_monate']} Monate"
+        f"  1. Nach Verkürzung:                "
+        f"{ergebnis['verkuerzte_dauer_monate']} Monate"
     )
     output.append(
-        f"     (Verkürzung gesamt: {ergebnis['verkuerzung_gesamt_monate']} Monate)"
+        f"     (Verkürzung gesamt: "
+        f"{ergebnis['verkuerzung_gesamt_monate']} Monate)"
     )
     output.append(
-        f"  2. Nach autom. Verlängerung:       {ergebnis['nach_schritt1_monate']:.1f} Monate"
+        f"  2. Nach autom. Verlängerung:       "
+        f"{ergebnis['nach_schritt1_monate']:.1f} Monate"
     )
     output.append(
-        f"  3. Nach Obergrenze (max 1,5x):     {ergebnis['nach_schritt2_monate']:.1f} Monate"
+        f"  3. Nach Obergrenze (max 1,5x):     "
+        f"{ergebnis['nach_schritt2_monate']:.1f} Monate"
     )
     output.append(
-        f"  4. Nach Abrundung:                 {ergebnis['finale_dauer_monate']} Monate"
+        f"  4. Nach Abrundung:                 "
+        f"{ergebnis['finale_dauer_monate']} Monate"
     )
     output.append("")
     output.append("ENDERGEBNIS:")
     output.append(
-        f"  ► Finale Ausbildungsdauer:         {ergebnis['finale_dauer_monate']} Monate"
+        f"  ► Finale Ausbildungsdauer:         "
+        f"{ergebnis['finale_dauer_monate']} Monate"
     )
     output.append(
-        f"                                     ({ergebnis['finale_dauer_jahre']} Jahre)"
+        f"                                     "
+        f"({ergebnis['finale_dauer_jahre']} Jahre)"
     )
     output.append(
-        f"  ► Verlängerung durch Teilzeit:     {ergebnis['verlaengerung_durch_teilzeit_monate']} Monate"
+        f"  ► Verlängerung durch Teilzeit:     "
+        f"{ergebnis['verlaengerung_durch_teilzeit_monate']} Monate"
     )
     output.append("=" * 70)
 
