@@ -1,0 +1,204 @@
+:root {
+  --primary: #e00000;
+  --background: #f5f5f5;
+  --card-bg: #ffffff;
+  --shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  background-color: var(--background);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background-color: var(--primary);
+  color: white;
+  text-align: center;
+  padding: 1rem 0;
+  box-shadow: var(--shadow);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.app-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+}
+
+.calculator {
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 480px;
+}
+
+.input-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.input-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.input-row .half {
+  flex: 1;
+}
+
+.input-with-unit {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-unit input {
+  width: 100%;
+  padding-right: 1.8rem; /* Platz für Einheit */
+  box-sizing: border-box;
+}
+
+.input-with-unit .unit {
+  position: absolute;
+  right: 0.6rem;
+  color: #888;
+  font-weight: 500;
+  pointer-events: none;
+  font-size: 0.95rem;
+}
+
+
+h3 {
+  margin-top: 1.5rem;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.button-container {
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.button-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+
+button.preset {
+  background-color: #f2f2f2;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.6rem 0;
+  width: 5rem;
+  font-weight: 600;
+  box-shadow: var(--shadow);
+  transition: all 0.2s ease;
+}
+
+button.preset:hover {
+  background-color: #eaeaea;
+}
+
+button.preset.active {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(224, 0, 0, 0.2);
+}
+
+.ergebnis-box {
+  background: #f9f9f9;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+/* --- Info-Icon Grundlayout --- */
+.info-icon {
+  display: inline-block;
+  margin-left: 6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #e9e9ee;
+  color: #555;
+  font-weight: bold;
+  font-size: 0.8rem;
+  line-height: 18px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+}
+
+/* --- Tooltip-Styling --- */
+.info-icon::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+}
+
+/* --- Tooltip-Pfeil --- */
+.info-icon::before {
+  content: "";
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #111 transparent transparent transparent;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* --- Tooltip sichtbar beim Hover oder Klick --- */
+.info-icon.active::after,
+.info-icon.active::before,
+.info-icon:hover::after,
+.info-icon:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-2px);
+}
