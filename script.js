@@ -4,34 +4,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const dauerInput = document.getElementById("dauer");
   const wochenstundenInput = document.getElementById("stunden");
   const teilzeitProzentInput = document.getElementById("teilzeitProzent");
+  const teilzeitProzentMin = 50;
   const teilzeitStundenInput = document.getElementById("teilzeitStunden");
   const buttons = document.querySelectorAll(".preset");
 
-  // Sicherheitscheck: existieren alle Elemente?
+  // Sicherheitscheck
   if (!dauerInput || !wochenstundenInput || !teilzeitProzentInput || !teilzeitStundenInput) {
     console.error("Ein oder mehrere benötigte Elemente wurden nicht gefunden. Prüfe die IDs in HTML und JS.");
     return;
   }
 
-  // Prozent → Stunden
-  teilzeitProzentInput.addEventListener("input", () => {
-    const gesamt = parseFloat(wochenstundenInput.value);
-    const prozent = parseFloat(teilzeitProzentInput.value);
-    if (!isNaN(gesamt) && !isNaN(prozent)) {
-      teilzeitStundenInput.value = (gesamt * prozent / 100).toFixed(1);
-    }
-    clearActiveButtons();
-  });
-
-  // Stunden → Prozent
-  teilzeitStundenInput.addEventListener("input", () => {
-    const gesamt = parseFloat(wochenstundenInput.value);
-    const stunden = parseFloat(teilzeitStundenInput.value);
-    if (!isNaN(gesamt) && !isNaN(stunden) && gesamt > 0) {
-      teilzeitProzentInput.value = ((stunden / gesamt) * 100).toFixed(1);
-    }
-    clearActiveButtons();
-  });
+  // Wird ausgeführt, nachdem ein neuer Prozentwert eingegeben wurde
+  teilzeitProzentInput.addEventListener("blur", () => {
+    checkMinAndMaxPercent();
+    syncStunden();
+  })
+  
+  // Wird ausgeführt, nachdem ein neuer Teilzeit-wochenstundenwert eingegeben wurde
+  teilzeitStundenInput.addEventListener("blur", () => {
+    checkMinAndMaxStunden();
+    syncProzent();
+  })
+  
 
   // Wochenstunden geändert → Teilzeit neu berechnen
   wochenstundenInput.addEventListener("input", () => {
@@ -64,6 +58,50 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // Syncronisiere die Wochenstunden mit dem Prozentwert
+  function syncStunden() {
+    const gesamt = parseFloat(wochenstundenInput.value);
+    const prozent = parseFloat(teilzeitProzentInput.value);
+    if (!isNaN(gesamt) && !isNaN(prozent)) {
+      teilzeitStundenInput.value = (gesamt * prozent / 100).toFixed(1);
+    }
+    clearActiveButtons();
+  }
+  
+  // Syncronisiere den Prozentwert mit den Wochenstunden
+  function syncProzent() {
+    const gesamt = parseFloat(wochenstundenInput.value);
+    const stunden = parseFloat(teilzeitStundenInput.value);
+    if (!isNaN(gesamt) && !isNaN(stunden) && gesamt > 0) {
+      teilzeitProzentInput.value = ((stunden / gesamt) * 100).toFixed(1);
+    }
+    clearActiveButtons();
+  }
+  
+  // Verhindere, dass Werte unter oder über den Minimal- und Maximalwerten eingetragen werden
+  function checkMinAndMaxPercent() {
+    // Check min value
+    if (teilzeitProzentInput.value !== '' && Number(teilzeitProzentInput.value) < teilzeitProzentMin) {
+        teilzeitProzentInput.value = teilzeitProzentMin;
+    }
+    // Check max value
+    if (teilzeitProzentInput.value > 100) {
+      teilzeitProzentInput.value = 100;
+    }
+  }
+  
+  // Verhindere, dass Werte unter oder über den Minimal- und Maximalwerten eingetragen werden
+  function checkMinAndMaxStunden() {
+    // Check min value
+    if (teilzeitStundenInput < wochenstundenInput / 2) {
+        teilzeitStundenInput.value = wochenstundenInput / 2;
+    }
+    // Check max value
+    if (teilzeitStundenInput > wochenstundenInput) {
+        teilzeitStundenInput.value = wochenstundenInput;
+    }
+  }
+  
   // Hilfsfunktion: aktive Buttons zurücksetzen
   function clearActiveButtons() {
     buttons.forEach(btn => btn.classList.remove("active"));
