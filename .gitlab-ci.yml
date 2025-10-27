@@ -1,0 +1,30 @@
+# .gitlab-ci.yml
+# CI Pipeline for Linting & Code Quality
+# Runs on merge requests to develop/main and on direct pushes to develop
+
+stages:
+  - lint
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+before_script:
+  # Check Python version and install dependencies
+  - python --version
+  - pip install --upgrade pip
+  - pip install -r requirements.txt
+
+lint:
+  stage: lint
+  image: python:3.12
+  script:
+    - echo "🔍 Running code quality checks with Flake8, Black, and Isort..."
+    - flake8 src/
+    - black --check src/
+    - isort --check-only src/
+  only:
+    refs:
+      - merge_requests
+      - develop
+      - main
+  allow_failure: false
