@@ -14,6 +14,25 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  // Wird ausgeführt, nachdem eine neue Ausbildungsdauer eingegeben wurde
+  dauerInput.addEventListener("blur", () => {
+    if (dauerInput.value < 0) {
+      dauerInput.value = 0;
+    }
+  })
+  
+  // Wird ausgeführt, nachdem neue reguläre Wochenstunden eingegeben wurden
+  wochenstundenInput.addEventListener("blur", () => {
+    if (wochenstundenInput.value < 0) {
+      wochenstundenInput.value = 0;
+    }
+    const gesamt = parseInt(wochenstundenInput.value);
+    const prozent = parseInt(teilzeitProzentInput.value);
+    if (!isNaN(gesamt) && !isNaN(prozent)) {
+      teilzeitStundenInput.value = (gesamt * prozent / 100).toFixed(1);
+    }
+  })
+  
   // Wird ausgeführt, nachdem ein neuer Prozentwert eingegeben wurde
   teilzeitProzentInput.addEventListener("blur", () => {
     checkMinAndMaxPercent();
@@ -25,16 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
     checkMinAndMaxStunden();
     syncProzent();
   })
-  
-
-  // Wochenstunden geändert → Teilzeit neu berechnen
-  wochenstundenInput.addEventListener("input", () => {
-    const gesamt = parseFloat(wochenstundenInput.value);
-    const prozent = parseFloat(teilzeitProzentInput.value);
-    if (!isNaN(gesamt) && !isNaN(prozent)) {
-      teilzeitStundenInput.value = (gesamt * prozent / 100).toFixed(1);
-    }
-  });
 
   // Button-Klicks für Prozent/Stunden
   buttons.forEach(btn => {
@@ -102,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   
-  // Hilfsfunktion: aktive Buttons zurücksetzen
+  // Aktive Buttons zurücksetzen
   function clearActiveButtons() {
     buttons.forEach(btn => btn.classList.remove("active"));
   }
