@@ -3,8 +3,11 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Testing
+# Coverage & test artifacts
 .coverage
+coverage.xml
+htmlcov/
+.cache/
 .pytest_cache/
 
 # IDE
