@@ -50,11 +50,11 @@ function fillInputsList(inputs) {
   list.innerHTML = "";
 
   const rows = [
-    ["Regular Training Duration (months)", `${inputs.baseMonths}`],
-    ["Weekly Hours (total)", `${inputs.weeklyHours} h`],
-    ["Part-time Share", `${inputs.partTimePercent}%`],
-    ["School / Week", `${inputs.schoolHoursPerWeek} h`],
-    ["Work / Week", `${inputs.workHoursPerWeek} h`],
+     ["Reguläre Ausbildungsdauer (Monate)", `${inputs.baseMonths}`],
+     ["Wöchentliche Stunden (insgesamt)", `${inputs.weeklyHours} Std`],
+     ["Teilzeitanteil", `${inputs.partTimePercent}%`],
+     ["Schule / Woche", `${inputs.schoolHoursPerWeek} Std`],
+     ["Arbeit / Woche", `${inputs.workHoursPerWeek} h`],
   ];
 
   for (const [k, v] of rows) {
