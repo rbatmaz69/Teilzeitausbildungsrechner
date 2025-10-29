@@ -1,0 +1,12 @@
+[flake8]
+# Maximum line length (compatible with Black)
+max-line-length = 88
+
+# Exclude unnecessary folders/files
+exclude = 
+    .git,
+    __pycache__,
+    venv,
+    .venv,
+    build,
+    dist
