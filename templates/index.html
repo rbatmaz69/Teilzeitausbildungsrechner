@@ -8,8 +8,9 @@
   <!-- externe CSS-Datei mit Styles -->
   <link rel="stylesheet" href="../static/styles.css">
   <!-- Verlinkung der JS Scripte-->
-  <script src="../static/script.js" defer></script>
   <script src="../static/script_eingabe.js" defer></script>
+  <script src="../static/script_Verkuerzungsgruende_Auswaehlen.js" defer></script>
+  <script src="../static/script_Ergebnis_Uebersicht.js" defer></script>
 </head>
 <body>
   <main class="app-container">
@@ -155,5 +156,77 @@
       </form>
     </div>
   </div>
+
+  <!-- Ab hier die user Story #14 -->
+  <div class="container">
+    <!-- Hauptkarte, optisch hervorgehoben -->
+    <div class="card highlight" aria-labelledby="res-headline">
+      <h1 id="res-headline">Ihre Teilzeitausbildung</h1>
+      <p class="helper">Hier sehen Sie Ihre Eingaben und das berechnete Ergebnis auf einen Blick.</p>
+
+      <!-- Grid-Layout für Haupt- und Meta-Ergebnisse -->
+      <div class="grid">
+        <div class="highlight-main">
+          <p class="big-number" id="res-total-months" aria-live="polite">–</p>
+          <p class="muted" id="res-extension">–</p>
+        </div>
+
+        <div class="highlight-meta">
+          <dl class="kv">
+            <div>
+              <dt>Gesamtdauer</dt>
+              <dd id="res-total-weeks">–</dd>
+            </div>
+            <div>
+              <dt>Ausbildung / Woche</dt>
+              <dd id="res-school-per-week">–</dd>
+            </div>
+            <div>
+              <dt>Arbeit / Woche</dt>
+              <dd id="res-work-per-week">–</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Karte: Alle Eingaben -->
+    <div class="card" aria-labelledby="inputs-title">
+      <h2 id="inputs-title">Ihre Eingaben</h2>
+      <dl class="kv kv-2col" id="inputs-list">
+        <!-- Inhalte werden dynamisch per JS gefüllt -->
+      </dl>
+    </div>
+
+    <!-- Karte: Verkürzungsgründe -->
+    <div class="card" aria-labelledby="cuts-title" id="cuts-section" hidden>
+      <h2 id="cuts-title">Verkürzungsgründe</h2>
+      <ul class="tags" id="cuts-list"></ul>
+      <p class="muted" id="cuts-summary"></p>
+    </div>
+
+    <!-- Karte: Hinweise -->
+    <div class="card" aria-labelledby="notes-title">
+      <h2 id="notes-title">Wichtige Hinweise</h2>
+      <ul class="notes">
+        <li>Die Berechnung ist eine Orientierungshilfe.</li>
+        <li>Die finale Vereinbarung erfolgt mit dem Ausbildungsbetrieb.</li>
+        <li>Für eine anerkannte Teilzeitausbildung sind mindestens 50 % erforderlich.</li>
+      </ul>
+    </div>
+
+    <!-- Zeitstempel -->
+    <div class="meta" aria-label="Metadaten">
+      <span id="stamp-date"></span>
+    </div>
+  </div>
+
+  <!-- Navigationsleiste (mobil sticky) -->
+  <nav class="actionbar" aria-label="Aktionen">
+    <button class="btn ghost" id="btn-reset" type="button" aria-label="Zurücksetzen">Zurücksetzen</button>
+    <div class="spacer"></div>
+    <button class="btn outline" id="btn-share" type="button">Link teilen</button>
+  </nav>
+
 </body>
 </html>
