@@ -2,6 +2,10 @@
    Bereinigte Version: kein PDF-Button, enthält Zurücksetzen-Funktion
 */
 
+document.addEventListener("DOMContentLoaded", () => {
+    const errorTotalMonths = document.getElementById('errorTotalMonths');
+})
+
 // Hilfsfunktionen für Selektoren
 const $ = (sel) => document.querySelector(sel);
 function setText(sel, text) { const el = $(sel); if (el) el.textContent = text; }
@@ -90,6 +94,17 @@ function fillCuts(inputs, calc) {
 /** Zeigt die Hauptergebnisse */
 function fillResults(inputs, calc) {
   setText("#res-total-months", `${calc.totalMonths} Monate`);
+  // Zeige eine Fehlermeldung, wenn die Gesamtdauer um mehr als 12 Monate verkürzt wird.
+  if (calc.totalMonths < inputs.baseMonths - 12) {
+    errorTotalMonths.textContent = 'Die Gesamtdauer darf maximal um 12 Monate verkürzt werden!';
+  }
+  // Zeige eine Fehlermeldung, wenn die Gesamtdauer um mehr als das 1,5-fache verlängert wird.
+  else if (calc.totalMonths > inputs.baseMonths * 1.5) {
+    errorTotalMonths.textContent = 'Die Gesamtdauer darf maximal das 1,5-fache verlängert werden!';
+  } else {
+    errorTotalMonths.textContent = '';
+  }
+
   setText(
     "#res-extension",
     calc.extensionMonths > 0
