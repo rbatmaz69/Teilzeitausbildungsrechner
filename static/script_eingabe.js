@@ -17,6 +17,51 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  // Helpers: Parsing, Step-Rounding und Clamping
+  function parseNum(input) {
+    if (input.value === '' || input.value === null || input.value === undefined) return '';
+    const n = Number(input.value);
+    return Number.isNaN(n) ? '' : n;
+  }
+
+  function roundToStep(base, step, value) {
+    if (!step || step <= 0) return value;
+    const relative = value - (Number.isFinite(base) ? base : 0);
+    const snapped = Math.round(relative / step) * step + (Number.isFinite(base) ? base : 0);
+    return snapped;
+  }
+
+  function clampToMinMaxStep(input, opts = {}) {
+    const { dynamicMin, dynamicMax, snapToStep = false, baseForStep } = opts;
+    const raw = input.value;
+    if (raw === '' || raw === null || raw === undefined) return; // leere Zwischenstände erlauben
+
+    let val = Number(raw);
+    if (Number.isNaN(val)) return;
+
+    const attrMin = input.getAttribute('min');
+    const attrMax = input.getAttribute('max');
+    const attrStep = input.getAttribute('step');
+
+    const minVal = Number.isFinite(dynamicMin) ? dynamicMin : (attrMin !== null ? Number(attrMin) : undefined);
+    const maxVal = Number.isFinite(dynamicMax) ? dynamicMax : (attrMax !== null ? Number(attrMax) : undefined);
+    const stepVal = attrStep !== null && attrStep !== 'any' ? Number(attrStep) : undefined;
+
+    if (Number.isFinite(minVal) && val < minVal) val = minVal;
+    if (Number.isFinite(maxVal) && val > maxVal) val = maxVal;
+
+    if (snapToStep && Number.isFinite(stepVal) && stepVal > 0) {
+      const base = Number.isFinite(baseForStep) ? baseForStep : (Number.isFinite(minVal) ? minVal : 0);
+      val = roundToStep(base, stepVal, val);
+      // Nach dem Snapping erneut begrenzen, falls Rundung über Grenzen ging
+      if (Number.isFinite(minVal) && val < minVal) val = minVal;
+      if (Number.isFinite(maxVal) && val > maxVal) val = maxVal;
+    }
+
+    // Wert zurückschreiben ohne unnötige Nachkommastellen
+    input.value = Number.isInteger(val) ? String(val) : String(+val.toFixed(2));
+  }
+
   // Wird ausgeführt, nachdem eine neue Ausbildungsdauer eingegeben wurde
   dauerInput.addEventListener("blur", () => {
     if (dauerInput.value < 0) {
@@ -48,6 +93,94 @@ document.addEventListener("DOMContentLoaded", () => {
     syncProzent();
   })
 
+  // Live-Validierung beim Tippen (input)
+  dauerInput.addEventListener('input', () => {
+    // live kein hartes Clamping, erst bei blur
+    if (dauerInput.value === '') return;
+  });
+
+  wochenstundenInput.addEventListener('input', () => {
+    if (wochenstundenInput.value === '') return;
+    // live: keine harte Korrektur; nur abhängige Anzeigen und Fehlertexte
+    const gesamt = Number(wochenstundenInput.value);
+    const dynMin = Number.isFinite(gesamt) ? gesamt / 2 : undefined;
+    const dynMax = Number.isFinite(gesamt) ? gesamt : undefined;
+
+    // min/max Attribute dynamisch anpassen, damit Browser-Grenzen sichtbar sind
+    if (Number.isFinite(dynMin)) {
+      teilzeitStundenInput.setAttribute('min', String(dynMin));
+    }
+    if (Number.isFinite(dynMax)) {
+      teilzeitStundenInput.setAttribute('max', String(dynMax));
+    }
+
+    // Fehlertext Stunden nach neuem Rahmen aktualisieren
+    if (teilzeitStundenInput.value !== '' && Number.isFinite(gesamt)) {
+      const st = Number(teilzeitStundenInput.value);
+      if (!Number.isNaN(st) && Number.isFinite(dynMin) && Number.isFinite(dynMax)) {
+        if (st < dynMin) {
+          errorStunden.textContent = 'Die Wochenstunden müssen mindestens die Hälfte der regulären Wochenstunden entsprechen';
+        } else if (st > dynMax) {
+          errorStunden.textContent = 'Die Wochenstunden dürfen die regulären Wochenstunden nicht überschreiten';
+        } else {
+          errorStunden.textContent = '';
+        }
+      }
+    }
+
+    // Nur synchronisieren, wenn Zahlen vorhanden
+    const prozent = parseFloat(teilzeitProzentInput.value);
+    if (!Number.isNaN(gesamt) && !Number.isNaN(prozent)) {
+      teilzeitStundenInput.value = (gesamt * prozent / 100).toFixed(1);
+    }
+    if (!Number.isNaN(gesamt) && teilzeitStundenInput.value !== '') {
+      const st = parseFloat(teilzeitStundenInput.value);
+      if (!Number.isNaN(st) && gesamt > 0) {
+        teilzeitProzentInput.value = ((st / gesamt) * 100).toFixed(1);
+      }
+    }
+  });
+
+  teilzeitProzentInput.addEventListener('input', () => {
+    if (teilzeitProzentInput.value === '') { errorProzent.textContent = ''; clearActiveButtons(); return; }
+    // live: keine harte Korrektur, nur Fehler anzeigen und ggf. synchronisieren wenn im Rahmen
+    const v = Number(teilzeitProzentInput.value);
+    if (!Number.isNaN(v)) {
+      if (v < teilzeitProzentMin) {
+        errorProzent.textContent = 'Der Teilzeit-Anteil muss mindestens 50% betragen';
+      } else if (v > 100) {
+        errorProzent.textContent = 'Der Teilzeit-Anteil darf 100% nicht überschreiten';
+      } else {
+        errorProzent.textContent = '';
+        syncStunden();
+      }
+    }
+    clearActiveButtons();
+  });
+
+  teilzeitStundenInput.addEventListener('input', () => {
+    if (teilzeitStundenInput.value === '') { errorStunden.textContent = ''; clearActiveButtons(); return; }
+    // live: keine harte Korrektur, nur Fehler anzeigen und ggf. synchronisieren wenn im Rahmen
+    const gesamt = Number(wochenstundenInput.value);
+    const st = Number(teilzeitStundenInput.value);
+    if (!Number.isNaN(gesamt) && !Number.isNaN(st)) {
+      const dynMin = gesamt / 2;
+      const dynMax = gesamt;
+      if (st > dynMax) {
+        // zu hohe Eingabe sofort deckeln
+        teilzeitStundenInput.value = String(dynMax);
+        errorStunden.textContent = '';
+        syncProzent();
+      } else if (st < dynMin) {
+        errorStunden.textContent = 'Die Wochenstunden müssen mindestens die Hälfte der regulären Wochenstunden entsprechen';
+      } else {
+        errorStunden.textContent = '';
+        syncProzent();
+      }
+    }
+    clearActiveButtons();
+  });
+
   // Button-Klicks für Prozent/Stunden
   buttons.forEach(btn => {
     btn.addEventListener("click", () => {
@@ -74,8 +207,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function syncStunden() {
     const gesamt = parseFloat(wochenstundenInput.value);
     const prozent = parseFloat(teilzeitProzentInput.value);
-    if (!isNaN(gesamt) && !isNaN(prozent)) {
-      teilzeitStundenInput.value = (gesamt * prozent / 100).toFixed(1);
+    // Nur synchronisieren, wenn Prozent im gültigen Bereich liegt
+    if (!isNaN(gesamt) && !isNaN(prozent) && prozent >= teilzeitProzentMin && prozent <= 100) {
+      const stunden = (gesamt * prozent / 100);
+      teilzeitStundenInput.value = stunden.toFixed(1);
     }
     clearActiveButtons();
   }
@@ -85,7 +220,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const gesamt = parseFloat(wochenstundenInput.value);
     const stunden = parseFloat(teilzeitStundenInput.value);
     if (!isNaN(gesamt) && !isNaN(stunden) && gesamt > 0) {
-      teilzeitProzentInput.value = ((stunden / gesamt) * 100).toFixed(1);
+      // Nur synchronisieren, wenn Stunden im dynamisch gültigen Bereich liegen
+      const dynMin = gesamt / 2;
+      const dynMax = gesamt;
+      if (stunden >= dynMin && stunden <= dynMax) {
+        teilzeitProzentInput.value = ((stunden / gesamt) * 100).toFixed(1);
+      }
     }
     clearActiveButtons();
   }
