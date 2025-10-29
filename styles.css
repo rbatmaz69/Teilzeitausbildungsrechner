@@ -344,29 +344,9 @@ body{
   .actionbar .btn{ padding: .9rem 1.2rem; }
 }
 
-/* Barrierearm: Fokus sichtbar */
+/* Accessibility: visible focus */
 :focus-visible{
   outline: 3px solid #a5b4fc;
   outline-offset: 2px;
-}
-
-/* Print: sauberes PDF via window.print() */
-@media print{
-  :root{
-    --bg: #fff;
-    --border: #d9d9d9;
-    --shadow: none;
-  }
-  body{ background: #fff; }
-  .app-header, .actionbar{ display: none !important; }
-  .container{ padding: 0; }
-  .card{
-    box-shadow: none;
-    break-inside: avoid;
-    page-break-inside: avoid;
-    margin-bottom: 1rem;
-  }
-  .highlight{ border: 2px solid #dfe8ff; }
-  .big-number{ font-size: 2.2rem; }
 }
 
