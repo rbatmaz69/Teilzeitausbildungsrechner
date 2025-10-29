@@ -353,6 +353,14 @@ def calculate_gesamtdauer(
         ...     input_type='stunden'
         ... )
     """
+    # Eingabevalidierung (User Story 24): Nur Zahlen erlaubt
+    if not isinstance(base_duration_months, (int, float)):
+        raise TypeError("Ausbildungsdauer muss eine Zahl sein")
+    if not isinstance(vollzeit_stunden, (int, float)):
+        raise TypeError("Vollzeit-Stunden müssen eine Zahl sein")
+    if not isinstance(teilzeit_input, (int, float)):
+        raise TypeError("Teilzeit-Wert muss eine Zahl sein")
+    
     # Teilzeit-Input verarbeiten (Prozentsatz oder Stunden)
     if input_type == "stunden":
         # Stunden zu Prozentsatz umrechnen
