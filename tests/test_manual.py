@@ -6,7 +6,7 @@ Testet die Implementierung mit verschiedenen Beispielen aus dem Gesetzestext
 und weiteren realistischen Szenarien.
 """
 
-from calculation_logic import calculate_gesamtdauer, format_ergebnis, calculate_teilzeit_prozent, calculate_teilzeit_stunden
+from src.calculation_logic import calculate_gesamtdauer, format_ergebnis, calculate_teilzeit_prozent, calculate_teilzeit_stunden
 
 
 def test_beispiele_aus_gesetzestext():
