@@ -7,6 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const teilzeitProzentMin = 50;
   const teilzeitStundenInput = document.getElementById("teilzeitStunden");
   const buttons = document.querySelectorAll(".preset");
+  const errorProzent = document.getElementById('errorProzent');
+  const errorStunden = document.getElementById('errorStunden');
+
 
   // Sicherheitscheck
   if (!dauerInput || !wochenstundenInput || !teilzeitProzentInput || !teilzeitStundenInput) {
@@ -91,7 +94,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function checkMinAndMaxPercent() {
     // Check min value
     if (teilzeitProzentInput.value !== '' && Number(teilzeitProzentInput.value) < teilzeitProzentMin) {
-        teilzeitProzentInput.value = teilzeitProzentMin;
+      teilzeitProzentInput.value = teilzeitProzentMin;
+      errorProzent.textContent = 'Der Teilzeit-Anteil muss mindestens 50% betragen';
+    } else {
+      errorProzent.textContent = '';
     }
     // Check max value
     if (teilzeitProzentInput.value > 100) {
@@ -102,12 +108,15 @@ document.addEventListener("DOMContentLoaded", () => {
   // Verhindere, dass Werte unter oder über den Minimal- und Maximalwerten eingetragen werden
   function checkMinAndMaxStunden() {
     // Check min value
-    if (teilzeitStundenInput < wochenstundenInput / 2) {
-        teilzeitStundenInput.value = wochenstundenInput / 2;
+    if (teilzeitStundenInput.value < wochenstundenInput.value / 2) {
+      teilzeitStundenInput.value = wochenstundenInput.value / 2;
+      errorStunden.textContent = 'Die Wochenstunden müssen mindestens die Hälfte der regulären Wochenstunden entsprechen';
+    } else {
+      errorStunden.textContent = '';
     }
     // Check max value
-    if (teilzeitStundenInput > wochenstundenInput) {
-        teilzeitStundenInput.value = wochenstundenInput;
+    if (teilzeitStundenInput.value > wochenstundenInput.value) {
+      teilzeitStundenInput.value = wochenstundenInput.value;
     }
   }
   

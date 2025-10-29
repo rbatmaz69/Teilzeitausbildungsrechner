@@ -271,6 +271,13 @@ button.preset.active {
   box-shadow: var(--shadow);
 }
 
+.error-message {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 4px;
+  display: block;
+}
+
 /* Info-Icon */
 .info-icon {
   display: inline-block;
