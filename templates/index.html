@@ -4,13 +4,81 @@
   <!-- Zeichensatz und Responsive-Meta, wichtig für korrekte Darstellung -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Teilzeitrechner</title>
-  <title>Teilzeitrechner</title>
+  <title>Teilzeitausbildungsrechner</title>
   <!-- externe CSS-Datei mit Styles -->
   <link rel="stylesheet" href="../static/styles.css">
+  <!-- Verlinkung der JS Scripte-->
+  <script src="../static/script_eingabe.js" defer></script>
+  <script src="../static/script_Verkuerzungsgruende_Auswaehlen.js" defer></script>
+  <script src="../static/script_Ergebnis_Uebersicht.js" defer></script>
 </head>
 <body>
-<!-- Ab hier die user Story #5 -->
+  <main class="app-container">
+
+    <section class="calculator">
+      <div class="input-group">
+        <label for="dauer">
+          Reguläre Ausbildungsdauer (Monate)
+           <span class="info-icon" data-tooltip="Die normale Dauer Ihrer Ausbildung bei Vollzeit">i</span>
+        </label>
+        <input type="number" id="dauer" value="36" min="12">
+      </div>
+
+      <div class="input-group">
+        <label for="stunden">
+          Reguläre Wochenstunden (gesamt)
+          <span class="info-icon" data-tooltip="Ihre gesamten Wochenstunden inkl. Berufsschule">i</span>
+        </label>
+        <input type="number" id="stunden" value="40" min="0">
+      </div>
+
+      <div class="input-group">
+        <label for="teilzeitProzent">
+          Teilzeit-Anteil
+          <span class="info-icon" data-tooltip="Mindestens 50% für eine anerkannte Teilzeitausbildung">i</span>
+        </label>
+
+        <div class="input-row">
+          <div class="input-group half">
+             <label for="teilzeitProzent">Prozent</label>
+             <div class="input-with-unit">
+              <input type="number" id="teilzeitProzent" value="75" min="50" max="100" step="5">
+              <span class="unit">%</span>
+            </div>
+            <span class="error-message" id="errorProzent"></span>
+          </div>
+
+          <div class="input-group half">
+            <label for="teilzeitStunden">Stunden</label>
+            <div class="input-with-unit">
+              <input type="number" id="teilzeitStunden" value="20" min="5" step="1">
+              <span class="unit">h</span>
+            </div>
+            <span class="error-message" id="errorStunden"></span>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Buttons in zwei Zeilen, optisch getrennt -->
+      <div class="button-container">
+        <div class="button-row">
+          <button class="preset" data-type="percent" data-value="50">50%</button>
+          <button class="preset" data-type="percent" data-value="60">60%</button>
+          <button class="preset" data-type="percent" data-value="75">75%</button>
+          <button class="preset" data-type="percent" data-value="80">80%</button>
+        </div>
+        <div class="button-row">
+          <button class="preset" data-type="hours" data-value="20">20 h</button>
+          <button class="preset" data-type="hours" data-value="25">25 h</button>
+          <button class="preset" data-type="hours" data-value="30">30 h</button>
+          <button class="preset" data-type="hours" data-value="35">35 h</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  
   <div class="container">
     <!-- Hauptkarte, optisch hervorgehoben, über aria-labelledby mit der H1 verbunden -->
     <div class="card" aria-labelledby="vk-heading">
@@ -91,11 +159,7 @@
     </div>
   </div>
 
-  <!-- Verknüpfung zur JavaScript-Datei; defer = nach dem Laden ausführen -->
-  <script src="../static/script.js" defer></script>
-
-  
-<!-- Ab hier die user Story #14 -->
+  <!-- Ab hier die user Story #14 -->
   <div class="container">
     <!-- Hauptkarte, optisch hervorgehoben -->
     <div class="card highlight" aria-labelledby="res-headline">
@@ -166,4 +230,5 @@
     <button class="btn outline" id="btn-share" type="button">Link teilen</button>
   </nav>
 
-  <script src="../static/script_Ergebnis_Übersicht.js" defer></script>
+</body>
+</html>
