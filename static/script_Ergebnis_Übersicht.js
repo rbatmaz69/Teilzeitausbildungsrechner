@@ -1,16 +1,16 @@
-/* script_Ergebnis_Übersicht.js – results page logic
-   Clean version: no PDF button, includes reset functionality
+/* script_Ergebnis_Übersicht.js – Logik der Ergebnisseite
+   Bereinigte Version: kein PDF-Button, enthält Zurücksetzen-Funktion
 */
 
-// Helper selector shortcuts
+// Hilfsfunktionen für Selektoren
 const $ = (sel) => document.querySelector(sel);
 function setText(sel, text) { const el = $(sel); if (el) el.textContent = text; }
 function show(el) { if (el) el.hidden = false; }
 function hide(el) { if (el) el.hidden = true; }
 
 /**
- * Example data object – used until the Flask backend is connected.
- * Replace this later with a fetch() call to your Flask endpoint.
+ * Beispieldatenobjekt – wird verwendet, bis das Flask-Backend verbunden ist.
+ * Später durch einen fetch()-Aufruf zu deinem Flask-Endpunkt ersetzen.
  */
 async function getSummary() {
   return {
@@ -21,8 +21,8 @@ async function getSummary() {
       schoolHoursPerWeek: 28,
       workHoursPerWeek: 12,
       cuts: [
-        { key: "abitur", label: "A-Levels / High School Diploma", months: 12 },
-        { key: "experience", label: "Previous Work Experience", months: 6 },
+        { key: "abitur", label: "Abitur / Hochschulreife", months: 12 },
+        { key: "experience", label: "Berufserfahrung", months: 6 },
       ],
     },
     calc: {
@@ -34,17 +34,17 @@ async function getSummary() {
     },
   };
 
-  // Later replace with:
+  // Später ersetzen durch:
   // const resp = await fetch("/api/v1/parttime/summary", { headers: { "Accept": "application/json" } });
-  // if (!resp.ok) throw new Error("Error loading data");
+  // if (!resp.ok) throw new Error("Fehler beim Laden der Daten");
   // return await resp.json();
 }
 
 /* ------------------------------
-   Rendering helper functions
+   Hilfsfunktionen zur Darstellung
    ------------------------------ */
 
-/** Fill the input overview table */
+/** Füllt die Übersichtstabelle der Eingaben */
 function fillInputsList(inputs) {
   const list = $("#inputs-list");
   list.innerHTML = "";
@@ -54,7 +54,7 @@ function fillInputsList(inputs) {
      ["Wöchentliche Stunden (insgesamt)", `${inputs.weeklyHours} Std`],
      ["Teilzeitanteil", `${inputs.partTimePercent}%`],
      ["Schule / Woche", `${inputs.schoolHoursPerWeek} Std`],
-     ["Arbeit / Woche", `${inputs.workHoursPerWeek} h`],
+     ["Arbeit / Woche", `${inputs.workHoursPerWeek} Std`],
   ];
 
   for (const [k, v] of rows) {
@@ -66,7 +66,7 @@ function fillInputsList(inputs) {
   }
 }
 
-/** Render shortening reasons and summary text */
+/** Zeigt Verkürzungsgründe und Zusammenfassung */
 function fillCuts(inputs, calc) {
   const wrap = $("#cuts-section");
   const ul = $("#cuts-list");
@@ -80,58 +80,58 @@ function fillCuts(inputs, calc) {
   cuts.forEach((c) => {
     const li = document.createElement("li");
     li.className = "tag";
-    li.textContent = c.label + (c.months ? ` (−${c.months} mo.)` : "");
+    li.textContent = c.label + (c.months ? ` (−${c.months} Mon.)` : "");
     ul.appendChild(li);
   });
 
-  sum.textContent = `Total: −${calc.totalCutMonths} months · New Base: ${calc.newBase} months`;
+  sum.textContent = `Gesamt: −${calc.totalCutMonths} Monate · Neue Basis: ${calc.newBase} Monate`;
 }
 
-/** Render the main result numbers */
+/** Zeigt die Hauptergebnisse */
 function fillResults(inputs, calc) {
-  setText("#res-total-months", `${calc.totalMonths} months`);
+  setText("#res-total-months", `${calc.totalMonths} Monate`);
   setText(
     "#res-extension",
     calc.extensionMonths > 0
-      ? `+${calc.extensionMonths} months extension`
-      : "No extension"
+      ? `+${calc.extensionMonths} Monate Verlängerung`
+      : "Keine Verlängerung"
   );
-  setText("#res-total-weeks", `${calc.totalWeeks} weeks`);
-  setText("#res-school-per-week", `${inputs.schoolHoursPerWeek} h`);
-  setText("#res-work-per-week", `${inputs.workHoursPerWeek} h`);
+  setText("#res-total-weeks", `${calc.totalWeeks} Wochen`);
+  setText("#res-school-per-week", `${inputs.schoolHoursPerWeek} Std`);
+  setText("#res-work-per-week", `${inputs.workHoursPerWeek} Std`);
 }
 
-/** Set the date in the footer */
+/** Setzt das Datum in der Fußzeile */
 function setDateStamp() {
   const el = $("#stamp-date");
-  const fmt = new Intl.DateTimeFormat("en-GB", { dateStyle: "long" });
-  el.textContent = `As of: ${fmt.format(new Date())}`;
+  const fmt = new Intl.DateTimeFormat("de-DE", { dateStyle: "long" });
+  el.textContent = `Stand: ${fmt.format(new Date())}`;
 }
 
 /* ------------------------------
-   Action buttons
+   Aktions-Buttons
    ------------------------------ */
 
-/** Share current page link (Web Share API + clipboard fallback) */
+/** Aktuelle Seiten-URL teilen (Web Share API + Zwischenablage-Fallback) */
 async function shareLink() {
   const url = new URL(location.href);
   try {
     if (navigator.share) {
       await navigator.share({
-        title: "Part-Time Calculator – Result",
-        text: "Here is my result overview.",
+        title: "Teilzeitrechner – Ergebnis",
+        text: "Hier ist meine Ergebnisübersicht.",
         url: url.toString(),
       });
     } else {
       await navigator.clipboard.writeText(url.toString());
-      alert("Link copied to clipboard.");
+      alert("Link in die Zwischenablage kopiert.");
     }
   } catch {}
 }
 
-/** Reset all stored data and reload the page */
+/** Alle gespeicherten Daten löschen und Seite neu laden */
 function resetData() {
-  if (confirm("Do you really want to reset all data?")) {
+  if (confirm("Möchten Sie wirklich alle Daten zurücksetzen?")) {
     localStorage.clear();
     sessionStorage.clear();
     location.reload();
@@ -139,14 +139,14 @@ function resetData() {
 }
 
 /* ------------------------------
-   Initialization
+   Initialisierung
    ------------------------------ */
 async function init() {
-  // Attach button event handlers
+  // Event-Handler für Buttons
   $("#btn-share")?.addEventListener("click", shareLink);
   $("#btn-reset")?.addEventListener("click", resetData);
 
-  // Load data and render
+  // Daten laden und anzeigen
   try {
     const { inputs, calc } = await getSummary();
     fillInputsList(inputs);
@@ -154,7 +154,7 @@ async function init() {
     fillResults(inputs, calc);
     setDateStamp();
   } catch (err) {
-    console.error("Error loading data:", err);
+    console.error("Fehler beim Laden der Daten:", err);
   }
 }
 
