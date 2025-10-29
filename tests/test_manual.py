@@ -389,7 +389,7 @@ def test_dummy_szenarien():
     Führt Dummy-Datensätze aus dummy_data.get_dummy_inputs() aus,
     wenn die Env-Variable USE_DUMMY_DATA gesetzt ist.
     """
-    from dummy_data import get_dummy_inputs
+    from tests.dummy_data import get_dummy_inputs
 
     print("\n" + "=" * 80)
     print("TESTE DUMMY-DATEN (aktiviert über USE_DUMMY_DATA)")
