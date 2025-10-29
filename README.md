@@ -97,6 +97,23 @@ python3 test_manual.py
 # - Realistische Szenarien
 ```
 
+### Dummy-Daten aktivieren (User Story 30)
+
+Führe zusätzliche Dummy-Szenarien aus, indem du eine Env-Variable setzt:
+
+```bash
+# macOS/Linux
+USE_DUMMY_DATA=1 python3 test_manual.py
+
+# Windows PowerShell
+$env:USE_DUMMY_DATA=1; python3 test_manual.py
+
+# Windows CMD
+set USE_DUMMY_DATA=1 && python3 test_manual.py
+```
+
+Die Dummy-Datensätze werden nur ausgeführt, wenn `USE_DUMMY_DATA` gesetzt ist.
+
 ## 📁 Projektstruktur
 
 ```

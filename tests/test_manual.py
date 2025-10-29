@@ -7,6 +7,15 @@ und weiteren realistischen Szenarien.
 """
 
 from src.calculation_logic import calculate_gesamtdauer, format_ergebnis, calculate_teilzeit_prozent, calculate_teilzeit_stunden
+import os
+
+
+def is_dummy_enabled():
+    """
+    Prüft, ob Dummy-Daten aktiviert sind (über Env-Variable USE_DUMMY_DATA).
+    Gültige Werte: "1", "true", "True".
+    """
+    return os.environ.get("USE_DUMMY_DATA", "0") in {"1", "true", "True"}
 
 
 def test_beispiele_aus_gesetzestext():
@@ -375,6 +384,27 @@ def test_realistische_szenarien():
         print(f"  • Finale Dauer: {ergebnis['finale_dauer_monate']} Monate ({ergebnis['finale_dauer_jahre']} Jahre)")
 
 
+def test_dummy_szenarien():
+    """
+    Führt Dummy-Datensätze aus dummy_data.get_dummy_inputs() aus,
+    wenn die Env-Variable USE_DUMMY_DATA gesetzt ist.
+    """
+    from tests.dummy_data import get_dummy_inputs
+
+    print("\n" + "=" * 80)
+    print("TESTE DUMMY-DATEN (aktiviert über USE_DUMMY_DATA)")
+    print("=" * 80)
+
+    for case in get_dummy_inputs():
+        ergebnis = calculate_gesamtdauer(
+            base_duration_months=case["base_duration_months"],
+            vollzeit_stunden=case["vollzeit_stunden"],
+            teilzeit_input=case["teilzeit_input"],
+            verkuerzungsgruende=case["verkuerzungsgruende"],
+            input_type=case["input_type"],
+        )
+        print(format_ergebnis(ergebnis))
+
 def main():
     """
     Hauptfunktion: Führt alle Tests aus
@@ -391,6 +421,10 @@ def main():
         test_stunden_prozent_umrechnung()
         test_gesamtdauer_mit_stunden()
         test_realistische_szenarien()
+
+        # Optional: Dummy-Szenarien, wenn aktiviert
+        if is_dummy_enabled():
+            test_dummy_szenarien()
         
         print("\n" + "=" * 80)
         print("✅ ALLE TESTS ERFOLGREICH ABGESCHLOSSEN!")
