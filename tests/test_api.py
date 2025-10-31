@@ -25,7 +25,8 @@ def client():
         FlaskClient: Test-Client für API-Requests
     """
     app = create_app()
-    app.config.update(TESTING=True)  # Aktiviert Test-Modus (deaktiviert z.B. Debug-Mode)
+    app.config.update(TESTING=True)  # Aktiviert Test-Modus
+    # (deaktiviert z.B. Debug-Mode)
     with app.test_client() as c:
         yield c
 
@@ -68,9 +69,12 @@ def test_calculate_success(client):
     
     # Ergebnis-Details prüfen
     r = data["result"]
-    assert r["original_dauer_monate"] == 36  # Original-Dauer wurde korrekt übernommen
-    assert r["teilzeit_prozent"] == 75  # Teilzeit-Prozent wurde korrekt übernommen
-    # Teilzeit verlängert mindestens die Basis (außer bei starker Verkürzung)
+    # Original-Dauer wurde korrekt übernommen
+    assert r["original_dauer_monate"] == 36
+    # Teilzeit-Prozent wurde korrekt übernommen
+    assert r["teilzeit_prozent"] == 75
+    # Teilzeit verlängert mindestens die Basis
+    # (außer bei starker Verkürzung)
     assert r["finale_dauer_monate"] >= 36
 
 
@@ -109,7 +113,8 @@ def test_validation_error_returns_422(client):
     - Fehler-Code "validation_error"
     - Beschreibende Fehlermeldung
     """
-    # Teilzeit unter 50% erzwingt Validierungsfehler aus der Berechnungslogik
+    # Teilzeit unter 50% erzwingt Validierungsfehler
+    # aus der Berechnungslogik
     payload = {
         "base_duration_months": 36,
         "vollzeit_stunden": 40,

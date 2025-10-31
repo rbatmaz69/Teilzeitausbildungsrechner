@@ -1,7 +1,8 @@
 """
 Flask Web-Application für den Teilzeitrechner
 
-Diese Datei implementiert User Story 31: Verbindung zwischen Frontend und Backend.
+Diese Datei implementiert User Story 31:
+Verbindung zwischen Frontend und Backend.
 
 Die Flask-App stellt folgende Funktionen bereit:
 - Liefert die HTML-UI (index.html) aus
@@ -21,8 +22,10 @@ def create_app() -> Flask:
     """
     Flask App-Factory Pattern
 
-    Erstellt und konfiguriert die Flask-Applikation. Das Factory-Pattern ermöglicht:
-    - Flexible Konfiguration für unterschiedliche Umgebungen (Development, Testing, Production)
+    Erstellt und konfiguriert die Flask-Applikation.
+    Das Factory-Pattern ermöglicht:
+    - Flexible Konfiguration für unterschiedliche Umgebungen
+      (Development, Testing, Production)
     - Mehrfache App-Instanzen für Tests
     - Nachträgliche Konfiguration durch Flask-Erweiterungen
 
@@ -30,7 +33,8 @@ def create_app() -> Flask:
         Flask: Konfigurierte Flask-Applikation mit allen Routen
     """
     # Flask-App erstellen mit relativen Pfaden zu Static Files und Templates
-    # Da src/app.py in einem Unterverzeichnis liegt, müssen wir einen Level nach oben gehen
+    # Da src/app.py in einem Unterverzeichnis liegt,
+    # müssen wir einen Level nach oben gehen
     app = Flask(
         __name__,
         static_folder="../static",      # JavaScript, CSS-Dateien
@@ -42,8 +46,9 @@ def create_app() -> Flask:
         """
         Hauptroute: Liefert die HTML-Startseite aus
 
-        Diese Route rendert das index.html Template, welches die komplette
-        Benutzeroberfläche enthält (Eingabefelder, Verkürzungsgründe, Ergebnisanzeige).
+        Diese Route rendert das index.html Template, welches die
+        komplette Benutzeroberfläche enthält
+        (Eingabefelder, Verkürzungsgründe, Ergebnisanzeige).
 
         Returns:
             str: Gerendertes HTML-Template
@@ -75,7 +80,8 @@ def create_app() -> Flask:
         Responses:
             200 OK: Berechnung erfolgreich
             400 Bad Request: Ungültige Request-Struktur oder fehlende Felder
-            422 Unprocessable Entity: Validierungsfehler (z.B. Teilzeit < 50%)
+            422 Unprocessable Entity: Validierungsfehler
+            (z.B. Teilzeit < 50%)
             500 Internal Server Error: Unerwarteter Serverfehler
         """
         # ============================================================
@@ -88,7 +94,9 @@ def create_app() -> Flask:
                 jsonify({
                     "error": {
                         "code": "invalid_request",
-                        "message": "Erwarte application/json im Request-Body",
+                        "message": (
+                            "Erwarte application/json im Request-Body"
+                        ),
                     }
                 }),
                 400,
@@ -103,12 +111,14 @@ def create_app() -> Flask:
         # ============================================================
         # SCHRITT 2: Pflichtfelder-Validierung
         # ============================================================
-        # Liste aller Felder, die für die Berechnung zwingend erforderlich sind
+        # Liste aller Felder, die für die Berechnung
+        # zwingend erforderlich sind
         required = [
-            "base_duration_months",    # Ausbildungsdauer gemäß Ausbildungsordnung
+            "base_duration_months",    # Ausbildungsdauer gemäß AO
             "vollzeit_stunden",        # Wochenstunden bei Vollzeit
-            "teilzeit_input",          # Teilzeit-Eingabe (Prozent oder Stunden)
-            "input_type",              # Gibt an, ob teilzeit_input als % oder h interpretiert wird
+            "teilzeit_input",          # Teilzeit-Eingabe (Prozent/Stunden)
+            "input_type",              # Ob teilzeit_input als % oder h
+                                       # interpretiert wird
             "verkuerzungsgruende",     # Dictionary mit Verkürzungsgründen
         ]
 
@@ -116,7 +126,8 @@ def create_app() -> Flask:
         missing = [k for k in required if k not in data]
         if missing:
             # Strukturierte Fehlerantwort mit Details über fehlende Felder
-            # Dies hilft dem Frontend, dem Benutzer gezielt zu sagen, was fehlt
+            # Dies hilft dem Frontend, dem Benutzer gezielt zu sagen,
+            # was fehlt
             return (
                 jsonify({
                     "error": {
@@ -135,7 +146,8 @@ def create_app() -> Flask:
             # Aufruf der zentralen Berechnungslogik
             # Diese Funktion führt das komplette 4-Schritt-Verfahren durch:
             # 1. Verkürzung anwenden (gemäß § 8 BBiG)
-            # 2. Automatische Verlängerung durch Teilzeit (gemäß § 7a Abs. 2 BBiG)
+            # 2. Automatische Verlängerung durch Teilzeit
+            #    (gemäß § 7a Abs. 2 BBiG)
             # 3. Gesetzliche Obergrenze prüfen (max. 1,5-fache AO-Dauer)
             # 4. Auf ganze Monate abrunden
             result = calculate_gesamtdauer(
@@ -143,7 +155,7 @@ def create_app() -> Flask:
                 vollzeit_stunden=data["vollzeit_stunden"],
                 teilzeit_input=data["teilzeit_input"],
                 verkuerzungsgruende=data["verkuerzungsgruende"],
-                input_type=data.get("input_type", "prozent"),  # Default: Prozent
+                input_type=data.get("input_type", "prozent"),  # Default: %
             )
 
             # Erfolgreiche Antwort mit allen Berechnungsergebnissen
@@ -159,22 +171,26 @@ def create_app() -> Flask:
             # - Teilzeit < 50% (gemäß § 7a Abs. 1 Satz 3 BBiG)
             # - Ungültige Datentypen (z.B. String statt Zahl)
             # - Logische Fehler (z.B. Stunden > Vollzeitstunden)
-            # HTTP 422 = Unprocessable Entity: Request ist syntaktisch korrekt,
-            # aber semantisch ungültig
+            # HTTP 422 = Unprocessable Entity:
+            # Request ist syntaktisch korrekt, aber semantisch ungültig
             return (
                 jsonify({
                     "error": {
                         "code": "validation_error",
-                        "message": str(e),  # Fehlermeldung aus calculation_logic.py
+                        "message": str(e),  # Fehlermeldung aus
+                        # calculation_logic.py
                     }
                 }),
                 422,
             )
         except Exception:
-            # Unerwarteter Fehler (z.B. interne Logik-Fehler, Datenbank-Fehler)
+            # Unerwarteter Fehler (z.B. interne Logik-Fehler,
+            # Datenbank-Fehler)
             # WICHTIG: Keine Details zurückgeben aus Sicherheitsgründen!
-            # Ein Angreifer könnte sonst Rückschlüsse auf die Server-Struktur ziehen.
-            # Die detaillierte Fehlermeldung wird serverseitig geloggt (nicht hier implementiert).
+            # Ein Angreifer könnte sonst Rückschlüsse auf die
+            # Server-Struktur ziehen.
+            # Die detaillierte Fehlermeldung wird serverseitig geloggt
+            # (nicht hier implementiert).
             # HTTP 500 = Internal Server Error
             return (
                 jsonify({
