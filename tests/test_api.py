@@ -73,9 +73,11 @@ def test_calculate_success(client):
     assert r["original_dauer_monate"] == 36
     # Teilzeit-Prozent wurde korrekt übernommen
     assert r["teilzeit_prozent"] == 75
-    # Teilzeit verlängert mindestens die Basis
-    # (außer bei starker Verkürzung)
-    assert r["finale_dauer_monate"] >= 36
+    # Bei Abitur-Verkürzung (-12 Monate) und 75% Teilzeit:
+    # Verkürzt auf 24 Monate, dann 24/0.75 = 32 Monate
+    assert r["finale_dauer_monate"] == 32
+    # Finale Dauer muss positiv sein
+    assert r["finale_dauer_monate"] > 0
 
 
 def test_missing_fields_returns_400(client):
