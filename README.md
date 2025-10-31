@@ -34,10 +34,14 @@ pip install -r requirements.txt
 
 # App lokal starten (Entwicklung)
 python -m src.app
+# Läuft auf http://localhost:5000/
+# Falls Port 5000 belegt ist, wird automatisch 5001 verwendet
 
 # Alternativ mit Flask CLI
 export FLASK_APP=src.app:create_app
 flask run
+# Oder mit spezifischem Port:
+flask run --port=5001
 ```
 
 ## 💻 Verwendung
@@ -281,6 +285,23 @@ gunicorn 'wsgi:app' --bind 0.0.0.0:5000 --workers 2
 ```
 
 - In Docker kann das als `CMD` verwendet werden. Bei späterer Trennung von UI/API kann optional CORS aktiviert werden.
+
+## 🔧 Troubleshooting
+
+### Port 5000 ist belegt
+Wenn beim Start eine Fehlermeldung wie "Address already in use" erscheint:
+- **macOS**: Port 5000 wird oft von AirPlay Receiver verwendet
+- **Lösung**: Der Server versucht automatisch Port 5001
+- **Manuell**: `python -m src.app 5001` oder `flask run --port=5001`
+
+### Static Files oder Templates werden nicht gefunden
+- Stelle sicher, dass du im Projekt-Root-Verzeichnis startest
+- Die Pfade sind jetzt absolut und funktionieren von überall
+
+### ModuleNotFoundError: No module named 'flask'
+```bash
+pip install -r requirements.txt
+```
 
 ---
 

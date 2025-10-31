@@ -11,6 +11,8 @@ Die Flask-App stellt folgende Funktionen bereit:
 - Strukturierte Fehlerbehandlung
 """
 
+from pathlib import Path
+
 from flask import Flask, jsonify, render_template, request
 
 # Import der zentralen Berechnungslogik
@@ -32,13 +34,14 @@ def create_app() -> Flask:
     Returns:
         Flask: Konfigurierte Flask-Applikation mit allen Routen
     """
-    # Flask-App erstellen mit relativen Pfaden zu Static Files und Templates
-    # Da src/app.py in einem Unterverzeichnis liegt,
-    # müssen wir einen Level nach oben gehen
+    # Flask-App erstellen mit absoluten Pfaden zu Static Files und Templates
+    # Dies funktioniert unabhängig vom aktuellen Arbeitsverzeichnis
+    # Ermittelt das Projekt-Root-Verzeichnis (ein Level über src/)
+    base_dir = Path(__file__).parent.parent
     app = Flask(
         __name__,
-        static_folder="../static",      # JavaScript, CSS-Dateien
-        template_folder="../templates",  # HTML-Templates
+        static_folder=str(base_dir / "static"),      # JavaScript, CSS-Dateien
+        template_folder=str(base_dir / "templates"),  # HTML-Templates
     )
 
     @app.get("/")
@@ -217,7 +220,25 @@ def create_app() -> Flask:
 #   python src/app.py
 #
 # Der Development-Server läuft dann auf http://localhost:5000/
+# Falls Port 5000 belegt ist, wird automatisch ein anderer Port verwendet
 # debug=True aktiviert automatisches Neuladen bei Code-Änderungen
 if __name__ == "__main__":
+    import sys
+    
     app = create_app()
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    port = 5000
+    
+    # Prüfe ob Port bereits belegt ist (z.B. AirPlay auf macOS)
+    # Falls ja, versuche alternativen Port
+    if len(sys.argv) > 1:
+        try:
+            port = int(sys.argv[1])
+        except ValueError:
+            pass
+    
+    try:
+        app.run(host="127.0.0.1", port=port, debug=True)
+    except OSError:
+        # Port belegt, versuche alternativen Port
+        print(f"⚠️  Port {port} ist belegt, verwende Port 5001")
+        app.run(host="127.0.0.1", port=5001, debug=True)
