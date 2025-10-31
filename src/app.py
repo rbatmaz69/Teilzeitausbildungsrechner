@@ -224,10 +224,10 @@ def create_app() -> Flask:
 # debug=True aktiviert automatisches Neuladen bei Code-Änderungen
 if __name__ == "__main__":
     import sys
-    
+
     app = create_app()
     port = 5000
-    
+
     # Prüfe ob Port bereits belegt ist (z.B. AirPlay auf macOS)
     # Falls ja, versuche alternativen Port
     if len(sys.argv) > 1:
@@ -235,7 +235,7 @@ if __name__ == "__main__":
             port = int(sys.argv[1])
         except ValueError:
             pass
-    
+
     try:
         app.run(host="127.0.0.1", port=port, debug=True)
     except OSError:
