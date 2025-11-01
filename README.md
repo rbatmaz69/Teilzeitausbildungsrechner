@@ -21,7 +21,7 @@ Dieses Projekt implementiert die gesetzlichen Vorgaben für Teilzeitberufsausbil
 
 ### Voraussetzungen
 - Python 3.7+
-- Keine externen Abhängigkeiten
+- Python-Pakete aus `requirements.txt`
 
 ### Setup
 ```bash
@@ -29,11 +29,72 @@ Dieses Projekt implementiert die gesetzlichen Vorgaben für Teilzeitberufsausbil
 git clone https://git.it.hs-heilbronn.de/it/courses/seb/lab/ws25/group-04.git
 cd group-04
 
-# Tests ausführen
-python3 test_manual.py
+# Abhängigkeiten installieren
+pip install -r requirements.txt
+
+# App lokal starten (Entwicklung)
+python -m src.app
+# Läuft auf http://localhost:5000/
+# Falls Port 5000 belegt ist, wird automatisch 5001 verwendet
+
+# Alternativ mit Flask CLI
+export FLASK_APP=src.app:create_app
+flask run
+# Oder mit spezifischem Port:
+flask run --port=5001
 ```
 
 ## 💻 Verwendung
+
+### Web-UI + API
+
+Nach dem Start ist die Oberfläche unter `http://localhost:5000/` erreichbar. Die Berechnung erfolgt serverseitig über die API.
+
+API-Endpoint:
+
+```
+POST /api/calculate
+Content-Type: application/json
+
+{
+  "base_duration_months": 36,
+  "vollzeit_stunden": 40,
+  "teilzeit_input": 75,
+  "input_type": "prozent",           # oder "stunden"
+  "verkuerzungsgruende": {
+    "abitur": true,
+    "realschule": false,
+    "alter_ueber_21": false,
+    "vorkenntnisse_monate": 0
+  }
+}
+```
+
+Antwort (200):
+
+```
+{
+  "result": {
+    "original_dauer_monate": 36,
+    "verkuerzte_dauer_monate": 24,
+    "teilzeit_prozent": 75,
+    "teilzeit_stunden": 30.0,
+    "nach_schritt1_monate": 32.0,
+    "nach_schritt2_monate": 32.0,
+    "finale_dauer_monate": 32,
+    "finale_dauer_jahre": 2.7,
+    "wochenstunden": 30.0,
+    "verkuerzung_gesamt_monate": 12,
+    "verlaengerung_durch_teilzeit_monate": 8
+  }
+}
+```
+
+Fehler (400/422/500):
+
+```
+{ "error": { "code": "...", "message": "...", "details": { } } }
+```
 
 ### Grundlegende Berechnung
 ```python
@@ -86,7 +147,7 @@ ergebnis = calculate_gesamtdauer(
 
 ```bash
 # Alle Tests ausführen
-python3 test_manual.py
+pytest -q
 
 # Tests umfassen:
 # - Beispiele aus dem Gesetzestext
@@ -118,10 +179,26 @@ Die Dummy-Datensätze werden nur ausgeführt, wenn `USE_DUMMY_DATA` gesetzt ist.
 
 ```
 group-04/
-├── calculation_logic.py    # Haupt-Berechnungslogik
-├── test_manual.py         # Umfassende Tests
-├── README.md              # Diese Datei
-└── .git/                  # Git Repository
+├── src/
+│   ├── __init__.py          # Python-Paket-Initialisierung
+│   ├── app.py               # Flask-App (Routes, API-Endpunkte)
+│   └── calculation_logic.py # Haupt-Berechnungslogik (BBiG § 7a, § 8)
+├── static/
+│   ├── script_eingabe.js              # Eingabe-Logik (Teilzeit-Prozent/Stunden)
+│   ├── script_Ergebnis_Uebersicht.js  # Ergebnis-Anzeige (API-Integration)
+│   ├── script_Verkuerzungsgruende_Auswaehlen.js  # Verkürzungsgründe-UI
+│   └── styles.css                     # Styling
+├── templates/
+│   └── index.html          # Haupt-HTML-Template
+├── tests/
+│   ├── test_api.py         # API-Tests (Flask-Endpunkte)
+│   ├── test_calculation_logic.py  # Unit-Tests für Berechnungslogik
+│   ├── test_manual.py      # Manuelle Test-Suite
+│   └── dummy_data.py       # Dummy-Daten für Tests (User Story 30)
+├── wsgi.py                 # WSGI-Entry für Production-Server
+├── requirements.txt        # Python-Dependencies
+├── pytest.ini              # Pytest-Konfiguration
+└── README.md               # Diese Datei
 ```
 
 ## 🔧 Git Workflow
@@ -195,6 +272,36 @@ Alle Funktionen sind ausführlich dokumentiert mit:
 ✅ **Getestet** - Umfassende Test-Suite
 ✅ **Dokumentiert** - Ausführliche Kommentare und Beispiele
 ✅ **Produktionsreif** - Bereit für den produktiven Einsatz
+
+---
+
+## 🐳 Deployment (Docker-Ready)
+
+- WSGI-Entry ist vorhanden (`wsgi.py`).
+- Beispiel-Start mit Gunicorn:
+
+```bash
+gunicorn 'wsgi:app' --bind 0.0.0.0:5000 --workers 2
+```
+
+- In Docker kann das als `CMD` verwendet werden. Bei späterer Trennung von UI/API kann optional CORS aktiviert werden.
+
+## 🔧 Troubleshooting
+
+### Port 5000 ist belegt
+Wenn beim Start eine Fehlermeldung wie "Address already in use" erscheint:
+- **macOS**: Port 5000 wird oft von AirPlay Receiver verwendet
+- **Lösung**: Der Server versucht automatisch Port 5001
+- **Manuell**: `python -m src.app 5001` oder `flask run --port=5001`
+
+### Static Files oder Templates werden nicht gefunden
+- Stelle sicher, dass du im Projekt-Root-Verzeichnis startest
+- Die Pfade sind jetzt absolut und funktionieren von überall
+
+### ModuleNotFoundError: No module named 'flask'
+```bash
+pip install -r requirements.txt
+```
 
 ---
 
