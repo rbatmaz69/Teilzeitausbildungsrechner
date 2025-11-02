@@ -262,6 +262,24 @@ button.preset.active {
   box-shadow: 0 0 0 2px rgba(224, 0, 0, 0.2);
 }
 
+button.berechnen {
+  background-color: #e60000; /* kräftiges Rot */
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px; /* abgerundete Ecken */
+  padding: 12px 40px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  display: inline-block;
+}
+
+/* Hover-Effekt */
+button.berechnen:hover {
+  background-color: #a90000; /* etwas dunkleres Rot beim Hover */
+}
+
 .ergebnis-box {
   background: #f9f9f9;
   margin-top: 1rem;

@@ -308,3 +308,31 @@ async function init() {
 }
 
 document.addEventListener("DOMContentLoaded", init);
+
+// Funktion für Berechnen-Button
+async function berechnen() {
+  // Daten laden und anzeigen
+  try {
+    const { inputs, calc } = await getSummary();
+    fillInputsList(inputs);
+    fillCuts(inputs, calc);
+    fillResults(inputs, calc);
+    setDateStamp();
+  } catch (err) {
+    console.error("Fehler beim Laden der Daten:", err);
+    const msg = (err && err.message) ? String(err.message) : "Unbekannter Fehler";
+    setText('#res-total-months', '–');
+    setText('#res-extension', '');
+    setText('#res-total-weeks', '–');
+    setText('#res-school-per-week', '–');
+    setText('#res-work-per-week', '–');
+    const em = document.getElementById('errorTotalMonths');
+    if (em) em.textContent = msg;
+  }
+}
+
+
+// Berechnen-Button
+document.getElementById("berechnenBtn").addEventListener("click", () => {
+  berechnen();
+});
