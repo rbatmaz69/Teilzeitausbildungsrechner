@@ -1,160 +1,420 @@
+"""
+Unit-Tests für die Berechnungslogik (calculation_logic.py)
+
+Diese Tests prüfen die Business Logic direkt, ohne HTTP-Layer.
+Alle Tests verwenden zentrale Dummy-Daten aus dummy_data.py.
+
+Testabdeckung:
+- Vollzeit ohne Verkürzung (Baseline)
+- Teilzeit-Berechnungen (50%, 75%, etc.)
+- Alle Verkürzungsgründe einzeln
+- Kombinationen von Verkürzungsgründen
+- Input-Type: Prozent und Stunden
+- Verschiedene Ausbildungsdauern
+- Obergrenze (max. 1,5-fache)
+- Rundung auf ganze Monate
+- Edge Cases (negative Werte, 0%, > 100%)
+- Formatierung der Ausgabe
+"""
+
 import pytest
+
 from src.calculation_logic import calculate_gesamtdauer, format_ergebnis
+from tests.dummy_data import (
+    DAUER_24_MONATE,
+    DAUER_42_MONATE,
+    KOMBINATION_ABITUR_REALSCHULE,
+    MIT_ALTER_21,
+    MIT_REALSCHULE,
+    MIT_VORKENNTNISSE_6,
+    MIT_VORKENNTNISSE_12,
+    STUNDEN_INPUT_20_VON_40,
+    STUNDEN_INPUT_30_VON_40,
+    TEILZEIT_50_PROZENT,
+    TEILZEIT_75_MIT_ABITUR,
+    UNGUELTIG_NEGATIVE_MONATE,
+    UNGUELTIG_STUNDEN_UEBER_VOLLZEIT,
+    UNGUELTIG_TEILZEIT_0,
+    UNGUELTIG_TEILZEIT_UEBER_100,
+    UNGUELTIG_TEILZEIT_UNTER_50,
+    VOLLZEIT_OHNE_VERKUERZUNG,
+)
 
 
-# -------------------------------
-# Basic Tests
-# -------------------------------
+# ============================================================
+# Basis-Tests: Vollzeit und Standard-Teilzeit
+# ============================================================
 
-def test_full_time_no_reduction():
-    """Test normal training without part-time reduction."""
-    result = calculate_gesamtdauer(
-        base_duration_months=36,
-        vollzeit_stunden=40,
-        teilzeit_input=100,
-        verkuerzungsgruende={
-            'abitur': False,
-            'realschule': False,
-            'alter_ueber_21': False,
-            'vorkenntnisse_monate': 0
-        },
-        input_type='prozent'
-    )
+
+def test_vollzeit_ohne_verkuerzung():
+    """
+    Test: Vollzeit (100%) ohne Verkürzungsgründe.
+    
+    Erwartung: Ausbildungsdauer bleibt unverändert (36 Monate).
+    Keine Verlängerung durch Teilzeit.
+    """
+    result = calculate_gesamtdauer(**VOLLZEIT_OHNE_VERKUERZUNG)
+    
     assert result["finale_dauer_monate"] == 36
     assert result["verlaengerung_durch_teilzeit_monate"] == 0
+    assert result["verkuerzung_gesamt_monate"] == 0
+    assert result["teilzeit_prozent"] == 100
 
 
-def test_part_time_50_percent():
-    """Test a typical part-time case with 50% workload."""
-    result = calculate_gesamtdauer(
-        base_duration_months=36,
-        vollzeit_stunden=40,
-        teilzeit_input=50,
-        verkuerzungsgruende={
-            'abitur': False,
-            'realschule': False,
-            'alter_ueber_21': False,
-            'vorkenntnisse_monate': 0
-        },
-        input_type='prozent'
-    )
-    # Should increase training duration due to reduced hours
+def test_teilzeit_50_prozent():
+    """
+    Test: Teilzeit mit 50% (gesetzliches Minimum).
+    
+    Erwartung: Maximale Verlängerung wird angewendet.
+    36 Monate / 0.5 = 72 Monate, aber begrenzt auf 54 Monate (1,5-fache).
+    """
+    result = calculate_gesamtdauer(**TEILZEIT_50_PROZENT)
+    
+    # Muss auf 1,5-fache begrenzt werden (36 * 1.5 = 54)
+    assert result["finale_dauer_monate"] == 54
     assert result["finale_dauer_monate"] > 36
-    assert result["finale_dauer_monate"] <= 54  # Max 1.5× limit
+    assert result["verlaengerung_durch_teilzeit_monate"] > 0
 
 
-def test_part_time_75_percent_with_reduction():
-    """Test part-time case with both shortening factors."""
-    result = calculate_gesamtdauer(
-        base_duration_months=36,
-        vollzeit_stunden=40,
-        teilzeit_input=75,
-        verkuerzungsgruende={
-            'abitur': True,
-            'realschule': False,
-            'alter_ueber_21': False,
-            'vorkenntnisse_monate': 0
-        },
-        input_type='prozent'
-    )
-    # Expect shorter total time because of reduction
-    assert result["finale_dauer_monate"] < 36
-    assert result["verkuerzung_gesamt_monate"] > 0
+def test_teilzeit_75_prozent():
+    """
+    Test: Teilzeit mit 75% ohne Verkürzung.
+    
+    Erwartung: Verlängerung um 33% → 36 / 0.75 = 48 Monate.
+    """
+    data = VOLLZEIT_OHNE_VERKUERZUNG.copy()
+    data["teilzeit_input"] = 75
+    result = calculate_gesamtdauer(**data)
+    
+    assert result["finale_dauer_monate"] == 48
+    assert result["verlaengerung_durch_teilzeit_monate"] == 12
 
 
-def test_upper_limit_enforced():
-    """Test that total duration never exceeds 1.5× the original duration."""
-    result = calculate_gesamtdauer(
-        base_duration_months=36,
-        vollzeit_stunden=40,
-        teilzeit_input=50,  # Minimum allowed percentage
-        verkuerzungsgruende={
-            'abitur': False,
-            'realschule': False,
-            'alter_ueber_21': False,
-            'vorkenntnisse_monate': 0
-        },
-        input_type='prozent'
-    )
-    # Must be capped at 1.5× (i.e. 54 months)
+# ============================================================
+# Verkürzungsgründe einzeln testen
+# ============================================================
+
+
+def test_verkuerzung_abitur():
+    """
+    Test: Verkürzung durch Abitur/Hochschulreife.
+    
+    Erwartung: 12 Monate Verkürzung gemäß § 8 BBiG.
+    36 - 12 = 24 Monate, dann 24 / 0.75 = 32 Monate.
+    """
+    result = calculate_gesamtdauer(**TEILZEIT_75_MIT_ABITUR)
+    
+    assert result["finale_dauer_monate"] == 32
+    assert result["verkuerzung_gesamt_monate"] == 12
+    assert result["verkuerzte_dauer_monate"] == 24
+
+
+def test_verkuerzung_realschule():
+    """
+    Test: Verkürzung durch Realschulabschluss.
+    
+    Erwartung: 6 Monate Verkürzung gemäß § 8 BBiG.
+    36 - 6 = 30 Monate, dann 30 / 0.75 = 40 Monate.
+    """
+    result = calculate_gesamtdauer(**MIT_REALSCHULE)
+    
+    assert result["finale_dauer_monate"] == 40
+    assert result["verkuerzung_gesamt_monate"] == 6
+    assert result["verkuerzte_dauer_monate"] == 30
+
+
+def test_verkuerzung_alter_21():
+    """
+    Test: Verkürzung durch Alter über 21 Jahre.
+    
+    Erwartung: 12 Monate Verkürzung gemäß § 8 BBiG.
+    36 - 12 = 24 Monate, dann 24 / 0.75 = 32 Monate.
+    """
+    result = calculate_gesamtdauer(**MIT_ALTER_21)
+    
+    assert result["finale_dauer_monate"] == 32
+    assert result["verkuerzung_gesamt_monate"] == 12
+
+
+def test_verkuerzung_vorkenntnisse_6():
+    """
+    Test: Verkürzung durch berufliche Vorkenntnisse (6 Monate).
+    
+    Erwartung: 6 Monate Verkürzung.
+    36 - 6 = 30 Monate, dann 30 / 0.75 = 40 Monate.
+    """
+    result = calculate_gesamtdauer(**MIT_VORKENNTNISSE_6)
+    
+    assert result["finale_dauer_monate"] == 40
+    assert result["verkuerzung_gesamt_monate"] == 6
+
+
+def test_verkuerzung_vorkenntnisse_12():
+    """
+    Test: Verkürzung durch berufliche Vorkenntnisse (12 Monate).
+    
+    Erwartung: 12 Monate Verkürzung.
+    36 - 12 = 24 Monate, dann 24 / 0.75 = 32 Monate.
+    """
+    result = calculate_gesamtdauer(**MIT_VORKENNTNISSE_12)
+    
+    assert result["finale_dauer_monate"] == 32
+    assert result["verkuerzung_gesamt_monate"] == 12
+
+
+# ============================================================
+# Kombinationen von Verkürzungsgründen
+# ============================================================
+
+
+def test_kombination_abitur_und_realschule():
+    """
+    Test: Kombination aus Abitur und Realschule.
+    
+    Erwartung: Beide Verkürzungen werden addiert (18 Monate).
+    HINWEIS: Die aktuelle Implementierung addiert alle Verkürzungen.
+    """
+    result = calculate_gesamtdauer(**KOMBINATION_ABITUR_REALSCHULE)
+    
+    # Beide Verkürzungen werden addiert: 12 (Abitur) + 6 (Realschule) = 18
+    assert result["verkuerzung_gesamt_monate"] == 18
+    # 36 - 18 = 18 Monate, dann 18 / 0.75 = 24 Monate
+    assert result["finale_dauer_monate"] == 24
+
+
+# ============================================================
+# Input-Type: Stunden statt Prozent
+# ============================================================
+
+
+def test_input_type_stunden_30_von_40():
+    """
+    Test: Stunden-Input statt Prozent-Input.
+    
+    Input: 30 Stunden von 40 Stunden Vollzeit.
+    Erwartung: Wird als 75% interpretiert → 48 Monate.
+    """
+    result = calculate_gesamtdauer(**STUNDEN_INPUT_30_VON_40)
+    
+    assert result["teilzeit_prozent"] == 75.0
+    assert result["teilzeit_stunden"] == 30.0
+    assert result["finale_dauer_monate"] == 48
+
+
+def test_input_type_stunden_20_von_40():
+    """
+    Test: Stunden-Input mit Minimum (50%).
+    
+    Input: 20 Stunden von 40 Stunden Vollzeit.
+    Erwartung: 50% → Obergrenze greift (54 Monate).
+    """
+    result = calculate_gesamtdauer(**STUNDEN_INPUT_20_VON_40)
+    
+    assert result["teilzeit_prozent"] == 50.0
+    assert result["teilzeit_stunden"] == 20.0
     assert result["finale_dauer_monate"] == 54
 
 
-# -------------------------------
-# Edge Case Tests
-# -------------------------------
-
-def test_zero_percentage():
-    """Check that 0% part-time raises an error."""
-    with pytest.raises(ValueError):
-        calculate_gesamtdauer(
-            base_duration_months=36,
-            vollzeit_stunden=40,
-            teilzeit_input=0,
-            verkuerzungsgruende={
-                'abitur': False,
-                'realschule': False,
-                'alter_ueber_21': False,
-                'vorkenntnisse_monate': 0
-            },
-            input_type='prozent'
-        )
+# ============================================================
+# Verschiedene Ausbildungsdauern
+# ============================================================
 
 
-def test_negative_input():
-    """Negative inputs for percentage must raise a ValueError."""
-    with pytest.raises(ValueError):
-        calculate_gesamtdauer(
-            base_duration_months=36,
-            vollzeit_stunden=40,
-            teilzeit_input=-10,  # Negative percentage should fail
-            verkuerzungsgruende={
-                'abitur': False,
-                'realschule': False,
-                'alter_ueber_21': False,
-                'vorkenntnisse_monate': 0
-            },
-            input_type='prozent'
-        )
+def test_ausbildungsdauer_24_monate():
+    """
+    Test: Kürzere Ausbildungsdauer (24 Monate).
+    
+    Erwartung: Obergrenze liegt bei 36 Monaten (24 * 1.5).
+    """
+    result = calculate_gesamtdauer(**DAUER_24_MONATE)
+    
+    assert result["original_dauer_monate"] == 24
+    # 24 / 0.6 = 40, aber begrenzt auf 36
+    assert result["finale_dauer_monate"] <= 36
 
 
-def test_rounding_behavior():
-    """Ensure the final duration is always an integer (rounded months)."""
-    result = calculate_gesamtdauer(
-        base_duration_months=36,
-        vollzeit_stunden=40,
-        teilzeit_input=70,
-        verkuerzungsgruende={
-            'abitur': False,
-            'realschule': False,
-            'alter_ueber_21': False,
-            'vorkenntnisse_monate': 0
-        },
-        input_type='prozent'
-    )
+def test_ausbildungsdauer_42_monate():
+    """
+    Test: Längere Ausbildungsdauer (42 Monate).
+    
+    Erwartung: Obergrenze liegt bei 63 Monaten (42 * 1.5).
+    """
+    result = calculate_gesamtdauer(**DAUER_42_MONATE)
+    
+    assert result["original_dauer_monate"] == 42
+    assert result["finale_dauer_monate"] <= 63
+
+
+# ============================================================
+# Obergrenze und Rundung
+# ============================================================
+
+
+def test_obergrenze_wird_eingehalten():
+    """
+    Test: Obergrenze (1,5-fache der AO-Dauer) wird nie überschritten.
+    
+    Bei 36 Monaten AO-Dauer: Maximal 54 Monate.
+    """
+    result = calculate_gesamtdauer(**TEILZEIT_50_PROZENT)
+    
+    # 36 / 0.5 = 72, aber begrenzt auf 54
+    assert result["finale_dauer_monate"] == 54
+    assert result["nach_schritt2_monate"] == 54
+
+
+def test_rundung_auf_ganze_monate():
+    """
+    Test: Finale Dauer wird auf ganze Monate abgerundet.
+    
+    Erwartung: Ergebnis ist immer ein Integer.
+    """
+    data = VOLLZEIT_OHNE_VERKUERZUNG.copy()
+    data["teilzeit_input"] = 70  # Erzeugt Nachkommastellen
+    result = calculate_gesamtdauer(**data)
+    
     assert isinstance(result["finale_dauer_monate"], int)
+    # 36 / 0.7 = 51.43 → sollte auf 51 abgerundet werden
+    assert result["finale_dauer_monate"] == 51
 
 
-# -------------------------------
-# Format Output Tests
-# -------------------------------
+# ============================================================
+# Edge Cases und Validierung
+# ============================================================
 
-def test_format_output_contains_key_values():
-    """Check that formatted output includes key information."""
-    result = calculate_gesamtdauer(
-        base_duration_months=36,
-        vollzeit_stunden=40,
-        teilzeit_input=80,
-        verkuerzungsgruende={
-            'abitur': False,
-            'realschule': False,
-            'alter_ueber_21': False,
-            'vorkenntnisse_monate': 0
-        },
-        input_type='prozent'
-    )
+
+def test_teilzeit_unter_50_prozent_fehler():
+    """
+    Test: Teilzeit unter 50% ist ungültig.
+    
+    Erwartung: ValueError mit Hinweis auf 50-100% Bereich.
+    """
+    with pytest.raises(ValueError, match="zwischen 50% und 100%"):
+        calculate_gesamtdauer(**UNGUELTIG_TEILZEIT_UNTER_50)
+
+
+def test_teilzeit_ueber_100_prozent_fehler():
+    """
+    Test: Teilzeit über 100% ist ungültig.
+    
+    Erwartung: ValueError.
+    """
+    with pytest.raises(ValueError):
+        calculate_gesamtdauer(**UNGUELTIG_TEILZEIT_UEBER_100)
+
+
+def test_teilzeit_0_prozent_fehler():
+    """
+    Test: 0% Teilzeit ist ungültig.
+    
+    Erwartung: ValueError.
+    """
+    with pytest.raises(ValueError):
+        calculate_gesamtdauer(**UNGUELTIG_TEILZEIT_0)
+
+
+def test_negative_monate_fehler():
+    """
+    Test: Negative Ausbildungsdauer ist ungültig.
+    
+    Erwartung: ValueError mit Hinweis auf 12-60 Monate Bereich.
+    """
+    with pytest.raises(ValueError, match="zwischen 12 und 60"):
+        calculate_gesamtdauer(**UNGUELTIG_NEGATIVE_MONATE)
+
+
+def test_stunden_ueber_vollzeit_fehler():
+    """
+    Test: Teilzeitstunden über Vollzeitstunden ist ungültig.
+    
+    Erwartung: ValueError.
+    """
+    with pytest.raises(ValueError):
+        calculate_gesamtdauer(**UNGUELTIG_STUNDEN_UEBER_VOLLZEIT)
+
+
+def test_null_ausbildungsdauer_fehler():
+    """
+    Test: Ausbildungsdauer von 0 Monaten ist ungültig.
+    
+    Erwartung: ValueError mit Hinweis auf 12-60 Monate Bereich.
+    """
+    data = VOLLZEIT_OHNE_VERKUERZUNG.copy()
+    data["base_duration_months"] = 0
+    
+    with pytest.raises(ValueError, match="zwischen 12 und 60"):
+        calculate_gesamtdauer(**data)
+
+
+def test_negative_vollzeit_stunden_fehler():
+    """
+    Test: Negative Vollzeit-Stunden sind ungültig.
+    
+    Erwartung: ValueError mit Hinweis auf 10-48 Stunden Bereich.
+    """
+    data = VOLLZEIT_OHNE_VERKUERZUNG.copy()
+    data["vollzeit_stunden"] = -40
+    
+    with pytest.raises(ValueError, match="zwischen 10 und 48"):
+        calculate_gesamtdauer(**data)
+
+
+def test_null_vollzeit_stunden_fehler():
+    """
+    Test: Vollzeit-Stunden von 0 sind ungültig.
+    
+    Erwartung: ValueError mit Hinweis auf 10-48 Stunden Bereich.
+    """
+    data = VOLLZEIT_OHNE_VERKUERZUNG.copy()
+    data["vollzeit_stunden"] = 0
+    
+    with pytest.raises(ValueError, match="zwischen 10 und 48"):
+        calculate_gesamtdauer(**data)
+
+
+def test_negative_teilzeit_input_fehler():
+    """
+    Test: Negativer Teilzeit-Input ist ungültig.
+    
+    Erwartung: ValueError mit Hinweis auf positive Werte.
+    """
+    data = VOLLZEIT_OHNE_VERKUERZUNG.copy()
+    data["teilzeit_input"] = -75
+    
+    with pytest.raises(ValueError, match="größer als 0"):
+        calculate_gesamtdauer(**data)
+
+
+# ============================================================
+# Formatierung der Ausgabe
+# ============================================================
+
+
+def test_format_ergebnis_enthaelt_pflichtfelder():
+    """
+    Test: Formatierte Ausgabe enthält alle wichtigen Informationen.
+    
+    Erwartung: String enthält Überschrift, Dauer, Prozent, etc.
+    """
+    result = calculate_gesamtdauer(**TEILZEIT_75_MIT_ABITUR)
     output = format_ergebnis(result)
-    # Verify important text elements are in the formatted string
+    
+    # Prüfe, ob wichtige Elemente enthalten sind
     assert "BERECHNUNGSERGEBNIS TEILZEITAUSBILDUNG" in output
     assert "Finale Ausbildungsdauer" in output
     assert str(result["finale_dauer_monate"]) in output
+    assert "75" in output  # Prozentsatz
+    assert "Monate" in output
+
+
+def test_format_ergebnis_ist_string():
+    """
+    Test: Formatierte Ausgabe ist ein String.
+    
+    Erwartung: Return-Typ ist str.
+    """
+    result = calculate_gesamtdauer(**VOLLZEIT_OHNE_VERKUERZUNG)
+    output = format_ergebnis(result)
+    
+    assert isinstance(output, str)
+    assert len(output) > 0
