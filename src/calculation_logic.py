@@ -301,25 +301,35 @@ def calculate_gesamtdauer(
         raise TypeError("Vollzeit-Stunden müssen eine Zahl sein")
     if not isinstance(teilzeit_input, (int, float)):
         raise TypeError("Teilzeit-Wert muss eine Zahl sein")
-    
+
     # Wert-Validierung: Gültige Bereiche gemäß HTML-Eingabefeldern
     if base_duration_months < 12 or base_duration_months > 60:
         raise ValueError("Ausbildungsdauer muss zwischen 12 und 60 Monaten liegen")
     if vollzeit_stunden < 10 or vollzeit_stunden > 48:
         raise ValueError("Vollzeit-Stunden müssen zwischen 10 und 48 Stunden liegen")
-    
+
     # Zusätzliche Validierung je nach input_type
     if input_type == "prozent":
         # Gemäß § 7a Abs. 1 Satz 3 BBiG: Mindestens 50% der Vollzeit
         if teilzeit_input < 50 or teilzeit_input > 100:
-            raise ValueError("Teilzeit-Anteil muss zwischen 50% und 100% liegen (§ 7a Abs. 1 Satz 3 BBiG)")
+            raise ValueError(
+                "Teilzeit-Anteil muss zwischen 50% und 100% liegen "
+                "(§ 7a Abs. 1 Satz 3 BBiG)"
+            )
     elif input_type == "stunden":
-        # Mindestens die Hälfte der Vollzeit-Stunden, maximal Vollzeit-Stunden
+        # Mindestens die Hälfte der Vollzeit-Stunden, maximal Vollzeit
         min_stunden = vollzeit_stunden / 2
         if teilzeit_input < min_stunden:
-            raise ValueError(f"Wochenstunden müssen mindestens {min_stunden} Stunden betragen (Hälfte der regulären Wochenstunden, § 7a Abs. 1 Satz 3 BBiG)")
+            raise ValueError(
+                f"Wochenstunden müssen mindestens {min_stunden} Stunden "
+                f"betragen (Hälfte der regulären Wochenstunden, "
+                f"§ 7a Abs. 1 Satz 3 BBiG)"
+            )
         if teilzeit_input > vollzeit_stunden:
-            raise ValueError(f"Wochenstunden dürfen die regulären Wochenstunden ({vollzeit_stunden}) nicht überschreiten")
+            raise ValueError(
+                f"Wochenstunden dürfen die regulären Wochenstunden "
+                f"({vollzeit_stunden}) nicht überschreiten"
+            )
     else:
         raise ValueError("input_type muss 'prozent' oder 'stunden' sein")
 
