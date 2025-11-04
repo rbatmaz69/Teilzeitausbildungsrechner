@@ -375,13 +375,107 @@ def test_null_vollzeit_stunden_fehler():
 def test_negative_teilzeit_input_fehler():
     """
     Test: Negativer Teilzeit-Input ist ungültig.
-    
-    Erwartung: ValueError mit Hinweis auf positive Werte.
+
+    Erwartung: ValueError mit Hinweis auf gültigen Bereich.
     """
     data = VOLLZEIT_OHNE_VERKUERZUNG.copy()
     data["teilzeit_input"] = -75
-    
-    with pytest.raises(ValueError, match="größer als 0"):
+
+    with pytest.raises(ValueError, match="zwischen 50% und 100%"):
+        calculate_gesamtdauer(**data)
+
+
+def test_type_error_base_duration_string():
+    """
+    Test: String als Ausbildungsdauer ist ungültig.
+
+    Erwartung: TypeError mit Hinweis auf Zahlen.
+    """
+    data = VOLLZEIT_OHNE_VERKUERZUNG.copy()
+    data["base_duration_months"] = "36"
+
+    with pytest.raises(TypeError, match="Ausbildungsdauer muss eine Zahl sein"):
+        calculate_gesamtdauer(**data)
+
+
+def test_type_error_teilzeit_input_string():
+    """
+    Test: String als Teilzeit-Input ist ungültig.
+
+    Erwartung: TypeError mit Hinweis auf Zahlen.
+    """
+    data = VOLLZEIT_OHNE_VERKUERZUNG.copy()
+    data["teilzeit_input"] = "75"
+
+    with pytest.raises(TypeError, match="Teilzeit-Wert muss eine Zahl sein"):
+        calculate_gesamtdauer(**data)
+
+
+def test_type_error_vollzeit_stunden_string():
+    """
+    Test: String als Vollzeit-Stunden ist ungültig.
+
+    Erwartung: TypeError mit Hinweis auf Zahlen.
+    """
+    data = VOLLZEIT_OHNE_VERKUERZUNG.copy()
+    data["vollzeit_stunden"] = "40"
+
+    with pytest.raises(TypeError, match="Vollzeit-Stunden müssen eine Zahl sein"):
+        calculate_gesamtdauer(**data)
+
+
+def test_invalid_input_type():
+    """
+    Test: Ungültiger input_type ist ungültig.
+
+    Erwartung: ValueError mit Hinweis auf 'prozent' oder 'stunden'.
+    """
+    data = VOLLZEIT_OHNE_VERKUERZUNG.copy()
+    data["input_type"] = "invalid"
+
+    with pytest.raises(ValueError, match="input_type muss 'prozent' oder 'stunden' sein"):
+        calculate_gesamtdauer(**data)
+
+
+def test_stunden_input_exakt_vollzeit_grenze():
+    """
+    Test: Teilzeitstunden exakt bei Vollzeit (obere Grenze).
+
+    Erwartung: Kein Fehler, Teilzeit = 100%
+    """
+    data = VOLLZEIT_OHNE_VERKUERZUNG.copy()
+    data["input_type"] = "stunden"
+    data["teilzeit_input"] = 40  # exakt Vollzeit
+
+    result = calculate_gesamtdauer(**data)
+    assert result["teilzeit_prozent"] == 100
+
+
+def test_stunden_input_ueber_vollzeit():
+    """
+    Test: Teilzeitstunden über Vollzeit ist ungültig.
+
+    Erwartung: ValueError mit Hinweis auf Vollzeit-Grenze.
+    """
+    data = VOLLZEIT_OHNE_VERKUERZUNG.copy()
+    data["input_type"] = "stunden"
+    data["teilzeit_input"] = 45  # über Vollzeit (40h)
+
+    with pytest.raises(ValueError, match="dürfen die regulären Wochenstunden .* nicht überschreiten"):
+        calculate_gesamtdauer(**data)
+
+
+def test_stunden_input_unter_minimum():
+    """
+    Test: Teilzeitstunden unter Minimum (< 50% Vollzeit) ist ungültig.
+
+    Erwartung: ValueError mit Hinweis auf Mindest-Stunden.
+    """
+    data = VOLLZEIT_OHNE_VERKUERZUNG.copy()
+    data["input_type"] = "stunden"
+    data["teilzeit_input"] = 15  # unter 50% von 40h (= 20h)
+
+    with pytest.raises(ValueError, match="müssen mindestens .* Stunden betragen"):
         calculate_gesamtdauer(**data)
 
 
