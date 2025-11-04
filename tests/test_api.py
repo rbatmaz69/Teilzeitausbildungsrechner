@@ -632,3 +632,35 @@ def test_verkuerzungsgruende_leer_ist_gueltig(client):
     data = resp.get_json()
     assert data["result"]["verkuerzung_gesamt_monate"] == 0
 
+
+def test_internal_server_error_returns_500(client, monkeypatch):
+    """
+    Test: Unerwartete Exceptions führen zu HTTP 500.
+    
+    Simuliert einen internen Serverfehler durch Mocken von
+    calculate_gesamtdauer, sodass eine unerwartete Exception geworfen wird.
+    
+    Erwartung:
+    - HTTP 500 Internal Server Error
+    - Generische Fehlermeldung ohne Details (Security)
+    """
+    # Mock calculate_gesamtdauer um eine unerwartete Exception zu werfen
+    def mock_calculate(*args, **kwargs):
+        raise RuntimeError("Simulierter interner Fehler")
+    
+    # Patche die Funktion im app-Modul
+    monkeypatch.setattr("src.app.calculate_gesamtdauer", mock_calculate)
+    
+    resp = client.post(
+        "/api/calculate",
+        data=json.dumps(VOLLZEIT_OHNE_VERKUERZUNG),
+        content_type="application/json",
+    )
+    
+    assert resp.status_code == 500
+    data = resp.get_json()
+    assert data["error"]["code"] == "internal_error"
+    assert data["error"]["message"] == "Unerwarteter Serverfehler"
+    # Wichtig: Keine Details über den tatsächlichen Fehler (Security)
+    assert "RuntimeError" not in data["error"]["message"]
+
