@@ -1,112 +1,253 @@
 """
-Dummy-Daten für manuelle Tests (User Story 30)
+Dummy-Daten für Tests (User Story 30)
 
-Liefert realistische Beispiel-Eingaben für calculate_gesamtdauer().
+Zentrale Test-Daten für alle automatisierten Tests.
+Verwendet von test_calculation_logic.py und test_api.py.
 """
 
-from typing import Dict, Iterable, List
+# ============================================================
+# Test-Daten für spezifische Test-Szenarien
+# ============================================================
 
+# Vollzeit ohne Verkürzung (Baseline)
+VOLLZEIT_OHNE_VERKUERZUNG = {
+    "base_duration_months": 36,
+    "vollzeit_stunden": 40,
+    "teilzeit_input": 100,
+    "verkuerzungsgruende": {
+        "abitur": False,
+        "realschule": False,
+        "alter_ueber_21": False,
+        "vorkenntnisse_monate": 0,
+    },
+    "input_type": "prozent",
+}
 
-def get_dummy_inputs() -> Iterable[Dict]:
-    """
-    Gibt eine Liste realistischer Eingabesätze zurück.
+# 50% Teilzeit (Minimum + Obergrenze)
+TEILZEIT_50_PROZENT = {
+    "base_duration_months": 36,
+    "vollzeit_stunden": 40,
+    "teilzeit_input": 50,
+    "verkuerzungsgruende": {
+        "abitur": False,
+        "realschule": False,
+        "alter_ueber_21": False,
+        "vorkenntnisse_monate": 0,
+    },
+    "input_type": "prozent",
+}
 
-    Jeder Datensatz ist kompatibel zu calculation_logic.calculate_gesamtdauer():
-    - base_duration_months (int)
-    - vollzeit_stunden (float)
-    - teilzeit_input (float)
-    - verkuerzungsgruende (dict)
-    - input_type (str)
-    """
-    datasets: List[Dict] = [
-        {
-            "name": "Standard 36M, 75% Teilzeit",
-            "base_duration_months": 36,
-            "vollzeit_stunden": 40,
-            "teilzeit_input": 75,
-            "verkuerzungsgruende": {
-                "abitur": False,
-                "realschule": False,
-                "alter_ueber_21": False,
-                "vorkenntnisse_monate": 0,
-            },
-            "input_type": "prozent",
-        },
-        {
-            "name": "Realschule + 75% Teilzeit",
-            "base_duration_months": 36,
-            "vollzeit_stunden": 40,
-            "teilzeit_input": 75,
-            "verkuerzungsgruende": {
-                "abitur": False,
-                "realschule": True,
-                "alter_ueber_21": False,
-                "vorkenntnisse_monate": 0,
-            },
-            "input_type": "prozent",
-        },
-        {
-            "name": "Abitur + 60% Teilzeit",
-            "base_duration_months": 36,
-            "vollzeit_stunden": 40,
-            "teilzeit_input": 60,
-            "verkuerzungsgruende": {
-                "abitur": True,
-                "realschule": False,
-                "alter_ueber_21": False,
-                "vorkenntnisse_monate": 0,
-            },
-            "input_type": "prozent",
-        },
-        {
-            "name": "Umschüler, Vorkenntnisse 8M, 80% Teilzeit",
-            "base_duration_months": 36,
-            "vollzeit_stunden": 40,
-            "teilzeit_input": 80,
-            "verkuerzungsgruende": {
-                "abitur": False,
-                "realschule": True,
-                "alter_ueber_21": True,
-                "vorkenntnisse_monate": 8,
-            },
-            "input_type": "prozent",
-        },
-        {
-            "name": "Stunden-Input: 30h statt 75%",
-            "base_duration_months": 36,
-            "vollzeit_stunden": 40,
-            "teilzeit_input": 30,  # entspricht 75%
-            "verkuerzungsgruende": {
-                "abitur": False,
-                "realschule": False,
-                "alter_ueber_21": False,
-                "vorkenntnisse_monate": 0,
-            },
-            "input_type": "stunden",
-        },
-        {
-            "name": "Grenzfall: 50% Teilzeit (Obergrenze relevant)",
-            "base_duration_months": 36,
-            "vollzeit_stunden": 40,
-            "teilzeit_input": 50,
-            "verkuerzungsgruende": {
-                "abitur": False,
-                "realschule": False,
-                "alter_ueber_21": False,
-                "vorkenntnisse_monate": 0,
-            },
-            "input_type": "prozent",
-        },
-    ]
+# 75% Teilzeit mit Abitur
+TEILZEIT_75_MIT_ABITUR = {
+    "base_duration_months": 36,
+    "vollzeit_stunden": 40,
+    "teilzeit_input": 75,
+    "verkuerzungsgruende": {
+        "abitur": True,
+        "realschule": False,
+        "alter_ueber_21": False,
+        "vorkenntnisse_monate": 0,
+    },
+    "input_type": "prozent",
+}
 
-    # Nur relevante Felder für calculate_gesamtdauer weiterreichen
-    for ds in datasets:
-        yield {
-            "base_duration_months": ds["base_duration_months"],
-            "vollzeit_stunden": ds["vollzeit_stunden"],
-            "teilzeit_input": ds["teilzeit_input"],
-            "verkuerzungsgruende": ds["verkuerzungsgruende"],
-            "input_type": ds["input_type"],
-        }
+# Realschulabschluss
+MIT_REALSCHULE = {
+    "base_duration_months": 36,
+    "vollzeit_stunden": 40,
+    "teilzeit_input": 75,
+    "verkuerzungsgruende": {
+        "abitur": False,
+        "realschule": True,
+        "alter_ueber_21": False,
+        "vorkenntnisse_monate": 0,
+    },
+    "input_type": "prozent",
+}
+
+# Alter über 21
+MIT_ALTER_21 = {
+    "base_duration_months": 36,
+    "vollzeit_stunden": 40,
+    "teilzeit_input": 75,
+    "verkuerzungsgruende": {
+        "abitur": False,
+        "realschule": False,
+        "alter_ueber_21": True,
+        "vorkenntnisse_monate": 0,
+    },
+    "input_type": "prozent",
+}
+
+# Vorkenntnisse 6 Monate
+MIT_VORKENNTNISSE_6 = {
+    "base_duration_months": 36,
+    "vollzeit_stunden": 40,
+    "teilzeit_input": 75,
+    "verkuerzungsgruende": {
+        "abitur": False,
+        "realschule": False,
+        "alter_ueber_21": False,
+        "vorkenntnisse_monate": 6,
+    },
+    "input_type": "prozent",
+}
+
+# Vorkenntnisse 12 Monate
+MIT_VORKENNTNISSE_12 = {
+    "base_duration_months": 36,
+    "vollzeit_stunden": 40,
+    "teilzeit_input": 75,
+    "verkuerzungsgruende": {
+        "abitur": False,
+        "realschule": False,
+        "alter_ueber_21": False,
+        "vorkenntnisse_monate": 12,
+    },
+    "input_type": "prozent",
+}
+
+# Kombination: Abitur + Realschule
+KOMBINATION_ABITUR_REALSCHULE = {
+    "base_duration_months": 36,
+    "vollzeit_stunden": 40,
+    "teilzeit_input": 75,
+    "verkuerzungsgruende": {
+        "abitur": True,
+        "realschule": True,
+        "alter_ueber_21": False,
+        "vorkenntnisse_monate": 0,
+    },
+    "input_type": "prozent",
+}
+
+# Stunden-Input: 30h von 40h
+STUNDEN_INPUT_30_VON_40 = {
+    "base_duration_months": 36,
+    "vollzeit_stunden": 40,
+    "teilzeit_input": 30,
+    "verkuerzungsgruende": {
+        "abitur": False,
+        "realschule": False,
+        "alter_ueber_21": False,
+        "vorkenntnisse_monate": 0,
+    },
+    "input_type": "stunden",
+}
+
+# Stunden-Input: 20h von 40h (50%)
+STUNDEN_INPUT_20_VON_40 = {
+    "base_duration_months": 36,
+    "vollzeit_stunden": 40,
+    "teilzeit_input": 20,
+    "verkuerzungsgruende": {
+        "abitur": False,
+        "realschule": False,
+        "alter_ueber_21": False,
+        "vorkenntnisse_monate": 0,
+    },
+    "input_type": "stunden",
+}
+
+# Verschiedene Ausbildungsdauern
+DAUER_24_MONATE = {
+    "base_duration_months": 24,
+    "vollzeit_stunden": 40,
+    "teilzeit_input": 60,
+    "verkuerzungsgruende": {
+        "abitur": False,
+        "realschule": False,
+        "alter_ueber_21": False,
+        "vorkenntnisse_monate": 0,
+    },
+    "input_type": "prozent",
+}
+
+DAUER_42_MONATE = {
+    "base_duration_months": 42,
+    "vollzeit_stunden": 40,
+    "teilzeit_input": 70,
+    "verkuerzungsgruende": {
+        "abitur": False,
+        "realschule": False,
+        "alter_ueber_21": False,
+        "vorkenntnisse_monate": 0,
+    },
+    "input_type": "prozent",
+}
+
+# ============================================================
+# Ungültige Eingaben für Fehler-Tests
+# ============================================================
+
+# Teilzeit unter 50% (ungültig)
+UNGUELTIG_TEILZEIT_UNTER_50 = {
+    "base_duration_months": 36,
+    "vollzeit_stunden": 40,
+    "teilzeit_input": 40,  # < 50%
+    "verkuerzungsgruende": {
+        "abitur": False,
+        "realschule": False,
+        "alter_ueber_21": False,
+        "vorkenntnisse_monate": 0,
+    },
+    "input_type": "prozent",
+}
+
+# Teilzeit über 100% (ungültig)
+UNGUELTIG_TEILZEIT_UEBER_100 = {
+    "base_duration_months": 36,
+    "vollzeit_stunden": 40,
+    "teilzeit_input": 120,  # > 100%
+    "verkuerzungsgruende": {
+        "abitur": False,
+        "realschule": False,
+        "alter_ueber_21": False,
+        "vorkenntnisse_monate": 0,
+    },
+    "input_type": "prozent",
+}
+
+# Negative Werte (ungültig)
+UNGUELTIG_NEGATIVE_MONATE = {
+    "base_duration_months": -36,
+    "vollzeit_stunden": 40,
+    "teilzeit_input": 75,
+    "verkuerzungsgruende": {
+        "abitur": False,
+        "realschule": False,
+        "alter_ueber_21": False,
+        "vorkenntnisse_monate": 0,
+    },
+    "input_type": "prozent",
+}
+
+# Stunden über Vollzeit (ungültig)
+UNGUELTIG_STUNDEN_UEBER_VOLLZEIT = {
+    "base_duration_months": 36,
+    "vollzeit_stunden": 40,
+    "teilzeit_input": 50,  # 50h > 40h Vollzeit
+    "verkuerzungsgruende": {
+        "abitur": False,
+        "realschule": False,
+        "alter_ueber_21": False,
+        "vorkenntnisse_monate": 0,
+    },
+    "input_type": "stunden",
+}
+
+# 0% Teilzeit (ungültig)
+UNGUELTIG_TEILZEIT_0 = {
+    "base_duration_months": 36,
+    "vollzeit_stunden": 40,
+    "teilzeit_input": 0,
+    "verkuerzungsgruende": {
+        "abitur": False,
+        "realschule": False,
+        "alter_ueber_21": False,
+        "vorkenntnisse_monate": 0,
+    },
+    "input_type": "prozent",
+}
 
 
