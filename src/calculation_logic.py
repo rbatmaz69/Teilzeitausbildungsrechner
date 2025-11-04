@@ -119,16 +119,6 @@ def calculate_teilzeit_schritt1(verkuerzte_dauer_months, teilzeit_prozent):
         >>> calculate_teilzeit_schritt1(24, 50)
         48.0
     """
-    # Validierung: Mindestens 50% Teilzeit erforderlich
-    if teilzeit_prozent < MIN_TEILZEIT_PROZENT:
-        raise ValueError(
-            f"Teilzeit muss mindestens {MIN_TEILZEIT_PROZENT}% betragen "
-            f"(§ 7a Abs. 1 Satz 3 BBiG)"
-        )
-
-    if teilzeit_prozent > 100:
-        raise ValueError("Teilzeit kann nicht über 100% liegen")
-
     # Automatische Verlängerung berechnen
     # Beispiel: 36 Monate bei 75% = 36 / 0.75 = 48 Monate
     verlaengerte_dauer = verkuerzte_dauer_months / (teilzeit_prozent / 100.0)
@@ -242,15 +232,9 @@ def calculate_teilzeit_prozent(vollzeit_stunden, teilzeit_stunden):
         >>> calculate_teilzeit_prozent(40, 20)
         50.0
     """
-    if vollzeit_stunden <= 0:
-        raise ValueError("Vollzeitstunden müssen größer als 0 sein")
-
-    if teilzeit_stunden <= 0:
-        raise ValueError("Teilzeitstunden müssen größer als 0 sein")
-
     prozent = (teilzeit_stunden / vollzeit_stunden) * 100
 
-    # Mindest-Teilzeit prüfen
+    # Mindest-Teilzeit prüfen (nach Berechnung)
     if prozent < MIN_TEILZEIT_PROZENT:
         raise ValueError(
             f"Teilzeit muss mindestens {MIN_TEILZEIT_PROZENT}% betragen. "
@@ -281,12 +265,6 @@ def calculate_teilzeit_stunden(vollzeit_stunden, teilzeit_prozent):
         >>> calculate_teilzeit_stunden(40, 50.0)
         20.0
     """
-    if teilzeit_prozent < MIN_TEILZEIT_PROZENT:
-        raise ValueError(f"Teilzeit muss mindestens {MIN_TEILZEIT_PROZENT}% betragen")
-
-    if teilzeit_prozent > 100:
-        raise ValueError("Teilzeit kann nicht über 100% liegen")
-
     return vollzeit_stunden * (teilzeit_prozent / 100.0)
 
 
