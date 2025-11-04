@@ -1,6 +1,5 @@
-// script.js
 document.addEventListener("DOMContentLoaded", () => {
-  // Elemente (IDs wie in deinem HTML)
+  
   const dauerInput = document.getElementById("dauer");
   const wochenstundenInput = document.getElementById("stunden");
   const teilzeitProzentInput = document.getElementById("teilzeitProzent");

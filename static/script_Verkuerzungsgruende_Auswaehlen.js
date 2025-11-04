@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+  const abiturCheckbox = document.getElementById('g-abitur');
+  const realschuleCheckbox = document.getElementById('g-realschule');
+
   /* ========== Tooltips (touch-optimiert) ========== */
   document.querySelectorAll('.info-btn').forEach(btn => {
     const tooltip = btn.closest('.tile')?.querySelector('.tooltip');
@@ -21,6 +25,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!(e.target instanceof Element) || !e.target.classList.contains('info-btn')) {
       document.querySelectorAll('.tooltip').forEach(t => t.classList.remove('show'));
       document.querySelectorAll('.info-btn[aria-expanded="true"]').forEach(b => b.setAttribute('aria-expanded','false'));
+    }
+  });
+
+  // Exklusives Verhalten für Abitur- und Realschule-Checkboxen
+  abiturCheckbox.addEventListener('change', () => {
+    if (abiturCheckbox.checked) {
+      realschuleCheckbox.checked = false;
+    }
+  });
+
+  realschuleCheckbox.addEventListener('change', () => {
+    if (realschuleCheckbox.checked) {
+      abiturCheckbox.checked = false;
     }
   });
 });
