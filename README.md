@@ -146,34 +146,23 @@ ergebnis = calculate_gesamtdauer(
 ## 🧪 Tests
 
 ```bash
-# Alle Tests ausführen
-pytest -q
+# Alle Tests ausführen (49 Tests)
+pytest tests/ -v
 
-# Tests umfassen:
-# - Beispiele aus dem Gesetzestext
-# - Verkürzung + Teilzeit Kombinationen
-# - Verschiedene Ausbildungsberufe
-# - Grenzfälle und Edge Cases
-# - Stunden/Prozentsatz Umrechnung
-# - Realistische Szenarien
+# Nur Unit-Tests (Berechnungslogik)
+pytest tests/test_calculation_logic.py -v
+
+# Nur Integration-Tests (API)
+pytest tests/test_api.py -v
+
+# Mit Coverage-Report
+pytest tests/ --cov=src --cov-report=term
 ```
 
-### Dummy-Daten aktivieren (User Story 30)
-
-Führe zusätzliche Dummy-Szenarien aus, indem du eine Env-Variable setzt:
-
-```bash
-# macOS/Linux
-USE_DUMMY_DATA=1 python3 test_manual.py
-
-# Windows PowerShell
-$env:USE_DUMMY_DATA=1; python3 test_manual.py
-
-# Windows CMD
-set USE_DUMMY_DATA=1 && python3 test_manual.py
-```
-
-Die Dummy-Datensätze werden nur ausgeführt, wenn `USE_DUMMY_DATA` gesetzt ist.
+**Test-Struktur:**
+- `tests/test_calculation_logic.py` - Unit-Tests für Berechnungslogik
+- `tests/test_api.py` - Integration-Tests für Flask-API
+- `tests/dummy_data.py` - Zentrale Testdaten (von allen Tests verwendet)
 
 ## 📁 Projektstruktur
 
@@ -193,7 +182,6 @@ group-04/
 ├── tests/
 │   ├── test_api.py         # API-Tests (Flask-Endpunkte)
 │   ├── test_calculation_logic.py  # Unit-Tests für Berechnungslogik
-│   ├── test_manual.py      # Manuelle Test-Suite
 │   └── dummy_data.py       # Dummy-Daten für Tests (User Story 30)
 ├── wsgi.py                 # WSGI-Entry für Production-Server
 ├── requirements.txt        # Python-Dependencies
