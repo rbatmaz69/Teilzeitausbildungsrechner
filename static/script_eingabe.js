@@ -44,6 +44,21 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!isNaN(wochenstunden) && !isNaN(prozent)) {
       teilzeitStundenInput.value = (wochenstundenInput.value * prozent / 100).toFixed(1);
     }
+
+    // Deaktiviere Stunden-Buttons, die über den regulären Wochenstunden liegen
+    buttons.forEach(btn => {
+      if (btn.dataset.type === "hours") {
+        const btnValue = parseFloat(btn.dataset.value);
+        if (btnValue > wochenstundenInput.value) {
+          btn.disabled = true;
+          btn.style.visibility = "hidden";
+          btn.classList.remove("active");
+        } else {
+          btn.disabled = false;
+          btn.style.visibility = "visible";
+        }
+      }
+    });
   })
   
   // Wird ausgeführt, nachdem ein neuer Prozentwert eingegeben wurde
