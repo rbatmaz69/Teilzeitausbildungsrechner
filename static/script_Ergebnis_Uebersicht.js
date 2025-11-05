@@ -46,6 +46,9 @@ async function getSummary() {
   const alter21 = !!document.getElementById("g-alter21")?.checked;
   const vork = !!document.getElementById("g-vork")?.checked;
 
+  // Slider für berufliche Vorkenntnisse
+  const vorkSlider = document.getElementById("vork-slider");
+
   // Werte aus den Eingabefeldern extrahieren und in Zahlen umwandeln
   // || 0 stellt sicher, dass wir immer eine Zahl haben (auch bei leerem Feld)
   const baseMonths = Number(baseMonthsEl?.value || 0);
@@ -66,9 +69,7 @@ async function getSummary() {
       abitur,
       realschule,
       alter_ueber_21: alter21,
-      // Vorkenntnisse: Ohne separate Eingabe setzen wir konservativ 6 Monate,
-      // wenn die Checkbox aktiviert ist. Das ist eine Vereinfachung.
-      vorkenntnisse_monate: vork ? 6 : 0,
+      vorkenntnisse_monate: vork ? Number(vorkSlider?.value || 0) : 0,
     },
   };
 
@@ -308,3 +309,31 @@ async function init() {
 }
 
 document.addEventListener("DOMContentLoaded", init);
+
+// Funktion für Berechnen-Button
+async function berechnen() {
+  // Daten laden und anzeigen
+  try {
+    const { inputs, calc } = await getSummary();
+    fillInputsList(inputs);
+    fillCuts(inputs, calc);
+    fillResults(inputs, calc);
+    setDateStamp();
+  } catch (err) {
+    console.error("Fehler beim Laden der Daten:", err);
+    const msg = (err && err.message) ? String(err.message) : "Unbekannter Fehler";
+    setText('#res-total-months', '–');
+    setText('#res-extension', '');
+    setText('#res-total-weeks', '–');
+    setText('#res-school-per-week', '–');
+    setText('#res-work-per-week', '–');
+    const em = document.getElementById('errorTotalMonths');
+    if (em) em.textContent = msg;
+  }
+}
+
+
+// Berechnen-Button
+document.getElementById("berechnenBtn").addEventListener("click", () => {
+  berechnen();
+});
