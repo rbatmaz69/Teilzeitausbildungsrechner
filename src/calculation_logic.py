@@ -119,16 +119,6 @@ def calculate_teilzeit_schritt1(verkuerzte_dauer_months, teilzeit_prozent):
         >>> calculate_teilzeit_schritt1(24, 50)
         48.0
     """
-    # Validierung: Mindestens 50% Teilzeit erforderlich
-    if teilzeit_prozent < MIN_TEILZEIT_PROZENT:
-        raise ValueError(
-            f"Teilzeit muss mindestens {MIN_TEILZEIT_PROZENT}% betragen "
-            f"(§ 7a Abs. 1 Satz 3 BBiG)"
-        )
-
-    if teilzeit_prozent > 100:
-        raise ValueError("Teilzeit kann nicht über 100% liegen")
-
     # Automatische Verlängerung berechnen
     # Beispiel: 36 Monate bei 75% = 36 / 0.75 = 48 Monate
     verlaengerte_dauer = verkuerzte_dauer_months / (teilzeit_prozent / 100.0)
@@ -200,31 +190,6 @@ def apply_rundung_schritt3(dauer_months):
     return math.floor(dauer_months)
 
 
-def calculate_wochenstunden(vollzeit_stunden, teilzeit_prozent):
-    """
-    Berechnet die tatsächlichen Wochenstunden bei Teilzeit
-
-    Beispiel aus der Empfehlung (Seite 1):
-    - Vollzeit: 40 Stunden/Woche (5 Tage à 8 Stunden)
-    - Teilzeit: 75%
-    - Ergebnis: 30 Stunden/Woche (5 Tage à 6 Stunden)
-
-    Args:
-        vollzeit_stunden (float): Wochenstunden bei Vollzeit
-        teilzeit_prozent (int): Prozentsatz der Teilzeit
-
-    Returns:
-        float: Tatsächliche Wochenstunden bei Teilzeit
-
-    Beispiel:
-        >>> calculate_wochenstunden(40, 75)
-        30.0
-        >>> calculate_wochenstunden(40, 50)
-        20.0
-    """
-    return vollzeit_stunden * (teilzeit_prozent / 100.0)
-
-
 def calculate_teilzeit_prozent(vollzeit_stunden, teilzeit_stunden):
     """
     Berechnet den Teilzeit-Prozentsatz basierend auf Vollzeit- und Teilzeitstunden
@@ -242,25 +207,7 @@ def calculate_teilzeit_prozent(vollzeit_stunden, teilzeit_stunden):
         >>> calculate_teilzeit_prozent(40, 20)
         50.0
     """
-    if vollzeit_stunden <= 0:
-        raise ValueError("Vollzeitstunden müssen größer als 0 sein")
-
-    if teilzeit_stunden <= 0:
-        raise ValueError("Teilzeitstunden müssen größer als 0 sein")
-
     prozent = (teilzeit_stunden / vollzeit_stunden) * 100
-
-    # Mindest-Teilzeit prüfen
-    if prozent < MIN_TEILZEIT_PROZENT:
-        raise ValueError(
-            f"Teilzeit muss mindestens {MIN_TEILZEIT_PROZENT}% betragen. "
-            f"Bei {vollzeit_stunden} Vollzeitstunden sind das mindestens "
-            f"{vollzeit_stunden * MIN_TEILZEIT_PROZENT / 100} Stunden."
-        )
-
-    if prozent > 100:
-        raise ValueError("Teilzeit kann nicht über 100% liegen")
-
     return prozent
 
 
@@ -281,12 +228,6 @@ def calculate_teilzeit_stunden(vollzeit_stunden, teilzeit_prozent):
         >>> calculate_teilzeit_stunden(40, 50.0)
         20.0
     """
-    if teilzeit_prozent < MIN_TEILZEIT_PROZENT:
-        raise ValueError(f"Teilzeit muss mindestens {MIN_TEILZEIT_PROZENT}% betragen")
-
-    if teilzeit_prozent > 100:
-        raise ValueError("Teilzeit kann nicht über 100% liegen")
-
     return vollzeit_stunden * (teilzeit_prozent / 100.0)
 
 
@@ -361,17 +302,46 @@ def calculate_gesamtdauer(
     if not isinstance(teilzeit_input, (int, float)):
         raise TypeError("Teilzeit-Wert muss eine Zahl sein")
 
+    # Wert-Validierung: Gültige Bereiche gemäß HTML-Eingabefeldern
+    if base_duration_months < 12 or base_duration_months > 60:
+        raise ValueError("Ausbildungsdauer muss zwischen 12 und 60 Monaten liegen")
+    if vollzeit_stunden < 10 or vollzeit_stunden > 48:
+        raise ValueError("Vollzeit-Stunden müssen zwischen 10 und 48 Stunden liegen")
+
+    # Zusätzliche Validierung je nach input_type
+    if input_type == "prozent":
+        # Gemäß § 7a Abs. 1 Satz 3 BBiG: Mindestens 50% der Vollzeit
+        if teilzeit_input < 50 or teilzeit_input > 100:
+            raise ValueError(
+                "Teilzeit-Anteil muss zwischen 50% und 100% liegen "
+                "(§ 7a Abs. 1 Satz 3 BBiG)"
+            )
+    elif input_type == "stunden":
+        # Mindestens die Hälfte der Vollzeit-Stunden, maximal Vollzeit
+        min_stunden = vollzeit_stunden / 2
+        if teilzeit_input < min_stunden:
+            raise ValueError(
+                f"Wochenstunden müssen mindestens {min_stunden} Stunden "
+                f"betragen (Hälfte der regulären Wochenstunden, "
+                f"§ 7a Abs. 1 Satz 3 BBiG)"
+            )
+        if teilzeit_input > vollzeit_stunden:
+            raise ValueError(
+                f"Wochenstunden dürfen die regulären Wochenstunden "
+                f"({vollzeit_stunden}) nicht überschreiten"
+            )
+    else:
+        raise ValueError("input_type muss 'prozent' oder 'stunden' sein")
+
     # Teilzeit-Input verarbeiten (Prozentsatz oder Stunden)
     if input_type == "stunden":
         # Stunden zu Prozentsatz umrechnen
         teilzeit_prozent = calculate_teilzeit_prozent(vollzeit_stunden, teilzeit_input)
         teilzeit_stunden = teilzeit_input
-    elif input_type == "prozent":
+    else:  # input_type == "prozent"
         # Prozentsatz zu Stunden umrechnen
         teilzeit_prozent = teilzeit_input
         teilzeit_stunden = calculate_teilzeit_stunden(vollzeit_stunden, teilzeit_input)
-    else:
-        raise ValueError("input_type muss 'prozent' oder 'stunden' sein")
 
     # Schritt 0: Verkürzung anwenden (BEVOR Teilzeit berechnet wird)
     verkuerzte_dauer = calculate_verkuerzung(base_duration_months, verkuerzungsgruende)
