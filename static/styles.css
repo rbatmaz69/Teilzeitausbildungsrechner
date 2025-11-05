@@ -105,7 +105,7 @@ p.helper{ color:var(--muted); margin:0 0 14px }
 
 .slider-container input[type="range"] {
   flex: 1;
-  accent-color: #df0202; /* Sliderfarbe */
+  accent-color: #df0202;
 }
 
 /* Wenn Checkbox aktiv → Slider anzeigen */

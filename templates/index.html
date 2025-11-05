@@ -15,6 +15,9 @@
 <body>
   <main class="app-container">
 
+    <!-- ================================ EINGABEN DES RECHNERS ================================ -->
+
+    <!-- Eingabe reguläre Ausbildungsdauer -->
     <section class="calculator">
       <div class="input-group">
         <label for="dauer">
@@ -24,6 +27,7 @@
         <input type="number" id="dauer" value="36" min="12" max="60" step="1" required>
       </div>
 
+      <!-- Eingabe reguläre Wochenstunden -->
       <div class="input-group">
         <label for="stunden">
           Reguläre Wochenstunden (gesamt)
@@ -32,12 +36,14 @@
         <input type="number" id="stunden" value="40" min="10" max="48" step="1" required>
       </div>
 
+      <!-- Eingabe Teilzeitanteil -->
       <div class="input-group">
         <label for="teilzeitProzent">
           Teilzeit-Anteil
           <span class="info-icon" data-tooltip="Mindestens 50% für eine anerkannte Teilzeitausbildung">i</span>
         </label>
 
+        <!-- Prozentanteil -->
         <div class="input-row">
           <div class="input-group half">
              <label for="teilzeitProzent">Prozent</label>
@@ -48,6 +54,7 @@
             <span class="error-message" id="errorProzent"></span>
           </div>
 
+          <!-- Stundenanteil -->
           <div class="input-group half">
             <label for="teilzeitStunden">Stunden</label>
             <div class="input-with-unit">
@@ -60,7 +67,7 @@
       </div>
 
 
-      <!-- Buttons in zwei Zeilen, optisch getrennt -->
+      <!-- Buttons für gängige Werte -->
       <div class="button-container">
         <div class="button-row">
           <button class="preset" data-type="percent" data-value="50">50%</button>
@@ -78,7 +85,7 @@
     </section>
   </main>
   
-  
+  <!-- ================================ VERKÜRZUNGSGRÜNDE AUSWÄHLEN ================================ -->
   <div class="container">
     <!-- Hauptkarte, optisch hervorgehoben, über aria-labelledby mit der H1 verbunden -->
     <div class="card" aria-labelledby="vk-heading">
