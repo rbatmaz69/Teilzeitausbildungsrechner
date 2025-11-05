@@ -95,6 +95,24 @@ p.helper{ color:var(--muted); margin:0 0 14px }
   white-space:nowrap;
 }
 
+/* Slider Container */
+.slider-container {
+  display: none;
+  margin-top: 10px;
+  align-items: center;
+  gap: 8px;
+}
+
+.slider-container input[type="range"] {
+  flex: 1;
+  accent-color: #df0202; /* Sliderfarbe */
+}
+
+/* Wenn Checkbox aktiv → Slider anzeigen */
+input[type="checkbox"]:checked ~ .tile-body .slider-container {
+  display: flex;
+}
+
 /* Info-Button & Tooltip */
 .info-btn{
   -webkit-appearance:none; appearance:none; border:0; background:transparent; padding:6px;

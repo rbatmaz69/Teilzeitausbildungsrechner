@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const abiturCheckbox = document.getElementById('g-abitur');
   const realschuleCheckbox = document.getElementById('g-realschule');
+  const vorkenntnisseCheckbox = document.getElementById('g-vork');
+  const vorkSlider = document.getElementById('vork-slider');
+  const vorkWert = document.getElementById('vork-wert');
 
   /* ========== Tooltips (touch-optimiert) ========== */
   document.querySelectorAll('.info-btn').forEach(btn => {
@@ -39,5 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (realschuleCheckbox.checked) {
       abiturCheckbox.checked = false;
     }
+  });
+
+  vorkenntnisseCheckbox.addEventListener('change', () => {
+    if (vorkenntnisseCheckbox.checked) {
+      
+    }
+  });
+
+  vorkSlider.addEventListener('input', () => {
+    vorkWert.textContent = vorkSlider.value + " Monate";
   });
 });

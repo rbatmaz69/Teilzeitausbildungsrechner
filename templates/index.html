@@ -146,7 +146,12 @@
                 <div class="tile-body" style="flex:1">
                   <div class="tile-header">
                     <span>Berufliche Vorkenntnisse <span class="badge">−6 bis −12&nbsp;Monate</span></span>
-                    <button type="button" class="info-btn" aria-label="Info Vorkenntnisse" data-tooltip="Praxiserfahrungen oder Abschlüsse können die Ausbildungsdauer bei ihnen verkürzen.">ℹ️</button>
+                    <button type="button" class="info-btn" aria-label="Info Vorkenntnisse" data-tooltip="Praxiserfahrungen oder Abschlüsse können die Ausbildungsdauer bei Ihnen verkürzen.">ℹ️</button>
+                  </div>
+                  <!-- Slider zur Auswahl der genauen Verkürzungsdauer -->
+                  <div class="slider-container">
+                    <input type="range" id="vork-slider" min="6" max="12" step="1" value="6">
+                    <span id="vork-wert">6 Monate</span>
                   </div>
                 </div>
                 <div class="tooltip" role="tooltip"></div>

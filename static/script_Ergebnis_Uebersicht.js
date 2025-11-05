@@ -45,6 +45,7 @@ async function getSummary() {
   const realschule = !!document.getElementById("g-realschule")?.checked;
   const alter21 = !!document.getElementById("g-alter21")?.checked;
   const vork = !!document.getElementById("g-vork")?.checked;
+  const vorkSlider = document.getElementById("vork-slider");
 
   // Werte aus den Eingabefeldern extrahieren und in Zahlen umwandeln
   // || 0 stellt sicher, dass wir immer eine Zahl haben (auch bei leerem Feld)
@@ -68,7 +69,7 @@ async function getSummary() {
       alter_ueber_21: alter21,
       // Vorkenntnisse: Ohne separate Eingabe setzen wir konservativ 6 Monate,
       // wenn die Checkbox aktiviert ist. Das ist eine Vereinfachung.
-      vorkenntnisse_monate: vork ? 6 : 0,
+      vorkenntnisse_monate: vork ? Number(vorkSlider?.value || 0) : 0,
     },
   };
 
