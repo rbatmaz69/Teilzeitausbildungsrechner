@@ -146,34 +146,23 @@ ergebnis = calculate_gesamtdauer(
 ## 🧪 Tests
 
 ```bash
-# Alle Tests ausführen
-pytest -q
+# Alle Tests ausführen (57 Tests)
+pytest tests/ -v
 
-# Tests umfassen:
-# - Beispiele aus dem Gesetzestext
-# - Verkürzung + Teilzeit Kombinationen
-# - Verschiedene Ausbildungsberufe
-# - Grenzfälle und Edge Cases
-# - Stunden/Prozentsatz Umrechnung
-# - Realistische Szenarien
+# Nur Unit-Tests (33 Tests - Berechnungslogik)
+pytest tests/test_calculation_logic.py -v
+
+# Nur Integration-Tests (24 Tests - API)
+pytest tests/test_api.py -v
+
+# Mit Coverage-Report
+pytest tests/ --cov=src --cov-report=term
 ```
 
-### Dummy-Daten aktivieren (User Story 30)
-
-Führe zusätzliche Dummy-Szenarien aus, indem du eine Env-Variable setzt:
-
-```bash
-# macOS/Linux
-USE_DUMMY_DATA=1 python3 test_manual.py
-
-# Windows PowerShell
-$env:USE_DUMMY_DATA=1; python3 test_manual.py
-
-# Windows CMD
-set USE_DUMMY_DATA=1 && python3 test_manual.py
-```
-
-Die Dummy-Datensätze werden nur ausgeführt, wenn `USE_DUMMY_DATA` gesetzt ist.
+**Test-Struktur:**
+- `tests/test_calculation_logic.py` - Unit-Tests für Berechnungslogik (33 Tests)
+- `tests/test_api.py` - Integration-Tests für Flask-API (24 Tests)
+- `tests/dummy_data.py` - Zentrale Testdaten (von allen Tests verwendet)
 
 ## 📁 Projektstruktur
 
@@ -191,13 +180,16 @@ group-04/
 ├── templates/
 │   └── index.html          # Haupt-HTML-Template
 ├── tests/
-│   ├── test_api.py         # API-Tests (Flask-Endpunkte)
-│   ├── test_calculation_logic.py  # Unit-Tests für Berechnungslogik
-│   ├── test_manual.py      # Manuelle Test-Suite
-│   └── dummy_data.py       # Dummy-Daten für Tests (User Story 30)
-├── wsgi.py                 # WSGI-Entry für Production-Server
-├── requirements.txt        # Python-Dependencies
+│   ├── test_api.py         # Integration-Tests für Flask-API (24 Tests)
+│   ├── test_calculation_logic.py  # Unit-Tests für Berechnungslogik (33 Tests)
+│   └── dummy_data.py       # Zentrale Testdaten (User Story 30)
+├── .flake8                 # Flake8 Linter-Konfiguration
+├── .gitignore              # Git-Ignore-Regeln
+├── .gitlab-ci.yml          # GitLab CI/CD Pipeline-Konfiguration
+├── coverage.xml            # Coverage-Report (XML-Format)
 ├── pytest.ini              # Pytest-Konfiguration
+├── requirements.txt        # Python-Dependencies
+├── wsgi.py                 # WSGI-Entry für Production-Server
 └── README.md               # Diese Datei
 ```
 
@@ -258,20 +250,36 @@ Alle Funktionen sind ausführlich dokumentiert mit:
 
 ## 🔄 CI/CD Pipeline
 
-🚧 **Geplant** - Automatisierte Tests und Deployment werden später implementiert
-
-### Geplante Features
-- [ ] **Automatisierte Tests** - Python-Tests bei jedem Push
-- [ ] **Code Quality** - Linting und Formatting
+### Pipeline-Stages
+- [x] **Lint** - Flake8 und isort Code Quality Checks
+- [x] **Test** - Pytest mit Coverage-Report (90%)
+- [x] **Coverage Report** - Automatische Coverage-Artefakte
 - [ ] **Deployment** - Automatisches Deployment nach Tests
 - [ ] **Status Badges** - Build-Status in README
 
+**Pipeline läuft automatisch bei:**
+- Merge Requests
+- Pushes zu `develop`
+- Pushes zu `main`
+
+**Konfiguration:** `.gitlab-ci.yml`
+
 ## 🎯 Status
 
-✅ **Vollständig implementiert** - Alle Kernfunktionen verfügbar
-✅ **Getestet** - Umfassende Test-Suite
-✅ **Dokumentiert** - Ausführliche Kommentare und Beispiele
-✅ **Produktionsreif** - Bereit für den produktiven Einsatz
+- [x] **Vollständig implementiert** - Alle Kernfunktionen verfügbar
+- [x] **Getestet** - 57 Tests mit 90% Code Coverage
+- [x] **Dokumentiert** - Ausführliche Kommentare und Beispiele
+- [x] **Produktionsreif** - Bereit für den produktiven Einsatz
+
+### Test-Coverage
+- **Gesamt**: 90% (133 Statements)
+- **calculation_logic.py**: 100% (93 Statements)
+- **app.py**: 68% (40 Statements - nur CLI-Code ungetestet)
+
+### Code-Qualität
+- **Flake8**: Vollständig konform
+- **Dokumentation**: Alle Funktionen dokumentiert
+- **Tests**: Unit + Integration Tests
 
 ---
 
