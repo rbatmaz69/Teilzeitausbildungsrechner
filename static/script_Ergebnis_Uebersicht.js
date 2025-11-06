@@ -171,7 +171,7 @@ function fillCuts(inputs, calc) {
     ul.appendChild(li);
   });
 
-  const monthsWordFull = t("units.months.short", "Mon.");
+  const monthsWordFull = t("units.months.full", "Monate");
   const totalLabel = t("cuts.total", "Gesamt");
   const newBaseLabel = t("cuts.newBase", "Neue Basis");
   sum.textContent = `${totalLabel}: −${calc.totalCutMonths} ${monthsWordFull} · ${newBaseLabel}: ${calc.newBase} ${monthsWordFull}`;
@@ -182,7 +182,7 @@ function fillResults(inputs, calc) {
   const U = units();
 
   // Zahl + Einheit lokalisiert
-  const monthsWord = t("units.months.short", "Mon.");
+  const monthsWord = t("units.months.full", "Monate");
   setText("#res-total-months", `${calc.totalMonths} ${monthsWord}`);
 
   // Validierungen mit i18n-Texten
@@ -287,3 +287,32 @@ window.addEventListener("i18n:changed", () => {
   fillResults(LAST_INPUTS, LAST_CALC);
   setDateStamp();
 });
+
+// Funktion für Berechnen-Button
+async function berechnen() {
+  // Daten laden und anzeigen
+  try {
+    const { inputs, calc } = await getSummary();
+    fillInputsList(inputs);
+    fillCuts(inputs, calc);
+    fillResults(inputs, calc);
+    setDateStamp();
+  } catch (err) {
+    console.error("Fehler beim Laden der Daten:", err);
+    const msg = (err && err.message) ? String(err.message) : "Unbekannter Fehler";
+    setText('#res-total-months', '–');
+    setText('#res-extension', '');
+    setText('#res-total-weeks', '–');
+    setText('#res-school-per-week', '–');
+    setText('#res-work-per-week', '–');
+    const em = document.getElementById('errorTotalMonths');
+    if (em) em.textContent = msg;
+  }
+}
+
+
+// Berechnen-Button
+document.getElementById("berechnenBtn").addEventListener("click", () => {
+  berechnen();
+});
+

@@ -51,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   vorkSlider.addEventListener('input', () => {
-    vorkWert.textContent = vorkSlider.value + " Monate";
+    const monthsLabel = window.I18N?.t("units.months.full", "Monate") || "Monate";
+    vorkWert.textContent = `${vorkSlider.value} ${monthsLabel}`;
   });
 });
