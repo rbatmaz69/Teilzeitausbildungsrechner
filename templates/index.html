@@ -17,26 +17,18 @@
   <script src="../static/script_Sprache_Auswaehlen.js" defer></script>
 </head>
 <body>
-<main class="app-container">
-  <!-- Spracheinstellungs Dropdown Menü -->
-  <nav class="actionbar" aria-label="Aktionen" data-i18n-attr="aria-label:nav.actions">
-    <button class="btn ghost" id="btn-reset" type="button"
-            aria-label="Zurücksetzen"
-            data-i18n="btn.reset"
-            data-i18n-attr="aria-label:btn.reset">Zurücksetzen</button>
-
-    <div class="spacer"></div>
-
-    <!-- Sprachwahl -->
-    <label class="sr-only" for="lang-switcher" data-i18n="lang.label">Sprache</label>
+  <!-- Sprachleiste oben -->
+<nav class="langbar" aria-label="Sprache">
+  <label class="sr-only" for="lang-switcher" data-i18n="lang.label">Sprache</label>
+  <div class="langbar__right">
     <select id="lang-switcher" aria-label="Sprache wählen" data-i18n-attr="aria-label:lang.aria">
       <option value="de" data-i18n="lang.de">Deutsch</option>
       <option value="en" data-i18n="lang.en">English</option>
     </select>
+  </div>
+</nav>
 
-    <button class="btn outline" id="btn-share" type="button" data-i18n="btn.share">Link teilen</button>
-  </nav>
-
+<main class="app-container">
   <!-- Eingabenmenü -->
   <section class="calculator">
     <div class="input-group">

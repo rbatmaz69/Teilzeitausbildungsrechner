@@ -48,28 +48,20 @@
     "helper": "Choose all reasons that apply to you.",
     "legend": "Reasons for reduction",
     "abitur": {
-      "label": "Abitur / Advanced school diploma",
-      "badge": "−12 months",
-      "infoAria": "Info Abitur",
-      "tooltip": "If you have Abitur, a reduction may be possible."
+      "label": "Abitur / advanced diploma",
+      "badge": "−12 months"
     },
     "realschule": {
       "label": "Intermediate school diploma",
-      "badge": "−6 months",
-      "infoAria": "Info secondary school",
-      "tooltip": "If you have a secondary school diploma, a reduction may be possible."
+      "badge": "−6 months"
     },
     "alter21": {
-      "label": "Age over 21 years",
-      "badge": "−12 months",
-      "infoAria": "Info age over 21",
-      "tooltip": "Older trainees can have prior experience credited."
+      "label": "Age above 21",
+      "badge": "−12 months"
     },
     "vork": {
       "label": "Professional experience",
-      "badge": "−6 to −12 months",
-      "infoAria": "Info professional knowledge",
-      "tooltip": "Practical experience or degrees can shorten your training time."
+      "badge": "−6 to −12 months"
     }
   },
   "res": {
@@ -80,6 +72,10 @@
       "schoolPerWeek": "Training / week",
       "workPerWeek": "Work / week"
     },
+    "extension": {
+      "plus": "+{n} months extension",
+      "none": "No extension"
+    },
     "notesTitle": "Important notes",
     "notes": [
       "The calculation is for <strong>orientation only</strong>.",
@@ -89,6 +85,22 @@
     ]
   },
   "cuts": {
-    "title": "Reasons for reduction"
+    "title": "Reasons for reduction",
+    "total": "Total",
+    "newBase": "New base"
+  },
+  "errors": {
+    "fetch": "Error while loading data",
+    "tooShort": "The total duration may be reduced by a maximum of 12 months!",
+    "tooLong": "The total duration may be extended to a maximum of 1.5×!",
+    "unknown": "Unknown error"
+  },
+  "share": {
+    "title": "Part-time calculator – result",
+    "text": "Here is my result overview.",
+    "copied": "Link copied to clipboard."
+  },
+  "reset": {
+    "confirm": "Do you really want to reset all data?"
   }
 }

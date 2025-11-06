@@ -3,15 +3,13 @@
   const DEFAULT_LANG = "de";
   const SUPPORTED = ["de", "en"];
 
-  // Pfad angepasst an deine Struktur
+  // Sprachdateien liegen in /static/Sprachdateien/
   const I18N_PATH = "/static/Sprachdateien";
 
   const state = {
     lang: null,
     dict: null
   };
-
-  // --- Helpers ----------------------------------------------------
 
   const getSavedLang = () => localStorage.getItem("lang");
   const saveLang = (lang) => localStorage.setItem("lang", lang);
@@ -21,8 +19,7 @@
 
   const setHtmlLangDir = (lang) => {
     document.documentElement.setAttribute("lang", lang);
-
-    const rtlLangs = ["ar", "he", "fa", "ur"]; // falls du später RTL-Sprachen ergänzt
+    const rtlLangs = ["ar", "he", "fa", "ur"];
     document.documentElement.setAttribute("dir", rtlLangs.includes(lang) ? "rtl" : "ltr");
   };
 
@@ -31,8 +28,7 @@
     const url = `${I18N_PATH}/messages.${safeLang}.json`;
 
     const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) throw new Error(`i18n: Konnte ${url} nicht laden (${res.status})`);
-
+    if (!res.ok) throw new Error(`i18n: Could not load ${url} (${res.status})`);
     return res.json();
   };
 
@@ -44,24 +40,19 @@
     }
   };
 
-  // --- DOM translation --------------------------------------------
-
   const applyTranslations = (dict) => {
-    // 1) Textknoten
     document.querySelectorAll("[data-i18n]").forEach((el) => {
       const key = el.dataset.i18n;
       const val = resolve(dict, key);
       if (val == null) return;
 
       if (Array.isArray(val)) {
-        // Arrays als <li> Liste rendern
         applyText(el, val.map((item) => `<li>${item}</li>`).join(""));
       } else {
         applyText(el, String(val));
       }
     });
 
-    // 2) Attribute
     document.querySelectorAll("[data-i18n-attr]").forEach((el) => {
       const mappings = el.dataset.i18nAttr.split(",").map((s) => s.trim());
       mappings.forEach((map) => {
@@ -71,7 +62,6 @@
       });
     });
 
-    // 3) Sprachdropdown text sync (falls Browser gecacht hat)
     const langSel = document.getElementById("lang-switcher");
     if (langSel) {
       [...langSel.options].forEach((opt) => {
@@ -84,6 +74,23 @@
     }
   };
 
+  const registerGlobalAPI = () => {
+    window.I18N = {
+      get lang() { return state.lang; },
+      get dict() { return state.dict; },
+      t(key, fallback) {
+        const val = resolve(state.dict, key);
+        return val != null ? (Array.isArray(val) ? val : String(val)) : (fallback ?? key);
+      }
+    };
+  };
+
+  const dispatchLangChanged = () => {
+    window.dispatchEvent(new CustomEvent("i18n:changed", {
+      detail: { lang: state.lang }
+    }));
+  };
+
   const loadAndApply = async (lang) => {
     state.lang = SUPPORTED.includes(lang) ? lang : DEFAULT_LANG;
     setHtmlLangDir(state.lang);
@@ -91,12 +98,12 @@
     try {
       state.dict = await fetchDict(state.lang);
       applyTranslations(state.dict);
+      registerGlobalAPI();
+      dispatchLangChanged();
     } catch (e) {
       console.error(e);
     }
   };
-
-  // --- Init --------------------------------------------------------
 
   document.addEventListener("DOMContentLoaded", async () => {
     const langSel = document.getElementById("lang-switcher");
@@ -116,9 +123,6 @@
         const newLang = e.target.value;
         saveLang(newLang);
         await loadAndApply(newLang);
-
-        // Falls du stattdessen wirklich neu laden willst:
-        // location.reload();
       });
     }
   });
