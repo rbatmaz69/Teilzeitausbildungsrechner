@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+  const abiturCheckbox = document.getElementById('g-abitur');
+  const realschuleCheckbox = document.getElementById('g-realschule');
+  const vorkenntnisseCheckbox = document.getElementById('g-vork');
+  const vorkSlider = document.getElementById('vork-slider');
+  const vorkWert = document.getElementById('vork-wert');
+
   /* ========== Tooltips (touch-optimiert) ========== */
   document.querySelectorAll('.info-btn').forEach(btn => {
     const tooltip = btn.closest('.tile')?.querySelector('.tooltip');
@@ -22,5 +29,28 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.tooltip').forEach(t => t.classList.remove('show'));
       document.querySelectorAll('.info-btn[aria-expanded="true"]').forEach(b => b.setAttribute('aria-expanded','false'));
     }
+  });
+
+  // Exklusives Verhalten für Abitur- und Realschule-Checkboxen
+  abiturCheckbox.addEventListener('change', () => {
+    if (abiturCheckbox.checked) {
+      realschuleCheckbox.checked = false;
+    }
+  });
+
+  realschuleCheckbox.addEventListener('change', () => {
+    if (realschuleCheckbox.checked) {
+      abiturCheckbox.checked = false;
+    }
+  });
+
+  vorkenntnisseCheckbox.addEventListener('change', () => {
+    if (vorkenntnisseCheckbox.checked) {
+      
+    }
+  });
+
+  vorkSlider.addEventListener('input', () => {
+    vorkWert.textContent = vorkSlider.value + " Monate";
   });
 });
