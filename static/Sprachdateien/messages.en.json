@@ -1,0 +1,94 @@
+{
+  "app": {
+    "title": "Part-time Apprenticeship Calculator"
+  },
+  "nav": {
+    "actions": "Actions"
+  },
+  "btn": {
+    "reset": "Reset",
+    "share": "Share link"
+  },
+  "lang": {
+    "label": "Language",
+    "aria": "Choose language",
+    "de": "German",
+    "en": "English"
+  },
+  "inputs": {
+    "title": "Your Inputs",
+    "dauer": {
+      "label": "Regular training duration (months)",
+      "tooltip": "The standard duration of your full-time training"
+    },
+    "stunden": {
+      "label": "Regular weekly hours (total)",
+      "tooltip": "Your total weekly hours incl. vocational school"
+    },
+    "teilzeit": {
+      "label": "Part-time share",
+      "tooltip": "At least 50% for a recognized part-time apprenticeship",
+      "percent": "Percent",
+      "hours": "Hours"
+    }
+  },
+  "units": {
+    "hours": {
+      "short": "h"
+    },
+    "months": {
+      "short": "mo"
+    },
+    "weeks": {
+      "short": "wk"
+    }
+  },
+  "vk": {
+    "heading": "Select reasons for reduction",
+    "helper": "Choose all reasons that apply to you.",
+    "legend": "Reasons for reduction",
+    "abitur": {
+      "label": "Abitur / Advanced school diploma",
+      "badge": "−12 months",
+      "infoAria": "Info Abitur",
+      "tooltip": "If you have Abitur, a reduction may be possible."
+    },
+    "realschule": {
+      "label": "Intermediate school diploma",
+      "badge": "−6 months",
+      "infoAria": "Info secondary school",
+      "tooltip": "If you have a secondary school diploma, a reduction may be possible."
+    },
+    "alter21": {
+      "label": "Age over 21 years",
+      "badge": "−12 months",
+      "infoAria": "Info age over 21",
+      "tooltip": "Older trainees can have prior experience credited."
+    },
+    "vork": {
+      "label": "Professional experience",
+      "badge": "−6 to −12 months",
+      "infoAria": "Info professional knowledge",
+      "tooltip": "Practical experience or degrees can shorten your training time."
+    }
+  },
+  "res": {
+    "headline": "Your part-time apprenticeship",
+    "helper": "Your inputs and the calculated result at a glance.",
+    "kv": {
+      "total": "Total duration",
+      "schoolPerWeek": "Training / week",
+      "workPerWeek": "Work / week"
+    },
+    "notesTitle": "Important notes",
+    "notes": [
+      "The calculation is for <strong>orientation only</strong>.",
+      "There is no legal claim to the displayed evaluation.",
+      "The final agreement is made with your training company.",
+      "For a recognized part-time apprenticeship, at least 50% of the regular training time is required."
+    ]
+  },
+  "cuts": {
+    "title": "Reasons for reduction"
+  }
+}

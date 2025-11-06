@@ -1,0 +1,94 @@
+{
+  "app": {
+    "title": "Teilzeitausbildungsrechner"
+  },
+  "nav": {
+    "actions": "Aktionen"
+  },
+  "btn": {
+    "reset": "Zurücksetzen",
+    "share": "Link teilen"
+  },
+  "lang": {
+    "label": "Sprache",
+    "aria": "Sprache wählen",
+    "de": "Deutsch",
+    "en": "English"
+  },
+  "inputs": {
+    "title": "Ihre Eingaben",
+    "dauer": {
+      "label": "Reguläre Ausbildungsdauer (Monate)",
+      "tooltip": "Die normale Dauer Ihrer Ausbildung bei Vollzeit"
+    },
+    "stunden": {
+      "label": "Reguläre Wochenstunden (gesamt)",
+      "tooltip": "Ihre gesamten Wochenstunden inkl. Berufsschule"
+    },
+    "teilzeit": {
+      "label": "Teilzeit-Anteil",
+      "tooltip": "Mindestens 50% für eine anerkannte Teilzeitausbildung",
+      "percent": "Prozent",
+      "hours": "Stunden"
+    }
+  },
+  "units": {
+    "hours": {
+      "short": "h"
+    },
+    "months": {
+      "short": "Mon."
+    },
+    "weeks": {
+      "short": "Wo."
+    }
+  },
+  "vk": {
+    "heading": "Verkürzungsgründe auswählen",
+    "helper": "Wähle alle Gründe aus, die auf dich zutreffen.",
+    "legend": "Verkürzungsgründe",
+    "abitur": {
+      "label": "Abitur / Fachabitur",
+      "badge": "−12 Monate",
+      "infoAria": "Info Abitur",
+      "tooltip": "Wenn sie Abitur haben, ist eine Verkürzung möglich."
+    },
+    "realschule": {
+      "label": "Realschulabschluss",
+      "badge": "−6 Monate",
+      "infoAria": "Info Realschule",
+      "tooltip": "Wenn sie einen Realschulabschluss haben, ist eine Verkürzung möglich."
+    },
+    "alter21": {
+      "label": "Alter über 21 Jahre",
+      "badge": "−12 Monate",
+      "infoAria": "Info Alter über 21",
+      "tooltip": "Bei älteren Auszubildenden ist eine Anrechnung von Vorerfahrungen möglich."
+    },
+    "vork": {
+      "label": "Berufliche Vorkenntnisse",
+      "badge": "−6 bis −12 Monate",
+      "infoAria": "Info Vorkenntnisse",
+      "tooltip": "Praxiserfahrungen oder Abschlüsse können die Ausbildungsdauer bei ihnen verkürzen."
+    }
+  },
+  "res": {
+    "headline": "Ihre Teilzeitausbildung",
+    "helper": "Hier sehen Sie Ihre Eingaben und das berechnete Ergebnis auf einen Blick.",
+    "kv": {
+      "total": "Gesamtdauer",
+      "schoolPerWeek": "Ausbildung / Woche",
+      "workPerWeek": "Arbeit / Woche"
+    },
+    "notesTitle": "Wichtige Hinweise",
+    "notes": [
+      "Die Berechnung ist eine reine <strong>Orientierungshilfe</strong>.",
+      "Es besteht kein gesetzlicher Anspruch auf die dargestellte Auswertung.",
+      "Die finale Vereinbarung erfolgt mit ihrem Ausbildungsbetrieb.",
+      "Für eine anerkannte Teilzeitausbildung muss die Ausbildungszeit mindestens 50 % der regulären Ausbildungszeit betragen."
+    ]
+  },
+  "cuts": {
+    "title": "Verkürzungsgründe"
+  }
+}
