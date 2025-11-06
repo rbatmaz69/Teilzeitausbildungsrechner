@@ -238,11 +238,26 @@ async function shareLink() {
 
 function resetData() {
   const msg = t("reset.confirm", "Möchten Sie wirklich alle Daten zurücksetzen?");
-  if (confirm(msg)) {
-    localStorage.clear();
-    sessionStorage.clear();
-    location.reload();
+  if (!confirm(msg)) return;
+
+  // Sprache merken, bevor wir den Storage leeren
+  const LANG_KEY = "lang";
+  const savedLang =
+    localStorage.getItem(LANG_KEY) ||
+    (window.I18N && window.I18N.lang) ||
+    null;
+
+  // Alles löschen (Formulardaten etc.)
+  try { localStorage.clear(); } catch {}
+  try { sessionStorage.clear(); } catch {}
+
+  // Sprache wiederherstellen
+  if (savedLang) {
+    try { localStorage.setItem(LANG_KEY, savedLang); } catch {}
   }
+
+  // Neu laden
+  location.reload();
 }
 
 /* ------------------------------
