@@ -46,7 +46,10 @@ class CalculationRequest:
         if missing:
             raise MissingFieldsError(missing)
 
-        verkuerzungsgruende = _require_dict(payload["verkuerzungsgruende"], "verkuerzungsgruende")
+        verkuerzungsgruende = _require_dict(
+            payload["verkuerzungsgruende"],
+            "verkuerzungsgruende",
+        )
         _validate_verkuerzungsgruende(verkuerzungsgruende)
         verkuerzungsgruende = _normalise_verkuerzungsgruende(verkuerzungsgruende)
 
@@ -106,7 +109,13 @@ class MissingFieldsError(CalculationServiceError):
 
 
 class PayloadValidationError(CalculationServiceError):
-    def __init__(self, message: str, *, code: str = "validation_error", details: Optional[Dict[str, Any]] = None) -> None:
+    def __init__(
+        self,
+        message: str,
+        *,
+        code: str = "validation_error",
+        details: Optional[Dict[str, Any]] = None,
+    ) -> None:
         self.code = code
         self.details = details
         super().__init__(message)
@@ -135,10 +144,20 @@ def handle_calculation_request(payload: Mapping[str, Any]) -> CalculationService
             message=str(exc),
             details={"missing": exc.missing},
         )
-        return CalculationServiceResponse(status_code=400, body={"error": error.to_dict()})
+        return CalculationServiceResponse(
+            status_code=400,
+            body={"error": error.to_dict()},
+        )
     except PayloadValidationError as exc:
-        error = ServiceError(code=exc.code, message=str(exc), details=exc.details)
-        return CalculationServiceResponse(status_code=422, body={"error": error.to_dict()})
+        error = ServiceError(
+            code=exc.code,
+            message=str(exc),
+            details=exc.details,
+        )
+        return CalculationServiceResponse(
+            status_code=422,
+            body={"error": error.to_dict()},
+        )
 
     try:
         result = calculate_gesamtdauer(
@@ -150,11 +169,22 @@ def handle_calculation_request(payload: Mapping[str, Any]) -> CalculationService
         )
     except (TypeError, ValueError) as exc:
         error = ServiceError(code="validation_error", message=str(exc))
-        return CalculationServiceResponse(status_code=422, body={"error": error.to_dict()})
+        return CalculationServiceResponse(
+            status_code=422,
+            body={"error": error.to_dict()},
+        )
     except Exception:  # pragma: no cover - Catch-All zur Sicherheit
-        logger.exception("Unerwarteter Fehler während calculate_gesamtdauer")
-        error = ServiceError(code="internal_error", message="Unerwarteter Serverfehler")
-        return CalculationServiceResponse(status_code=500, body={"error": error.to_dict()})
+        logger.exception(
+            "Unerwarteter Fehler während calculate_gesamtdauer",
+        )
+        error = ServiceError(
+            code="internal_error",
+            message="Unerwarteter Serverfehler",
+        )
+        return CalculationServiceResponse(
+            status_code=500,
+            body={"error": error.to_dict()},
+        )
 
     return CalculationServiceResponse(status_code=200, body={"result": result})
 
@@ -206,5 +236,3 @@ def _normalise_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]:
         "alter_ueber_21": bool(data.get("alter_ueber_21", False)),
         "vorkenntnisse_monate": data.get("vorkenntnisse_monate", 0),
     }
-
-

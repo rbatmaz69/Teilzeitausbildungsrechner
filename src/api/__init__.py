@@ -11,4 +11,3 @@ __all__ = [
     "CalculationServiceResponse",
     "handle_calculation_request",
 ]
-
