@@ -126,7 +126,9 @@ class PayloadValidationError(CalculationServiceError):
 # ---------------------------------------------------------------------------
 
 
-def handle_calculation_request(payload: Mapping[str, Any]) -> CalculationServiceResponse:
+def handle_calculation_request(
+    payload: Mapping[str, Any],
+) -> CalculationServiceResponse:
     """Zentrale Einstiegsmethode für die Flask-Routen.
 
     Args:
