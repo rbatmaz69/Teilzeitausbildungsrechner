@@ -648,8 +648,11 @@ def test_internal_server_error_returns_500(client, monkeypatch):
     def mock_calculate(*args, **kwargs):
         raise RuntimeError("Simulierter interner Fehler")
     
-    # Patche die Funktion im app-Modul
-    monkeypatch.setattr("src.app.calculate_gesamtdauer", mock_calculate)
+    # Patche die Berechnungslogik im Service-Layer
+    monkeypatch.setattr(
+        "src.api.calculation_service.calculate_gesamtdauer",
+        mock_calculate,
+    )
     
     resp = client.post(
         "/api/calculate",
