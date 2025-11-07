@@ -4,7 +4,7 @@
   "type": "module",
   "description": "Frontend linting tools for Teilzeitrechner",
   "scripts": {
-    "lint": "npm run lint:js & npm run lint:css & npm run lint:html",
+    "lint": "npm run lint:js && npm run lint:css && npm run lint:html",
     "lint:js": "eslint static/*.js",
     "lint:css": "stylelint static/*.css",
     "lint:html": "htmlhint templates/*.html",
