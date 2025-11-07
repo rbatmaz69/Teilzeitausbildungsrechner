@@ -17,7 +17,7 @@ from flask import Flask, jsonify, render_template, request
 
 # Import der zentralen Berechnungslogik
 # Diese enthält die komplette Implementierung gemäß BBiG § 7a und § 8
-from .calculation_logic import calculate_gesamtdauer
+from .api import handle_calculation_request
 
 
 def create_app() -> Flask:
@@ -112,98 +112,11 @@ def create_app() -> Flask:
         data = request.get_json(force=True, silent=True) or {}
 
         # ============================================================
-        # SCHRITT 2: Pflichtfelder-Validierung
+        # SCHRITT 2: Service-Layer Aufruf
         # ============================================================
-        # Liste aller Felder, die für die Berechnung
-        # zwingend erforderlich sind
-        required = [
-            "base_duration_months",    # Ausbildungsdauer gemäß AO
-            "vollzeit_stunden",        # Wochenstunden bei Vollzeit
-            "teilzeit_input",          # Teilzeit-Eingabe (Prozent/Stunden)
-            "input_type",              # Ob teilzeit_input als % oder h
-                                       # interpretiert wird
-            "verkuerzungsgruende",     # Dictionary mit Verkürzungsgründen
-        ]
+        response = handle_calculation_request(data)
 
-        # Prüfen, welche Pflichtfelder fehlen
-        missing = [k for k in required if k not in data]
-        if missing:
-            # Strukturierte Fehlerantwort mit Details über fehlende Felder
-            # Dies hilft dem Frontend, dem Benutzer gezielt zu sagen,
-            # was fehlt
-            return (
-                jsonify({
-                    "error": {
-                        "code": "missing_fields",
-                        "message": f"Fehlende Felder: {', '.join(missing)}",
-                        "details": {"missing": missing},
-                    }
-                }),
-                400,
-            )
-
-        # ============================================================
-        # SCHRITT 3: Berechnung durchführen
-        # ============================================================
-        try:
-            # Aufruf der zentralen Berechnungslogik
-            # Diese Funktion führt das komplette 4-Schritt-Verfahren durch:
-            # 1. Verkürzung anwenden (gemäß § 8 BBiG)
-            # 2. Automatische Verlängerung durch Teilzeit
-            #    (gemäß § 7a Abs. 2 BBiG)
-            # 3. Gesetzliche Obergrenze prüfen (max. 1,5-fache AO-Dauer)
-            # 4. Auf ganze Monate abrunden
-            result = calculate_gesamtdauer(
-                base_duration_months=data["base_duration_months"],
-                vollzeit_stunden=data["vollzeit_stunden"],
-                teilzeit_input=data["teilzeit_input"],
-                verkuerzungsgruende=data["verkuerzungsgruende"],
-                input_type=data.get("input_type", "prozent"),  # Default: %
-            )
-
-            # Erfolgreiche Antwort mit allen Berechnungsergebnissen
-            # Das Frontend kann diese direkt zur Anzeige verwenden
-            return jsonify({"result": result}), 200
-
-        # ============================================================
-        # SCHRITT 4: Fehlerbehandlung
-        # ============================================================
-        except (TypeError, ValueError) as e:
-            # Typ- oder Validierungsfehler aus der Berechnungslogik
-            # Beispiele:
-            # - Teilzeit < 50% (gemäß § 7a Abs. 1 Satz 3 BBiG)
-            # - Ungültige Datentypen (z.B. String statt Zahl)
-            # - Logische Fehler (z.B. Stunden > Vollzeitstunden)
-            # HTTP 422 = Unprocessable Entity:
-            # Request ist syntaktisch korrekt, aber semantisch ungültig
-            return (
-                jsonify({
-                    "error": {
-                        "code": "validation_error",
-                        "message": str(e),  # Fehlermeldung aus
-                        # calculation_logic.py
-                    }
-                }),
-                422,
-            )
-        except Exception:
-            # Unerwarteter Fehler (z.B. interne Logik-Fehler,
-            # Datenbank-Fehler)
-            # WICHTIG: Keine Details zurückgeben aus Sicherheitsgründen!
-            # Ein Angreifer könnte sonst Rückschlüsse auf die
-            # Server-Struktur ziehen.
-            # Die detaillierte Fehlermeldung wird serverseitig geloggt
-            # (nicht hier implementiert).
-            # HTTP 500 = Internal Server Error
-            return (
-                jsonify({
-                    "error": {
-                        "code": "internal_error",
-                        "message": "Unerwarteter Serverfehler",
-                    }
-                }),
-                500,
-            )
+        return jsonify(response.body), response.status_code
 
     return app
 
@@ -223,10 +136,11 @@ def create_app() -> Flask:
 # Falls Port 5000 belegt ist, wird automatisch ein anderer Port verwendet
 # debug=True aktiviert automatisches Neuladen bei Code-Änderungen
 if __name__ == "__main__":
+    import os
     import sys
 
     app = create_app()
-    port = 5000
+    port = int(os.getenv("PORT", 8000))
 
     # Prüfe ob Port bereits belegt ist (z.B. AirPlay auf macOS)
     # Falls ja, versuche alternativen Port
@@ -240,5 +154,6 @@ if __name__ == "__main__":
         app.run(host="127.0.0.1", port=port, debug=True)
     except OSError:
         # Port belegt, versuche alternativen Port
-        print(f"⚠️  Port {port} ist belegt, verwende Port 5001")
-        app.run(host="127.0.0.1", port=5001, debug=True)
+        fallback_port = port + 1
+        print(f"⚠️  Port {port} ist belegt, verwende Port {fallback_port}")
+        app.run(host="127.0.0.1", port=fallback_port, debug=True)
