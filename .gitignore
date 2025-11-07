@@ -3,6 +3,9 @@ __pycache__/
 *.pyc
 *.pyo
 
+# Node.js
+node_modules/
+
 # Coverage & test artifacts
 .coverage
 coverage.xml

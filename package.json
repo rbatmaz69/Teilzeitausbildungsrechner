@@ -1,0 +1,22 @@
+{
+  "name": "teilzeitrechner-frontend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Frontend linting tools for Teilzeitrechner",
+  "scripts": {
+    "lint": "npm run lint:js & npm run lint:css & npm run lint:html",
+    "lint:js": "eslint static/*.js",
+    "lint:css": "stylelint static/*.css",
+    "lint:html": "htmlhint templates/*.html",
+    "lint:fix": "npm run lint:js -- --fix && npm run lint:css -- --fix"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "eslint": "^9.39.1",
+    "globals": "^16.5.0",
+    "htmlhint": "^1.7.1",
+    "stylelint": "^16.25.0",
+    "stylelint-config-standard": "^39.0.1"
+  },
+  "private": true
+}
