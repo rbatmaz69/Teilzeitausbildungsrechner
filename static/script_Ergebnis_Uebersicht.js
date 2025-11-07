@@ -1,157 +1,103 @@
-/* script_Ergebnis_Übersicht.js – Logik der Ergebnisseite
-   Bereinigte Version: kein PDF-Button, enthält Zurücksetzen-Funktion
-*/
+/* script_Ergebnis_Übersicht.js – i18n-fähige Ergebnislogik */
 
 document.addEventListener("DOMContentLoaded", () => {
-    const errorTotalMonths = document.getElementById('errorTotalMonths');
-})
+  // nichts; init() wird unten registriert
+});
 
-// Hilfsfunktionen für Selektoren
+// Kurz-Helpers
 const $ = (sel) => document.querySelector(sel);
 function setText(sel, text) { const el = $(sel); if (el) el.textContent = text; }
 function show(el) { if (el) el.hidden = false; }
 function hide(el) { if (el) el.hidden = true; }
 
+// i18n Helper (nutzt die globale API aus script_Sprache_Auswaehlen.js)
+function t(key, fallback) {
+  if (window.I18N && typeof window.I18N.t === "function") {
+    return window.I18N.t(key, fallback);
+  }
+  return fallback ?? key;
+}
+function currentLang() {
+  return (window.I18N && window.I18N.lang) || "de";
+}
+
+// Units/Labels aus i18n
+function units() {
+  return {
+    h: t("units.hours.short", "h"),
+    months: t("units.months.short", "Mon."),
+    weeks: t("units.weeks.short", "Wo.")
+  };
+}
+
+// Zustand merken, damit wir bei Sprachwechsel neu rendern können
+let LAST_INPUTS = null;
+let LAST_CALC = null;
+let errorTotalMonths = null;
+
 /**
- * Holt die Berechnungsergebnisse vom Flask-Backend basierend auf aktuellen UI-Eingaben
- * 
- * Diese Funktion ist Teil von User Story 31 und stellt die Verbindung zwischen
- * Frontend und Backend her. Sie ersetzt die vorherigen Dummy-Daten.
- * 
- * Ablauf:
- * 1. Liest alle Eingaben aus dem HTML-Formular
- * 2. Baut einen JSON-Request auf
- * 3. Sendet diesen an POST /api/calculate (Flask-Backend)
- * 4. Verarbeitet die Antwort und formatiert sie für die UI-Darstellung
- * 
- * @returns {Promise<Object>} Objekt mit inputs und calc für die UI-Darstellung
- * @throws {Error} Bei API-Fehlern oder Netzwerkproblemen
+ * Holt die Berechnungsergebnisse vom Backend
  */
 async function getSummary() {
-  // ============================================================
-  // SCHRITT 1: Eingaben aus dem HTML-Formular lesen
-  // ============================================================
-  // Alle Eingabefelder werden anhand ihrer IDs gefunden
-  // Die IDs entsprechen denen in templates/index.html
-  
-  const baseMonthsEl = document.getElementById("dauer");         // Reguläre Ausbildungsdauer
-  const weeklyHoursEl = document.getElementById("stunden");      // Wochenstunden bei Vollzeit
-  const percentEl = document.getElementById("teilzeitProzent");  // Teilzeit in Prozent
+  const baseMonthsEl = document.getElementById("dauer");
+  const weeklyHoursEl = document.getElementById("stunden");
+  const percentEl = document.getElementById("teilzeitProzent");
 
-  // Verkürzungsgründe werden als Checkboxes im HTML gespeichert
-  // !! wandelt den Checkbox-State in einen boolean um (true/false)
-  // ?. ist optional chaining: gibt undefined, wenn Element nicht existiert
   const abitur = !!document.getElementById("g-abitur")?.checked;
   const realschule = !!document.getElementById("g-realschule")?.checked;
   const alter21 = !!document.getElementById("g-alter21")?.checked;
   const vork = !!document.getElementById("g-vork")?.checked;
 
-  // Slider für berufliche Vorkenntnisse
-  const vorkSlider = document.getElementById("vork-slider");
-
-  // Werte aus den Eingabefeldern extrahieren und in Zahlen umwandeln
-  // || 0 stellt sicher, dass wir immer eine Zahl haben (auch bei leerem Feld)
   const baseMonths = Number(baseMonthsEl?.value || 0);
   const weeklyHours = Number(weeklyHoursEl?.value || 0);
   const partTimePercent = Number(percentEl?.value || 0);
 
-  // ============================================================
-  // SCHRITT 2: API-Request-Payload aufbauen
-  // ============================================================
-  // Die Struktur muss exakt der erwarteten API-Schnittstelle entsprechen
-  // (siehe src/app.py, api_calculate())
   const payload = {
     base_duration_months: baseMonths,
     vollzeit_stunden: weeklyHours,
     teilzeit_input: partTimePercent,
-    input_type: "prozent",  // Aktuell immer Prozent; könnte später erweitert werden
+    input_type: "prozent",
     verkuerzungsgruende: {
       abitur,
       realschule,
       alter_ueber_21: alter21,
-      vorkenntnisse_monate: vork ? Number(vorkSlider?.value || 0) : 0,
-    },
+      vorkenntnisse_monate: vork ? 6 : 0
+    }
   };
 
-  // ============================================================
-  // SCHRITT 3: API-Request an Flask-Backend senden
-  // ============================================================
   const resp = await fetch("/api/calculate", {
-    method: "POST",  // HTTP POST, da wir Daten senden
-    headers: {
-      "Content-Type": "application/json",  // Backend erwartet JSON
-      "Accept": "application/json",        // Wir erwarten JSON-Antwort
-    },
-    body: JSON.stringify(payload),  // JavaScript-Objekt in JSON-String umwandeln
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Accept": "application/json" },
+    body: JSON.stringify(payload)
   });
 
-  // ============================================================
-  // SCHRITT 4: HTTP-Status-Code prüfen
-  // ============================================================
-  // resp.ok ist true bei Status-Codes 200-299
-  // Bei 400/422/500 gibt es einen Fehler, den wir behandeln müssen
   if (!resp.ok) {
-    let message = "Fehler beim Laden der Daten";
-    
-    // Versuche, die Fehlerantwort vom Backend zu extrahieren
-    // Das Backend sendet strukturierte Fehlerantworten (siehe src/app.py)
+    let message = t("errors.fetch", "Fehler beim Laden der Daten");
     try {
       const err = await resp.json();
-      // Backend sendet: { error: { code: "...", message: "..." } }
       message = err?.error?.message || message;
-    } catch {
-      // Falls JSON-Parsing fehlschlägt, verwende Standard-Fehlermeldung
-      // (z.B. bei 500-Fehlern ohne JSON-Body)
-    }
-    
-    // Fehler weiterwerfen, damit init() ihn behandeln kann
+    } catch {}
     throw new Error(message);
   }
 
-  // ============================================================
-  // SCHRITT 5: Erfolgreiche Antwort verarbeiten
-  // ============================================================
-  // Backend sendet: { result: { original_dauer_monate: ..., ... } }
   const data = await resp.json();
-  const r = data.result || {};  // Fallback auf leeres Objekt, falls result fehlt
+  const r = data.result || {};
 
-  // ============================================================
-  // SCHRITT 6: API-Antwort in UI-Format umwandeln
-  // ============================================================
-  // Die API liefert technische Daten, die wir für die Anzeige umwandeln müssen
-  
-  // Hauptergebnis: Finale Ausbildungsdauer in Monaten
   const totalMonths = Number(r.finale_dauer_monate || 0);
-  
-  // Verlängerung durch Teilzeit (kann negativ sein, wenn Verkürzung überwiegt)
   const extensionMonths = Number(r.verlaengerung_durch_teilzeit_monate || 0);
-  
-  // Gesamte Verkürzung in Monaten
   const totalCutMonths = Number(r.verkuerzung_gesamt_monate || 0);
-  
-  // Verkürzte Basis-Dauer (nach Anwendung aller Verkürzungen, aber vor Teilzeit-Verlängerung)
   const newBase = Number(r.verkuerzte_dauer_monate || 0);
-  
-  // Wochen berechnen: Durchschnittlich 4.33 Wochen pro Monat (52 Wochen / 12 Monate)
   const weeks = Math.round(totalMonths * 4.33);
-  
-  // Wochenstunden für Arbeit/Schule aufteilen
-  // Arbeit: Minimum zwischen Gesamtstunden und berechneten Teilzeitstunden
+
   const workHoursPerWeek = Math.min(weeklyHours, Number(r.wochenstunden || 0));
-  // Schule: Rest (darf nicht negativ sein)
   const schoolHoursPerWeek = Math.max(0, weeklyHours - workHoursPerWeek);
 
-  // Liste der aktiven Verkürzungsgründe für die UI-Anzeige
   const cuts = [];
-  if (abitur) cuts.push({ key: "abitur", label: "Abitur / Hochschulreife", months: 12 });
-  if (realschule) cuts.push({ key: "realschule", label: "Realschulabschluss", months: 6 });
-  if (alter21) cuts.push({ key: "alter_ueber_21", label: "Alter über 21 Jahre", months: 12 });
-  if (vork) cuts.push({ key: "vorkenntnisse", label: "Berufliche Vorkenntnisse", months: 6 });
+  if (abitur) cuts.push({ key: "abitur", months: 12 });
+  if (realschule) cuts.push({ key: "realschule", months: 6 });
+  if (alter21) cuts.push({ key: "alter_ueber_21", months: 12 });
+  if (vork) cuts.push({ key: "vorkenntnisse", months: 6 });
 
-  // ============================================================
-  // SCHRITT 7: Strukturiertes Objekt für die UI zurückgeben
-  // ============================================================
-  // Dieses Format wird von fillInputsList(), fillCuts(), fillResults() verwendet
   return {
     inputs: {
       baseMonths,
@@ -159,33 +105,31 @@ async function getSummary() {
       partTimePercent,
       schoolHoursPerWeek,
       workHoursPerWeek,
-      cuts,
+      cuts
     },
     calc: {
       extensionMonths,
       totalCutMonths,
       newBase,
       totalMonths,
-      totalWeeks: weeks,
-    },
+      totalWeeks: weeks
+    }
   };
 }
 
-/* ------------------------------
-   Hilfsfunktionen zur Darstellung
-   ------------------------------ */
-
-/** Füllt die Übersichtstabelle der Eingaben */
+/** Füllt die Übersichtstabelle der Eingaben (mit i18n) */
 function fillInputsList(inputs) {
   const list = $("#inputs-list");
+  if (!list) return;
+  const U = units();
   list.innerHTML = "";
 
   const rows = [
-     ["Reguläre Ausbildungsdauer (Monate)", `${inputs.baseMonths}`],
-     ["Wöchentliche Stunden (insgesamt)", `${inputs.weeklyHours} Std`],
-     ["Teilzeitanteil", `${inputs.partTimePercent}%`],
-     ["Schule / Woche", `${inputs.schoolHoursPerWeek} Std`],
-     ["Arbeit / Woche", `${inputs.workHoursPerWeek} Std`],
+    [ t("inputs.dauer.label", "Reguläre Ausbildungsdauer (Monate)"), `${inputs.baseMonths}` ],
+    [ t("inputs.stunden.label", "Reguläre Wochenstunden (gesamt)"), `${inputs.weeklyHours} ${U.h}` ],
+    [ t("inputs.teilzeit.label", "Teilzeit-Anteil"), `${inputs.partTimePercent}%` ],
+    [ t("res.kv.schoolPerWeek", "Ausbildung / Woche"), `${inputs.schoolHoursPerWeek} ${U.h}` ],
+    [ t("res.kv.workPerWeek", "Arbeit / Woche"), `${inputs.workHoursPerWeek} ${U.h}` ]
   ];
 
   for (const [k, v] of rows) {
@@ -197,13 +141,14 @@ function fillInputsList(inputs) {
   }
 }
 
-/** Zeigt Verkürzungsgründe und Zusammenfassung */
+/** Zeigt Verkürzungsgründe und Zusammenfassung (mit i18n) */
 function fillCuts(inputs, calc) {
   const wrap = $("#cuts-section");
   const ul = $("#cuts-list");
   const sum = $("#cuts-summary");
-  ul.innerHTML = "";
+  if (!wrap || !ul || !sum) return;
 
+  ul.innerHTML = "";
   const cuts = Array.isArray(inputs.cuts) ? inputs.cuts : [];
   if (!cuts.length) { hide(wrap); return; }
   show(wrap);
@@ -211,93 +156,131 @@ function fillCuts(inputs, calc) {
   cuts.forEach((c) => {
     const li = document.createElement("li");
     li.className = "tag";
-    li.textContent = c.label + (c.months ? ` (−${c.months} Mon.)` : "");
+    // Label aus i18n je Key
+    let labelKey;
+    switch (c.key) {
+      case "abitur": labelKey = "vk.abitur.label"; break;
+      case "realschule": labelKey = "vk.realschule.label"; break;
+      case "alter_ueber_21": labelKey = "vk.alter21.label"; break;
+      case "vorkenntnisse": labelKey = "vk.vork.label"; break;
+      default: labelKey = "";
+    }
+    const label = labelKey ? t(labelKey, c.key) : (c.key || "");
+    const monthsWord = t("units.months.short", "Mon.");
+    li.textContent = c.months ? `${label} (−${c.months} ${monthsWord})` : label;
     ul.appendChild(li);
   });
 
-  sum.textContent = `Gesamt: −${calc.totalCutMonths} Monate · Neue Basis: ${calc.newBase} Monate`;
+  const monthsWordFull = t("units.months.full", "Monate");
+  const totalLabel = t("cuts.total", "Gesamt");
+  const newBaseLabel = t("cuts.newBase", "Neue Basis");
+  sum.textContent = `${totalLabel}: −${calc.totalCutMonths} ${monthsWordFull} · ${newBaseLabel}: ${calc.newBase} ${monthsWordFull}`;
 }
 
-/** Zeigt die Hauptergebnisse */
+/** Zeigt die Hauptergebnisse (mit i18n) */
 function fillResults(inputs, calc) {
-  setText("#res-total-months", `${calc.totalMonths} Monate`);
-  // Zeige eine Fehlermeldung, wenn die Gesamtdauer um mehr als 12 Monate verkürzt wird.
+  const U = units();
+
+  // Zahl + Einheit lokalisiert
+  const monthsWord = t("units.months.full", "Monate");
+  setText("#res-total-months", `${calc.totalMonths} ${monthsWord}`);
+
+  // Validierungen mit i18n-Texten
   if (calc.totalMonths < inputs.baseMonths - 12) {
-    errorTotalMonths.textContent = 'Die Gesamtdauer darf maximal um 12 Monate verkürzt werden!';
-  }
-  // Zeige eine Fehlermeldung, wenn die Gesamtdauer um mehr als das 1,5-fache verlängert wird.
-  else if (calc.totalMonths > inputs.baseMonths * 1.5) {
-    errorTotalMonths.textContent = 'Die Gesamtdauer darf maximal das 1,5-fache verlängert werden!';
+    setText('#errorTotalMonths', t("errors.tooShort", "Die Gesamtdauer darf maximal um 12 Monate verkürzt werden!"));
+  } else if (calc.totalMonths > inputs.baseMonths * 1.5) {
+    setText('#errorTotalMonths', t("errors.tooLong", "Die Gesamtdauer darf maximal das 1,5-fache verlängert werden!"));
   } else {
-    errorTotalMonths.textContent = '';
+    setText('#errorTotalMonths', "");
   }
 
-  setText(
-    "#res-extension",
-    calc.extensionMonths > 0
-      ? `+${calc.extensionMonths} Monate Verlängerung`
-      : "Keine Verlängerung"
-  );
-  setText("#res-total-weeks", `${calc.totalWeeks} Wochen`);
-  setText("#res-school-per-week", `${inputs.schoolHoursPerWeek} Std`);
-  setText("#res-work-per-week", `${inputs.workHoursPerWeek} Std`);
+  // Verlängerungszeile
+  const extensionLabel = t("res.extension.plus", "+{n} Monate Verlängerung")
+    .replace("{n}", calc.extensionMonths);
+  const noExt = t("res.extension.none", "Keine Verlängerung");
+  setText("#res-extension", calc.extensionMonths > 0 ? extensionLabel : noExt);
+
+  // Weitere Felder
+  const weeksWord = t("units.weeks.short", "Wo.");
+  setText("#res-total-weeks", `${calc.totalWeeks} ${weeksWord}`);
+  setText("#res-school-per-week", `${inputs.schoolHoursPerWeek} ${U.h}`);
+  setText("#res-work-per-week", `${inputs.workHoursPerWeek} ${U.h}`);
 }
 
-/** Setzt das Datum in der Fußzeile */
+/** Setzt das Datum in der Fußzeile (lokalisiert) */
 function setDateStamp() {
   const el = $("#stamp-date");
-  const fmt = new Intl.DateTimeFormat("de-DE", { dateStyle: "long" });
-  el.textContent = `Stand: ${fmt.format(new Date())}`;
+  if (!el) return;
+  const lang = currentLang();
+  const fmt = new Intl.DateTimeFormat(lang === "en" ? "en-US" : "de-DE", { dateStyle: "long" });
+  const label = lang === "en" ? "As of" : "Stand";
+  el.textContent = `${label}: ${fmt.format(new Date())}`;
 }
 
 /* ------------------------------
-   Aktions-Buttons
+   Share / Reset – mit i18n
    ------------------------------ */
 
-/** Aktuelle Seiten-URL teilen (Web Share API + Zwischenablage-Fallback) */
 async function shareLink() {
   const url = new URL(location.href);
+  const title = t("share.title", "Teilzeitrechner – Ergebnis");
+  const text = t("share.text", "Hier ist meine Ergebnisübersicht.");
+  const copied = t("share.copied", "Link in die Zwischenablage kopiert.");
   try {
     if (navigator.share) {
-      await navigator.share({
-        title: "Teilzeitrechner – Ergebnis",
-        text: "Hier ist meine Ergebnisübersicht.",
-        url: url.toString(),
-      });
+      await navigator.share({ title, text, url: url.toString() });
     } else {
       await navigator.clipboard.writeText(url.toString());
-      alert("Link in die Zwischenablage kopiert.");
+      alert(copied);
     }
   } catch {}
 }
 
-/** Alle gespeicherten Daten löschen und Seite neu laden */
 function resetData() {
-  if (confirm("Möchten Sie wirklich alle Daten zurücksetzen?")) {
-    localStorage.clear();
-    sessionStorage.clear();
-    location.reload();
+  const msg = t("reset.confirm", "Möchten Sie wirklich alle Daten zurücksetzen?");
+  if (!confirm(msg)) return;
+
+  // Sprache merken, bevor wir den Storage leeren
+  const LANG_KEY = "lang";
+  const savedLang =
+    localStorage.getItem(LANG_KEY) ||
+    (window.I18N && window.I18N.lang) ||
+    null;
+
+  // Alles löschen (Formulardaten etc.)
+  try { localStorage.clear(); } catch {}
+  try { sessionStorage.clear(); } catch {}
+
+  // Sprache wiederherstellen
+  if (savedLang) {
+    try { localStorage.setItem(LANG_KEY, savedLang); } catch {}
   }
+
+  // Neu laden
+  location.reload();
 }
 
 /* ------------------------------
-   Initialisierung
+   Initialisierung & Re-Render bei Sprachwechsel
    ------------------------------ */
+
 async function init() {
-  // Event-Handler für Buttons
+  errorTotalMonths = document.getElementById('errorTotalMonths');
+
   $("#btn-share")?.addEventListener("click", shareLink);
   $("#btn-reset")?.addEventListener("click", resetData);
 
-  // Daten laden und anzeigen
   try {
     const { inputs, calc } = await getSummary();
+    LAST_INPUTS = inputs;
+    LAST_CALC = calc;
     fillInputsList(inputs);
     fillCuts(inputs, calc);
     fillResults(inputs, calc);
     setDateStamp();
   } catch (err) {
     console.error("Fehler beim Laden der Daten:", err);
-    const msg = (err && err.message) ? String(err.message) : "Unbekannter Fehler";
+    const msg = (err && err.message) ? String(err.message) : t("errors.unknown", "Unbekannter Fehler");
     setText('#res-total-months', '–');
     setText('#res-extension', '');
     setText('#res-total-weeks', '–');
@@ -308,7 +291,17 @@ async function init() {
   }
 }
 
+// Erst-Init
 document.addEventListener("DOMContentLoaded", init);
+
+// Bei Sprachwechsel nur UI neu rendern (ohne neue API-Calls)
+window.addEventListener("i18n:changed", () => {
+  if (!LAST_INPUTS || !LAST_CALC) return;
+  fillInputsList(LAST_INPUTS);
+  fillCuts(LAST_INPUTS, LAST_CALC);
+  fillResults(LAST_INPUTS, LAST_CALC);
+  setDateStamp();
+});
 
 // Funktion für Berechnen-Button
 async function berechnen() {
@@ -337,3 +330,4 @@ async function berechnen() {
 document.getElementById("berechnenBtn").addEventListener("click", () => {
   berechnen();
 });
+

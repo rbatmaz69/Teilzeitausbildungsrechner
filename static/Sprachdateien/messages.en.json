@@ -1,0 +1,107 @@
+{
+  "app": {
+    "title": "Part-time training calculator"
+  },
+  "lang": {
+    "label": "Language",
+    "aria": "Select language",
+    "de": "German",
+    "en": "English"
+  },
+  "inputs": {
+    "title": "Your inputs",
+    "dauer": {
+      "label": "Regular training duration (months)",
+      "tooltip": "The normal duration of your training in full-time"
+    },
+    "stunden": {
+      "label": "Regular weekly hours (total)",
+      "tooltip": "Your total weekly hours including vocational school"
+    },
+    "teilzeit": {
+      "label": "Part-time share",
+      "tooltip": "At least 50% required for recognized part-time training",
+      "percent": "Percent",
+      "hours": "Hours"
+    }
+  },
+  "vk": {
+    "heading": "Select reasons for reduction",
+    "helper": "Select all reasons that apply to you.",
+    "legend": "Reasons for reduction",
+    "abitur": {
+      "label": "High school diploma / A-levels",
+      "badge": "−12 months",
+      "tooltip": "If you have a high school diploma, a reduction is possible."
+    },
+    "realschule": {
+      "label": "Secondary school diploma",
+      "badge": "−6 months",
+      "tooltip": "If you have a secondary school diploma, a reduction is possible."
+    },
+    "alter21": {
+      "label": "Age over 21 years",
+      "badge": "−12 months",
+      "tooltip": "For older trainees, prior experience may be credited."
+    },
+    "vork": {
+      "label": "Professional experience",
+      "badge": "−6 to −12 months",
+      "tooltip": "Practical experience or qualifications may shorten the training duration.",
+      "months": "6 months"
+    }
+  },
+  "res": {
+    "headline": "Your part-time training",
+    "helper": "Here you can see your inputs and calculated result at a glance.",
+    "notesTitle": "Important notes",
+    "notes": "<li>The calculation is for <strong>guidance only</strong>.</li><li>There is no legal entitlement to the displayed result.</li><li>The final agreement is made with your training company.</li><li>To qualify as a recognized part-time training, the duration must be at least 50% of the regular training time.</li>",
+    "kv": {
+      "total": "Total duration",
+      "schoolPerWeek": "Training / week",
+      "workPerWeek": "Work / week"
+    },
+    "extension": {
+      "plus": "+{n} months extension",
+      "none": "No extension"
+    },
+    "placeholders": {
+      "months": "–",
+      "extension": "–"
+    }
+  },
+  "cuts": {
+    "title": "Reasons for reduction",
+    "total": "Total",
+    "newBase": "New base"
+  },
+  "units": {
+    "hours": { "short": "h", "full": "hours" },
+    "months": { "short": "mo", "full": "months" },
+    "weeks": { "short": "wk", "full": "weeks" },
+    "percent": "%"
+  },
+  "errors": {
+    "placeholder": "",
+    "fetch": "Error loading data",
+    "unknown": "Unknown error",
+    "tooShort": "The total duration may be shortened by a maximum of 12 months!",
+    "tooLong": "The total duration may not exceed 1.5 times the regular duration!"
+  },
+  "btn": {
+    "calculate": "Calculate",
+    "reset": "Reset",
+    "share": "Share link"
+  },
+  "share": {
+    "title": "Part-time calculator – result",
+    "text": "Here is my result overview.",
+    "copied": "Link copied to clipboard."
+  },
+  "reset": {
+    "confirm": "Do you really want to reset all data?"
+  },
+  "nav": {
+    "actions": "Actions"
+  }
+}
