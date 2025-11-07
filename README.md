@@ -42,15 +42,15 @@ npm install
 # exakt die gleichen Linter-Versionen verwenden. Nicht manuell editieren oder löschen!
 
 # App lokal starten (Entwicklung)
-python -m src.app
-# Läuft auf http://localhost:5000/
-# Falls Port 5000 belegt ist, wird automatisch 5001 verwendet
+python3 -m src.app
+# Läuft auf http://localhost:8000/
+# Falls Port 8000 belegt ist, wird automatisch der nächste freie Port verwendet
 
 # Alternativ mit Flask CLI
 export FLASK_APP=src.app:create_app
 flask run
 # Oder mit spezifischem Port:
-flask run --port=5001
+flask run --port=8001
 ```
 
 ## 💻 Verwendung
@@ -155,22 +155,26 @@ ergebnis = calculate_gesamtdauer(
 ## 🧪 Tests
 
 ```bash
-# Alle Tests ausführen (57 Tests)
-pytest tests/ -v
+# Alle Tests ausführen
+python3 -m pytest tests/ -v
 
-# Nur Unit-Tests (33 Tests - Berechnungslogik)
-pytest tests/test_calculation_logic.py -v
+# Nur Unit-Tests (Berechnungslogik)
+python3 -m pytest tests/test_calculation_logic.py -v
 
-# Nur Integration-Tests (24 Tests - API)
-pytest tests/test_api.py -v
+# Nur Service-Layer-Tests
+python3 -m pytest tests/test_calculation_service.py -v
+
+# Nur Integration-Tests (API)
+python3 -m pytest tests/test_api.py -v
 
 # Mit Coverage-Report
-pytest tests/ --cov=src --cov-report=term
+python3 -m pytest tests/ --cov=src --cov-report=term
 ```
 
 **Test-Struktur:**
-- `tests/test_calculation_logic.py` - Unit-Tests für Berechnungslogik (33 Tests)
-- `tests/test_api.py` - Integration-Tests für Flask-API (24 Tests)
+- `tests/test_calculation_logic.py` - Unit-Tests für Berechnungslogik
+- `tests/test_calculation_service.py` - Unit-Tests für Service-Layer
+- `tests/test_api.py` - Integration-Tests für Flask-API
 - `tests/dummy_data.py` - Zentrale Testdaten (von allen Tests verwendet)
 
 ## 📁 Projektstruktur
@@ -179,6 +183,9 @@ pytest tests/ --cov=src --cov-report=term
 group-04/
 ├── src/
 │   ├── __init__.py          # Python-Paket-Initialisierung
+│   ├── api/
+│   │   ├── __init__.py                 # Öffentliche Service-Schnittstelle
+│   │   └── calculation_service.py      # Validierung & Fehlerbehandlung
 │   ├── app.py               # Flask-App (Routes, API-Endpunkte)
 │   └── calculation_logic.py # Haupt-Berechnungslogik (BBiG § 7a, § 8)
 ├── static/
@@ -189,8 +196,9 @@ group-04/
 ├── templates/
 │   └── index.html          # Haupt-HTML-Template
 ├── tests/
-│   ├── test_api.py         # Integration-Tests für Flask-API (24 Tests)
-│   ├── test_calculation_logic.py  # Unit-Tests für Berechnungslogik (33 Tests)
+│   ├── test_api.py         # Integration-Tests für Flask-API
+│   ├── test_calculation_logic.py  # Unit-Tests für Berechnungslogik
+│   ├── test_calculation_service.py # Unit-Tests für Service-Layer
 │   └── dummy_data.py       # Zentrale Testdaten (User Story 30)
 ├── .flake8                 # Flake8 Linter-Konfiguration
 ├── eslint.config.js        # ESLint 9 Config (nutzt recommended + browser globals)
