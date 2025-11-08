@@ -258,6 +258,9 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
   pointer-events: none;
   transition: opacity 0.2s ease, transform 0.2s ease;
   z-index: 10;
+  max-width: 90vw;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .info-icon::before {
