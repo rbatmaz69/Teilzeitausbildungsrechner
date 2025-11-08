@@ -68,7 +68,7 @@ p.helper {
   width: 100%;
   margin: 0 auto;
   padding: 1rem;
-  max-width: min(90vw, 480px);
+  max-width: 480px;
 }
 
 header {
