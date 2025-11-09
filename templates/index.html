@@ -20,7 +20,7 @@
   <!-- Sprachleiste oben -->
   <nav class="langbar" aria-label="Sprache">
     <label class="sr-only" for="lang-switcher" data-i18n="lang.label">Sprache</label>
-    <div class="langbar__right">
+    <div class="langbar-right">
       <select id="lang-switcher" aria-label="Sprache wählen" data-i18n-attr="aria-label:lang.aria">
         <option value="de" data-i18n="lang.de">Deutsch</option>
         <option value="en" data-i18n="lang.en">English</option>
@@ -28,11 +28,11 @@
     </div>
   </nav>
 
-  <main class="app-container">
+  <div class="container">
     <!-- ================================ EINGABEN DES RECHNERS ================================ -->
 
     <!-- Eingabe reguläre Ausbildungsdauer -->
-    <section class="calculator">
+    <section class="card" aria-labelledby="input-heading">
       <div class="input-group">
         <label for="dauer">
           <span data-i18n="inputs.dauer.label">Reguläre Ausbildungsdauer (Monate)</span>
@@ -99,7 +99,7 @@
         </div>
       </div>
     </section>
-  </main>
+  </div>
   
   <!-- ================================ VERKÜRZUNGSGRÜNDE AUSWÄHLEN ================================ -->
   <div class="container">
@@ -117,74 +117,67 @@
           <!-- Legende nur für Screenreader sichtbar, verbessert Barrierefreiheit -->
           <legend class="sr-only" data-i18n="vk.legend">Verkürzungsgründe</legend>
 
-          <!-- Grid-Layout für die einzelnen Auswahlkacheln -->
-          <div class="grid">
-
-            <!-- ====================== ABITUR ====================== -->
-            <label class="tile" for="g-abitur">
-              <!-- Checkbox-Eingabe -->
-              <input id="g-abitur" type="checkbox">
-              <!-- Inhalt der Kachel -->
-              <div class="tile-body" style="flex:1">
-                <div class="tile-header">
-                  <span><span data-i18n="vk.abitur.label">Abitur / Fachabitur</span> <span class="badge" data-i18n="vk.abitur.badge">−12 Monate</span></span>
-                  <button type="button" class="info-btn" aria-label="Info Abitur"
-                          data-tooltip="Wenn sie Abitur haben, ist eine Verkürzung möglich."
-                          data-i18n-attr="data-tooltip:vk.abitur.tooltip">ℹ️</button>
-                </div>
+          <!-- ====================== ABITUR ====================== -->
+          <label class="tile" for="g-abitur">
+            <!-- Checkbox-Eingabe -->
+            <input id="g-abitur" type="checkbox">
+            <!-- Inhalt der Kachel -->
+            <div class="tile-body" style="flex:1">
+              <div class="tile-header">
+                <span><span data-i18n="vk.abitur.label">Abitur / Fachabitur</span> <span class="badge" data-i18n="vk.abitur.badge">−12 Monate</span></span>
+                <button type="button" class="info-btn" aria-label="Info Abitur"
+                        data-tooltip="Wenn sie Abitur haben, ist eine Verkürzung möglich."
+                        data-i18n-attr="data-tooltip:vk.abitur.tooltip">ℹ️</button>
               </div>
-              <div class="tooltip" role="tooltip"></div>
-            </label>
-
-            <!-- ====================== REALSCHULE ====================== -->
-            <label class="tile" for="g-realschule">
-              <input id="g-realschule" type="checkbox">
-              <div class="tile-body" style="flex:1">
-                <div class="tile-header">
-                  <span><span data-i18n="vk.realschule.label">Realschulabschluss</span> <span class="badge" data-i18n="vk.realschule.badge">−6 Monate</span></span>
-                  <button type="button" class="info-btn" aria-label="Info Realschule"
-                          data-tooltip="Wenn sie einen Realschulabschluss haben, ist eine Verkürzung möglich."
-                          data-i18n-attr="data-tooltip:vk.realschule.tooltip">ℹ️</button>
-                </div>
-              </div>
-              <div class="tooltip" role="tooltip"></div>
-            </label>
-
-            <!-- ====================== ALTER ÜBER 21 ====================== -->
-            <label class="tile" for="g-alter21">
-              <input id="g-alter21" type="checkbox">
-              <div class="tile-body" style="flex:1">
-                <div class="tile-header">
-                  <span><span data-i18n="vk.alter21.label">Alter über 21 Jahre</span> <span class="badge" data-i18n="vk.alter21.badge">−12 Monate</span></span>
-                  <button type="button" class="info-btn" aria-label="Info Alter über 21"
-                          data-tooltip="Bei älteren Auszubildenden ist eine Anrechnung von Vorerfahrungen möglich."
-                          data-i18n-attr="data-tooltip:vk.alter21.tooltip">ℹ️</button>
-                </div>
-              </div>
-              <div class="tooltip" role="tooltip"></div>
-            </label>
-
-            <!-- ====================== BERUFLICHE VORKENNTNISSE ====================== -->
-            <div>
-              <label class="tile" for="g-vork">
-                <input id="g-vork" type="checkbox">
-                <div class="tile-body" style="flex:1">
-                  <div class="tile-header">
-                    <span><span data-i18n="vk.vork.label">Berufliche Vorkenntnisse</span> <span class="badge" data-i18n="vk.vork.badge">−6 bis −12 Monate</span></span>
-                    <button type="button" class="info-btn" aria-label="Info Vorkenntnisse"
-                            data-tooltip="Praxiserfahrungen oder Abschlüsse können die Ausbildungsdauer bei Ihnen verkürzen."
-                            data-i18n-attr="data-tooltip:vk.vork.tooltip">ℹ️</button>
-                  </div>
-                  <div class="slider-container">
-                    <input type="range" id="vork-slider" min="6" max="12" step="1" value="6">
-                    <span id="vork-wert" data-i18n="vk.vork.months">6 Monate</span>
-                  </div>
-                </div>
-                <div class="tooltip" role="tooltip"></div>
-              </label>
             </div>
+            <div class="tooltip" role="tooltip"></div>
+          </label>
+          <!-- ====================== REALSCHULE ====================== -->
+          <label class="tile" for="g-realschule">
+            <input id="g-realschule" type="checkbox">
+            <div class="tile-body" style="flex:1">
+              <div class="tile-header">
+                <span><span data-i18n="vk.realschule.label">Realschulabschluss</span> <span class="badge" data-i18n="vk.realschule.badge">−6 Monate</span></span>
+                <button type="button" class="info-btn" aria-label="Info Realschule"
+                        data-tooltip="Wenn sie einen Realschulabschluss haben, ist eine Verkürzung möglich."
+                        data-i18n-attr="data-tooltip:vk.realschule.tooltip">ℹ️</button>
+              </div>
+            </div>
+            <div class="tooltip" role="tooltip"></div>
+          </label>
+          <!-- ====================== ALTER ÜBER 21 ====================== -->
+          <label class="tile" for="g-alter21">
+            <input id="g-alter21" type="checkbox">
+            <div class="tile-body" style="flex:1">
+              <div class="tile-header">
+                <span><span data-i18n="vk.alter21.label">Alter über 21 Jahre</span> <span class="badge" data-i18n="vk.alter21.badge">−12 Monate</span></span>
+                <button type="button" class="info-btn" aria-label="Info Alter über 21"
+                        data-tooltip="Bei älteren Auszubildenden ist eine Anrechnung von Vorerfahrungen möglich."
+                        data-i18n-attr="data-tooltip:vk.alter21.tooltip">ℹ️</button>
+              </div>
+            </div>
+            <div class="tooltip" role="tooltip"></div>
+          </label>
+          <!-- ====================== BERUFLICHE VORKENNTNISSE ====================== -->
+          <div>
+            <label class="tile" for="g-vork">
+              <input id="g-vork" type="checkbox">
+              <div class="tile-body" style="flex:1">
+                <div class="tile-header">
+                  <span><span data-i18n="vk.vork.label">Berufliche Vorkenntnisse</span> <span class="badge" data-i18n="vk.vork.badge">−6 bis −12 Monate</span></span>
+                  <button type="button" class="info-btn" aria-label="Info Vorkenntnisse"
+                          data-tooltip="Praxiserfahrungen oder Abschlüsse können die Ausbildungsdauer bei Ihnen verkürzen."
+                          data-i18n-attr="data-tooltip:vk.vork.tooltip">ℹ️</button>
+                </div>
+                <div class="slider-container">
+                  <input type="range" id="vork-slider" min="6" max="12" step="1" value="6">
+                  <span id="vork-wert" data-i18n="vk.vork.months">6 Monate</span>
+                </div>
+              </div>
+              <div class="tooltip" role="tooltip"></div>
+            </label>
+          </div>
 
-          </div> <!-- Ende grid -->
         </fieldset>
       </form>
       <button class="berechnen" id="berechnenBtn" data-i18n="btn.calculate">Berechnen</button>
@@ -260,7 +253,6 @@
   <!-- Navigationsleiste (mobil sticky) -->
   <nav class="actionbar" aria-label="Aktionen" data-i18n-attr="aria-label:nav.actions">
     <button class="btn ghost" id="btn-reset" type="button" aria-label="Zurücksetzen" data-i18n="btn.reset" data-i18n-attr="aria-label:btn.reset">Zurücksetzen</button>
-    <div class="spacer"></div>
     <button class="btn outline" id="btn-share" type="button" data-i18n="btn.share">Link teilen</button>
   </nav>
 
