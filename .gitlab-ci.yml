@@ -1,6 +1,5 @@
 # CI Pipeline for Linting & Code Quality
 # Runs on merge requests to develop/main and on direct pushes to develop
-image: python:3.12
 
 stages:
   - lint
@@ -12,17 +11,19 @@ variables:
 cache:
   paths:
     - .cache/pip
+    - node_modules/
 
-before_script:
-  # Check Python version and install dependencies
-  - python --version
-  - pip install --upgrade pip
-  - pip install -r requirements.txt
+# ====================== PYTHON LINTING ======================
 
-lint:
+lint:python:
+  image: python:3.12
+  before_script:
+    - python --version
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
   stage: lint
   script:
-    - echo "🔍 Running code quality checks with Flake8 and Isort..."
+    - echo "🔍 Running Python code quality checks..."
     - flake8 src/
     - isort --check-only src/
   only:
@@ -32,7 +33,31 @@ lint:
       - main
   allow_failure: false
 
+# ====================== FRONTEND LINTING ======================
+
+lint:frontend:
+  image: node:20-alpine
+  before_script:
+    - npm install
+  stage: lint
+  script:
+    - echo "🔍 Running Frontend linting (ESLint, Stylelint, HTMLHint)..."
+    - npm run lint
+  only:
+    refs:
+      - merge_requests
+      - develop
+      - main
+  allow_failure: false
+
+# ====================== TESTING ======================
+
 test:
+  image: python:3.12
+  before_script:
+    - python --version
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
   stage: test
   script:
     - echo "🧪 Running unit tests with pytest and coverage..."

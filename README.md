@@ -21,7 +21,9 @@ Dieses Projekt implementiert die gesetzlichen Vorgaben für Teilzeitberufsausbil
 
 ### Voraussetzungen
 - Python 3.7+
+- Node.js 18+ (für Linting-Tools)
 - Python-Pakete aus `requirements.txt`
+- Node.js-Pakete aus `package.json`
 
 ### Setup
 ```bash
@@ -29,8 +31,15 @@ Dieses Projekt implementiert die gesetzlichen Vorgaben für Teilzeitberufsausbil
 git clone https://git.it.hs-heilbronn.de/it/courses/seb/lab/ws25/group-04.git
 cd group-04
 
-# Abhängigkeiten installieren
+# Python-Abhängigkeiten installieren (erforderlich)
 pip install -r requirements.txt
+
+# Frontend-Linting-Tools installieren (optional, nur für lokales Linting)
+# Die Pipeline installiert diese automatisch - dieses Setup ist nur für lokale Entwicklung
+npm install
+
+# Hinweis: package-lock.json sorgt dafür, dass alle Teammitglieder und die Pipeline
+# exakt die gleichen Linter-Versionen verwenden. Nicht manuell editieren oder löschen!
 
 # App lokal starten (Entwicklung)
 python3 -m src.app
@@ -192,9 +201,14 @@ group-04/
 │   ├── test_calculation_service.py # Unit-Tests für Service-Layer
 │   └── dummy_data.py       # Zentrale Testdaten (User Story 30)
 ├── .flake8                 # Flake8 Linter-Konfiguration
+├── eslint.config.js        # ESLint 9 Config (nutzt recommended + browser globals)
+├── .stylelintrc.json       # Stylelint Config (nutzt stylelint-config-standard)
+├── .htmlhintrc             # HTMLHint Config (wichtigste HTML-Regeln)
 ├── .gitignore              # Git-Ignore-Regeln
 ├── .gitlab-ci.yml          # GitLab CI/CD Pipeline-Konfiguration
 ├── coverage.xml            # Coverage-Report (XML-Format)
+├── package.json            # Node.js-Dependencies (Linting-Tools)
+├── package-lock.json       # Locked dependency versions (nicht manuell ändern!)
 ├── pytest.ini              # Pytest-Konfiguration
 ├── requirements.txt        # Python-Dependencies
 ├── wsgi.py                 # WSGI-Entry für Production-Server
@@ -259,7 +273,11 @@ Alle Funktionen sind ausführlich dokumentiert mit:
 ## 🔄 CI/CD Pipeline
 
 ### Pipeline-Stages
-- [x] **Lint** - Flake8 und isort Code Quality Checks
+- [x] **Lint** - Code Quality Checks für Backend & Frontend
+  - Python: Flake8, isort
+  - JavaScript: ESLint
+  - CSS: Stylelint
+  - HTML: HTMLHint
 - [x] **Test** - Pytest mit Coverage-Report (90%)
 - [x] **Coverage Report** - Automatische Coverage-Artefakte
 - [ ] **Deployment** - Automatisches Deployment nach Tests
@@ -271,6 +289,33 @@ Alle Funktionen sind ausführlich dokumentiert mit:
 - Pushes zu `main`
 
 **Konfiguration:** `.gitlab-ci.yml`
+
+### Linting lokal ausführen
+
+**Alle Linter auf einmal:**
+```bash
+npm run lint     # Führt ESLint, Stylelint und HTMLHint parallel aus
+```
+
+**Einzelne Linter:**
+```bash
+npm run lint:js      # JavaScript (ESLint 9)
+npm run lint:css     # CSS (Stylelint)
+npm run lint:html    # HTML (HTMLHint)
+flake8 src/          # Python (Flake8)
+isort --check-only src/  # Python Import-Sortierung
+```
+
+**Automatische Fixes:**
+```bash
+npm run lint:fix      # JavaScript + CSS auto-fix
+isort src/            # Python Imports sortieren
+```
+
+**Linting-Configs:**
+- Alle nutzen Standard-Configs (recommended/standard)
+- Minimal angepasst für Browser-Umgebung
+- Einfach zu verstehen und zu warten
 
 ## 🎯 Status
 

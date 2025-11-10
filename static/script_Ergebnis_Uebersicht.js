@@ -33,7 +33,7 @@ function units() {
 // Zustand merken, damit wir bei Sprachwechsel neu rendern können
 let LAST_INPUTS = null;
 let LAST_CALC = null;
-let errorTotalMonths = null;
+let errorTotalMonths;
 
 /**
  * Holt die Berechnungsergebnisse vom Backend
@@ -76,7 +76,9 @@ async function getSummary() {
     try {
       const err = await resp.json();
       message = err?.error?.message || message;
-    } catch {}
+    } catch (error) {
+      console.warn("Fehler beim Verarbeiten der Antwort:", error);
+    }
     throw new Error(message);
   }
 
@@ -233,7 +235,9 @@ async function shareLink() {
       await navigator.clipboard.writeText(url.toString());
       alert(copied);
     }
-  } catch {}
+  } catch (error) {
+    console.warn("Fehler beim Teilen:", error);
+  }
 }
 
 function resetData() {
@@ -248,12 +252,18 @@ function resetData() {
     null;
 
   // Alles löschen (Formulardaten etc.)
-  try { localStorage.clear(); } catch {}
-  try { sessionStorage.clear(); } catch {}
+  try { localStorage.clear(); } catch (error) {
+    console.warn("Konnte localStorage nicht löschen:", error);
+  }
+  try { sessionStorage.clear(); } catch (error) {
+    console.warn("Konnte sessionStorage nicht löschen:", error);
+  }
 
   // Sprache wiederherstellen
   if (savedLang) {
-    try { localStorage.setItem(LANG_KEY, savedLang); } catch {}
+    try { localStorage.setItem(LANG_KEY, savedLang); } catch (error) {
+      console.warn("Konnte Sprache nicht wiederherstellen:", error);
+    }
   }
 
   // Neu laden
