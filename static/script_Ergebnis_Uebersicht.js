@@ -33,7 +33,7 @@ function units() {
 // Zustand merken, damit wir bei Sprachwechsel neu rendern können
 let LAST_INPUTS = null;
 let LAST_CALC = null;
-let errorTotalMonths = null;
+let errorTotalMonths;
 
 /**
  * Holt die Berechnungsergebnisse vom Backend

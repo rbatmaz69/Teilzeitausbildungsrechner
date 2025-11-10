@@ -20,7 +20,6 @@
   --shadow: 0 6px 16px rgb(20, 20, 40 / 8%);
   --radius-lg: 16px;
   --radius-sm: 10px;
-
   --space-1: .5rem;
   --space-2: .75rem;
   --space-3: 1rem;
@@ -254,7 +253,6 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 0.8rem;
-  white-space: nowrap;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease, transform 0.2s ease;
