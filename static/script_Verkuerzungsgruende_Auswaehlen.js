@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const abiturCheckbox = document.getElementById('g-abitur');
   const realschuleCheckbox = document.getElementById('g-realschule');
-  const vorkenntnisseCheckbox = document.getElementById('g-vork');
   const vorkSlider = document.getElementById('vork-slider');
   const vorkWert = document.getElementById('vork-wert');
 
