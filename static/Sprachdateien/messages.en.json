@@ -4,65 +4,65 @@
   },
   "lang": {
     "label": "Language",
-    "aria": "Select language",
+    "aria": "Choose language",
     "de": "German",
     "en": "English"
   },
   "inputs": {
-    "title": "Your inputs",
+    "title": "Your details",
     "dauer": {
-      "label": "Regular training duration (months)",
-      "tooltip": "The normal duration of your training in full-time"
+      "label": "How long is your training in full-time?",
+      "tooltip": "Write how many months your training usually takes in full-time."
     },
     "stunden": {
-      "label": "Regular weekly hours (total)",
-      "tooltip": "Your total weekly hours including vocational school"
+      "label": "How many hours do you work in a normal week?",
+      "tooltip": "Count all hours, including school hours."
     },
     "teilzeit": {
-      "label": "Part-time share",
-      "tooltip": "At least 50% required for recognized part-time training",
+      "label": "What part-time percentage do you want?",
+      "tooltip": "For part-time training, you must work at least 50%.",
       "percent": "Percent",
       "hours": "Hours"
     }
   },
   "vk": {
-    "heading": "Select reasons for reduction",
-    "helper": "Select all reasons that apply to you.",
-    "legend": "Reasons for reduction",
+    "heading": "Reasons for shorter training",
+    "helper": "Choose all options that fit you.",
+    "legend": "Shortening reasons",
     "abitur": {
-      "label": "High school diploma / A-levels",
+      "label": "Do you have a high school diploma (Abitur)?",
       "badge": "−12 months",
-      "tooltip": "If you have a high school diploma, a reduction is possible."
+      "tooltip": "If you have a high school diploma, you can shorten your training by 1 year."
     },
     "realschule": {
-      "label": "Secondary school diploma",
+      "label": "Did you finish secondary school (Realschule)?",
       "badge": "−6 months",
-      "tooltip": "If you have a secondary school diploma, a reduction is possible."
+      "tooltip": "If you finished secondary school, you can shorten your training by 6 months."
     },
     "alter21": {
-      "label": "Age over 21 years",
+      "label": "Are you older than 21?",
       "badge": "−12 months",
-      "tooltip": "For older trainees, prior experience may be credited."
+      "tooltip": "If you are older, your experience counts. Your training can then be shorter."
     },
     "vork": {
-      "label": "Professional experience",
+      "label": "Do you already have work experience in this field?",
       "badge": "−6 to −12 months",
-      "tooltip": "Practical experience or qualifications may shorten the training duration.",
+      "tooltip": "If you have worked in this job before, your training can be shorter.",
       "months": "6 months"
     }
   },
   "res": {
     "headline": "Your part-time training",
-    "helper": "Here you can see your inputs and calculated result at a glance.",
-    "notesTitle": "Important notes",
-    "notes": "<li>The calculation is for <strong>guidance only</strong>.</li><li>There is no legal entitlement to the displayed result.</li><li>The final agreement is made with your training company.</li><li>To qualify as a recognized part-time training, the duration must be at least 50% of the regular training time.</li>",
+    "helper": "Here you can see your details and the result.",
+    "notesTitle": "Important information",
+    "notes": "<li>This calculation is only a <strong>help</strong>.</li><li>The result is <strong>not official</strong>.</li><li>Talk about the result with your training company.</li><li>Part-time training is possible if you do at least 50% of the normal time.</li>",
     "kv": {
-      "total": "Total duration",
-      "schoolPerWeek": "Training / week",
-      "workPerWeek": "Work / week"
+      "total": "Total time",
+      "schoolPerWeek": "School per week",
+      "workPerWeek": "Work per week"
     },
     "extension": {
-      "plus": "+{n} months extension",
+      "plus": "+{n} more months",
       "none": "No extension"
     },
     "placeholders": {
@@ -71,7 +71,7 @@
     }
   },
   "cuts": {
-    "title": "Reasons for reduction",
+    "title": "Reasons for shortening",
     "total": "Total",
     "newBase": "New base"
   },
@@ -83,20 +83,20 @@
   },
   "errors": {
     "placeholder": "",
-    "fetch": "Error loading data",
+    "fetch": "Could not load data.",
     "unknown": "Unknown error",
-    "tooShort": "The total duration may be shortened by a maximum of 12 months!",
-    "tooLong": "The total duration may not exceed 1.5 times the regular duration!"
+    "tooShort": "Training can be shortened by up to 12 months only!",
+    "tooLong": "Training can be at most 1.5 times longer!"
   },
   "btn": {
-    "calculate": "Calculate",
+    "calculate": "Show result",
     "reset": "Reset",
     "share": "Share link"
   },
   "share": {
-    "title": "Part-time calculator – result",
-    "text": "Here is my result overview.",
-    "copied": "Link copied to clipboard."
+    "title": "Part-Time Calculator – result",
+    "text": "Here is my result.",
+    "copied": "The link has been copied."
   },
   "reset": {
     "confirm": "Do you really want to reset all data?"
