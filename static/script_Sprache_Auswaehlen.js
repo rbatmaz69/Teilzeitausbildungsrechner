@@ -11,18 +11,41 @@
     dict: null
   };
 
+  /**
+   * Liest die zuletzt vom Nutzer gewählte Sprache aus dem LocalStorage aus.
+   * @returns {string|null} ISO-Sprachcode oder null, falls keiner gespeichert ist.
+   */
   const getSavedLang = () => localStorage.getItem("lang");
+  /**
+   * Persistiert die gewählte Sprache im LocalStorage.
+   * @param {string} lang ISO-Sprachcode (z.B. "de" oder "en").
+   */
   const saveLang = (lang) => localStorage.setItem("lang", lang);
 
+  /**
+   * Führt einen sicheren Zugriff auf verschachtelte Schlüssel in einem Objekt aus.
+   * @param {Object} obj Wörterbuch mit Übersetzungen.
+   * @param {string} path Punkt-getrennter Pfad (z.B. "inputs.dauer.label").
+   * @returns {any} Gefundener Wert oder null.
+   */
   const resolve = (obj, path) =>
     path.split(".").reduce((o, k) => (o && o[k] !== undefined ? o[k] : null), obj);
 
+  /**
+   * Setzt die globalen `lang`- und `dir`-Attribute auf dem `<html>`-Element.
+   * @param {string} lang ISO-Sprachcode.
+   */
   const setHtmlLangDir = (lang) => {
     document.documentElement.setAttribute("lang", lang);
     const rtlLangs = ["ar", "he", "fa", "ur"];
     document.documentElement.setAttribute("dir", rtlLangs.includes(lang) ? "rtl" : "ltr");
   };
 
+  /**
+   * Lädt die JSON-Übersetzungsdatei für eine Sprache.
+   * @param {string} lang ISO-Sprachcode.
+   * @returns {Promise<Object>} JSON-Dictionary mit Übersetzungen.
+   */
   const fetchDict = async (lang) => {
     const safeLang = SUPPORTED.includes(lang) ? lang : DEFAULT_LANG;
     const url = `${I18N_PATH}/messages.${safeLang}.json`;
@@ -32,6 +55,11 @@
     return res.json();
   };
 
+  /**
+   * Schreibt den übersetzten Wert in ein DOM-Element.
+   * @param {HTMLElement} el Ziel-Element.
+  * @param {string} value Übersetzter Text oder HTML.
+   */
   const applyText = (el, value) => {
     if (el.dataset.i18nHtml === "true" || /<[^>]*>/.test(value)) {
       el.innerHTML = value;
@@ -40,6 +68,10 @@
     }
   };
 
+  /**
+   * Wendet alle Übersetzungen auf Elemente mit data-i18n-Attributen an.
+   * @param {Object} dict Wörterbuch mit Übersetzungen.
+   */
   const applyTranslations = (dict) => {
     document.querySelectorAll("[data-i18n]").forEach((el) => {
       const key = el.dataset.i18n;
@@ -74,6 +106,7 @@
     }
   };
 
+  /** Registriert eine globale I18N-Hilfs-API auf `window`. */
   const registerGlobalAPI = () => {
     window.I18N = {
       get lang() { return state.lang; },
@@ -85,12 +118,17 @@
     };
   };
 
+  /** Sendet ein benutzerdefiniertes Event, wenn sich die Sprache ändert. */
   const dispatchLangChanged = () => {
     window.dispatchEvent(new CustomEvent("i18n:changed", {
       detail: { lang: state.lang }
     }));
   };
 
+  /**
+   * Lädt Übersetzungen und aktualisiert UI sowie globale APIs.
+   * @param {string} lang ISO-Sprachcode.
+   */
   const loadAndApply = async (lang) => {
     state.lang = SUPPORTED.includes(lang) ? lang : DEFAULT_LANG;
     setHtmlLangDir(state.lang);

@@ -1,5 +1,11 @@
+/**
+ * Initialisiert alle Formularelemente und synchronisiert Prozent- und Stunden-Eingaben.
+ *
+ * Alle Listener sorgen dafür, dass Eingaben valide bleiben und UI-Buttons korrekt
+ * reagieren. Die Funktion wird automatisch nach dem Laden des DOMs ausgeführt.
+ */
 document.addEventListener("DOMContentLoaded", () => {
-  
+
   const dauerInput = document.getElementById("dauer");
   const wochenstundenInput = document.getElementById("stunden");
   const teilzeitProzentInput = document.getElementById("teilzeitProzent");
@@ -92,7 +98,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Syncronisiere die Wochenstunden mit dem Prozentwert
+  /**
+   * Synchronisiert die Wochenstunden mit dem Teilzeit-Prozentwert.
+   * Stellt sicher, dass bei geänderten Prozentwerten die abgeleiteten Stunden
+   * automatisch aktualisiert werden.
+   */
   function syncStunden() {
     const gesamt = parseFloat(wochenstundenInput.value);
     const prozent = parseFloat(teilzeitProzentInput.value);
@@ -102,7 +112,10 @@ document.addEventListener("DOMContentLoaded", () => {
     clearActiveButtons();
   }
   
-  // Syncronisiere den Prozentwert mit den Wochenstunden
+  /**
+   * Synchronisiert den Prozentwert mit den Wochenstunden.
+   * Wird verwendet, wenn die Wochenstunden direkt eingegeben oder über Presets gesetzt werden.
+   */
   function syncProzent() {
     const gesamt = parseFloat(wochenstundenInput.value);
     const stunden = parseFloat(teilzeitStundenInput.value);
@@ -112,7 +125,10 @@ document.addEventListener("DOMContentLoaded", () => {
     clearActiveButtons();
   }
   
-  // Verhindere, dass Werte unter oder über den Minimal- und Maximalwerten eingetragen werden
+  /**
+   * Validiert den Teilzeit-Prozentwert und erzwingt die gesetzlichen Grenzen von 50-100%.
+   * Rückmeldungen werden in der UI angezeigt.
+   */
   function checkMinAndMaxPercent() {
     const teilzeitProzent = parseFloat(teilzeitProzentInput.value);
     
@@ -139,7 +155,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   
-  // Verhindere, dass Werte unter oder über den Minimal- und Maximalwerten eingetragen werden
+  /**
+   * Validiert die Teilzeit-Wochenstunden und hält sie im erlaubten Bereich
+   * zwischen der Hälfte und der vollen Wochenarbeitszeit.
+   */
   function checkMinAndMaxStunden() {
     const wochenstunden = parseFloat(wochenstundenInput.value);
     const teilzeitStunden = parseFloat(teilzeitStundenInput.value);
@@ -167,7 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   
-  // Aktive Buttons zurücksetzen
+  /** Entfernt den aktiven Zustand aller Preset-Buttons. */
   function clearActiveButtons() {
     buttons.forEach(btn => btn.classList.remove("active"));
   }

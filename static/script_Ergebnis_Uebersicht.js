@@ -36,7 +36,10 @@ let LAST_CALC = null;
 let errorTotalMonths;
 
 /**
- * Holt die Berechnungsergebnisse vom Backend
+ * Holt die Berechnungsergebnisse vom Backend.
+ *
+ * Sammelt Formularwerte, sendet sie an den API-Endpunkt und normalisiert
+ * das Ergebnis für die tabellarische Darstellung.
  */
 async function getSummary() {
   const baseMonthsEl = document.getElementById("dauer");
@@ -119,7 +122,11 @@ async function getSummary() {
   };
 }
 
-/** Füllt die Übersichtstabelle der Eingaben (mit i18n) */
+/**
+ * Füllt die Übersichtstabelle der Eingaben (mit i18n).
+ *
+ * @param {Object} inputs - Vorverarbeitete Eingabewerte aus getSummary().
+ */
 function fillInputsList(inputs) {
   const list = $("#inputs-list");
   if (!list) return;
@@ -143,7 +150,12 @@ function fillInputsList(inputs) {
   }
 }
 
-/** Zeigt Verkürzungsgründe und Zusammenfassung (mit i18n) */
+/**
+ * Zeigt Verkürzungsgründe und Zusammenfassung (mit i18n).
+ *
+ * @param {Object} inputs - Eingabe-Informationen inklusive ausgewählter Cuts.
+ * @param {Object} calc - Berechnungsergebnisse zur Darstellung.
+ */
 function fillCuts(inputs, calc) {
   const wrap = $("#cuts-section");
   const ul = $("#cuts-list");
@@ -179,7 +191,12 @@ function fillCuts(inputs, calc) {
   sum.textContent = `${totalLabel}: −${calc.totalCutMonths} ${monthsWordFull} · ${newBaseLabel}: ${calc.newBase} ${monthsWordFull}`;
 }
 
-/** Zeigt die Hauptergebnisse (mit i18n) */
+/**
+ * Zeigt die Hauptergebnisse (mit i18n) an.
+ *
+ * @param {Object} inputs - Eingaben zur Ableitung von Plausibilitätsprüfungen.
+ * @param {Object} calc - Kernzahlen der Berechnung (Monate, Wochen, Stunden).
+ */
 function fillResults(inputs, calc) {
   const U = units();
 
@@ -209,7 +226,7 @@ function fillResults(inputs, calc) {
   setText("#res-work-per-week", `${inputs.workHoursPerWeek} ${U.h}`);
 }
 
-/** Setzt das Datum in der Fußzeile (lokalisiert) */
+/** Setzt das Datum in der Fußzeile (lokalisiert). */
 function setDateStamp() {
   const el = $("#stamp-date");
   if (!el) return;
@@ -223,6 +240,9 @@ function setDateStamp() {
    Share / Reset – mit i18n
    ------------------------------ */
 
+/**
+ * Teilt die Ergebnisübersicht über die Web Share API oder die Zwischenablage.
+ */
 async function shareLink() {
   const url = new URL(location.href);
   const title = t("share.title", "Teilzeitrechner – Ergebnis");
@@ -240,6 +260,10 @@ async function shareLink() {
   }
 }
 
+/**
+ * Setzt alle gespeicherten Formular- und Spracheinstellungen zurück.
+ * Die zuletzt gewählte Sprache wird erneut gespeichert.
+ */
 function resetData() {
   const msg = t("reset.confirm", "Möchten Sie wirklich alle Daten zurücksetzen?");
   if (!confirm(msg)) return;
@@ -274,6 +298,10 @@ function resetData() {
    Initialisierung & Re-Render bei Sprachwechsel
    ------------------------------ */
 
+/**
+ * Initialisiert die Ergebnisansicht und lädt einmalig die aktuellen Berechnungen.
+ * Speichert die letzten Daten, damit sie bei Sprachwechseln wiederverwendet werden können.
+ */
 async function init() {
   errorTotalMonths = document.getElementById('errorTotalMonths');
 
@@ -314,6 +342,10 @@ window.addEventListener("i18n:changed", () => {
 });
 
 // Funktion für Berechnen-Button
+/**
+ * Führt eine erneute Berechnung aus und aktualisiert die Ergebnisansicht.
+ * Fehler werden im UI angezeigt.
+ */
 async function berechnen() {
   // Daten laden und anzeigen
   try {
