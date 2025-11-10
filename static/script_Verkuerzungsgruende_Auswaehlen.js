@@ -44,12 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  vorkenntnisseCheckbox.addEventListener('change', () => {
-    if (vorkenntnisseCheckbox.checked) {
-      
-    }
-  });
-
   vorkSlider.addEventListener('input', () => {
     const monthsLabel = window.I18N?.t("units.months.full", "Monate") || "Monate";
     vorkWert.textContent = `${vorkSlider.value} ${monthsLabel}`;

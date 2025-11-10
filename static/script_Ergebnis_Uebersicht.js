@@ -33,7 +33,6 @@ function units() {
 // Zustand merken, damit wir bei Sprachwechsel neu rendern können
 let LAST_INPUTS = null;
 let LAST_CALC = null;
-let errorTotalMonths = null;
 
 /**
  * Holt die Berechnungsergebnisse vom Backend
@@ -76,7 +75,7 @@ async function getSummary() {
     try {
       const err = await resp.json();
       message = err?.error?.message || message;
-    } catch {}
+    } catch {error}
     throw new Error(message);
   }
 
@@ -233,7 +232,7 @@ async function shareLink() {
       await navigator.clipboard.writeText(url.toString());
       alert(copied);
     }
-  } catch {}
+  } catch {error}
 }
 
 function resetData() {
@@ -248,12 +247,12 @@ function resetData() {
     null;
 
   // Alles löschen (Formulardaten etc.)
-  try { localStorage.clear(); } catch {}
-  try { sessionStorage.clear(); } catch {}
+  try { localStorage.clear(); } catch {error}
+  try { sessionStorage.clear(); } catch {error}
 
   // Sprache wiederherstellen
   if (savedLang) {
-    try { localStorage.setItem(LANG_KEY, savedLang); } catch {}
+    try { localStorage.setItem(LANG_KEY, savedLang); } catch {error}
   }
 
   // Neu laden
