@@ -8,6 +8,26 @@ Ein Python-basierter Rechner für Teilzeitberufsausbildungen gemäß BBiG § 7a 
 
 Dieses Projekt implementiert die gesetzlichen Vorgaben für Teilzeitberufsausbildungen basierend auf der Empfehlung des Hauptausschusses des Bundesinstituts für Berufsbildung vom 10. Juni 2021.
 
+## 🏗️ Architekturüberblick
+
+Der Teilzeitrechner ist als klassische Drei-Schichten-Anwendung aufgebaut:
+
+- **Frontend (Static Assets in `static/` + Templates in `templates/`)**  
+  Eine schlanke HTML-Oberfläche (`templates/index.html`) liefert die Eingabe- und Ausgabemasken.  
+  JavaScript-Module (`static/script_eingabe.js`, `static/script_Verkuerzungsgruende_Auswaehlen.js`, `static/script_Ergebnis_Uebersicht.js`, `static/script_Sprache_Auswaehlen.js`) übernehmen Formularvalidierung, Mehrsprachigkeit und die Kommunikation mit der API.
+
+- **Service-/API-Schicht (`src/api/`)**  
+  `src/api/calculation_service.py` kapselt Request-Validierung, Fehlercodes und die Ankopplung an die Berechnungslogik. Über `src/api/__init__.py` wird eine stabile öffentliche Schnittstelle (`handle_calculation_request`) bereitgestellt, die von der Flask-App konsumiert wird.
+
+- **Berechnungslogik (`src/calculation_logic.py`)**  
+  Enthält das fachliche Herzstück mit den vier Berechnungsschritten (Verkürzung, automatische Verlängerung, gesetzliche Obergrenze, Rundung) sowie Helfern für Stunden-/Prozent-Umrechnungen. Die Funktionen sind so dokumentiert, dass sie auch unabhängig vom Web-Layer test- und nachvollziehbar bleiben.
+
+Die Schichten werden über die Flask-App (`src/app.py`) verdrahtet. `create_app()` registriert zwei Routen:
+1. `GET /` liefert die Benutzeroberfläche
+2. `POST /api/calculate` verarbeitet Berechnungsanfragen, ruft den Service-Layer auf und liefert strukturierte Ergebnisse zurück
+
+Tests im Ordner `tests/` decken jede Schicht ab (Unit-Tests für Logik und Service, Integrationstests für die API). Dummy-Daten für manuelle Tests stehen in `tests/dummy_data.py` bereit.
+
 ### ✨ Features
 
 - **Vollständige Berechnungslogik** für Teilzeitausbildungen
@@ -260,6 +280,16 @@ Alle Funktionen sind ausführlich dokumentiert mit:
 - Berechnungsbeispielen
 - Gesetzesbegründungen
 - Quellenangaben
+
+### Automatische Docstring-Dokumentation
+Eine Markdown-Referenz der Python-Module kann jederzeit generiert werden:
+
+```bash
+python scripts/generate_docs.py            # erzeugt docs/api_reference.md
+python scripts/generate_docs.py -o docs/custom.md  # eigener Ausgabepfad
+```
+
+Das Skript wertet die Docstrings der Kernmodule (`src/calculation_logic.py`, `src/api/calculation_service.py`, `src/app.py`) aus und aktualisiert die Referenz im Ordner `docs/`.
 
 ## 👥 Autoren
 

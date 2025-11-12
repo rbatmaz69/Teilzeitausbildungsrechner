@@ -1,5 +1,10 @@
+/**
+ * Initialisiert die Verkürzungsgründe-Steuerung.
+ *
+ * Bindet Tooltips, sorgt für korrektes Checkbox-Verhalten und synchronisiert
+ * die Anzeige der Vorkenntnis-Monate mit der aktuellen Sprache.
+ */
 document.addEventListener('DOMContentLoaded', () => {
-
   const abiturCheckbox = document.getElementById('g-abitur');
   const realschuleCheckbox = document.getElementById('g-realschule');
   const vorkSlider = document.getElementById('vork-slider');
