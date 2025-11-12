@@ -19,7 +19,7 @@
       "tooltip": "Count all hours, including school hours."
     },
     "teilzeit": {
-      "label": "What part-time percentage do you want?",
+      "label": "How much of full-time do you want to work?",
       "tooltip": "For part-time training, you must work at least 50%.",
       "percent": "Percent",
       "hours": "Hours"

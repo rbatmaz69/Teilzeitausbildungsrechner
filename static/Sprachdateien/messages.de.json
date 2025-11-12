@@ -19,7 +19,7 @@
       "tooltip": "Zähle alle Stunden mit, auch die Stunden in der Berufsschule."
     },
     "teilzeit": {
-      "label": "Wie viel Prozent willst du in Teilzeit arbeiten?",
+      "label": "Wie viel der Vollzeit willst du arbeiten?",
       "tooltip": "Für eine Teilzeit Ausbildung must du mindestens 50 % arbeiten.",
       "percent": "Prozent",
       "hours": "Stunden"
