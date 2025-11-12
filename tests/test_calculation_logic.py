@@ -385,7 +385,7 @@ def test_negative_teilzeit_input_fehler():
         berechne_gesamtdauer(**data)
 
 
-def test_typ_fehler_basis_dauer_zeichenkette():
+def test_basis_dauer_als_text_wirft_fehler():
     """
     Test: String als Ausbildungsdauer ist ungültig.
 
@@ -398,7 +398,7 @@ def test_typ_fehler_basis_dauer_zeichenkette():
         berechne_gesamtdauer(**data)
 
 
-def test_typ_fehler_teilzeit_eingabe_zeichenkette():
+def test_teilzeit_eingabe_als_text_wirft_fehler():
     """
     Test: String als Teilzeit-Input ist ungültig.
 
@@ -411,7 +411,7 @@ def test_typ_fehler_teilzeit_eingabe_zeichenkette():
         berechne_gesamtdauer(**data)
 
 
-def test_typ_fehler_vollzeit_stunden_zeichenkette():
+def test_vollzeit_stunden_als_text_wirft_fehler():
     """
     Test: String als Vollzeit-Stunden ist ungültig.
 
@@ -484,7 +484,7 @@ def test_stunden_eingabe_unter_minimum():
 # ============================================================
 
 
-def test_formatiere_ergebnis_enthaelt_pflichtfelder():
+def test_formatierung_enthaelt_alle_pflichtfelder():
     """
     Test: Formatierte Ausgabe enthält alle wichtigen Informationen.
     
@@ -501,7 +501,7 @@ def test_formatiere_ergebnis_enthaelt_pflichtfelder():
     assert "Monate" in output
 
 
-def test_formatiere_ergebnis_ist_string():
+def test_formatierung_gibt_text_zurueck():
     """
     Test: Formatierte Ausgabe ist ein String.
     

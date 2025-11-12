@@ -56,7 +56,7 @@ def client():
 # ============================================================
 
 
-def test_get_index_route_liefert_html(client):
+def test_startseite_liefert_html(client):
     """
     Test: GET / liefert die HTML-Startseite aus.
     
@@ -78,7 +78,7 @@ def test_get_index_route_liefert_html(client):
 # ============================================================
 
 
-def test_calculate_success_vollzeit(client):
+def test_berechnung_vollzeit_erfolgreich(client):
     """
     Test: Erfolgreiche Berechnung mit Vollzeit (100%).
     
@@ -103,7 +103,7 @@ def test_calculate_success_vollzeit(client):
     assert result["verlaengerung_durch_teilzeit_monate"] == 0
 
 
-def test_calculate_success_mit_abitur(client):
+def test_berechnung_mit_abitur_erfolgreich(client):
     """
     Test: Erfolgreiche Berechnung mit Abitur-Verkürzung.
     
@@ -128,13 +128,13 @@ def test_calculate_success_mit_abitur(client):
     assert result["verkuerzung_gesamt_monate"] == 12
 
 
-def test_calculate_success_mit_realschule(client):
+def test_berechnung_mit_realschule_erfolgreich(client):
     """
-    Test: Erfolgreiche Berechnung mit Realschulabschluss.
+    Test: Erfolgreiche Berechnung mit Realschulabschluss-Verkürzung.
     
     Erwartung:
     - HTTP 200 OK
-    - Verkürzung um 6 Monate
+    - Verkürzung um 6 Monate (Realschule)
     """
     resp = client.post(
         "/api/calculate",
@@ -149,13 +149,13 @@ def test_calculate_success_mit_realschule(client):
     assert result["verkuerzung_gesamt_monate"] == 6
 
 
-def test_calculate_success_mit_alter_21(client):
+def test_berechnung_mit_alter_21_erfolgreich(client):
     """
-    Test: Erfolgreiche Berechnung mit Alter über 21.
+    Test: Erfolgreiche Berechnung mit Alter-über-21-Verkürzung.
     
     Erwartung:
     - HTTP 200 OK
-    - Verkürzung um 12 Monate
+    - Verkürzung um 12 Monate (Alter)
     """
     resp = client.post(
         "/api/calculate",
@@ -170,13 +170,13 @@ def test_calculate_success_mit_alter_21(client):
     assert result["verkuerzung_gesamt_monate"] == 12
 
 
-def test_calculate_success_mit_vorkenntnissen(client):
+def test_berechnung_mit_vorkenntnissen_erfolgreich(client):
     """
-    Test: Erfolgreiche Berechnung mit Vorkenntnissen.
+    Test: Erfolgreiche Berechnung mit Vorkenntnissen-Verkürzung.
     
     Erwartung:
     - HTTP 200 OK
-    - Verkürzung um 6 Monate
+    - Verkürzung um 6 Monate (Vorkenntnisse)
     """
     resp = client.post(
         "/api/calculate",
@@ -191,7 +191,7 @@ def test_calculate_success_mit_vorkenntnissen(client):
     assert result["verkuerzung_gesamt_monate"] == 6
 
 
-def test_calculate_success_mit_stunden_input(client):
+def test_berechnung_mit_stundeneingabe_erfolgreich(client):
     """
     Test: Erfolgreiche Berechnung mit Stunden-Input.
     
@@ -199,7 +199,7 @@ def test_calculate_success_mit_stunden_input(client):
     Erwartung:
     - HTTP 200 OK
     - Teilzeit-Prozent wird korrekt berechnet (75%)
-    - Teilzeit-Stunden wird korrekt übernommen (30h)
+    - Wochenstunden = 30
     """
     resp = client.post(
         "/api/calculate",
@@ -525,7 +525,7 @@ def test_validierungsfehler_negative_vollzeit_stunden_gibt_422_zurueck(client):
 # ============================================================
 
 
-def test_erfolg_antwort_struktur(client):
+def test_erfolgreiche_antwort_hat_korrekte_struktur(client):
     """
     Test: Erfolgreiche Response hat die richtige Struktur.
     
@@ -555,7 +555,7 @@ def test_erfolg_antwort_struktur(client):
     assert "verlaengerung_durch_teilzeit_monate" in result
 
 
-def test_fehler_antwort_struktur(client):
+def test_fehler_antwort_hat_korrekte_struktur(client):
     """
     Test: Fehler-Response hat die richtige Struktur.
     
