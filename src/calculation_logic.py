@@ -391,60 +391,60 @@ def formatiere_ergebnis(ergebnis):
     Returns:
         str: Formatierte Ausgabe
     """
-    output = []
-    output.append("=" * 70)
-    output.append("BERECHNUNGSERGEBNIS TEILZEITAUSBILDUNG")
-    output.append("=" * 70)
-    output.append("")
-    output.append("EINGABEWERTE:")
-    output.append(
+    ausgabe = []
+    ausgabe.append("=" * 70)
+    ausgabe.append("BERECHNUNGSERGEBNIS TEILZEITAUSBILDUNG")
+    ausgabe.append("=" * 70)
+    ausgabe.append("")
+    ausgabe.append("EINGABEWERTE:")
+    ausgabe.append(
         f"  • Reguläre Ausbildungsdauer (AO):  "
         f"{ergebnis['original_dauer_monate']} Monate"
     )
-    output.append(
+    ausgabe.append(
         f"  • Teilzeit-Prozentsatz:            "
         f"{ergebnis['teilzeit_prozent']:.1f}%"
     )
-    output.append(
+    ausgabe.append(
         f"  • Teilzeitstunden:                 "
         f"{ergebnis['teilzeit_stunden']:.1f} Stunden"
     )
-    output.append("")
-    output.append("BERECHNUNGSSCHRITTE:")
-    output.append(
+    ausgabe.append("")
+    ausgabe.append("BERECHNUNGSSCHRITTE:")
+    ausgabe.append(
         f"  1. Nach Verkürzung:                "
         f"{ergebnis['verkuerzte_dauer_monate']} Monate"
     )
-    output.append(
+    ausgabe.append(
         f"     (Verkürzung gesamt: "
         f"{ergebnis['verkuerzung_gesamt_monate']} Monate)"
     )
-    output.append(
+    ausgabe.append(
         f"  2. Nach autom. Verlängerung:       "
         f"{ergebnis['nach_schritt1_monate']:.1f} Monate"
     )
-    output.append(
+    ausgabe.append(
         f"  3. Nach Obergrenze (max 1,5x):     "
         f"{ergebnis['nach_schritt2_monate']:.1f} Monate"
     )
-    output.append(
+    ausgabe.append(
         f"  4. Nach Abrundung:                 "
         f"{ergebnis['finale_dauer_monate']} Monate"
     )
-    output.append("")
-    output.append("ENDERGEBNIS:")
-    output.append(
+    ausgabe.append("")
+    ausgabe.append("ENDERGEBNIS:")
+    ausgabe.append(
         f"  ► Finale Ausbildungsdauer:         "
         f"{ergebnis['finale_dauer_monate']} Monate"
     )
-    output.append(
+    ausgabe.append(
         f"                                     "
         f"({ergebnis['finale_dauer_jahre']} Jahre)"
     )
-    output.append(
+    ausgabe.append(
         f"  ► Verlängerung durch Teilzeit:     "
         f"{ergebnis['verlaengerung_durch_teilzeit_monate']} Monate"
     )
-    output.append("=" * 70)
+    ausgabe.append("=" * 70)
 
-    return "\n".join(output)
+    return "\n".join(ausgabe)

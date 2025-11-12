@@ -44,7 +44,7 @@ class BerechnungsAnfrage:
     def from_dict(payload: Mapping[str, Any]) -> "BerechnungsAnfrage":
         missing = [field for field in PFLICHTFELDER if field not in payload]
         if missing:
-            raise FehlendeFelder_Fehler(missing)
+            raise FehlendeFelderFehler(missing)
 
         verkuerzungsgruende = _benoetige_dictionary(
             payload["verkuerzungsgruende"],
@@ -55,7 +55,7 @@ class BerechnungsAnfrage:
 
         eingabetyp = payload["eingabetyp"]
         if eingabetyp not in {"prozent", "stunden"}:
-            raise NutzlastValidierungs_Fehler(
+            raise NutzlastValidierungsFehler(
                 "eingabetyp muss 'prozent' oder 'stunden' sein",
                 code="ungültiger_eingabetyp",
             )
@@ -101,14 +101,14 @@ class BerechnungsDienstFehler(Exception):
     """Basisklasse für Service-spezifische Ausnahmen."""
 
 
-class FehlendeFelder_Fehler(BerechnungsDienstFehler):
+class FehlendeFelderFehler(BerechnungsDienstFehler):
     def __init__(self, missing: Any) -> None:
         self.missing = list(missing)
         message = f"Fehlende Felder: {', '.join(self.missing)}"
         super().__init__(message)
 
 
-class NutzlastValidierungs_Fehler(BerechnungsDienstFehler):
+class NutzlastValidierungsFehler(BerechnungsDienstFehler):
     def __init__(
         self,
         message: str,
@@ -140,7 +140,7 @@ def verarbeite_berechnungsanfrage(
 
     try:
         request_model = BerechnungsAnfrage.from_dict(payload)
-    except FehlendeFelder_Fehler as exc:
+    except FehlendeFelderFehler as exc:
         error = DienstFehler(
             code="missing_fields",
             message=str(exc),
@@ -150,7 +150,7 @@ def verarbeite_berechnungsanfrage(
             status_code=400,
             body={"error": error.to_dict()},
         )
-    except NutzlastValidierungs_Fehler as exc:
+    except NutzlastValidierungsFehler as exc:
         error = DienstFehler(
             code=exc.code,
             message=str(exc),
@@ -198,7 +198,7 @@ def verarbeite_berechnungsanfrage(
 
 def _benoetige_dictionary(value: Any, field_name: str) -> Dict[str, Any]:
     if not isinstance(value, Mapping):
-        raise NutzlastValidierungs_Fehler(
+        raise NutzlastValidierungsFehler(
             f"{field_name} muss ein Objekt sein",
             details={"field": field_name},
         )
@@ -209,7 +209,7 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
     allowed_keys = {"abitur", "realschule", "alter_ueber_21", "vorkenntnisse_monate"}
     unexpected_keys = sorted(set(data.keys()) - allowed_keys)
     if unexpected_keys:
-        raise NutzlastValidierungs_Fehler(
+        raise NutzlastValidierungsFehler(
             "Unbekannte Felder in verkuerzungsgruende",
             details={"field": "verkuerzungsgruende", "unexpected": unexpected_keys},
         )
@@ -217,7 +217,7 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
     for key in {"abitur", "realschule", "alter_ueber_21"}:
         value = data.get(key, False)
         if not isinstance(value, bool):
-            raise NutzlastValidierungs_Fehler(
+            raise NutzlastValidierungsFehler(
                 f"{key} muss bool sein",
                 details={"field": f"verkuerzungsgruende.{key}"},
             )
@@ -225,7 +225,7 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
     if "vorkenntnisse_monate" in data:
         value = data["vorkenntnisse_monate"]
         if not isinstance(value, (int, float)):
-            raise NutzlastValidierungs_Fehler(
+            raise NutzlastValidierungsFehler(
                 "vorkenntnisse_monate muss eine Zahl sein",
                 details={"field": "verkuerzungsgruende.vorkenntnisse_monate"},
             )

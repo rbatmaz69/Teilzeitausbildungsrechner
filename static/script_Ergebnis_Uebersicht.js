@@ -17,7 +17,7 @@ function uebersetzung(schluessel, fallback) {
   }
   return fallback ?? schluessel;
 }
-function aktuellesSprache() {
+function aktuelleSprache() {
   return (window.I18N && window.I18N.lang) || "de";
 }
 
@@ -230,7 +230,7 @@ function fuelleErgebnisse(eingaben, berechnung) {
 function setzeDatumstempel() {
   const element = $("#stamp-date");
   if (!element) return;
-  const sprache = aktuellesSprache();
+  const sprache = aktuelleSprache();
   const format = new Intl.DateTimeFormat(sprache === "en" ? "en-US" : "de-DE", { dateStyle: "long" });
   const beschriftung = sprache === "en" ? "As of" : "Stand";
   element.textContent = `${beschriftung}: ${format.format(new Date())}`;
