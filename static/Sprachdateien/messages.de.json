@@ -15,7 +15,7 @@
       "tooltip": "Schreibe, wie viele Monate deine Ausbildung normalerweise dauert."
     },
     "stunden": {
-      "label": "Wie viele Stunden arbeitest du in einer normalen Woche?",
+      "label": "Wie viele Stunden pro Woche hat die Ausbildung in Vollzeit?",
       "tooltip": "Zähle alle Stunden mit, auch die Stunden in der Berufsschule."
     },
     "teilzeit": {

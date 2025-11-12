@@ -15,7 +15,7 @@
       "tooltip": "Write how many months your training usually takes in full-time."
     },
     "stunden": {
-      "label": "How many hours do you work in a normal week?",
+      "label": "How many hours per week does the full-time training have?",
       "tooltip": "Count all hours, including school hours."
     },
     "teilzeit": {
