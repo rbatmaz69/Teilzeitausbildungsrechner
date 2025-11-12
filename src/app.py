@@ -17,7 +17,7 @@ from flask import Flask, jsonify, render_template, request
 
 # Import der zentralen Berechnungslogik
 # Diese enthält die komplette Implementierung gemäß BBiG § 7a und § 8
-from .api import handle_calculation_request
+from .api import verarbeite_berechnungsanfrage
 
 
 def create_app() -> Flask:
@@ -68,10 +68,10 @@ def create_app() -> Flask:
 
         Request Body (JSON):
             {
-                "base_duration_months": int,      # Reguläre Ausbildungsdauer (AO)
+                "basis_dauer_monate": int,        # Reguläre Ausbildungsdauer (AO)
                 "vollzeit_stunden": float,        # Wochenstunden bei Vollzeit
-                "teilzeit_input": float,          # Teilzeit als % oder Stunden
-                "input_type": str,                # "prozent" oder "stunden"
+                "teilzeit_eingabe": float,        # Teilzeit als % oder Stunden
+                "eingabetyp": str,                # "prozent" oder "stunden"
                 "verkuerzungsgruende": {
                     "abitur": bool,
                     "realschule": bool,
@@ -114,7 +114,7 @@ def create_app() -> Flask:
         # ============================================================
         # SCHRITT 2: Service-Layer Aufruf
         # ============================================================
-        response = handle_calculation_request(data)
+        response = verarbeite_berechnungsanfrage(data)
 
         return jsonify(response.body), response.status_code
 

@@ -36,7 +36,7 @@ MAX_VERLAENGERUNG_FAKTOR = (
 # ============================================================================
 
 
-def calculate_verkuerzung(base_duration_months, verkuerzungsgruende):
+def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
     """
     Berechnet die Gesamtverkürzung der Ausbildungsdauer basierend auf
     verschiedenen Verkürzungsgründen gemäß § 8 BBiG.
@@ -45,7 +45,7 @@ def calculate_verkuerzung(base_duration_months, verkuerzungsgruende):
     Siehe Abschnitt 5.2.2 der Empfehlung.
 
     Args:
-        base_duration_months (int): Reguläre Ausbildungsdauer in Monaten (gemäß AO)
+        basis_dauer_monate (int): Reguläre Ausbildungsdauer in Monaten (gemäß AO)
         verkuerzungsgruende (dict): Dictionary mit Verkürzungsgründen:
             - 'abitur' (bool): Hat Abitur/Hochschulreife
             - 'realschule' (bool): Hat Realschulabschluss/Fachoberschulreife
@@ -56,7 +56,7 @@ def calculate_verkuerzung(base_duration_months, verkuerzungsgruende):
         int: Verkürzte Ausbildungsdauer in Monaten
 
     Beispiel:
-        >>> calculate_verkuerzung(36, {'abitur': True, 'realschule': False,
+        >>> berechne_verkuerzung(36, {'abitur': True, 'realschule': False,
         ...      'alter_ueber_21': False, 'vorkenntnisse_monate': 0})
         24  # 36 - 12 = 24 Monate
     """
@@ -85,7 +85,7 @@ def calculate_verkuerzung(base_duration_months, verkuerzungsgruende):
         verkuerzung_gesamt += vorkenntnisse
 
     # Verkürzte Dauer berechnen
-    verkuerzte_dauer = base_duration_months - verkuerzung_gesamt
+    verkuerzte_dauer = basis_dauer_monate - verkuerzung_gesamt
 
     # Sicherstellen, dass Dauer nicht negativ wird
     verkuerzte_dauer = max(verkuerzte_dauer, 0)
@@ -93,7 +93,7 @@ def calculate_verkuerzung(base_duration_months, verkuerzungsgruende):
     return verkuerzte_dauer
 
 
-def calculate_teilzeit_schritt1(verkuerzte_dauer_months, teilzeit_prozent):
+def berechne_teilzeit_schritt1(verkuerzte_dauer_monate, teilzeit_prozent):
     """
     Schritt 1: Berechnet die automatische Verlängerung durch Teilzeit
 
@@ -107,26 +107,29 @@ def calculate_teilzeit_schritt1(verkuerzte_dauer_months, teilzeit_prozent):
     - Berechnung: 36 / 0,75 = 48 Monate
 
     Args:
-        verkuerzte_dauer_months (int): Verkürzte Ausbildungsdauer in Monaten
+        verkuerzte_dauer_monate (int): Verkürzte Ausbildungsdauer in Monaten
         teilzeit_prozent (int): Prozentsatz der Teilzeit (50-100)
 
     Returns:
         float: Verlängerte Ausbildungsdauer in Monaten (wird später gerundet)
 
     Beispiel:
-        >>> calculate_teilzeit_schritt1(36, 75)
+        >>> berechne_teilzeit_schritt1(36, 75)
         48.0
-        >>> calculate_teilzeit_schritt1(24, 50)
+        >>> berechne_teilzeit_schritt1(24, 50)
         48.0
     """
     # Automatische Verlängerung berechnen
     # Beispiel: 36 Monate bei 75% = 36 / 0.75 = 48 Monate
-    verlaengerte_dauer = verkuerzte_dauer_months / (teilzeit_prozent / 100.0)
+    verlaengerte_dauer = verkuerzte_dauer_monate / (teilzeit_prozent / 100.0)
 
     return verlaengerte_dauer
 
 
-def apply_obergrenze_schritt2(verlaengerte_dauer_months, original_ao_dauer_months):
+def obergrenze_anwenden_schritt2(
+    verlaengerte_dauer_monate: float,
+    original_ao_dauer_monate: int,
+) -> int:
     """
     Schritt 2: Wendet die gesetzliche Obergrenze an
 
@@ -143,25 +146,25 @@ def apply_obergrenze_schritt2(verlaengerte_dauer_months, original_ao_dauer_month
     - Ergebnis: 54 Monate (begrenzt durch Obergrenze)
 
     Args:
-        verlaengerte_dauer_months (float): Dauer nach automatischer Verlängerung
-        original_ao_dauer_months (int): Original-Ausbildungsdauer gemäß AO
+        verlaengerte_dauer_monate (float): Dauer nach automatischer Verlängerung
+        original_ao_dauer_monate (int): Original-Ausbildungsdauer gemäß AO
 
     Returns:
         float: Begrenzte Ausbildungsdauer in Monaten
 
     Beispiel:
-        >>> apply_obergrenze_schritt2(72, 36)
+        >>> obergrenze_anwenden_schritt2(72, 36)
         54.0
-        >>> apply_obergrenze_schritt2(48, 36)
+        >>> obergrenze_anwenden_schritt2(48, 36)
         48.0
     """
-    obergrenze = original_ao_dauer_months * MAX_VERLAENGERUNG_FAKTOR
+    obergrenze = original_ao_dauer_monate * MAX_VERLAENGERUNG_FAKTOR
 
     # Rückgabe des kleineren Wertes (Obergrenze wirkt als Maximum)
-    return min(verlaengerte_dauer_months, obergrenze)
+    return min(verlaengerte_dauer_monate, obergrenze)
 
 
-def apply_rundung_schritt3(dauer_months):
+def rundung_anwenden_schritt3(dauer_monate: float) -> int:
     """
     Schritt 3: Rundet auf ganze Monate ab
 
@@ -174,23 +177,23 @@ def apply_rundung_schritt3(dauer_months):
     - Nach Abrundung: 51 Monate
 
     Args:
-        dauer_months (float): Ausbildungsdauer in Monaten (kann Nachkommastellen haben)
+        dauer_monate (float): Ausbildungsdauer in Monaten (kann Nachkommastellen haben)
 
     Returns:
         int: Abgerundete Ausbildungsdauer in ganzen Monaten
 
     Beispiel:
-        >>> apply_rundung_schritt3(51.4)
+        >>> rundung_anwenden_schritt3(51.4)
         51
-        >>> apply_rundung_schritt3(48.0)
+        >>> rundung_anwenden_schritt3(48.0)
         48
     """
     import math
 
-    return math.floor(dauer_months)
+    return math.floor(dauer_monate)
 
 
-def calculate_teilzeit_prozent(vollzeit_stunden, teilzeit_stunden):
+def berechne_teilzeit_prozent(vollzeit_stunden, teilzeit_stunden):
     """
     Berechnet den Teilzeit-Prozentsatz basierend auf Vollzeit- und Teilzeitstunden
 
@@ -202,16 +205,16 @@ def calculate_teilzeit_prozent(vollzeit_stunden, teilzeit_stunden):
         float: Teilzeit-Prozentsatz (50.0-100.0)
 
     Beispiel:
-        >>> calculate_teilzeit_prozent(40, 30)
+        >>> berechne_teilzeit_prozent(40, 30)
         75.0
-        >>> calculate_teilzeit_prozent(40, 20)
+        >>> berechne_teilzeit_prozent(40, 20)
         50.0
     """
     prozent = (teilzeit_stunden / vollzeit_stunden) * 100
     return prozent
 
 
-def calculate_teilzeit_stunden(vollzeit_stunden, teilzeit_prozent):
+def berechne_teilzeit_stunden(vollzeit_stunden, teilzeit_prozent):
     """
     Berechnet die Teilzeitstunden basierend auf Vollzeitstunden und Prozentsatz
 
@@ -223,20 +226,20 @@ def calculate_teilzeit_stunden(vollzeit_stunden, teilzeit_prozent):
         float: Berechnete Teilzeitstunden
 
     Beispiel:
-        >>> calculate_teilzeit_stunden(40, 75.0)
+        >>> berechne_teilzeit_stunden(40, 75.0)
         30.0
-        >>> calculate_teilzeit_stunden(40, 50.0)
+        >>> berechne_teilzeit_stunden(40, 50.0)
         20.0
     """
     return vollzeit_stunden * (teilzeit_prozent / 100.0)
 
 
-def calculate_gesamtdauer(
-    base_duration_months,
+def berechne_gesamtdauer(
+    basis_dauer_monate,
     vollzeit_stunden,
-    teilzeit_input,
+    teilzeit_eingabe,
     verkuerzungsgruende,
-    input_type="prozent",
+    eingabetyp="prozent",
 ):
     """
     Hauptfunktion: Berechnet die Gesamtdauer der Teilzeitausbildung
@@ -251,11 +254,11 @@ def calculate_gesamtdauer(
     wird hier nicht implementiert, da er von konkreten Prüfungsterminen abhängt.
 
     Args:
-        base_duration_months (int): Reguläre Ausbildungsdauer in Monaten (gemäß AO)
+        basis_dauer_monate (int): Reguläre Ausbildungsdauer in Monaten (gemäß AO)
         vollzeit_stunden (float): Wochenstunden bei Vollzeit
-        teilzeit_input (float): Teilzeit-Eingabe (Prozentsatz ODER Stunden)
+        teilzeit_eingabe (float): Teilzeit-Eingabe (Prozentsatz ODER Stunden)
         verkuerzungsgruende (dict): Dictionary mit Verkürzungsgründen
-        input_type (str): 'prozent' oder 'stunden' - Art der Teilzeit-Eingabe
+        eingabetyp (str): 'prozent' oder 'stunden' - Art der Teilzeit-Eingabe
 
     Returns:
         dict: Alle Berechnungsergebnisse mit folgenden Keys:
@@ -273,95 +276,95 @@ def calculate_gesamtdauer(
 
     Beispiel:
         >>> # Mit Prozentsatz
-        >>> ergebnis = calculate_gesamtdauer(
-        ...     base_duration_months=36,
+        >>> ergebnis = berechne_gesamtdauer(
+        ...     basis_dauer_monate=36,
         ...     vollzeit_stunden=40,
-        ...     teilzeit_input=75,
+        ...     teilzeit_eingabe=75,
         ...     verkuerzungsgruende={'abitur': True, 'realschule': False,
         ...                          'alter_ueber_21': False,
         ...                          'vorkenntnisse_monate': 0},
-        ...     input_type='prozent'
+        ...     eingabetyp='prozent'
         ... )
 
         >>> # Mit Stunden
-        >>> ergebnis = calculate_gesamtdauer(
-        ...     base_duration_months=36,
+        >>> ergebnis = berechne_gesamtdauer(
+        ...     basis_dauer_monate=36,
         ...     vollzeit_stunden=40,
-        ...     teilzeit_input=30,
+        ...     teilzeit_eingabe=30,
         ...     verkuerzungsgruende={'abitur': True, 'realschule': False,
         ...                          'alter_ueber_21': False,
         ...                          'vorkenntnisse_monate': 0},
-        ...     input_type='stunden'
+        ...     eingabetyp='stunden'
         ... )
     """
     # Eingabevalidierung (User Story 24): Nur Zahlen erlaubt
-    if not isinstance(base_duration_months, (int, float)):
+    if not isinstance(basis_dauer_monate, (int, float)):
         raise TypeError("Ausbildungsdauer muss eine Zahl sein")
     if not isinstance(vollzeit_stunden, (int, float)):
         raise TypeError("Vollzeit-Stunden müssen eine Zahl sein")
-    if not isinstance(teilzeit_input, (int, float)):
+    if not isinstance(teilzeit_eingabe, (int, float)):
         raise TypeError("Teilzeit-Wert muss eine Zahl sein")
 
     # Wert-Validierung: Gültige Bereiche gemäß HTML-Eingabefeldern
-    if base_duration_months < 12 or base_duration_months > 60:
+    if basis_dauer_monate < 12 or basis_dauer_monate > 60:
         raise ValueError("Ausbildungsdauer muss zwischen 12 und 60 Monaten liegen")
     if vollzeit_stunden < 10 or vollzeit_stunden > 48:
         raise ValueError("Vollzeit-Stunden müssen zwischen 10 und 48 Stunden liegen")
 
-    # Zusätzliche Validierung je nach input_type
-    if input_type == "prozent":
+    # Zusätzliche Validierung je nach eingabetyp
+    if eingabetyp == "prozent":
         # Gemäß § 7a Abs. 1 Satz 3 BBiG: Mindestens 50% der Vollzeit
-        if teilzeit_input < 50 or teilzeit_input > 100:
+        if teilzeit_eingabe < 50 or teilzeit_eingabe > 100:
             raise ValueError(
                 "Teilzeit-Anteil muss zwischen 50% und 100% liegen "
                 "(§ 7a Abs. 1 Satz 3 BBiG)"
             )
-    elif input_type == "stunden":
+    elif eingabetyp == "stunden":
         # Mindestens die Hälfte der Vollzeit-Stunden, maximal Vollzeit
         min_stunden = vollzeit_stunden / 2
-        if teilzeit_input < min_stunden:
+        if teilzeit_eingabe < min_stunden:
             raise ValueError(
                 f"Wochenstunden müssen mindestens {min_stunden} Stunden "
                 f"betragen (Hälfte der regulären Wochenstunden, "
                 f"§ 7a Abs. 1 Satz 3 BBiG)"
             )
-        if teilzeit_input > vollzeit_stunden:
+        if teilzeit_eingabe > vollzeit_stunden:
             raise ValueError(
                 f"Wochenstunden dürfen die regulären Wochenstunden "
                 f"({vollzeit_stunden}) nicht überschreiten"
             )
     else:
-        raise ValueError("input_type muss 'prozent' oder 'stunden' sein")
+        raise ValueError("eingabetyp muss 'prozent' oder 'stunden' sein")
 
-    # Teilzeit-Input verarbeiten (Prozentsatz oder Stunden)
-    if input_type == "stunden":
+    # Teilzeit-Eingabe verarbeiten (Prozentsatz oder Stunden)
+    if eingabetyp == "stunden":
         # Stunden zu Prozentsatz umrechnen
-        teilzeit_prozent = calculate_teilzeit_prozent(vollzeit_stunden, teilzeit_input)
-        teilzeit_stunden = teilzeit_input
-    else:  # input_type == "prozent"
+        teilzeit_prozent = berechne_teilzeit_prozent(vollzeit_stunden, teilzeit_eingabe)
+        teilzeit_stunden = teilzeit_eingabe
+    else:  # eingabetyp == "prozent"
         # Prozentsatz zu Stunden umrechnen
-        teilzeit_prozent = teilzeit_input
-        teilzeit_stunden = calculate_teilzeit_stunden(vollzeit_stunden, teilzeit_input)
+        teilzeit_prozent = teilzeit_eingabe
+        teilzeit_stunden = berechne_teilzeit_stunden(vollzeit_stunden, teilzeit_eingabe)
 
     # Schritt 0: Verkürzung anwenden (BEVOR Teilzeit berechnet wird)
-    verkuerzte_dauer = calculate_verkuerzung(base_duration_months, verkuerzungsgruende)
+    verkuerzte_dauer = berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende)
 
     # Schritt 1: Automatische Verlängerung durch Teilzeit
-    nach_schritt1 = calculate_teilzeit_schritt1(verkuerzte_dauer, teilzeit_prozent)
+    nach_schritt1 = berechne_teilzeit_schritt1(verkuerzte_dauer, teilzeit_prozent)
 
     # Schritt 2: Gesetzliche Obergrenze anwenden
-    nach_schritt2 = apply_obergrenze_schritt2(nach_schritt1, base_duration_months)
+    nach_schritt2 = obergrenze_anwenden_schritt2(nach_schritt1, basis_dauer_monate)
 
     # Schritt 3: Auf ganze Monate abrunden
-    finale_dauer = apply_rundung_schritt3(nach_schritt2)
+    finale_dauer = rundung_anwenden_schritt3(nach_schritt2)
 
     # Zusätzliche Informationen berechnen
-    verkuerzung_gesamt = base_duration_months - verkuerzte_dauer
+    verkuerzung_gesamt = basis_dauer_monate - verkuerzte_dauer
     verlaengerung_durch_teilzeit = finale_dauer - verkuerzte_dauer
 
     # Ergebnis zusammenstellen
     return {
-        "original_dauer_monate": base_duration_months,
+        "original_dauer_monate": basis_dauer_monate,
         "verkuerzte_dauer_monate": verkuerzte_dauer,
         "teilzeit_prozent": teilzeit_prozent,
         "teilzeit_stunden": teilzeit_stunden,
@@ -378,12 +381,12 @@ def calculate_gesamtdauer(
 # Hilfsfunktionen
 
 
-def format_ergebnis(ergebnis):
+def formatiere_ergebnis(ergebnis):
     """
     Formatiert das Ergebnis der Berechnung für eine lesbare Ausgabe
 
     Args:
-        ergebnis (dict): Ergebnis von calculate_gesamtdauer()
+        ergebnis (dict): Ergebnis von berechne_gesamtdauer()
 
     Returns:
         str: Formatierte Ausgabe

@@ -11,7 +11,7 @@ import logging
 from dataclasses import dataclass
 from typing import Any, Dict, Mapping, Optional
 
-from ..calculation_logic import calculate_gesamtdauer
+from ..calculation_logic import berechne_gesamtdauer
 
 logger = logging.getLogger(__name__)
 
@@ -21,56 +21,56 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 
-REQUIRED_FIELDS = (
-    "base_duration_months",
+PFLICHTFELDER = (
+    "basis_dauer_monate",
     "vollzeit_stunden",
-    "teilzeit_input",
-    "input_type",
+    "teilzeit_eingabe",
+    "eingabetyp",
     "verkuerzungsgruende",
 )
 
 
 @dataclass(frozen=True)
-class CalculationRequest:
+class BerechnungsAnfrage:
     """Streng typisierte Darstellung des Request-Payloads für Berechnungen."""
 
-    base_duration_months: int
+    basis_dauer_monate: int
     vollzeit_stunden: float
-    teilzeit_input: float
-    input_type: str
+    teilzeit_eingabe: float
+    eingabetyp: str
     verkuerzungsgruende: Dict[str, Any]
 
     @staticmethod
-    def from_dict(payload: Mapping[str, Any]) -> "CalculationRequest":
-        missing = [field for field in REQUIRED_FIELDS if field not in payload]
+    def from_dict(payload: Mapping[str, Any]) -> "BerechnungsAnfrage":
+        missing = [field for field in PFLICHTFELDER if field not in payload]
         if missing:
-            raise MissingFieldsError(missing)
+            raise FehlendeFelder_Fehler(missing)
 
-        verkuerzungsgruende = _require_dict(
+        verkuerzungsgruende = _benoetige_dictionary(
             payload["verkuerzungsgruende"],
             "verkuerzungsgruende",
         )
-        _validate_verkuerzungsgruende(verkuerzungsgruende)
-        verkuerzungsgruende = _normalise_verkuerzungsgruende(verkuerzungsgruende)
+        _validiere_verkuerzungsgruende(verkuerzungsgruende)
+        verkuerzungsgruende = _normalisiere_verkuerzungsgruende(verkuerzungsgruende)
 
-        input_type = payload["input_type"]
-        if input_type not in {"prozent", "stunden"}:
-            raise PayloadValidationError(
-                "input_type muss 'prozent' oder 'stunden' sein",
-                code="invalid_input_type",
+        eingabetyp = payload["eingabetyp"]
+        if eingabetyp not in {"prozent", "stunden"}:
+            raise NutzlastValidierungs_Fehler(
+                "eingabetyp muss 'prozent' oder 'stunden' sein",
+                code="ungültiger_eingabetyp",
             )
 
-        return CalculationRequest(
-            base_duration_months=payload["base_duration_months"],
+        return BerechnungsAnfrage(
+            basis_dauer_monate=payload["basis_dauer_monate"],
             vollzeit_stunden=payload["vollzeit_stunden"],
-            teilzeit_input=payload["teilzeit_input"],
-            input_type=input_type,
+            teilzeit_eingabe=payload["teilzeit_eingabe"],
+            eingabetyp=eingabetyp,
             verkuerzungsgruende=verkuerzungsgruende,
         )
 
 
 @dataclass(frozen=True)
-class ServiceError:
+class DienstFehler:
     """Repräsentiert einen Fehler, der für die API-Antwort serialisiert wird."""
 
     code: str
@@ -85,7 +85,7 @@ class ServiceError:
 
 
 @dataclass(frozen=True)
-class CalculationServiceResponse:
+class BerechnungsDienstAntwort:
     """Container für das Zurückgeben der Ergebnisse an die Transportschicht."""
 
     status_code: int
@@ -97,18 +97,18 @@ class CalculationServiceResponse:
 # ---------------------------------------------------------------------------
 
 
-class CalculationServiceError(Exception):
+class BerechnungsDienstFehler(Exception):
     """Basisklasse für Service-spezifische Ausnahmen."""
 
 
-class MissingFieldsError(CalculationServiceError):
+class FehlendeFelder_Fehler(BerechnungsDienstFehler):
     def __init__(self, missing: Any) -> None:
         self.missing = list(missing)
         message = f"Fehlende Felder: {', '.join(self.missing)}"
         super().__init__(message)
 
 
-class PayloadValidationError(CalculationServiceError):
+class NutzlastValidierungs_Fehler(BerechnungsDienstFehler):
     def __init__(
         self,
         message: str,
@@ -126,69 +126,69 @@ class PayloadValidationError(CalculationServiceError):
 # ---------------------------------------------------------------------------
 
 
-def handle_calculation_request(
+def verarbeite_berechnungsanfrage(
     payload: Mapping[str, Any],
-) -> CalculationServiceResponse:
+) -> BerechnungsDienstAntwort:
     """Zentrale Einstiegsmethode für die Flask-Routen.
 
     Args:
         payload: Bereits geparstes JSON des Requests.
 
     Returns:
-        CalculationServiceResponse: Normalisierte Antwort mit Statuscode.
+        BerechnungsDienstAntwort: Normalisierte Antwort mit Statuscode.
     """
 
     try:
-        request_model = CalculationRequest.from_dict(payload)
-    except MissingFieldsError as exc:
-        error = ServiceError(
+        request_model = BerechnungsAnfrage.from_dict(payload)
+    except FehlendeFelder_Fehler as exc:
+        error = DienstFehler(
             code="missing_fields",
             message=str(exc),
             details={"missing": exc.missing},
         )
-        return CalculationServiceResponse(
+        return BerechnungsDienstAntwort(
             status_code=400,
             body={"error": error.to_dict()},
         )
-    except PayloadValidationError as exc:
-        error = ServiceError(
+    except NutzlastValidierungs_Fehler as exc:
+        error = DienstFehler(
             code=exc.code,
             message=str(exc),
             details=exc.details,
         )
-        return CalculationServiceResponse(
+        return BerechnungsDienstAntwort(
             status_code=422,
             body={"error": error.to_dict()},
         )
 
     try:
-        result = calculate_gesamtdauer(
-            base_duration_months=request_model.base_duration_months,
+        result = berechne_gesamtdauer(
+            basis_dauer_monate=request_model.basis_dauer_monate,
             vollzeit_stunden=request_model.vollzeit_stunden,
-            teilzeit_input=request_model.teilzeit_input,
+            teilzeit_eingabe=request_model.teilzeit_eingabe,
             verkuerzungsgruende=request_model.verkuerzungsgruende,
-            input_type=request_model.input_type,
+            eingabetyp=request_model.eingabetyp,
         )
     except (TypeError, ValueError) as exc:
-        error = ServiceError(code="validation_error", message=str(exc))
-        return CalculationServiceResponse(
+        error = DienstFehler(code="validation_error", message=str(exc))
+        return BerechnungsDienstAntwort(
             status_code=422,
             body={"error": error.to_dict()},
         )
     except Exception:  # pragma: no cover - Catch-All zur Sicherheit
         logger.exception(
-            "Unerwarteter Fehler während calculate_gesamtdauer",
+            "Unerwarteter Fehler während berechne_gesamtdauer",
         )
-        error = ServiceError(
+        error = DienstFehler(
             code="internal_error",
             message="Unerwarteter Serverfehler",
         )
-        return CalculationServiceResponse(
+        return BerechnungsDienstAntwort(
             status_code=500,
             body={"error": error.to_dict()},
         )
 
-    return CalculationServiceResponse(status_code=200, body={"result": result})
+    return BerechnungsDienstAntwort(status_code=200, body={"result": result})
 
 
 # ---------------------------------------------------------------------------
@@ -196,20 +196,20 @@ def handle_calculation_request(
 # ---------------------------------------------------------------------------
 
 
-def _require_dict(value: Any, field_name: str) -> Dict[str, Any]:
+def _benoetige_dictionary(value: Any, field_name: str) -> Dict[str, Any]:
     if not isinstance(value, Mapping):
-        raise PayloadValidationError(
+        raise NutzlastValidierungs_Fehler(
             f"{field_name} muss ein Objekt sein",
             details={"field": field_name},
         )
     return dict(value)
 
 
-def _validate_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
+def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
     allowed_keys = {"abitur", "realschule", "alter_ueber_21", "vorkenntnisse_monate"}
     unexpected_keys = sorted(set(data.keys()) - allowed_keys)
     if unexpected_keys:
-        raise PayloadValidationError(
+        raise NutzlastValidierungs_Fehler(
             "Unbekannte Felder in verkuerzungsgruende",
             details={"field": "verkuerzungsgruende", "unexpected": unexpected_keys},
         )
@@ -217,7 +217,7 @@ def _validate_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
     for key in {"abitur", "realschule", "alter_ueber_21"}:
         value = data.get(key, False)
         if not isinstance(value, bool):
-            raise PayloadValidationError(
+            raise NutzlastValidierungs_Fehler(
                 f"{key} muss bool sein",
                 details={"field": f"verkuerzungsgruende.{key}"},
             )
@@ -225,13 +225,13 @@ def _validate_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
     if "vorkenntnisse_monate" in data:
         value = data["vorkenntnisse_monate"]
         if not isinstance(value, (int, float)):
-            raise PayloadValidationError(
+            raise NutzlastValidierungs_Fehler(
                 "vorkenntnisse_monate muss eine Zahl sein",
                 details={"field": "verkuerzungsgruende.vorkenntnisse_monate"},
             )
 
 
-def _normalise_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]:
+def _normalisiere_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]:
     return {
         "abitur": bool(data.get("abitur", False)),
         "realschule": bool(data.get("realschule", False)),
