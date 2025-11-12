@@ -31,22 +31,22 @@
     "legend": "Reasons for reduction",
     "abitur": {
       "label": "High school diploma / A-levels",
-      "badge": "−12 months",
+      "badge": "12 months reduktion",
       "tooltip": "If you have a high school diploma, a reduction is possible."
     },
     "realschule": {
       "label": "Secondary school diploma",
-      "badge": "−6 months",
+      "badge": "6 months reduktion",
       "tooltip": "If you have a secondary school diploma, a reduction is possible."
     },
     "alter21": {
       "label": "Age over 21 years",
-      "badge": "−12 months",
+      "badge": "12 months reduktion",
       "tooltip": "For older trainees, prior experience may be credited."
     },
     "vork": {
       "label": "Professional experience",
-      "badge": "−6 to −12 months",
+      "badge": "Reduktion beetween 6 to 12 months",
       "tooltip": "Practical experience or qualifications may shorten the training duration.",
       "months": "6 months"
     }
@@ -62,7 +62,7 @@
       "workPerWeek": "Work / week"
     },
     "extension": {
-      "plus": "+{n} months extension",
+      "plus": "{n} months extension",
       "none": "No extension"
     },
     "placeholders": {
@@ -77,8 +77,8 @@
   },
   "units": {
     "hours": { "short": "h", "full": "hours" },
-    "months": { "short": "mo", "full": "months" },
-    "weeks": { "short": "wk", "full": "weeks" },
+    "months": { "short": "months", "full": "months" },
+    "weeks": { "short": "weeks", "full": "weeks" },
     "percent": "%"
   },
   "errors": {

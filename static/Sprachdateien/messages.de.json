@@ -31,22 +31,22 @@
     "legend": "Verkürzungsgründe",
     "abitur": {
       "label": "Abitur / Fachabitur",
-      "badge": "−12 Monate",
+      "badge": "12 Monate Verkürzung",
       "tooltip": "Wenn Sie Abitur haben, ist eine Verkürzung möglich."
     },
     "realschule": {
       "label": "Realschulabschluss",
-      "badge": "−6 Monate",
+      "badge": "6 Monate Verkürzung",
       "tooltip": "Wenn Sie einen Realschulabschluss haben, ist eine Verkürzung möglich."
     },
     "alter21": {
       "label": "Alter über 21 Jahre",
-      "badge": "−12 Monate",
+      "badge": "12 Monate Verkürzung",
       "tooltip": "Bei älteren Auszubildenden ist eine Anrechnung von Vorerfahrungen möglich."
     },
     "vork": {
       "label": "Berufliche Vorkenntnisse",
-      "badge": "−6 bis −12 Monate",
+      "badge": "zwischen 6 und 12 Monaten Verkürzung",
       "tooltip": "Praxiserfahrungen oder Abschlüsse können die Ausbildungsdauer verkürzen.",
       "months": "6 Monate"
     }
@@ -62,7 +62,7 @@
       "workPerWeek": "Arbeit / Woche"
     },
     "extension": {
-      "plus": "+{n} Monate Verlängerung",
+      "plus": "{n} Monate Verlängerung",
       "none": "Keine Verlängerung"
     },
     "placeholders": {
@@ -77,8 +77,8 @@
   },
   "units": {
     "hours": { "short": "h", "full": "Stunden" },
-    "months": { "short": "Mon.", "full": "Monate" },
-    "weeks": { "short": "Wo.", "full": "Wochen" },
+    "months": { "short": "Monate", "full": "Monate" },
+    "weeks": { "short": "Wochen", "full": "Wochen" },
     "percent": "%"
   },
   "errors": {

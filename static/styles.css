@@ -182,6 +182,7 @@ header h1 {
   gap: 8px;
 }
 
+/* Sichtbarmachen des Slider-Bereichs, wenn Checkbox aktiv ist (ohne JS) */
 input[type="checkbox"]:checked ~ .tile-body .slider-container {
   display: flex;
 }
@@ -191,6 +192,9 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
   accent-color: var(--primary);
 }
 
+/* Info-Buttons & Icons bleiben visuell erhalten.
+   Die eigentliche Beschreibung liefern sr-only-Texte im HTML.
+   Icons sind decorative: keine Fokusfalle nötig. */
 .info-btn {
   appearance: none;
   border: none;
@@ -200,9 +204,7 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
   padding: 6px;
   border-radius: 8px;
 }
-
 .info-btn:hover { color: #f00; }
-
 .info-btn:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
@@ -218,7 +220,7 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
   color: var(--muted);
   font-size: .95rem;
   box-shadow: var(--shadow);
-  display: none;
+  display: none; /* bleibt rein visuell/optional */
   z-index: 999;
 }
 
@@ -241,7 +243,7 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
   position: relative;
 }
 
-/* Tooltip für die Eingabe */
+/* Tooltip für die Eingabe (visuell, per CSS) */
 .info-icon::after {
   content: attr(data-tooltip);
   position: absolute;
@@ -362,12 +364,13 @@ label {
   font-size: .95rem;
 }
 
-input {
+input, select {
   width: 100%;
   padding: .5rem;
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 1rem;
+  background-color: #fff;
 }
 
 .input-group { margin-bottom: .8rem; }

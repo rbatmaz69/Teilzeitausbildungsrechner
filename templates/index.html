@@ -19,9 +19,10 @@
 
   <!-- Sprachleiste oben -->
   <nav class="langbar" aria-label="Sprache">
-    <label class="sr-only" for="lang-switcher" data-i18n="lang.label">Sprache</label>
+    <label id="label-lang" class="sr-only" for="lang-switcher" data-i18n="lang.label">Sprache</label>
     <div class="langbar-right">
-      <select id="lang-switcher" aria-label="Sprache wählen" data-i18n-attr="aria-label:lang.aria">
+      <!-- Beides bleibt bestehen; wir priorisieren das sichtbare Label über aria-labelledby -->
+      <select id="lang-switcher" aria-label="Sprache wählen" aria-labelledby="label-lang" data-i18n-attr="aria-label:lang.aria">
         <option value="de" data-i18n="lang.de">Deutsch</option>
         <option value="en" data-i18n="lang.en">English</option>
       </select>
@@ -33,13 +34,17 @@
 
     <!-- Eingabe reguläre Ausbildungsdauer -->
     <section class="card" aria-labelledby="input-heading">
+      <h1 id="input-heading" class="sr-only" data-i18n="inputs.heading">Eingaben</h1>
+
       <div class="input-group">
         <label for="dauer">
           <span data-i18n="inputs.dauer.label">Reguläre Ausbildungsdauer (Monate)</span>
           <span class="info-icon" data-tooltip="Die normale Dauer Ihrer Ausbildung bei Vollzeit"
-                data-i18n-attr="data-tooltip:inputs.dauer.tooltip">i</span>
+                data-i18n-attr="data-tooltip:inputs.dauer.tooltip" aria-hidden="true">i</span>
         </label>
-        <input type="number" id="dauer" value="36" min="12" max="60" step="1" required>
+        <input type="number" id="dauer" value="36" min="12" max="60" step="1" required aria-describedby="hint-dauer">
+        <!-- Unsichtbarer Hilfetext spiegelt das Tooltip (für SR) -->
+        <span id="hint-dauer" class="sr-only">Die normale Dauer Ihrer Ausbildung bei Vollzeit.</span>
       </div>
 
       <!-- Eingabe reguläre Wochenstunden -->
@@ -47,9 +52,10 @@
         <label for="stunden">
           <span data-i18n="inputs.stunden.label">Reguläre Wochenstunden (gesamt)</span>
           <span class="info-icon" data-tooltip="Ihre gesamten Wochenstunden inkl. Berufsschule"
-                data-i18n-attr="data-tooltip:inputs.stunden.tooltip">i</span>
+                data-i18n-attr="data-tooltip:inputs.stunden.tooltip" aria-hidden="true">i</span>
         </label>
-        <input type="number" id="stunden" value="40" min="10" max="48" step="1" required>
+        <input type="number" id="stunden" value="40" min="10" max="48" step="1" required aria-describedby="hint-stunden">
+        <span id="hint-stunden" class="sr-only">Ihre gesamten Wochenstunden inkl. Berufsschule.</span>
       </div>
 
       <!-- Eingabe Teilzeitanteil -->
@@ -57,7 +63,7 @@
         <label for="teilzeitProzent">
           <span data-i18n="inputs.teilzeit.label">Teilzeit-Anteil</span>
           <span class="info-icon" data-tooltip="Mindestens 50% für eine anerkannte Teilzeitausbildung"
-                data-i18n-attr="data-tooltip:inputs.teilzeit.tooltip">i</span>
+                data-i18n-attr="data-tooltip:inputs.teilzeit.tooltip" aria-hidden="true">i</span>
         </label>
 
         <!-- Prozentanteil -->
@@ -65,7 +71,7 @@
           <div class="input-group half">
             <label for="teilzeitProzent" data-i18n="inputs.teilzeit.percent">Prozent</label>
             <div class="input-with-unit">
-              <input type="number" id="teilzeitProzent" value="75" min="50" max="100" step="5">
+              <input type="number" id="teilzeitProzent" value="75" min="50" max="100" step="5" aria-describedby="hint-teilzeit">
               <span class="unit" data-i18n="units.percent">%</span>
             </div>
             <span class="error-message" id="errorProzent"></span>
@@ -75,12 +81,14 @@
           <div class="input-group half">
             <label for="teilzeitStunden" data-i18n="inputs.teilzeit.hours">Stunden</label>
             <div class="input-with-unit">
-              <input type="number" id="teilzeitStunden" value="20" min="5" max="48" step="1">
+              <input type="number" id="teilzeitStunden" value="20" min="5" max="48" step="1" aria-describedby="hint-teilzeit">
               <span class="unit" data-i18n="units.hours.short">h</span>
             </div>
             <span class="error-message" id="errorStunden"></span>
           </div>
         </div>
+        <!-- SR-Hinweis für beide Felder aus dem Info-Icon oben -->
+        <span id="hint-teilzeit" class="sr-only">Mindestens 50&nbsp;% für eine anerkannte Teilzeitausbildung.</span>
       </div>
 
       <!-- Buttons für gängige Werte -->
@@ -108,10 +116,10 @@
       <!-- Überschrift des Formularbereichs -->
       <h1 id="vk-heading" data-i18n="vk.heading">Verkürzungsgründe auswählen</h1>
       <!-- Kurze Anleitung für den Nutzer -->
-      <p class="helper" data-i18n="vk.helper">Wähle alle Gründe aus, die auf dich zutreffen.</p>
+      <p class="helper" id="vk-helper" data-i18n="vk.helper">Wähle alle Gründe aus, die auf dich zutreffen.</p>
 
       <!-- Formular für die Auswahl der Verkürzungsgründe -->
-      <form id="vk-form" aria-describedby="vk-heading">
+      <form id="vk-form" aria-describedby="vk-helper">
         <!-- fieldset ohne sichtbaren Rahmen für semantische Gruppierung -->
         <fieldset style="border:0;padding:0;margin:0">
           <!-- Legende nur für Screenreader sichtbar, verbessert Barrierefreiheit -->
@@ -120,7 +128,7 @@
           <!-- ====================== ABITUR ====================== -->
           <label class="tile" for="g-abitur">
             <!-- Checkbox-Eingabe -->
-            <input id="g-abitur" type="checkbox">
+            <input id="g-abitur" type="checkbox" aria-describedby="desc-abitur">
             <!-- Inhalt der Kachel -->
             <div class="tile-body" style="flex:1">
               <div class="tile-header">
@@ -130,11 +138,14 @@
                         data-i18n-attr="data-tooltip:vk.abitur.tooltip">ℹ️</button>
               </div>
             </div>
-            <div class="tooltip" role="tooltip"></div>
+            <div class="tooltip" role="tooltip" aria-hidden="true"></div>
           </label>
+          <!-- Unsichtbare, aber lesbare Beschreibung passend zum Info-Icon -->
+          <span id="desc-abitur" class="sr-only">Wenn sie Abitur haben, ist eine Verkürzung möglich.</span>
+
           <!-- ====================== REALSCHULE ====================== -->
           <label class="tile" for="g-realschule">
-            <input id="g-realschule" type="checkbox">
+            <input id="g-realschule" type="checkbox" aria-describedby="desc-realschule">
             <div class="tile-body" style="flex:1">
               <div class="tile-header">
                 <span><span data-i18n="vk.realschule.label">Realschulabschluss</span> <span class="badge" data-i18n="vk.realschule.badge">−6 Monate</span></span>
@@ -143,11 +154,13 @@
                         data-i18n-attr="data-tooltip:vk.realschule.tooltip">ℹ️</button>
               </div>
             </div>
-            <div class="tooltip" role="tooltip"></div>
+            <div class="tooltip" role="tooltip" aria-hidden="true"></div>
           </label>
+          <span id="desc-realschule" class="sr-only">Wenn sie einen Realschulabschluss haben, ist eine Verkürzung möglich.</span>
+
           <!-- ====================== ALTER ÜBER 21 ====================== -->
           <label class="tile" for="g-alter21">
-            <input id="g-alter21" type="checkbox">
+            <input id="g-alter21" type="checkbox" aria-describedby="desc-alter21">
             <div class="tile-body" style="flex:1">
               <div class="tile-header">
                 <span><span data-i18n="vk.alter21.label">Alter über 21 Jahre</span> <span class="badge" data-i18n="vk.alter21.badge">−12 Monate</span></span>
@@ -156,12 +169,14 @@
                         data-i18n-attr="data-tooltip:vk.alter21.tooltip">ℹ️</button>
               </div>
             </div>
-            <div class="tooltip" role="tooltip"></div>
+            <div class="tooltip" role="tooltip" aria-hidden="true"></div>
           </label>
+          <span id="desc-alter21" class="sr-only">Bei älteren Auszubildenden ist eine Anrechnung von Vorerfahrungen möglich.</span>
+
           <!-- ====================== BERUFLICHE VORKENNTNISSE ====================== -->
           <div>
             <label class="tile" for="g-vork">
-              <input id="g-vork" type="checkbox">
+              <input id="g-vork" type="checkbox" aria-describedby="desc-vork">
               <div class="tile-body" style="flex:1">
                 <div class="tile-header">
                   <span><span data-i18n="vk.vork.label">Berufliche Vorkenntnisse</span> <span class="badge" data-i18n="vk.vork.badge">−6 bis −12 Monate</span></span>
@@ -170,13 +185,15 @@
                           data-i18n-attr="data-tooltip:vk.vork.tooltip">ℹ️</button>
                 </div>
                 <div class="slider-container">
-                  <input type="range" id="vork-slider" min="6" max="12" step="1" value="6">
+                  <label for="vork-slider" class="sr-only">Monate der Verkürzung wählen</label>
+                  <input type="range" id="vork-slider" min="6" max="12" step="1" value="6" aria-describedby="vork-wert desc-vork">
                   <span id="vork-wert" data-i18n="vk.vork.months">6 Monate</span>
                 </div>
               </div>
-              <div class="tooltip" role="tooltip"></div>
+              <div class="tooltip" role="tooltip" aria-hidden="true"></div>
             </label>
           </div>
+          <span id="desc-vork" class="sr-only">Praxiserfahrungen oder Abschlüsse können die Ausbildungsdauer bei Ihnen verkürzen.</span>
 
         </fieldset>
       </form>
