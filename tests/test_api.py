@@ -222,7 +222,7 @@ def test_calculate_success_mit_stunden_input(client):
 # ============================================================
 
 
-def test_missing_all_fields_returns_400(client):
+def test_alle_felder_fehlen_gibt_400_zurueck(client):
     """
     Test: Leerer Request-Body (alle Pflichtfelder fehlen).
     
@@ -240,11 +240,11 @@ def test_missing_all_fields_returns_400(client):
     assert "missing" in data["error"]["details"]
     # Prüfe, dass wichtige Felder gelistet sind
     missing = data["error"]["details"]["missing"]
-    assert "base_duration_months" in missing
+    assert "basis_dauer_monate" in missing
     assert "vollzeit_stunden" in missing
 
 
-def test_partially_missing_fields_returns_400(client):
+def test_teilweise_fehlende_felder_gibt_400_zurueck(client):
     """
     Test: Nur ein Pflichtfeld fehlt.
     
@@ -254,10 +254,10 @@ def test_partially_missing_fields_returns_400(client):
     - Genau das fehlende Feld wird genannt
     """
     payload = {
-        "base_duration_months": 36,
+        "basis_dauer_monate": 36,
         "vollzeit_stunden": 40,
-        # "teilzeit_input" fehlt!
-        "input_type": "prozent",
+        # "teilzeit_eingabe" fehlt!
+        "eingabetyp": "prozent",
         "verkuerzungsgruende": {
             "abitur": False,
             "realschule": False,
@@ -271,10 +271,10 @@ def test_partially_missing_fields_returns_400(client):
     assert resp.status_code == 400
     data = resp.get_json()
     assert data["error"]["code"] == "missing_fields"
-    assert "teilzeit_input" in data["error"]["details"]["missing"]
+    assert "teilzeit_eingabe" in data["error"]["details"]["missing"]
 
 
-def test_missing_verkuerzungsgruende_returns_400(client):
+def test_fehlende_verkuerzungsgruende_gibt_400_zurueck(client):
     """
     Test: Verkuerzungsgruende-Dictionary fehlt komplett.
     
@@ -283,10 +283,10 @@ def test_missing_verkuerzungsgruende_returns_400(client):
     - "verkuerzungsgruende" ist in missing-Liste
     """
     payload = {
-        "base_duration_months": 36,
+        "basis_dauer_monate": 36,
         "vollzeit_stunden": 40,
-        "teilzeit_input": 75,
-        "input_type": "prozent",
+        "teilzeit_eingabe": 75,
+        "eingabetyp": "prozent",
         # "verkuerzungsgruende" fehlt!
     }
     
@@ -302,7 +302,7 @@ def test_missing_verkuerzungsgruende_returns_400(client):
 # ============================================================
 
 
-def test_non_json_content_type_returns_400(client):
+def test_nicht_json_inhaltstyp_gibt_400_zurueck(client):
     """
     Test: Request ohne JSON Content-Type.
     
@@ -321,7 +321,7 @@ def test_non_json_content_type_returns_400(client):
     assert data["error"]["code"] == "invalid_request"
 
 
-def test_malformed_json_returns_400(client):
+def test_fehlerhaftes_json_gibt_400_zurueck(client):
     """
     Test: Kaputtes JSON (Parse-Fehler).
     
@@ -346,7 +346,7 @@ def test_malformed_json_returns_400(client):
 # ============================================================
 
 
-def test_validation_error_teilzeit_unter_50_returns_422(client):
+def test_validierungsfehler_teilzeit_unter_50_gibt_422_zurueck(client):
     """
     Test: Teilzeit unter 50% ist ungültig.
     
@@ -368,7 +368,7 @@ def test_validation_error_teilzeit_unter_50_returns_422(client):
     assert "50" in data["error"]["message"]
 
 
-def test_validation_error_teilzeit_ueber_100_returns_422(client):
+def test_validierungsfehler_teilzeit_ueber_100_gibt_422_zurueck(client):
     """
     Test: Teilzeit über 100% ist ungültig.
     
@@ -387,7 +387,7 @@ def test_validation_error_teilzeit_ueber_100_returns_422(client):
     assert data["error"]["code"] == "validation_error"
 
 
-def test_validation_error_stunden_ueber_vollzeit_returns_422(client):
+def test_validierungsfehler_stunden_ueber_vollzeit_gibt_422_zurueck(client):
     """
     Test: Teilzeitstunden über Vollzeitstunden ist ungültig.
     
@@ -406,7 +406,7 @@ def test_validation_error_stunden_ueber_vollzeit_returns_422(client):
     assert data["error"]["code"] == "validation_error"
 
 
-def test_validation_error_invalid_data_types_returns_422(client):
+def test_validierungsfehler_ungueltige_datentypen_gibt_422_zurueck(client):
     """
     Test: Falsche Datentypen (String statt Zahl).
     
@@ -415,10 +415,10 @@ def test_validation_error_invalid_data_types_returns_422(client):
     - Fehler-Code: "validation_error"
     """
     payload = {
-        "base_duration_months": "nicht eine Zahl",  # String statt int!
+        "basis_dauer_monate": "nicht eine Zahl",  # String statt int!
         "vollzeit_stunden": 40,
-        "teilzeit_input": 75,
-        "input_type": "prozent",
+        "teilzeit_eingabe": 75,
+        "eingabetyp": "prozent",
         "verkuerzungsgruende": {
             "abitur": False,
             "realschule": False,
@@ -434,7 +434,7 @@ def test_validation_error_invalid_data_types_returns_422(client):
     assert data["error"]["code"] == "validation_error"
 
 
-def test_validation_error_negative_values_returns_422(client):
+def test_validierungsfehler_negative_werte_gibt_422_zurueck(client):
     """
     Test: Negative Werte sind ungültig.
     
@@ -444,10 +444,10 @@ def test_validation_error_negative_values_returns_422(client):
     - Fehlermeldung enthält Hinweis auf gültigen Bereich
     """
     payload = {
-        "base_duration_months": -36,  # Negativ!
+        "basis_dauer_monate": -36,  # Negativ!
         "vollzeit_stunden": 40,
-        "teilzeit_input": 75,
-        "input_type": "prozent",
+        "teilzeit_eingabe": 75,
+        "eingabetyp": "prozent",
         "verkuerzungsgruende": {
             "abitur": False,
             "realschule": False,
@@ -464,7 +464,7 @@ def test_validation_error_negative_values_returns_422(client):
     assert "zwischen 12 und 60" in data["error"]["message"]
 
 
-def test_validation_error_null_base_duration_returns_422(client):
+def test_validierungsfehler_null_basis_dauer_gibt_422_zurueck(client):
     """
     Test: Ausbildungsdauer von 0 ist ungültig.
     
@@ -473,10 +473,10 @@ def test_validation_error_null_base_duration_returns_422(client):
     - Fehler-Code: "validation_error"
     """
     payload = {
-        "base_duration_months": 0,  # Null!
+        "basis_dauer_monate": 0,  # Null!
         "vollzeit_stunden": 40,
-        "teilzeit_input": 75,
-        "input_type": "prozent",
+        "teilzeit_eingabe": 75,
+        "eingabetyp": "prozent",
         "verkuerzungsgruende": {
             "abitur": False,
             "realschule": False,
@@ -492,7 +492,7 @@ def test_validation_error_null_base_duration_returns_422(client):
     assert data["error"]["code"] == "validation_error"
 
 
-def test_validation_error_negative_vollzeit_stunden_returns_422(client):
+def test_validierungsfehler_negative_vollzeit_stunden_gibt_422_zurueck(client):
     """
     Test: Negative Vollzeit-Stunden sind ungültig.
     
@@ -501,10 +501,10 @@ def test_validation_error_negative_vollzeit_stunden_returns_422(client):
     - Fehler-Code: "validation_error"
     """
     payload = {
-        "base_duration_months": 36,
+        "basis_dauer_monate": 36,
         "vollzeit_stunden": -40,  # Negativ!
-        "teilzeit_input": 75,
-        "input_type": "prozent",
+        "teilzeit_eingabe": 75,
+        "eingabetyp": "prozent",
         "verkuerzungsgruende": {
             "abitur": False,
             "realschule": False,
@@ -525,7 +525,7 @@ def test_validation_error_negative_vollzeit_stunden_returns_422(client):
 # ============================================================
 
 
-def test_success_response_structure(client):
+def test_erfolg_antwort_struktur(client):
     """
     Test: Erfolgreiche Response hat die richtige Struktur.
     
@@ -555,7 +555,7 @@ def test_success_response_structure(client):
     assert "verlaengerung_durch_teilzeit_monate" in result
 
 
-def test_error_response_structure(client):
+def test_fehler_antwort_struktur(client):
     """
     Test: Fehler-Response hat die richtige Struktur.
     
@@ -585,7 +585,7 @@ def test_error_response_structure(client):
 # ============================================================
 
 
-def test_missing_input_type_returns_400(client):
+def test_fehlender_eingabetyp_gibt_400_zurueck(client):
     """
     Test: Wenn input_type fehlt, ist es ein Fehler (Pflichtfeld).
     
@@ -594,10 +594,10 @@ def test_missing_input_type_returns_400(client):
     - input_type ist in der Liste der fehlenden Felder
     """
     payload = {
-        "base_duration_months": 36,
+        "basis_dauer_monate": 36,
         "vollzeit_stunden": 40,
-        "teilzeit_input": 75,
-        # "input_type" fehlt!
+        "teilzeit_eingabe": 75,
+        # "eingabetyp" fehlt!
         "verkuerzungsgruende": {
             "abitur": False,
             "realschule": False,
@@ -611,7 +611,7 @@ def test_missing_input_type_returns_400(client):
     assert resp.status_code == 400
     data = resp.get_json()
     assert data["error"]["code"] == "missing_fields"
-    assert "input_type" in data["error"]["details"]["missing"]
+    assert "eingabetyp" in data["error"]["details"]["missing"]
 
 
 def test_verkuerzungsgruende_leer_ist_gueltig(client):
@@ -633,24 +633,24 @@ def test_verkuerzungsgruende_leer_ist_gueltig(client):
     assert data["result"]["verkuerzung_gesamt_monate"] == 0
 
 
-def test_internal_server_error_returns_500(client, monkeypatch):
+def test_interner_serverfehler_gibt_500_zurueck(client, monkeypatch):
     """
     Test: Unerwartete Exceptions führen zu HTTP 500.
     
     Simuliert einen internen Serverfehler durch Mocken von
-    calculate_gesamtdauer, sodass eine unerwartete Exception geworfen wird.
+    berechne_gesamtdauer, sodass eine unerwartete Exception geworfen wird.
     
     Erwartung:
     - HTTP 500 Internal Server Error
     - Generische Fehlermeldung ohne Details (Security)
     """
-    # Mock calculate_gesamtdauer um eine unerwartete Exception zu werfen
+    # Mock berechne_gesamtdauer um eine unerwartete Exception zu werfen
     def mock_calculate(*args, **kwargs):
         raise RuntimeError("Simulierter interner Fehler")
     
     # Patche die Berechnungslogik im Service-Layer
     monkeypatch.setattr(
-        "src.api.calculation_service.calculate_gesamtdauer",
+        "src.api.calculation_service.berechne_gesamtdauer",
         mock_calculate,
     )
     
