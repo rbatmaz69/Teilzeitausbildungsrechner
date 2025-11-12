@@ -204,7 +204,9 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
   padding: 6px;
   border-radius: 8px;
 }
+
 .info-btn:hover { color: #f00; }
+
 .info-btn:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
