@@ -30,24 +30,24 @@
     "helper": "Wähle alles aus, was zu dir passt.",
     "legend": "Gründe für Verkürzung",
     "abitur": {
-      "label": "Du hast Abitur oder Fachabitur?",
-      "badge": "−12 Monate",
-      "tooltip": "Wenn du Abitur hast, kannst du deine Ausbilung um 1 Jahr verkürzen."
+      "label": "Abitur / Fachabitur",
+      "badge": "12 Monate Verkürzung",
+      "tooltip": "Wenn Sie Abitur haben, ist eine Verkürzung möglich."
     },
     "realschule": {
-      "label": "Hast du die Realschule abgeschlossen?",
-      "badge": "−6 Monate",
-      "tooltip": "Wenn du die Realschule abgeschlossen hast, kannst du deine Ausbildung um 6 Monate verkürzen."
+      "label": "Realschulabschluss",
+      "badge": "6 Monate Verkürzung",
+      "tooltip": "Wenn Sie einen Realschulabschluss haben, ist eine Verkürzung möglich."
     },
     "alter21": {
-      "label": "Bist du über 21 Jahre alt?",
-      "badge": "−12 Monate",
-      "tooltip": "Wenn du älter bist, zählt deine Erfahrung. Dann kann die Ausbildung kürzer sein."
+      "label": "Alter über 21 Jahre",
+      "badge": "12 Monate Verkürzung",
+      "tooltip": "Bei älteren Auszubildenden ist eine Anrechnung von Vorerfahrungen möglich."
     },
     "vork": {
-      "label": "Hast du schon Berufserfahrung in diesem Bereich?",
-      "badge": "−6 bis −12 Monate",
-      "tooltip": "Wenn du schon in dem Beruf gearbeitet hast, kann deine Ausbildung kürzer sein.",
+      "label": "Berufliche Vorkenntnisse",
+      "badge": "zwischen 6 und 12 Monaten Verkürzung",
+      "tooltip": "Praxiserfahrungen oder Abschlüsse können die Ausbildungsdauer verkürzen.",
       "months": "6 Monate"
     }
   },
@@ -62,7 +62,7 @@
       "workPerWeek": "Arbeit pro Woche"
     },
     "extension": {
-      "plus": "+{n} Monate länger",
+      "plus": "{n} Monate Verlängerung",
       "none": "Keine Verlängerung"
     },
     "placeholders": {
@@ -77,8 +77,8 @@
   },
   "units": {
     "hours": { "short": "h", "full": "Stunden" },
-    "months": { "short": "Mon.", "full": "Monate" },
-    "weeks": { "short": "Wo.", "full": "Wochen" },
+    "months": { "short": "Monate", "full": "Monate" },
+    "weeks": { "short": "Wochen", "full": "Wochen" },
     "percent": "%"
   },
   "errors": {

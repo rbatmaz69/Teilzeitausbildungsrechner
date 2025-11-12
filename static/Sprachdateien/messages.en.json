@@ -30,24 +30,24 @@
     "helper": "Choose all options that fit you.",
     "legend": "Shortening reasons",
     "abitur": {
-      "label": "Do you have a high school diploma (Abitur)?",
-      "badge": "−12 months",
-      "tooltip": "If you have a high school diploma, you can shorten your training by 1 year."
+      "label": "High school diploma / A-levels",
+      "badge": "12 months reduktion",
+      "tooltip": "If you have a high school diploma, a reduction is possible."
     },
     "realschule": {
-      "label": "Did you finish secondary school (Realschule)?",
-      "badge": "−6 months",
-      "tooltip": "If you finished secondary school, you can shorten your training by 6 months."
+      "label": "Secondary school diploma",
+      "badge": "6 months reduktion",
+      "tooltip": "If you have a secondary school diploma, a reduction is possible."
     },
     "alter21": {
-      "label": "Are you older than 21?",
-      "badge": "−12 months",
-      "tooltip": "If you are older, your experience counts. Your training can then be shorter."
+      "label": "Age over 21 years",
+      "badge": "12 months reduktion",
+      "tooltip": "For older trainees, prior experience may be credited."
     },
     "vork": {
-      "label": "Do you already have work experience in this field?",
-      "badge": "−6 to −12 months",
-      "tooltip": "If you have worked in this job before, your training can be shorter.",
+      "label": "Professional experience",
+      "badge": "Reduktion beetween 6 to 12 months",
+      "tooltip": "Practical experience or qualifications may shorten the training duration.",
       "months": "6 months"
     }
   },
@@ -62,7 +62,7 @@
       "workPerWeek": "Work per week"
     },
     "extension": {
-      "plus": "+{n} more months",
+      "plus": "{n} months extension",
       "none": "No extension"
     },
     "placeholders": {
@@ -77,8 +77,8 @@
   },
   "units": {
     "hours": { "short": "h", "full": "hours" },
-    "months": { "short": "mo", "full": "months" },
-    "weeks": { "short": "wk", "full": "weeks" },
+    "months": { "short": "months", "full": "months" },
+    "weeks": { "short": "weeks", "full": "weeks" },
     "percent": "%"
   },
   "errors": {
