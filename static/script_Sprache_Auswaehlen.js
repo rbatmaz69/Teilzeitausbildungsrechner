@@ -1,166 +1,166 @@
 // ../static/script_Sprache_Auswaehlen.js
 (() => {
-  const DEFAULT_LANG = "de";
-  const SUPPORTED = ["de", "en"];
+  const STANDARD_SPRACHE = "de";
+  const UNTERSTUETZT = ["de", "en"];
 
   // Sprachdateien liegen in /static/Sprachdateien/
-  const I18N_PATH = "/static/Sprachdateien";
+  const I18N_PFAD = "/static/Sprachdateien";
 
-  const state = {
-    lang: null,
-    dict: null
+  const zustand = {
+    sprache: null,
+    woerterbuch: null
   };
 
   /**
    * Liest die zuletzt vom Nutzer gewählte Sprache aus dem LocalStorage aus.
    * @returns {string|null} ISO-Sprachcode oder null, falls keiner gespeichert ist.
    */
-  const getSavedLang = () => localStorage.getItem("lang");
+  const holeGespeicherteSprache = () => localStorage.getItem("lang");
   /**
    * Persistiert die gewählte Sprache im LocalStorage.
-   * @param {string} lang ISO-Sprachcode (z.B. "de" oder "en").
+   * @param {string} sprache ISO-Sprachcode (z.B. "de" oder "en").
    */
-  const saveLang = (lang) => localStorage.setItem("lang", lang);
+  const speichereSprache = (sprache) => localStorage.setItem("lang", sprache);
 
   /**
    * Führt einen sicheren Zugriff auf verschachtelte Schlüssel in einem Objekt aus.
-   * @param {Object} obj Wörterbuch mit Übersetzungen.
-   * @param {string} path Punkt-getrennter Pfad (z.B. "inputs.dauer.label").
+   * @param {Object} objekt Wörterbuch mit Übersetzungen.
+   * @param {string} pfad Punkt-getrennter Pfad (z.B. "inputs.dauer.label").
    * @returns {any} Gefundener Wert oder null.
    */
-  const resolve = (obj, path) =>
-    path.split(".").reduce((o, k) => (o && o[k] !== undefined ? o[k] : null), obj);
+  const aufloesung = (objekt, pfad) =>
+    pfad.split(".").reduce((o, schluessel) => (o && o[schluessel] !== undefined ? o[schluessel] : null), objekt);
 
   /**
    * Setzt die globalen `lang`- und `dir`-Attribute auf dem `<html>`-Element.
-   * @param {string} lang ISO-Sprachcode.
+   * @param {string} sprache ISO-Sprachcode.
    */
-  const setHtmlLangDir = (lang) => {
-    document.documentElement.setAttribute("lang", lang);
-    const rtlLangs = ["ar", "he", "fa", "ur"];
-    document.documentElement.setAttribute("dir", rtlLangs.includes(lang) ? "rtl" : "ltr");
+  const setzeHtmlSprachRichtung = (sprache) => {
+    document.documentElement.setAttribute("lang", sprache);
+    const rtlSprachen = ["ar", "he", "fa", "ur"];
+    document.documentElement.setAttribute("dir", rtlSprachen.includes(sprache) ? "rtl" : "ltr");
   };
 
   /**
    * Lädt die JSON-Übersetzungsdatei für eine Sprache.
-   * @param {string} lang ISO-Sprachcode.
+   * @param {string} sprache ISO-Sprachcode.
    * @returns {Promise<Object>} JSON-Dictionary mit Übersetzungen.
    */
-  const fetchDict = async (lang) => {
-    const safeLang = SUPPORTED.includes(lang) ? lang : DEFAULT_LANG;
-    const url = `${I18N_PATH}/messages.${safeLang}.json`;
+  const ladeWoerterbuch = async (sprache) => {
+    const sichereSprache = UNTERSTUETZT.includes(sprache) ? sprache : STANDARD_SPRACHE;
+    const adresse = `${I18N_PFAD}/messages.${sichereSprache}.json`;
 
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) throw new Error(`i18n: Could not load ${url} (${res.status})`);
-    return res.json();
+    const antwort = await fetch(adresse, { cache: "no-store" });
+    if (!antwort.ok) throw new Error(`i18n: Could not load ${adresse} (${antwort.status})`);
+    return antwort.json();
   };
 
   /**
    * Schreibt den übersetzten Wert in ein DOM-Element.
-   * @param {HTMLElement} el Ziel-Element.
-  * @param {string} value Übersetzter Text oder HTML.
+   * @param {HTMLElement} element Ziel-Element.
+  * @param {string} wert Übersetzter Text oder HTML.
    */
-  const applyText = (el, value) => {
-    if (el.dataset.i18nHtml === "true" || /<[^>]*>/.test(value)) {
-      el.innerHTML = value;
+  const wendeTextAn = (element, wert) => {
+    if (element.dataset.i18nHtml === "true" || /<[^>]*>/.test(wert)) {
+      element.innerHTML = wert;
     } else {
-      el.textContent = value;
+      element.textContent = wert;
     }
   };
 
   /**
    * Wendet alle Übersetzungen auf Elemente mit data-i18n-Attributen an.
-   * @param {Object} dict Wörterbuch mit Übersetzungen.
+   * @param {Object} woerterbuch Wörterbuch mit Übersetzungen.
    */
-  const applyTranslations = (dict) => {
-    document.querySelectorAll("[data-i18n]").forEach((el) => {
-      const key = el.dataset.i18n;
-      const val = resolve(dict, key);
-      if (val == null) return;
+  const wendeUebersetzungenAn = (woerterbuch) => {
+    document.querySelectorAll("[data-i18n]").forEach((element) => {
+      const schluessel = element.dataset.i18n;
+      const wert = aufloesung(woerterbuch, schluessel);
+      if (wert == null) return;
 
-      if (Array.isArray(val)) {
-        applyText(el, val.map((item) => `<li>${item}</li>`).join(""));
+      if (Array.isArray(wert)) {
+        wendeTextAn(element, wert.map((eintrag) => `<li>${eintrag}</li>`).join(""));
       } else {
-        applyText(el, String(val));
+        wendeTextAn(element, String(wert));
       }
     });
 
-    document.querySelectorAll("[data-i18n-attr]").forEach((el) => {
-      const mappings = el.dataset.i18nAttr.split(",").map((s) => s.trim());
-      mappings.forEach((map) => {
-        const [attr, key] = map.split(":").map((s) => s.trim());
-        const val = resolve(dict, key);
-        if (val != null) el.setAttribute(attr, String(val));
+    document.querySelectorAll("[data-i18n-attr]").forEach((element) => {
+      const zuordnungen = element.dataset.i18nAttr.split(",").map((zeichenkette) => zeichenkette.trim());
+      zuordnungen.forEach((zuordnung) => {
+        const [attribut, schluessel] = zuordnung.split(":").map((zeichenkette) => zeichenkette.trim());
+        const wert = aufloesung(woerterbuch, schluessel);
+        if (wert != null) element.setAttribute(attribut, String(wert));
       });
     });
 
-    const langSel = document.getElementById("lang-switcher");
-    if (langSel) {
-      [...langSel.options].forEach((opt) => {
-        const key = opt.dataset.i18n;
-        if (!key) return;
-        const val = resolve(dict, key);
-        if (val != null) opt.textContent = String(val);
+    const sprachAuswahl = document.getElementById("lang-switcher");
+    if (sprachAuswahl) {
+      [...sprachAuswahl.options].forEach((option) => {
+        const schluessel = option.dataset.i18n;
+        if (!schluessel) return;
+        const wert = aufloesung(woerterbuch, schluessel);
+        if (wert != null) option.textContent = String(wert);
       });
-      langSel.value = state.lang;
+      sprachAuswahl.value = zustand.sprache;
     }
   };
 
   /** Registriert eine globale I18N-Hilfs-API auf `window`. */
-  const registerGlobalAPI = () => {
+  const registriereGlobaleAPI = () => {
     window.I18N = {
-      get lang() { return state.lang; },
-      get dict() { return state.dict; },
-      t(key, fallback) {
-        const val = resolve(state.dict, key);
-        return val != null ? (Array.isArray(val) ? val : String(val)) : (fallback ?? key);
+      get lang() { return zustand.sprache; },
+      get dict() { return zustand.woerterbuch; },
+      t(schluessel, ersatzwert) {
+        const wert = aufloesung(zustand.woerterbuch, schluessel);
+        return wert != null ? (Array.isArray(wert) ? wert : String(wert)) : (ersatzwert ?? schluessel);
       }
     };
   };
 
   /** Sendet ein benutzerdefiniertes Event, wenn sich die Sprache ändert. */
-  const dispatchLangChanged = () => {
+  const sendeSprachGeaendertEvent = () => {
     window.dispatchEvent(new CustomEvent("i18n:changed", {
-      detail: { lang: state.lang }
+      detail: { lang: zustand.sprache }
     }));
   };
 
   /**
    * Lädt Übersetzungen und aktualisiert UI sowie globale APIs.
-   * @param {string} lang ISO-Sprachcode.
+   * @param {string} sprache ISO-Sprachcode.
    */
-  const loadAndApply = async (lang) => {
-    state.lang = SUPPORTED.includes(lang) ? lang : DEFAULT_LANG;
-    setHtmlLangDir(state.lang);
+  const ladeUndWendeAn = async (sprache) => {
+    zustand.sprache = UNTERSTUETZT.includes(sprache) ? sprache : STANDARD_SPRACHE;
+    setzeHtmlSprachRichtung(zustand.sprache);
 
     try {
-      state.dict = await fetchDict(state.lang);
-      applyTranslations(state.dict);
-      registerGlobalAPI();
-      dispatchLangChanged();
-    } catch (e) {
-      console.error(e);
+      zustand.woerterbuch = await ladeWoerterbuch(zustand.sprache);
+      wendeUebersetzungenAn(zustand.woerterbuch);
+      registriereGlobaleAPI();
+      sendeSprachGeaendertEvent();
+    } catch (fehler) {
+      console.error(fehler);
     }
   };
 
   document.addEventListener("DOMContentLoaded", async () => {
-    const langSel = document.getElementById("lang-switcher");
-    const initial =
-      getSavedLang() ||
+    const sprachAuswahl = document.getElementById("lang-switcher");
+    const anfaenglicheSprache =
+      holeGespeicherteSprache() ||
       (navigator.language || navigator.userLanguage || "de").slice(0, 2);
 
-    const startLang = SUPPORTED.includes(initial) ? initial : DEFAULT_LANG;
+    const startSprache = UNTERSTUETZT.includes(anfaenglicheSprache) ? anfaenglicheSprache : STANDARD_SPRACHE;
 
-    if (langSel) langSel.value = startLang;
+    if (sprachAuswahl) sprachAuswahl.value = startSprache;
 
-    await loadAndApply(startLang);
-    saveLang(startLang);
+    await ladeUndWendeAn(startSprache);
+    speichereSprache(startSprache);
 
-    if (langSel) {
-      langSel.addEventListener("change", async (e) => {
-        const newLang = e.target.value;
-        saveLang(newLang);
-        await loadAndApply(newLang);
+    if (sprachAuswahl) {
+      sprachAuswahl.addEventListener("change", async (ereignis) => {
+        const neueSprache = ereignis.target.value;
+        speichereSprache(neueSprache);
+        await ladeUndWendeAn(neueSprache);
       });
     }
   });
