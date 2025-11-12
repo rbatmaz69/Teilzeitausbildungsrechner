@@ -9,60 +9,60 @@
     "en": "Englisch"
   },
   "inputs": {
-    "title": "Ihre Eingaben",
+    "title": "Deine Angaben",
     "dauer": {
-      "label": "Reguläre Ausbildungsdauer (Monate)",
-      "tooltip": "Die normale Dauer Ihrer Ausbildung bei Vollzeit"
+      "label": "Wie lange dauert deine Ausbildung in Vollzeit?",
+      "tooltip": "Schreibe, wie viele Monate deine Ausbildung normalerweise dauert."
     },
     "stunden": {
-      "label": "Reguläre Wochenstunden (gesamt)",
-      "tooltip": "Ihre gesamten Wochenstunden inkl. Berufsschule"
+      "label": "Wie viele Stunden pro Woche hat die Ausbildung in Vollzeit?",
+      "tooltip": "Zähle alle Stunden mit, auch die Stunden in der Berufsschule."
     },
     "teilzeit": {
-      "label": "Teilzeit-Anteil",
-      "tooltip": "Mindestens 50% für eine anerkannte Teilzeitausbildung",
+      "label": "Wie viel der Vollzeit willst du arbeiten?",
+      "tooltip": "Für eine Teilzeit Ausbildung must du mindestens 50 % arbeiten.",
       "percent": "Prozent",
       "hours": "Stunden"
     }
   },
   "vk": {
-    "heading": "Verkürzungsgründe auswählen",
-    "helper": "Wähle alle Gründe aus, die auf dich zutreffen.",
-    "legend": "Verkürzungsgründe",
+    "heading": "Gründe für eine kürzere Ausbildung",
+    "helper": "Wähle alles aus, was zu dir passt.",
+    "legend": "Gründe für Verkürzung",
     "abitur": {
-      "label": "Abitur / Fachabitur",
+      "label": "Du hast Abitur oder Fachabitur?",
       "badge": "−12 Monate",
-      "tooltip": "Wenn Sie Abitur haben, ist eine Verkürzung möglich."
+      "tooltip": "Wenn du Abitur hast, kannst du deine Ausbilung um 1 Jahr verkürzen."
     },
     "realschule": {
-      "label": "Realschulabschluss",
+      "label": "Hast du die Realschule abgeschlossen?",
       "badge": "−6 Monate",
-      "tooltip": "Wenn Sie einen Realschulabschluss haben, ist eine Verkürzung möglich."
+      "tooltip": "Wenn du die Realschule abgeschlossen hast, kannst du deine Ausbildung um 6 Monate verkürzen."
     },
     "alter21": {
-      "label": "Alter über 21 Jahre",
+      "label": "Bist du über 21 Jahre alt?",
       "badge": "−12 Monate",
-      "tooltip": "Bei älteren Auszubildenden ist eine Anrechnung von Vorerfahrungen möglich."
+      "tooltip": "Wenn du älter bist, zählt deine Erfahrung. Dann kann die Ausbildung kürzer sein."
     },
     "vork": {
-      "label": "Berufliche Vorkenntnisse",
+      "label": "Hast du schon Berufserfahrung in diesem Bereich?",
       "badge": "−6 bis −12 Monate",
-      "tooltip": "Praxiserfahrungen oder Abschlüsse können die Ausbildungsdauer verkürzen.",
+      "tooltip": "Wenn du schon in dem Beruf gearbeitet hast, kann deine Ausbildung kürzer sein.",
       "months": "6 Monate"
     }
   },
   "res": {
-    "headline": "Ihre Teilzeitausbildung",
-    "helper": "Hier sehen Sie Ihre Eingaben und das berechnete Ergebnis auf einen Blick.",
+    "headline": "Deine Teilzeitausbildung",
+    "helper": "Hier siehst du deine Angaben und das Ergebnis.",
     "notesTitle": "Wichtige Hinweise",
-    "notes": "<li>Die Berechnung ist eine reine <strong>Orientierungshilfe</strong>.</li><li>Es besteht kein gesetzlicher Anspruch auf die dargestellte Auswertung.</li><li>Die finale Vereinbarung erfolgt mit Ihrem Ausbildungsbetrieb.</li><li>Für eine anerkannte Teilzeitausbildung muss die Ausbildungszeit mindestens 50 % der regulären Ausbildungszeit betragen.</li>",
+    "notes": "<li>Die Berechnung ist eine <strong>Hilfe</strong>.</li><li>Das Ergebnis ist <strong>nicht verbindlich</strong>.</li><li>Sprich das Ergebnis mit deinem Ausbildungsbetrieb ab.</li><li>Eine Teilzeitausbildung ist möglich, wenn du mindestens 50 % der normalen Zeit machst.</li>",
     "kv": {
       "total": "Gesamtdauer",
-      "schoolPerWeek": "Ausbildung / Woche",
-      "workPerWeek": "Arbeit / Woche"
+      "schoolPerWeek": "Ausbildung pro Woche",
+      "workPerWeek": "Arbeit pro Woche"
     },
     "extension": {
-      "plus": "+{n} Monate Verlängerung",
+      "plus": "+{n} Monate länger",
       "none": "Keine Verlängerung"
     },
     "placeholders": {
@@ -71,9 +71,9 @@
     }
   },
   "cuts": {
-    "title": "Verkürzungsgründe",
+    "title": "Gründe für Verkürzung",
     "total": "Gesamt",
-    "newBase": "Neue Basis"
+    "newBase": "Neue Grundlage"
   },
   "units": {
     "hours": { "short": "h", "full": "Stunden" },
@@ -83,23 +83,23 @@
   },
   "errors": {
     "placeholder": "",
-    "fetch": "Fehler beim Laden der Daten",
+    "fetch": "Daten konnten nicht geladen werden.",
     "unknown": "Unbekannter Fehler",
-    "tooShort": "Die Gesamtdauer darf maximal um 12 Monate verkürzt werden!",
-    "tooLong": "Die Gesamtdauer darf maximal das 1,5-fache verlängert werden!"
+    "tooShort": "Die Ausbildung darf höchstens 12 Monate kürzer sein!",
+    "tooLong": "Die Ausbildung darf höchstens 1,5-mal so lang sein!"
   },
   "btn": {
-    "calculate": "Berechnen",
+    "calculate": "Ergebnis anzeigen",
     "reset": "Zurücksetzen",
     "share": "Link teilen"
   },
   "share": {
     "title": "Teilzeitrechner – Ergebnis",
-    "text": "Hier ist meine Ergebnisübersicht.",
-    "copied": "Link in die Zwischenablage kopiert."
+    "text": "Hier ist mein Ergebnis.",
+    "copied": "Der Link wurde kopiert."
   },
   "reset": {
-    "confirm": "Möchten Sie wirklich alle Daten zurücksetzen?"
+    "confirm": "Möchtest du wirklich alle Daten zurücksetzen?"
   },
   "nav": {
     "actions": "Aktionen"
