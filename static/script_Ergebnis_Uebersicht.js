@@ -1,39 +1,39 @@
 /* script_Ergebnis_Übersicht.js – i18n-fähige Ergebnislogik */
 
 document.addEventListener("DOMContentLoaded", () => {
-  // nichts; init() wird unten registriert
+  // nichts; initialisiere() wird unten registriert
 });
 
-// Kurz-Helpers
-const $ = (sel) => document.querySelector(sel);
-function setText(sel, text) { const el = $(sel); if (el) el.textContent = text; }
-function show(el) { if (el) el.hidden = false; }
-function hide(el) { if (el) el.hidden = true; }
+// Kurz-Helfer
+const $ = (selektor) => document.querySelector(selektor);
+function setzeText(selektor, text) { const element = $(selektor); if (element) element.textContent = text; }
+function zeige(element) { if (element) element.hidden = false; }
+function verberge(element) { if (element) element.hidden = true; }
 
-// i18n Helper (nutzt die globale API aus script_Sprache_Auswaehlen.js)
-function t(key, fallback) {
+// i18n Helfer (nutzt die globale API aus script_Sprache_Auswaehlen.js)
+function uebersetzung(schluessel, fallback) {
   if (window.I18N && typeof window.I18N.t === "function") {
-    return window.I18N.t(key, fallback);
+    return window.I18N.t(schluessel, fallback);
   }
-  return fallback ?? key;
+  return fallback ?? schluessel;
 }
-function currentLang() {
+function aktuellesSprache() {
   return (window.I18N && window.I18N.lang) || "de";
 }
 
 // Units/Labels aus i18n
-function units() {
+function einheiten() {
   return {
-    h: t("units.hours.short", "h"),
-    months: t("units.months.short", "Mon."),
-    weeks: t("units.weeks.short", "Wo.")
+    h: uebersetzung("units.hours.short", "h"),
+    monate: uebersetzung("units.months.short", "Mon."),
+    wochen: uebersetzung("units.weeks.short", "Wo.")
   };
 }
 
 // Zustand merken, damit wir bei Sprachwechsel neu rendern können
-let LAST_INPUTS = null;
-let LAST_CALC = null;
-let errorTotalMonths;
+let LETZTE_EINGABEN = null;
+let LETZTE_BERECHNUNG = null;
+let fehlerGesamtmonate;
 
 /**
  * Holt die Berechnungsergebnisse vom Backend.
@@ -41,25 +41,25 @@ let errorTotalMonths;
  * Sammelt Formularwerte, sendet sie an den API-Endpunkt und normalisiert
  * das Ergebnis für die tabellarische Darstellung.
  */
-async function getSummary() {
-  const baseMonthsEl = document.getElementById("dauer");
-  const weeklyHoursEl = document.getElementById("stunden");
-  const percentEl = document.getElementById("teilzeitProzent");
+async function holeZusammenfassung() {
+  const basisMonateElement = document.getElementById("dauer");
+  const wochenstundenElement = document.getElementById("stunden");
+  const prozentElement = document.getElementById("teilzeitProzent");
 
   const abitur = !!document.getElementById("g-abitur")?.checked;
   const realschule = !!document.getElementById("g-realschule")?.checked;
   const alter21 = !!document.getElementById("g-alter21")?.checked;
   const vork = !!document.getElementById("g-vork")?.checked;
 
-  const baseMonths = Number(baseMonthsEl?.value || 0);
-  const weeklyHours = Number(weeklyHoursEl?.value || 0);
-  const partTimePercent = Number(percentEl?.value || 0);
+  const basisMonate = Number(basisMonateElement?.value || 0);
+  const wochenstunden = Number(wochenstundenElement?.value || 0);
+  const teilzeitProzent = Number(prozentElement?.value || 0);
 
-  const payload = {
-    base_duration_months: baseMonths,
-    vollzeit_stunden: weeklyHours,
-    teilzeit_input: partTimePercent,
-    input_type: "prozent",
+  const nutzdaten = {
+    basis_dauer_monate: basisMonate,
+    vollzeit_stunden: wochenstunden,
+    teilzeit_eingabe: teilzeitProzent,
+    eingabetyp: "prozent",
     verkuerzungsgruende: {
       abitur,
       realschule,
@@ -68,56 +68,56 @@ async function getSummary() {
     }
   };
 
-  const resp = await fetch("/api/calculate", {
+  const antwort = await fetch("/api/calculate", {
     method: "POST",
     headers: { "Content-Type": "application/json", "Accept": "application/json" },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(nutzdaten)
   });
 
-  if (!resp.ok) {
-    let message = t("errors.fetch", "Fehler beim Laden der Daten");
+  if (!antwort.ok) {
+    let nachricht = uebersetzung("errors.fetch", "Fehler beim Laden der Daten");
     try {
-      const err = await resp.json();
-      message = err?.error?.message || message;
+      const fehler = await antwort.json();
+      nachricht = fehler?.error?.message || nachricht;
     } catch (error) {
       console.warn("Fehler beim Verarbeiten der Antwort:", error);
     }
-    throw new Error(message);
+    throw new Error(nachricht);
   }
 
-  const data = await resp.json();
-  const r = data.result || {};
+  const daten = await antwort.json();
+  const ergebnis = daten.result || {};
 
-  const totalMonths = Number(r.finale_dauer_monate || 0);
-  const extensionMonths = Number(r.verlaengerung_durch_teilzeit_monate || 0);
-  const totalCutMonths = Number(r.verkuerzung_gesamt_monate || 0);
-  const newBase = Number(r.verkuerzte_dauer_monate || 0);
-  const weeks = Math.round(totalMonths * 4.33);
+  const gesamtMonate = Number(ergebnis.finale_dauer_monate || 0);
+  const verlaengerungMonate = Number(ergebnis.verlaengerung_durch_teilzeit_monate || 0);
+  const gesamteVerkuerzungMonate = Number(ergebnis.verkuerzung_gesamt_monate || 0);
+  const neueBasis = Number(ergebnis.verkuerzte_dauer_monate || 0);
+  const wochen = Math.round(gesamtMonate * 4.33);
 
-  const workHoursPerWeek = Math.min(weeklyHours, Number(r.wochenstunden || 0));
-  const schoolHoursPerWeek = Math.max(0, weeklyHours - workHoursPerWeek);
+  const arbeitStundenProWoche = Math.min(wochenstunden, Number(ergebnis.wochenstunden || 0));
+  const schuleStundenProWoche = Math.max(0, wochenstunden - arbeitStundenProWoche);
 
-  const cuts = [];
-  if (abitur) cuts.push({ key: "abitur", months: 12 });
-  if (realschule) cuts.push({ key: "realschule", months: 6 });
-  if (alter21) cuts.push({ key: "alter_ueber_21", months: 12 });
-  if (vork) cuts.push({ key: "vorkenntnisse", months: 6 });
+  const verkuerzungen = [];
+  if (abitur) verkuerzungen.push({ key: "abitur", months: 12 });
+  if (realschule) verkuerzungen.push({ key: "realschule", months: 6 });
+  if (alter21) verkuerzungen.push({ key: "alter_ueber_21", months: 12 });
+  if (vork) verkuerzungen.push({ key: "vorkenntnisse", months: 6 });
 
   return {
-    inputs: {
-      baseMonths,
-      weeklyHours,
-      partTimePercent,
-      schoolHoursPerWeek,
-      workHoursPerWeek,
-      cuts
+    eingaben: {
+      basisMonate,
+      wochenstunden,
+      teilzeitProzent,
+      schuleStundenProWoche,
+      arbeitStundenProWoche,
+      verkuerzungen
     },
-    calc: {
-      extensionMonths,
-      totalCutMonths,
-      newBase,
-      totalMonths,
-      totalWeeks: weeks
+    berechnung: {
+      verlaengerungMonate,
+      gesamteVerkuerzungMonate,
+      neueBasis,
+      gesamtMonate,
+      gesamtWochen: wochen
     }
   };
 }
@@ -125,115 +125,115 @@ async function getSummary() {
 /**
  * Füllt die Übersichtstabelle der Eingaben (mit i18n).
  *
- * @param {Object} inputs - Vorverarbeitete Eingabewerte aus getSummary().
+ * @param {Object} eingaben - Vorverarbeitete Eingabewerte aus holeZusammenfassung().
  */
-function fillInputsList(inputs) {
-  const list = $("#inputs-list");
-  if (!list) return;
-  const U = units();
-  list.innerHTML = "";
+function fuelleEingabenliste(eingaben) {
+  const liste = $("#inputs-list");
+  if (!liste) return;
+  const einh = einheiten();
+  liste.innerHTML = "";
 
-  const rows = [
-    [ t("inputs.dauer.label", "Reguläre Ausbildungsdauer (Monate)"), `${inputs.baseMonths}` ],
-    [ t("inputs.stunden.label", "Reguläre Wochenstunden (gesamt)"), `${inputs.weeklyHours} ${U.h}` ],
-    [ t("inputs.teilzeit.label", "Teilzeit-Anteil"), `${inputs.partTimePercent}%` ],
-    [ t("res.kv.schoolPerWeek", "Ausbildung / Woche"), `${inputs.schoolHoursPerWeek} ${U.h}` ],
-    [ t("res.kv.workPerWeek", "Arbeit / Woche"), `${inputs.workHoursPerWeek} ${U.h}` ]
+  const zeilen = [
+    [ uebersetzung("inputs.dauer.label", "Reguläre Ausbildungsdauer (Monate)"), `${eingaben.basisMonate}` ],
+    [ uebersetzung("inputs.stunden.label", "Reguläre Wochenstunden (gesamt)"), `${eingaben.wochenstunden} ${einh.h}` ],
+    [ uebersetzung("inputs.teilzeit.label", "Teilzeit-Anteil"), `${eingaben.teilzeitProzent}%` ],
+    [ uebersetzung("res.kv.schoolPerWeek", "Ausbildung / Woche"), `${eingaben.schuleStundenProWoche} ${einh.h}` ],
+    [ uebersetzung("res.kv.workPerWeek", "Arbeit / Woche"), `${eingaben.arbeitStundenProWoche} ${einh.h}` ]
   ];
 
-  for (const [k, v] of rows) {
+  for (const [schluessel, wert] of zeilen) {
     const dt = document.createElement("dt");
-    dt.textContent = k;
+    dt.textContent = schluessel;
     const dd = document.createElement("dd");
-    dd.textContent = v;
-    list.append(dt, dd);
+    dd.textContent = wert;
+    liste.append(dt, dd);
   }
 }
 
 /**
  * Zeigt Verkürzungsgründe und Zusammenfassung (mit i18n).
  *
- * @param {Object} inputs - Eingabe-Informationen inklusive ausgewählter Cuts.
- * @param {Object} calc - Berechnungsergebnisse zur Darstellung.
+ * @param {Object} eingaben - Eingabe-Informationen inklusive ausgewählter Cuts.
+ * @param {Object} berechnung - Berechnungsergebnisse zur Darstellung.
  */
-function fillCuts(inputs, calc) {
-  const wrap = $("#cuts-section");
-  const ul = $("#cuts-list");
-  const sum = $("#cuts-summary");
-  if (!wrap || !ul || !sum) return;
+function fuelleVerkuerzungen(eingaben, berechnung) {
+  const bereich = $("#cuts-section");
+  const liste = $("#cuts-list");
+  const zusammenfassung = $("#cuts-summary");
+  if (!bereich || !liste || !zusammenfassung) return;
 
-  ul.innerHTML = "";
-  const cuts = Array.isArray(inputs.cuts) ? inputs.cuts : [];
-  if (!cuts.length) { hide(wrap); return; }
-  show(wrap);
+  liste.innerHTML = "";
+  const verkuerzungen = Array.isArray(eingaben.verkuerzungen) ? eingaben.verkuerzungen : [];
+  if (!verkuerzungen.length) { verberge(bereich); return; }
+  zeige(bereich);
 
-  cuts.forEach((c) => {
+  verkuerzungen.forEach((verkuerzung) => {
     const li = document.createElement("li");
     li.className = "tag";
     // Label aus i18n je Key
-    let labelKey;
-    switch (c.key) {
-      case "abitur": labelKey = "vk.abitur.label"; break;
-      case "realschule": labelKey = "vk.realschule.label"; break;
-      case "alter_ueber_21": labelKey = "vk.alter21.label"; break;
-      case "vorkenntnisse": labelKey = "vk.vork.label"; break;
-      default: labelKey = "";
+    let beschriftungsSchluessel;
+    switch (verkuerzung.key) {
+      case "abitur": beschriftungsSchluessel = "vk.abitur.label"; break;
+      case "realschule": beschriftungsSchluessel = "vk.realschule.label"; break;
+      case "alter_ueber_21": beschriftungsSchluessel = "vk.alter21.label"; break;
+      case "vorkenntnisse": beschriftungsSchluessel = "vk.vork.label"; break;
+      default: beschriftungsSchluessel = "";
     }
-    const label = labelKey ? t(labelKey, c.key) : (c.key || "");
-    const monthsWord = t("units.months.short", "Mon.");
-    li.textContent = c.months ? `${label} (−${c.months} ${monthsWord})` : label;
-    ul.appendChild(li);
+    const beschriftung = beschriftungsSchluessel ? uebersetzung(beschriftungsSchluessel, verkuerzung.key) : (verkuerzung.key || "");
+    const monateWort = uebersetzung("units.months.short", "Mon.");
+    li.textContent = verkuerzung.months ? `${beschriftung} (−${verkuerzung.months} ${monateWort})` : beschriftung;
+    liste.appendChild(li);
   });
 
-  const monthsWordFull = t("units.months.full", "Monate");
-  const totalLabel = t("cuts.total", "Gesamt");
-  const newBaseLabel = t("cuts.newBase", "Neue Basis");
-  sum.textContent = `${totalLabel}: −${calc.totalCutMonths} ${monthsWordFull} · ${newBaseLabel}: ${calc.newBase} ${monthsWordFull}`;
+  const monateWortVoll = uebersetzung("units.months.full", "Monate");
+  const gesamtBeschriftung = uebersetzung("cuts.total", "Gesamt");
+  const neueBasisBeschriftung = uebersetzung("cuts.newBase", "Neue Basis");
+  zusammenfassung.textContent = `${gesamtBeschriftung}: −${berechnung.gesamteVerkuerzungMonate} ${monateWortVoll} · ${neueBasisBeschriftung}: ${berechnung.neueBasis} ${monateWortVoll}`;
 }
 
 /**
  * Zeigt die Hauptergebnisse (mit i18n) an.
  *
- * @param {Object} inputs - Eingaben zur Ableitung von Plausibilitätsprüfungen.
- * @param {Object} calc - Kernzahlen der Berechnung (Monate, Wochen, Stunden).
+ * @param {Object} eingaben - Eingaben zur Ableitung von Plausibilitätsprüfungen.
+ * @param {Object} berechnung - Kernzahlen der Berechnung (Monate, Wochen, Stunden).
  */
-function fillResults(inputs, calc) {
-  const U = units();
+function fuelleErgebnisse(eingaben, berechnung) {
+  const einh = einheiten();
 
   // Zahl + Einheit lokalisiert
-  const monthsWord = t("units.months.full", "Monate");
-  setText("#res-total-months", `${calc.totalMonths} ${monthsWord}`);
+  const monateWort = uebersetzung("units.months.full", "Monate");
+  setzeText("#res-total-months", `${berechnung.gesamtMonate} ${monateWort}`);
 
   // Validierungen mit i18n-Texten
-  if (calc.totalMonths < inputs.baseMonths - 12) {
-    setText('#errorTotalMonths', t("errors.tooShort", "Die Gesamtdauer darf maximal um 12 Monate verkürzt werden!"));
-  } else if (calc.totalMonths > inputs.baseMonths * 1.5) {
-    setText('#errorTotalMonths', t("errors.tooLong", "Die Gesamtdauer darf maximal das 1,5-fache verlängert werden!"));
+  if (berechnung.gesamtMonate < eingaben.basisMonate - 12) {
+    setzeText('#errorTotalMonths', uebersetzung("errors.tooShort", "Die Gesamtdauer darf maximal um 12 Monate verkürzt werden!"));
+  } else if (berechnung.gesamtMonate > eingaben.basisMonate * 1.5) {
+    setzeText('#errorTotalMonths', uebersetzung("errors.tooLong", "Die Gesamtdauer darf maximal das 1,5-fache verlängert werden!"));
   } else {
-    setText('#errorTotalMonths', "");
+    setzeText('#errorTotalMonths', "");
   }
 
   // Verlängerungszeile
-  const extensionLabel = t("res.extension.plus", "+{n} Monate Verlängerung")
-    .replace("{n}", calc.extensionMonths);
-  const noExt = t("res.extension.none", "Keine Verlängerung");
-  setText("#res-extension", calc.extensionMonths > 0 ? extensionLabel : noExt);
+  const verlaengerungBeschriftung = uebersetzung("res.extension.plus", "+{n} Monate Verlängerung")
+    .replace("{n}", berechnung.verlaengerungMonate);
+  const keineVerlaengerung = uebersetzung("res.extension.none", "Keine Verlängerung");
+  setzeText("#res-extension", berechnung.verlaengerungMonate > 0 ? verlaengerungBeschriftung : keineVerlaengerung);
 
   // Weitere Felder
-  const weeksWord = t("units.weeks.short", "Wo.");
-  setText("#res-total-weeks", `${calc.totalWeeks} ${weeksWord}`);
-  setText("#res-school-per-week", `${inputs.schoolHoursPerWeek} ${U.h}`);
-  setText("#res-work-per-week", `${inputs.workHoursPerWeek} ${U.h}`);
+  const wochenWort = uebersetzung("units.weeks.short", "Wo.");
+  setzeText("#res-total-weeks", `${berechnung.gesamtWochen} ${wochenWort}`);
+  setzeText("#res-school-per-week", `${eingaben.schuleStundenProWoche} ${einh.h}`);
+  setzeText("#res-work-per-week", `${eingaben.arbeitStundenProWoche} ${einh.h}`);
 }
 
 /** Setzt das Datum in der Fußzeile (lokalisiert). */
-function setDateStamp() {
-  const el = $("#stamp-date");
-  if (!el) return;
-  const lang = currentLang();
-  const fmt = new Intl.DateTimeFormat(lang === "en" ? "en-US" : "de-DE", { dateStyle: "long" });
-  const label = lang === "en" ? "As of" : "Stand";
-  el.textContent = `${label}: ${fmt.format(new Date())}`;
+function setzeDatumstempel() {
+  const element = $("#stamp-date");
+  if (!element) return;
+  const sprache = aktuellesSprache();
+  const format = new Intl.DateTimeFormat(sprache === "en" ? "en-US" : "de-DE", { dateStyle: "long" });
+  const beschriftung = sprache === "en" ? "As of" : "Stand";
+  element.textContent = `${beschriftung}: ${format.format(new Date())}`;
 }
 
 /* ------------------------------
@@ -243,20 +243,20 @@ function setDateStamp() {
 /**
  * Teilt die Ergebnisübersicht über die Web Share API oder die Zwischenablage.
  */
-async function shareLink() {
-  const url = new URL(location.href);
-  const title = t("share.title", "Teilzeitrechner – Ergebnis");
-  const text = t("share.text", "Hier ist meine Ergebnisübersicht.");
-  const copied = t("share.copied", "Link in die Zwischenablage kopiert.");
+async function teileLink() {
+  const adresse = new URL(location.href);
+  const titel = uebersetzung("share.title", "Teilzeitrechner – Ergebnis");
+  const text = uebersetzung("share.text", "Hier ist meine Ergebnisübersicht.");
+  const kopiert = uebersetzung("share.copied", "Link in die Zwischenablage kopiert.");
   try {
     if (navigator.share) {
-      await navigator.share({ title, text, url: url.toString() });
+      await navigator.share({ title: titel, text: text, url: adresse.toString() });
     } else {
-      await navigator.clipboard.writeText(url.toString());
-      alert(copied);
+      await navigator.clipboard.writeText(adresse.toString());
+      alert(kopiert);
     }
-  } catch (error) {
-    console.warn("Fehler beim Teilen:", error);
+  } catch (fehler) {
+    console.warn("Fehler beim Teilen:", fehler);
   }
 }
 
@@ -264,29 +264,29 @@ async function shareLink() {
  * Setzt alle gespeicherten Formular- und Spracheinstellungen zurück.
  * Die zuletzt gewählte Sprache wird erneut gespeichert.
  */
-function resetData() {
-  const msg = t("reset.confirm", "Möchten Sie wirklich alle Daten zurücksetzen?");
-  if (!confirm(msg)) return;
+function setzeDatenZurueck() {
+  const meldung = uebersetzung("reset.confirm", "Möchten Sie wirklich alle Daten zurücksetzen?");
+  if (!confirm(meldung)) return;
 
   // Sprache merken, bevor wir den Storage leeren
-  const LANG_KEY = "lang";
-  const savedLang =
-    localStorage.getItem(LANG_KEY) ||
+  const SPRACH_SCHLUESSEL = "lang";
+  const gespeicherteSprache =
+    localStorage.getItem(SPRACH_SCHLUESSEL) ||
     (window.I18N && window.I18N.lang) ||
     null;
 
   // Alles löschen (Formulardaten etc.)
-  try { localStorage.clear(); } catch (error) {
-    console.warn("Konnte localStorage nicht löschen:", error);
+  try { localStorage.clear(); } catch (fehler) {
+    console.warn("Konnte localStorage nicht löschen:", fehler);
   }
-  try { sessionStorage.clear(); } catch (error) {
-    console.warn("Konnte sessionStorage nicht löschen:", error);
+  try { sessionStorage.clear(); } catch (fehler) {
+    console.warn("Konnte sessionStorage nicht löschen:", fehler);
   }
 
   // Sprache wiederherstellen
-  if (savedLang) {
-    try { localStorage.setItem(LANG_KEY, savedLang); } catch (error) {
-      console.warn("Konnte Sprache nicht wiederherstellen:", error);
+  if (gespeicherteSprache) {
+    try { localStorage.setItem(SPRACH_SCHLUESSEL, gespeicherteSprache); } catch (fehler) {
+      console.warn("Konnte Sprache nicht wiederherstellen:", fehler);
     }
   }
 
@@ -302,43 +302,43 @@ function resetData() {
  * Initialisiert die Ergebnisansicht und lädt einmalig die aktuellen Berechnungen.
  * Speichert die letzten Daten, damit sie bei Sprachwechseln wiederverwendet werden können.
  */
-async function init() {
-  errorTotalMonths = document.getElementById('errorTotalMonths');
+async function initialisiere() {
+  fehlerGesamtmonate = document.getElementById('errorTotalMonths');
 
-  $("#btn-share")?.addEventListener("click", shareLink);
-  $("#btn-reset")?.addEventListener("click", resetData);
+  $("#btn-share")?.addEventListener("click", teileLink);
+  $("#btn-reset")?.addEventListener("click", setzeDatenZurueck);
 
   try {
-    const { inputs, calc } = await getSummary();
-    LAST_INPUTS = inputs;
-    LAST_CALC = calc;
-    fillInputsList(inputs);
-    fillCuts(inputs, calc);
-    fillResults(inputs, calc);
-    setDateStamp();
-  } catch (err) {
-    console.error("Fehler beim Laden der Daten:", err);
-    const msg = (err && err.message) ? String(err.message) : t("errors.unknown", "Unbekannter Fehler");
-    setText('#res-total-months', '–');
-    setText('#res-extension', '');
-    setText('#res-total-weeks', '–');
-    setText('#res-school-per-week', '–');
-    setText('#res-work-per-week', '–');
-    const em = document.getElementById('errorTotalMonths');
-    if (em) em.textContent = msg;
+    const { eingaben, berechnung } = await holeZusammenfassung();
+    LETZTE_EINGABEN = eingaben;
+    LETZTE_BERECHNUNG = berechnung;
+    fuelleEingabenliste(eingaben);
+    fuelleVerkuerzungen(eingaben, berechnung);
+    fuelleErgebnisse(eingaben, berechnung);
+    setzeDatumstempel();
+  } catch (fehler) {
+    console.error("Fehler beim Laden der Daten:", fehler);
+    const meldung = (fehler && fehler.message) ? String(fehler.message) : uebersetzung("errors.unknown", "Unbekannter Fehler");
+    setzeText('#res-total-months', '–');
+    setzeText('#res-extension', '');
+    setzeText('#res-total-weeks', '–');
+    setzeText('#res-school-per-week', '–');
+    setzeText('#res-work-per-week', '–');
+    const fehlerElement = document.getElementById('errorTotalMonths');
+    if (fehlerElement) fehlerElement.textContent = meldung;
   }
 }
 
 // Erst-Init
-document.addEventListener("DOMContentLoaded", init);
+document.addEventListener("DOMContentLoaded", initialisiere);
 
 // Bei Sprachwechsel nur UI neu rendern (ohne neue API-Calls)
 window.addEventListener("i18n:changed", () => {
-  if (!LAST_INPUTS || !LAST_CALC) return;
-  fillInputsList(LAST_INPUTS);
-  fillCuts(LAST_INPUTS, LAST_CALC);
-  fillResults(LAST_INPUTS, LAST_CALC);
-  setDateStamp();
+  if (!LETZTE_EINGABEN || !LETZTE_BERECHNUNG) return;
+  fuelleEingabenliste(LETZTE_EINGABEN);
+  fuelleVerkuerzungen(LETZTE_EINGABEN, LETZTE_BERECHNUNG);
+  fuelleErgebnisse(LETZTE_EINGABEN, LETZTE_BERECHNUNG);
+  setzeDatumstempel();
 });
 
 // Funktion für Berechnen-Button
@@ -349,21 +349,21 @@ window.addEventListener("i18n:changed", () => {
 async function berechnen() {
   // Daten laden und anzeigen
   try {
-    const { inputs, calc } = await getSummary();
-    fillInputsList(inputs);
-    fillCuts(inputs, calc);
-    fillResults(inputs, calc);
-    setDateStamp();
-  } catch (err) {
-    console.error("Fehler beim Laden der Daten:", err);
-    const msg = (err && err.message) ? String(err.message) : "Unbekannter Fehler";
-    setText('#res-total-months', '–');
-    setText('#res-extension', '');
-    setText('#res-total-weeks', '–');
-    setText('#res-school-per-week', '–');
-    setText('#res-work-per-week', '–');
-    const em = document.getElementById('errorTotalMonths');
-    if (em) em.textContent = msg;
+    const { eingaben, berechnung } = await holeZusammenfassung();
+    fuelleEingabenliste(eingaben);
+    fuelleVerkuerzungen(eingaben, berechnung);
+    fuelleErgebnisse(eingaben, berechnung);
+    setzeDatumstempel();
+  } catch (fehler) {
+    console.error("Fehler beim Laden der Daten:", fehler);
+    const meldung = (fehler && fehler.message) ? String(fehler.message) : "Unbekannter Fehler";
+    setzeText('#res-total-months', '–');
+    setzeText('#res-extension', '');
+    setzeText('#res-total-weeks', '–');
+    setzeText('#res-school-per-week', '–');
+    setzeText('#res-work-per-week', '–');
+    const fehlerElement = document.getElementById('errorTotalMonths');
+    if (fehlerElement) fehlerElement.textContent = meldung;
   }
 }
 
