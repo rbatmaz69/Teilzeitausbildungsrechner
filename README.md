@@ -17,7 +17,7 @@ Der Teilzeitrechner ist als klassische Drei-Schichten-Anwendung aufgebaut:
   JavaScript-Module (`static/script_eingabe.js`, `static/script_Verkuerzungsgruende_Auswaehlen.js`, `static/script_Ergebnis_Uebersicht.js`, `static/script_Sprache_Auswaehlen.js`) übernehmen Formularvalidierung, Mehrsprachigkeit und die Kommunikation mit der API.
 
 - **Service-/API-Schicht (`src/api/`)**  
-  `src/api/calculation_service.py` kapselt Request-Validierung, Fehlercodes und die Ankopplung an die Berechnungslogik. Über `src/api/__init__.py` wird eine stabile öffentliche Schnittstelle (`handle_calculation_request`) bereitgestellt, die von der Flask-App konsumiert wird.
+  `src/api/calculation_service.py` kapselt Request-Validierung, Fehlercodes und die Ankopplung an die Berechnungslogik. Über `src/api/__init__.py` wird eine stabile öffentliche Schnittstelle (`verarbeite_berechnungsanfrage`) bereitgestellt, die von der Flask-App konsumiert wird.
 
 - **Berechnungslogik (`src/calculation_logic.py`)**  
   Enthält das fachliche Herzstück mit den vier Berechnungsschritten (Verkürzung, automatische Verlängerung, gesetzliche Obergrenze, Rundung) sowie Helfern für Stunden-/Prozent-Umrechnungen. Die Funktionen sind so dokumentiert, dass sie auch unabhängig vom Web-Layer test- und nachvollziehbar bleiben.
@@ -86,10 +86,10 @@ POST /api/calculate
 Content-Type: application/json
 
 {
-  "base_duration_months": 36,
+  "basis_dauer_monate": 36,
   "vollzeit_stunden": 40,
-  "teilzeit_input": 75,
-  "input_type": "prozent",           # oder "stunden"
+  "teilzeit_eingabe": 75,
+  "eingabetyp": "prozent",           # oder "stunden"
   "verkuerzungsgruende": {
     "abitur": true,
     "realschule": false,
@@ -127,20 +127,20 @@ Fehler (400/422/500):
 
 ### Grundlegende Berechnung
 ```python
-from calculation_logic import calculate_gesamtdauer
+from src.calculation_logic import berechne_gesamtdauer
 
 # Beispiel: 36 Monate Ausbildung, 75% Teilzeit
-ergebnis = calculate_gesamtdauer(
-    base_duration_months=36,
+ergebnis = berechne_gesamtdauer(
+    basis_dauer_monate=36,
     vollzeit_stunden=40,
-    teilzeit_input=75,  # 75% Teilzeit
+    teilzeit_eingabe=75,  # 75% Teilzeit
     verkuerzungsgruende={
         'abitur': True,
         'realschule': False,
         'alter_ueber_21': False,
         'vorkenntnisse_monate': 0
     },
-    input_type='prozent'
+    eingabetyp='prozent'
 )
 
 print(f"Finale Ausbildungsdauer: {ergebnis['finale_dauer_monate']} Monate")
@@ -149,13 +149,13 @@ print(f"Finale Ausbildungsdauer: {ergebnis['finale_dauer_monate']} Monate")
 ### Mit Stunden-Input
 ```python
 # Beispiel: 30 Stunden statt 75%
-ergebnis = calculate_gesamtdauer(
-    base_duration_months=36,
+ergebnis = berechne_gesamtdauer(
+    basis_dauer_monate=36,
     vollzeit_stunden=40,
-    teilzeit_input=30,  # 30 Stunden
+    teilzeit_eingabe=30,  # 30 Stunden
     verkuerzungsgruende={'abitur': False, 'realschule': False, 
                         'alter_ueber_21': False, 'vorkenntnisse_monate': 0},
-    input_type='stunden'
+    eingabetyp='stunden'
 )
 ```
 
