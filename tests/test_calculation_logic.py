@@ -118,12 +118,17 @@ def test_verkuerzung_realschule():
     
     Erwartung: 6 Monate Verkürzung gemäß § 8 BBiG.
     36 - 6 = 30 Monate, dann 30 / 0.75 = 40 Monate.
+    Sonderregel § 8 Abs. 3 BBiG greift: 40 - 36 = 4 Monate ≤ 6 Monate,
+    daher wird die Dauer auf 36 Monate (Basis) gesetzt.
     """
     result = berechne_gesamtdauer(**MIT_REALSCHULE)
     
-    assert result["finale_dauer_monate"] == 40
+    # Sonderregel § 8 Abs. 3 greift: 40 - 36 = 4 Monate ≤ 6 Monate
+    assert result["finale_dauer_monate"] == 36
     assert result["verkuerzung_gesamt_monate"] == 6
     assert result["verkuerzte_dauer_monate"] == 30
+    # Nach Schritt 1: 30 / 0.75 = 40, aber Sonderregel setzt auf 36
+    assert result["nach_schritt1_monate"] == 40.0
 
 
 def test_verkuerzung_alter_21():
