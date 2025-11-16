@@ -17,8 +17,10 @@ für Berufsbildung vom 10. Juni 2021
 VERKUERZUNG_ABITUR = 12  # § 8 Abs. 1 BBiG - Hochschulreife
 VERKUERZUNG_REALSCHULE = 6  # § 8 Abs. 1 BBiG - Fachoberschulreife/Realschulabschluss
 VERKUERZUNG_ALTER_21 = 12  # § 8 Abs. 1 BBiG - Alter über 21 Jahre
-VERKUERZUNG_VORKENNTNISSE = 12  # § 8 Abs. 1 BBiG - Berufliche Vorkenntnisse (bis zu 12 Monate → fester Wert 12)
-VERKUERZUNG_FAMILIEN_PFLEGE = 12  # Familien- und Pflegeverantwortung (bis zu 12 Monate → fester Wert 12)
+# § 8 Abs. 1 BBiG - Berufliche Vorkenntnisse (bis zu 12 Monate → fester Wert 12)
+VERKUERZUNG_VORKENNTNISSE = 12
+# Familien- und Pflegeverantwortung (bis zu 12 Monate → fester Wert 12)
+VERKUERZUNG_FAMILIEN_PFLEGE = 12
 
 # Maximale Gesamtsumme aller Verkürzungen (Regel der zuständigen Stelle)
 MAX_GESAMT_VERKUERZUNG_MONATE = 12
@@ -49,8 +51,10 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
             - 'abitur' (bool): Hat Abitur/Hochschulreife
             - 'realschule' (bool): Hat Realschulabschluss/Fachoberschulreife
             - 'alter_ueber_21' (bool): Ist über 21 Jahre alt
-            - 'familien_pflegeverantwortung' (bool): Hat Familien- oder Pflegeverantwortung
-            - 'vorkenntnisse_monate' (int): Berufliche Vorkenntnisse, wird auf einen festen Wert von 12 Monaten abgebildet, sobald > 0
+            - 'familien_pflegeverantwortung' (bool): Hat Familien- oder
+              Pflegeverantwortung
+            - 'vorkenntnisse_monate' (int): Berufliche Vorkenntnisse,
+              wird auf einen festen Wert von 12 Monaten abgebildet, sobald > 0
 
     Returns:
         int: Verkürzte Ausbildungsdauer in Monaten
