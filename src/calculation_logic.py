@@ -13,16 +13,15 @@ für Berufsbildung vom 10. Juni 2021
 # KONSTANTEN (gemäß BBiG § 7a und § 8)
 # ============================================================================
 
-# Verkürzungsgründe (in Monaten)
+# Verkürzungsgründe (in Monaten – feste Maximalwerte)
 VERKUERZUNG_ABITUR = 12  # § 8 Abs. 1 BBiG - Hochschulreife
 VERKUERZUNG_REALSCHULE = 6  # § 8 Abs. 1 BBiG - Fachoberschulreife/Realschulabschluss
 VERKUERZUNG_ALTER_21 = 12  # § 8 Abs. 1 BBiG - Alter über 21 Jahre
-VERKUERZUNG_VORKENNTNISSE_MIN = (
-    6  # § 8 Abs. 1 BBiG - Berufliche Vorkenntnisse (Minimum)
-)
-VERKUERZUNG_VORKENNTNISSE_MAX = (
-    12  # § 8 Abs. 1 BBiG - Berufliche Vorkenntnisse (Maximum)
-)
+VERKUERZUNG_VORKENNTNISSE = 12  # § 8 Abs. 1 BBiG - Berufliche Vorkenntnisse (bis zu 12 Monate → fester Wert 12)
+VERKUERZUNG_FAMILIEN_PFLEGE = 12  # Familien- und Pflegeverantwortung (bis zu 12 Monate → fester Wert 12)
+
+# Maximale Gesamtsumme aller Verkürzungen (Regel der zuständigen Stelle)
+MAX_GESAMT_VERKUERZUNG_MONATE = 12
 
 # Teilzeit-Regelungen
 MIN_TEILZEIT_PROZENT = 50  # § 7a Abs. 1 Satz 3 BBiG - Mindestens 50% der Vollzeit
@@ -50,7 +49,8 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
             - 'abitur' (bool): Hat Abitur/Hochschulreife
             - 'realschule' (bool): Hat Realschulabschluss/Fachoberschulreife
             - 'alter_ueber_21' (bool): Ist über 21 Jahre alt
-            - 'vorkenntnisse_monate' (int): Monate Verkürzung durch Vorkenntnisse (6-12)
+            - 'familien_pflegeverantwortung' (bool): Hat Familien- oder Pflegeverantwortung
+            - 'vorkenntnisse_monate' (int): Berufliche Vorkenntnisse, wird auf einen festen Wert von 12 Monaten abgebildet, sobald > 0
 
     Returns:
         int: Verkürzte Ausbildungsdauer in Monaten
@@ -74,15 +74,17 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
     if verkuerzungsgruende.get("alter_ueber_21", False):
         verkuerzung_gesamt += VERKUERZUNG_ALTER_21
 
-    # Berufliche Vorkenntnisse: 6-12 Monate Verkürzung
+    # Familien- und Pflegeverantwortung: 12 Monate Verkürzung
+    if verkuerzungsgruende.get("familien_pflegeverantwortung", False):
+        verkuerzung_gesamt += VERKUERZUNG_FAMILIEN_PFLEGE
+
+    # Berufliche Vorkenntnisse: bis zu 12 Monate → fester Wert 12, sobald vorhanden
     vorkenntnisse = verkuerzungsgruende.get("vorkenntnisse_monate", 0)
-    if vorkenntnisse > 0:
-        # Begrenzen auf erlaubten Bereich
-        vorkenntnisse = min(
-            max(vorkenntnisse, VERKUERZUNG_VORKENNTNISSE_MIN),
-            VERKUERZUNG_VORKENNTNISSE_MAX,
-        )
-        verkuerzung_gesamt += vorkenntnisse
+    if vorkenntnisse and vorkenntnisse > 0:
+        verkuerzung_gesamt += VERKUERZUNG_VORKENNTNISSE
+
+    # Gesamtverkürzung darf maximal 12 Monate betragen (Regel der zuständigen Stelle)
+    verkuerzung_gesamt = min(verkuerzung_gesamt, MAX_GESAMT_VERKUERZUNG_MONATE)
 
     # Verkürzte Dauer berechnen
     verkuerzte_dauer = basis_dauer_monate - verkuerzung_gesamt
@@ -357,6 +359,15 @@ def berechne_gesamtdauer(
 
     # Schritt 3: Auf ganze Monate abrunden
     finale_dauer = rundung_anwenden_schritt3(nach_schritt2)
+
+    # Sonderregel § 8 Abs. 3 BBiG:
+    # Wenn die berechnete Ausbildungsdauer die Regelausbildungszeit
+    # um höchstens 6 Monate überschreitet, ist die Regelausbildungszeit
+    # als Ergebnis zu setzen (kein Nachteil für Auszubildende).
+    if finale_dauer > basis_dauer_monate:
+        differenz = finale_dauer - basis_dauer_monate
+        if differenz <= 6:
+            finale_dauer = basis_dauer_monate
 
     # Zusätzliche Informationen berechnen
     verkuerzung_gesamt = basis_dauer_monate - verkuerzte_dauer
