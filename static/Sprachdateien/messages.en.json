@@ -46,9 +46,13 @@
     },
     "vork": {
       "label": "Professional experience",
-      "badge": "Reduktion beetween 6 to 12 months",
-      "tooltip": "Practical experience or qualifications may shorten the training duration.",
-      "months": "6 months"
+      "badge": "−12 months",
+      "tooltip": "Practical experience or qualifications may shorten the training duration."
+    },
+    "familie": {
+      "label": "Family and care responsibilities",
+      "badge": "−12 months",
+      "tooltip": "If you have family or care responsibilities, a reduction is possible."
     }
   },
   "res": {
@@ -86,7 +90,13 @@
     "fetch": "Could not load data.",
     "unknown": "Unknown error",
     "tooShort": "Training can be shortened by up to 12 months only!",
-    "tooLong": "Training can be at most 1.5 times longer!"
+    "tooLong": "Training can be at most 1.5 times longer!",
+    "invalidPercent": "Please enter a valid number for the part-time percentage",
+    "percentMin": "The part-time percentage must be at least 50%",
+    "percentMax": "The part-time percentage must not exceed 100%",
+    "invalidHours": "Please enter a valid number for the part-time hours per week",
+    "hoursMin": "The hours per week must be at least half of the regular weekly hours",
+    "hoursMax": "The hours per week must not exceed the regular weekly hours"
   },
   "btn": {
     "calculate": "Show result",

@@ -174,26 +174,34 @@
           <span id="desc-alter21" class="sr-only">Bei älteren Auszubildenden ist eine Anrechnung von Vorerfahrungen möglich.</span>
 
           <!-- ====================== BERUFLICHE VORKENNTNISSE ====================== -->
-          <div>
-            <label class="tile" for="g-vork">
-              <input id="g-vork" type="checkbox" aria-describedby="desc-vork">
-              <div class="tile-body" style="flex:1">
-                <div class="tile-header">
-                  <span><span data-i18n="vk.vork.label">Berufliche Vorkenntnisse</span> <span class="badge" data-i18n="vk.vork.badge">−6 bis −12 Monate</span></span>
-                  <button type="button" class="info-btn" aria-label="Info Vorkenntnisse"
-                          data-tooltip="Praxiserfahrungen oder Abschlüsse können die Ausbildungsdauer bei Ihnen verkürzen."
-                          data-i18n-attr="data-tooltip:vk.vork.tooltip">ℹ️</button>
-                </div>
-                <div class="slider-container">
-                  <label for="vork-slider" class="sr-only">Monate der Verkürzung wählen</label>
-                  <input type="range" id="vork-slider" min="6" max="12" step="1" value="6" aria-describedby="vork-wert desc-vork">
-                  <span id="vork-wert" data-i18n="vk.vork.months">6 Monate</span>
-                </div>
+          <label class="tile" for="g-vork">
+            <input id="g-vork" type="checkbox" aria-describedby="desc-vork">
+            <div class="tile-body" style="flex:1">
+              <div class="tile-header">
+                <span><span data-i18n="vk.vork.label">Berufliche Vorkenntnisse</span> <span class="badge" data-i18n="vk.vork.badge">−12 Monate</span></span>
+                <button type="button" class="info-btn" aria-label="Info Vorkenntnisse"
+                        data-tooltip="Praxiserfahrungen oder Abschlüsse können die Ausbildungsdauer bei Ihnen verkürzen."
+                        data-i18n-attr="data-tooltip:vk.vork.tooltip">ℹ️</button>
               </div>
-              <div class="tooltip" role="tooltip" aria-hidden="true"></div>
-            </label>
-          </div>
+            </div>
+            <div class="tooltip" role="tooltip" aria-hidden="true"></div>
+          </label>
           <span id="desc-vork" class="sr-only">Praxiserfahrungen oder Abschlüsse können die Ausbildungsdauer bei Ihnen verkürzen.</span>
+
+          <!-- ====================== FAMILIEN- UND PFLEGEVERANTWORTUNG ====================== -->
+          <label class="tile" for="g-familie">
+            <input id="g-familie" type="checkbox" aria-describedby="desc-familie">
+            <div class="tile-body" style="flex:1">
+              <div class="tile-header">
+                <span><span data-i18n="vk.familie.label">Familien- und Pflegeverantwortung</span> <span class="badge" data-i18n="vk.familie.badge">−12 Monate</span></span>
+                <button type="button" class="info-btn" aria-label="Info Familien- und Pflegeverantwortung"
+                        data-tooltip="Wenn Sie Familien- oder Pflegeverantwortung haben, ist eine Verkürzung möglich."
+                        data-i18n-attr="data-tooltip:vk.familie.tooltip">ℹ️</button>
+              </div>
+            </div>
+            <div class="tooltip" role="tooltip" aria-hidden="true"></div>
+          </label>
+          <span id="desc-familie" class="sr-only">Wenn Sie Familien- oder Pflegeverantwortung haben, ist eine Verkürzung möglich.</span>
 
         </fieldset>
       </form>
@@ -221,14 +229,6 @@
             <div>
               <dt data-i18n="res.kv.total">Gesamtdauer</dt>
               <dd id="res-total-weeks">–</dd>
-            </div>
-            <div>
-              <dt data-i18n="res.kv.schoolPerWeek">Ausbildung / Woche</dt>
-              <dd id="res-school-per-week">–</dd>
-            </div>
-            <div>
-              <dt data-i18n="res.kv.workPerWeek">Arbeit / Woche</dt>
-              <dd id="res-work-per-week">–</dd>
             </div>
           </dl>
         </div>

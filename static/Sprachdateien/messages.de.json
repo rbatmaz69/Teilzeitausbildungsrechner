@@ -46,9 +46,13 @@
     },
     "vork": {
       "label": "Berufliche Vorkenntnisse",
-      "badge": "zwischen 6 und 12 Monaten Verkürzung",
-      "tooltip": "Praxiserfahrungen oder Abschlüsse können die Ausbildungsdauer verkürzen.",
-      "months": "6 Monate"
+      "badge": "−12 Monate",
+      "tooltip": "Praxiserfahrungen oder Abschlüsse können die Ausbildungsdauer verkürzen."
+    },
+    "familie": {
+      "label": "Familien- und Pflegeverantwortung",
+      "badge": "−12 Monate",
+      "tooltip": "Wenn Sie Familien- oder Pflegeverantwortung haben, ist eine Verkürzung möglich."
     }
   },
   "res": {
@@ -86,7 +90,13 @@
     "fetch": "Daten konnten nicht geladen werden.",
     "unknown": "Unbekannter Fehler",
     "tooShort": "Die Ausbildung darf höchstens 12 Monate kürzer sein!",
-    "tooLong": "Die Ausbildung darf höchstens 1,5-mal so lang sein!"
+    "tooLong": "Die Ausbildung darf höchstens 1,5-mal so lang sein!",
+    "invalidPercent": "Bitte geben Sie eine gültige Zahl für den Teilzeit-Anteil ein",
+    "percentMin": "Der Teilzeit-Anteil muss mindestens 50% betragen",
+    "percentMax": "Der Teilzeit-Anteil darf 100% nicht überschreiten",
+    "invalidHours": "Bitte geben Sie eine gültige Zahl für die Teilzeit-Wochenstunden ein",
+    "hoursMin": "Die Wochenstunden müssen mindestens die Hälfte der regulären Wochenstunden entsprechen",
+    "hoursMax": "Die Wochenstunden dürfen die regulären Wochenstunden nicht überschreiten"
   },
   "btn": {
     "calculate": "Ergebnis anzeigen",
