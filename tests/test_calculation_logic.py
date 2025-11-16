@@ -24,10 +24,13 @@ from tests.dummy_data import (
     DAUER_24_MONATE,
     DAUER_42_MONATE,
     KOMBINATION_ABITUR_REALSCHULE,
+    KOMBINATION_UEBER_12_MONATE,
     MIT_ALTER_21,
+    MIT_FAMILIEN_PFLEGE,
     MIT_REALSCHULE,
     MIT_VORKENNTNISSE_6,
     MIT_VORKENNTNISSE_12,
+    SONDERREGEL_6_MONATE,
     STUNDEN_INPUT_20_VON_40,
     STUNDEN_INPUT_30_VON_40,
     TEILZEIT_50_PROZENT,
@@ -140,13 +143,13 @@ def test_verkuerzung_vorkenntnisse_6():
     """
     Test: Verkürzung durch berufliche Vorkenntnisse (6 Monate).
     
-    Erwartung: 6 Monate Verkürzung.
-    36 - 6 = 30 Monate, dann 30 / 0.75 = 40 Monate.
+    Erwartung: Wird auf 12 Monate normalisiert (fester Wert).
+    36 - 12 = 24 Monate, dann 24 / 0.75 = 32 Monate.
     """
     result = berechne_gesamtdauer(**MIT_VORKENNTNISSE_6)
     
-    assert result["finale_dauer_monate"] == 40
-    assert result["verkuerzung_gesamt_monate"] == 6
+    assert result["finale_dauer_monate"] == 32
+    assert result["verkuerzung_gesamt_monate"] == 12
 
 
 def test_verkuerzung_vorkenntnisse_12():
@@ -171,15 +174,15 @@ def test_kombination_abitur_und_realschule():
     """
     Test: Kombination aus Abitur und Realschule.
     
-    Erwartung: Beide Verkürzungen werden addiert (18 Monate).
-    HINWEIS: Die aktuelle Implementierung addiert alle Verkürzungen.
+    Erwartung: Verkürzungen werden addiert (18 Monate), aber auf max. 12 Monate gedeckelt.
+    36 - 12 = 24 Monate, dann 24 / 0.75 = 32 Monate.
     """
     result = berechne_gesamtdauer(**KOMBINATION_ABITUR_REALSCHULE)
     
-    # Beide Verkürzungen werden addiert: 12 (Abitur) + 6 (Realschule) = 18
-    assert result["verkuerzung_gesamt_monate"] == 18
-    # 36 - 18 = 18 Monate, dann 18 / 0.75 = 24 Monate
-    assert result["finale_dauer_monate"] == 24
+    # Verkürzungen werden addiert: 12 (Abitur) + 6 (Realschule) = 18, aber gedeckelt auf 12
+    assert result["verkuerzung_gesamt_monate"] == 12
+    # 36 - 12 = 24 Monate, dann 24 / 0.75 = 32 Monate
+    assert result["finale_dauer_monate"] == 32
 
 
 # ============================================================
@@ -512,3 +515,68 @@ def test_formatierung_gibt_text_zurueck():
     
     assert isinstance(output, str)
     assert len(output) > 0
+
+
+# ============================================================
+# Neue Tests für User Story 3.1
+# ============================================================
+
+
+def test_verkuerzung_familien_pflegeverantwortung():
+    """
+    Test: Verkürzung durch Familien- und Pflegeverantwortung.
+    
+    Erwartung: 12 Monate Verkürzung.
+    36 - 12 = 24 Monate, dann 24 / 0.75 = 32 Monate.
+    """
+    result = berechne_gesamtdauer(**MIT_FAMILIEN_PFLEGE)
+    
+    assert result["finale_dauer_monate"] == 32
+    assert result["verkuerzung_gesamt_monate"] == 12
+    assert result["verkuerzte_dauer_monate"] == 24
+
+
+def test_verkuerzung_12_monate_deckel():
+    """
+    Test: Mehrere Verkürzungsgründe mit Summe > 12 Monate werden gedeckelt.
+    
+    Erwartung: Gesamtverkürzung wird auf maximal 12 Monate begrenzt.
+    """
+    result = berechne_gesamtdauer(**KOMBINATION_UEBER_12_MONATE)
+    
+    # Summe wäre 48 Monate, aber gedeckelt auf 12
+    assert result["verkuerzung_gesamt_monate"] == 12
+    assert result["verkuerzte_dauer_monate"] == 24  # 36 - 12 = 24
+    assert result["finale_dauer_monate"] == 24  # 100% Teilzeit, keine Verlängerung
+
+
+def test_sonderregel_8_abs_3_bei_6_monaten_ueberschreitung():
+    """
+    Test: Sonderregel § 8 Abs. 3 BBiG greift bei ≤ 6 Monaten Überschreitung.
+    
+    Erwartung: Wenn berechnete Dauer die Basis um ≤ 6 Monate überschreitet,
+    wird die Dauer auf die Regelausbildungszeit (Basis) gesetzt.
+    """
+    result = berechne_gesamtdauer(**SONDERREGEL_6_MONATE)
+    
+    # 36 / 0.85 ≈ 42.35 → 42 Monate (nach Abrundung)
+    # Differenz: 42 - 36 = 6 Monate → sollte auf 36 Monate gesetzt werden
+    assert result["finale_dauer_monate"] == 36
+    assert result["original_dauer_monate"] == 36
+
+
+def test_sonderregel_8_abs_3_bei_mehr_als_6_monaten():
+    """
+    Test: Sonderregel § 8 Abs. 3 BBiG greift NICHT bei > 6 Monaten Überschreitung.
+    
+    Erwartung: Wenn berechnete Dauer die Basis um > 6 Monate überschreitet,
+    bleibt die berechnete Dauer erhalten.
+    """
+    data = VOLLZEIT_OHNE_VERKUERZUNG.copy()
+    data["teilzeit_eingabe"] = 70  # 36 / 0.70 ≈ 51.43 → 51 Monate
+    # Differenz: 51 - 36 = 15 Monate > 6 → Regel greift NICHT
+    
+    result = berechne_gesamtdauer(**data)
+    
+    assert result["finale_dauer_monate"] == 51
+    assert result["original_dauer_monate"] == 36

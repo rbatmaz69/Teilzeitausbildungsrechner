@@ -16,10 +16,12 @@ für Berufsbildung vom 10. Juni 2021
 Hauptfunktion: Berechnet die Gesamtdauer der Teilzeitausbildung
 
 Führt das komplette 4-Schritt-Verfahren durch:
-1. Verkürzung anwenden
+1. Verkürzung anwenden (mit 12-Monats-Deckel)
 2. Automatische Verlängerung durch Teilzeit (Schritt 1)
 3. Gesetzliche Obergrenze prüfen (Schritt 2)
 4. Auf ganze Monate abrunden (Schritt 3)
+5. Sonderregel § 8 Abs. 3 BBiG: Wenn berechnete Dauer die Basis um ≤ 6 Monate überschreitet,
+   wird die Dauer auf die Regelausbildungszeit (Basis) gesetzt.
 
 Schritt 4 (Verlängerung bis zur nächsten Prüfung) ist optional und
 wird hier nicht implementiert, da er von konkreten Prüfungsterminen abhängt.
@@ -136,20 +138,25 @@ verschiedenen Verkürzungsgründen gemäß § 8 BBiG.
 Diese Verkürzung wird VOR der Teilzeit-Verlängerung angewendet.
 Siehe Abschnitt 5.2.2 der Empfehlung.
 
+Die Gesamtsumme aller Verkürzungen wird auf maximal 12 Monate begrenzt
+(Regel der zuständigen Stelle).
+
 Args:
     basis_dauer_monate (int): Reguläre Ausbildungsdauer in Monaten (gemäß AO)
     verkuerzungsgruende (dict): Dictionary mit Verkürzungsgründen:
-        - 'abitur' (bool): Hat Abitur/Hochschulreife
-        - 'realschule' (bool): Hat Realschulabschluss/Fachoberschulreife
-        - 'alter_ueber_21' (bool): Ist über 21 Jahre alt
-        - 'vorkenntnisse_monate' (int): Monate Verkürzung durch Vorkenntnisse (6-12)
+        - 'abitur' (bool): Hat Abitur/Hochschulreife (12 Monate)
+        - 'realschule' (bool): Hat Realschulabschluss/Fachoberschulreife (6 Monate)
+        - 'alter_ueber_21' (bool): Ist über 21 Jahre alt (12 Monate)
+        - 'familien_pflegeverantwortung' (bool): Hat Familien- oder Pflegeverantwortung (12 Monate)
+        - 'vorkenntnisse_monate' (int): Berufliche Vorkenntnisse (> 0 wird auf 12 Monate abgebildet)
 
 Returns:
     int: Verkürzte Ausbildungsdauer in Monaten
 
 Beispiel:
     >>> berechne_verkuerzung(36, {'abitur': True, 'realschule': False,
-    ...      'alter_ueber_21': False, 'vorkenntnisse_monate': 0})
+    ...      'alter_ueber_21': False, 'familien_pflegeverantwortung': False,
+    ...      'vorkenntnisse_monate': 0})
     24  # 36 - 12 = 24 Monate
 
 ### formatiere_ergebnis(ergebnis)

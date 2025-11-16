@@ -18,6 +18,7 @@ VOLLZEIT_OHNE_VERKUERZUNG = {
         "abitur": False,
         "realschule": False,
         "alter_ueber_21": False,
+        "familien_pflegeverantwortung": False,
         "vorkenntnisse_monate": 0,
     },
     "eingabetyp": "prozent",
@@ -32,6 +33,7 @@ TEILZEIT_50_PROZENT = {
         "abitur": False,
         "realschule": False,
         "alter_ueber_21": False,
+        "familien_pflegeverantwortung": False,
         "vorkenntnisse_monate": 0,
     },
     "eingabetyp": "prozent",
@@ -46,6 +48,7 @@ TEILZEIT_75_MIT_ABITUR = {
         "abitur": True,
         "realschule": False,
         "alter_ueber_21": False,
+        "familien_pflegeverantwortung": False,
         "vorkenntnisse_monate": 0,
     },
     "eingabetyp": "prozent",
@@ -60,6 +63,7 @@ MIT_REALSCHULE = {
         "abitur": False,
         "realschule": True,
         "alter_ueber_21": False,
+        "familien_pflegeverantwortung": False,
         "vorkenntnisse_monate": 0,
     },
     "eingabetyp": "prozent",
@@ -74,12 +78,13 @@ MIT_ALTER_21 = {
         "abitur": False,
         "realschule": False,
         "alter_ueber_21": True,
+        "familien_pflegeverantwortung": False,
         "vorkenntnisse_monate": 0,
     },
     "eingabetyp": "prozent",
 }
 
-# Vorkenntnisse 6 Monate
+# Vorkenntnisse (wird auf 12 Monate normalisiert)
 MIT_VORKENNTNISSE_6 = {
     "basis_dauer_monate": 36,
     "vollzeit_stunden": 40,
@@ -88,7 +93,8 @@ MIT_VORKENNTNISSE_6 = {
         "abitur": False,
         "realschule": False,
         "alter_ueber_21": False,
-        "vorkenntnisse_monate": 6,
+        "familien_pflegeverantwortung": False,
+        "vorkenntnisse_monate": 6,  # Wird auf 12 Monate normalisiert
     },
     "eingabetyp": "prozent",
 }
@@ -102,12 +108,28 @@ MIT_VORKENNTNISSE_12 = {
         "abitur": False,
         "realschule": False,
         "alter_ueber_21": False,
+        "familien_pflegeverantwortung": False,
         "vorkenntnisse_monate": 12,
     },
     "eingabetyp": "prozent",
 }
 
-# Kombination: Abitur + Realschule
+# Familien- und Pflegeverantwortung
+MIT_FAMILIEN_PFLEGE = {
+    "basis_dauer_monate": 36,
+    "vollzeit_stunden": 40,
+    "teilzeit_eingabe": 75,
+    "verkuerzungsgruende": {
+        "abitur": False,
+        "realschule": False,
+        "alter_ueber_21": False,
+        "familien_pflegeverantwortung": True,
+        "vorkenntnisse_monate": 0,
+    },
+    "eingabetyp": "prozent",
+}
+
+# Kombination: Abitur + Realschule (18 Monate → gedeckelt auf 12)
 KOMBINATION_ABITUR_REALSCHULE = {
     "basis_dauer_monate": 36,
     "vollzeit_stunden": 40,
@@ -116,6 +138,40 @@ KOMBINATION_ABITUR_REALSCHULE = {
         "abitur": True,
         "realschule": True,
         "alter_ueber_21": False,
+        "familien_pflegeverantwortung": False,
+        "vorkenntnisse_monate": 0,
+    },
+    "eingabetyp": "prozent",
+}
+
+# Kombination mehrerer Gründe über 12 Monate (gedeckelt auf 12)
+KOMBINATION_UEBER_12_MONATE = {
+    "basis_dauer_monate": 36,
+    "vollzeit_stunden": 40,
+    "teilzeit_eingabe": 100,
+    "verkuerzungsgruende": {
+        "abitur": True,  # 12 Monate
+        "realschule": False,
+        "alter_ueber_21": True,  # 12 Monate
+        "familien_pflegeverantwortung": True,  # 12 Monate
+        "vorkenntnisse_monate": 12,  # 12 Monate
+        # Summe: 48 Monate → gedeckelt auf 12 Monate
+    },
+    "eingabetyp": "prozent",
+}
+
+# Sonderregel § 8 Abs. 3: Berechnete Dauer überschreitet Basis um ≤ 6 Monate
+# 36 Monate Basis, 75% Teilzeit → 48 Monate, aber nur +12 Monate Überschreitung
+# Test mit kleinerer Teilzeit, die genau +6 Monate ergibt
+SONDERREGEL_6_MONATE = {
+    "basis_dauer_monate": 36,
+    "vollzeit_stunden": 40,
+    "teilzeit_eingabe": 85,  # 36 / 0.85 ≈ 42.35 → 42 Monate → +6 Monate → sollte auf 36 gesetzt werden
+    "verkuerzungsgruende": {
+        "abitur": False,
+        "realschule": False,
+        "alter_ueber_21": False,
+        "familien_pflegeverantwortung": False,
         "vorkenntnisse_monate": 0,
     },
     "eingabetyp": "prozent",
@@ -130,6 +186,7 @@ STUNDEN_INPUT_30_VON_40 = {
         "abitur": False,
         "realschule": False,
         "alter_ueber_21": False,
+        "familien_pflegeverantwortung": False,
         "vorkenntnisse_monate": 0,
     },
     "eingabetyp": "stunden",
@@ -144,6 +201,7 @@ STUNDEN_INPUT_20_VON_40 = {
         "abitur": False,
         "realschule": False,
         "alter_ueber_21": False,
+        "familien_pflegeverantwortung": False,
         "vorkenntnisse_monate": 0,
     },
     "eingabetyp": "stunden",
@@ -158,6 +216,7 @@ DAUER_24_MONATE = {
         "abitur": False,
         "realschule": False,
         "alter_ueber_21": False,
+        "familien_pflegeverantwortung": False,
         "vorkenntnisse_monate": 0,
     },
     "eingabetyp": "prozent",
@@ -171,6 +230,7 @@ DAUER_42_MONATE = {
         "abitur": False,
         "realschule": False,
         "alter_ueber_21": False,
+        "familien_pflegeverantwortung": False,
         "vorkenntnisse_monate": 0,
     },
     "eingabetyp": "prozent",
@@ -189,6 +249,7 @@ UNGUELTIG_TEILZEIT_UNTER_50 = {
         "abitur": False,
         "realschule": False,
         "alter_ueber_21": False,
+        "familien_pflegeverantwortung": False,
         "vorkenntnisse_monate": 0,
     },
     "eingabetyp": "prozent",
@@ -203,6 +264,7 @@ UNGUELTIG_TEILZEIT_UEBER_100 = {
         "abitur": False,
         "realschule": False,
         "alter_ueber_21": False,
+        "familien_pflegeverantwortung": False,
         "vorkenntnisse_monate": 0,
     },
     "eingabetyp": "prozent",
@@ -217,6 +279,7 @@ UNGUELTIG_NEGATIVE_MONATE = {
         "abitur": False,
         "realschule": False,
         "alter_ueber_21": False,
+        "familien_pflegeverantwortung": False,
         "vorkenntnisse_monate": 0,
     },
     "eingabetyp": "prozent",
@@ -231,6 +294,7 @@ UNGUELTIG_STUNDEN_UEBER_VOLLZEIT = {
         "abitur": False,
         "realschule": False,
         "alter_ueber_21": False,
+        "familien_pflegeverantwortung": False,
         "vorkenntnisse_monate": 0,
     },
     "eingabetyp": "stunden",
@@ -245,8 +309,8 @@ UNGUELTIG_TEILZEIT_0 = {
         "abitur": False,
         "realschule": False,
         "alter_ueber_21": False,
+        "familien_pflegeverantwortung": False,
         "vorkenntnisse_monate": 0,
     },
     "eingabetyp": "prozent",
 }
-
