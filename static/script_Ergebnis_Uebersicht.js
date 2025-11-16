@@ -50,6 +50,7 @@ async function holeZusammenfassung() {
   const realschule = !!document.getElementById("g-realschule")?.checked;
   const alter21 = !!document.getElementById("g-alter21")?.checked;
   const vork = !!document.getElementById("g-vork")?.checked;
+  const familie = !!document.getElementById("g-familie")?.checked;
 
   const basisMonate = Number(basisMonateElement?.value || 0);
   const wochenstunden = Number(wochenstundenElement?.value || 0);
@@ -64,7 +65,8 @@ async function holeZusammenfassung() {
       abitur,
       realschule,
       alter_ueber_21: alter21,
-      vorkenntnisse_monate: vork ? 6 : 0
+      familien_pflegeverantwortung: familie,
+      vorkenntnisse_monate: vork ? 12 : 0
     }
   };
 
@@ -94,22 +96,18 @@ async function holeZusammenfassung() {
   const neueBasis = Number(ergebnis.verkuerzte_dauer_monate || 0);
   const wochen = Math.round(gesamtMonate * 4.33);
 
-  const arbeitStundenProWoche = Math.min(wochenstunden, Number(ergebnis.wochenstunden || 0));
-  const schuleStundenProWoche = Math.max(0, wochenstunden - arbeitStundenProWoche);
-
   const verkuerzungen = [];
   if (abitur) verkuerzungen.push({ key: "abitur", months: 12 });
   if (realschule) verkuerzungen.push({ key: "realschule", months: 6 });
   if (alter21) verkuerzungen.push({ key: "alter_ueber_21", months: 12 });
-  if (vork) verkuerzungen.push({ key: "vorkenntnisse", months: 6 });
+  if (vork) verkuerzungen.push({ key: "vorkenntnisse", months: 12 });
+  if (familie) verkuerzungen.push({ key: "familien_pflegeverantwortung", months: 12 });
 
   return {
     eingaben: {
       basisMonate,
       wochenstunden,
       teilzeitProzent,
-      schuleStundenProWoche,
-      arbeitStundenProWoche,
       verkuerzungen
     },
     berechnung: {
@@ -136,9 +134,7 @@ function fuelleEingabenliste(eingaben) {
   const zeilen = [
     [ uebersetzung("inputs.dauer.label", "Reguläre Ausbildungsdauer (Monate)"), `${eingaben.basisMonate}` ],
     [ uebersetzung("inputs.stunden.label", "Reguläre Wochenstunden (gesamt)"), `${eingaben.wochenstunden} ${einh.h}` ],
-    [ uebersetzung("inputs.teilzeit.label", "Teilzeit-Anteil"), `${eingaben.teilzeitProzent}%` ],
-    [ uebersetzung("res.kv.schoolPerWeek", "Ausbildung / Woche"), `${eingaben.schuleStundenProWoche} ${einh.h}` ],
-    [ uebersetzung("res.kv.workPerWeek", "Arbeit / Woche"), `${eingaben.arbeitStundenProWoche} ${einh.h}` ]
+    [ uebersetzung("inputs.teilzeit.label", "Teilzeit-Anteil"), `${eingaben.teilzeitProzent}%` ]
   ];
 
   for (const [schluessel, wert] of zeilen) {
@@ -177,6 +173,7 @@ function fuelleVerkuerzungen(eingaben, berechnung) {
       case "realschule": beschriftungsSchluessel = "vk.realschule.label"; break;
       case "alter_ueber_21": beschriftungsSchluessel = "vk.alter21.label"; break;
       case "vorkenntnisse": beschriftungsSchluessel = "vk.vork.label"; break;
+      case "familien_pflegeverantwortung": beschriftungsSchluessel = "vk.familie.label"; break;
       default: beschriftungsSchluessel = "";
     }
     const beschriftung = beschriftungsSchluessel ? uebersetzung(beschriftungsSchluessel, verkuerzung.key) : (verkuerzung.key || "");
@@ -222,8 +219,6 @@ function fuelleErgebnisse(eingaben, berechnung) {
   // Weitere Felder
   const wochenWort = uebersetzung("units.weeks.short", "Wo.");
   setzeText("#res-total-weeks", `${berechnung.gesamtWochen} ${wochenWort}`);
-  setzeText("#res-school-per-week", `${eingaben.schuleStundenProWoche} ${einh.h}`);
-  setzeText("#res-work-per-week", `${eingaben.arbeitStundenProWoche} ${einh.h}`);
 }
 
 /** Setzt das Datum in der Fußzeile (lokalisiert). */
@@ -322,8 +317,6 @@ async function initialisiere() {
     setzeText('#res-total-months', '–');
     setzeText('#res-extension', '');
     setzeText('#res-total-weeks', '–');
-    setzeText('#res-school-per-week', '–');
-    setzeText('#res-work-per-week', '–');
     const fehlerElement = document.getElementById('errorTotalMonths');
     if (fehlerElement) fehlerElement.textContent = meldung;
   }
@@ -360,8 +353,6 @@ async function berechnen() {
     setzeText('#res-total-months', '–');
     setzeText('#res-extension', '');
     setzeText('#res-total-weeks', '–');
-    setzeText('#res-school-per-week', '–');
-    setzeText('#res-work-per-week', '–');
     const fehlerElement = document.getElementById('errorTotalMonths');
     if (fehlerElement) fehlerElement.textContent = meldung;
   }
