@@ -206,7 +206,13 @@ def _benoetige_dictionary(value: Any, field_name: str) -> Dict[str, Any]:
 
 
 def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
-    allowed_keys = {"abitur", "realschule", "alter_ueber_21", "vorkenntnisse_monate"}
+    allowed_keys = {
+        "abitur",
+        "realschule",
+        "alter_ueber_21",
+        "familien_pflegeverantwortung",
+        "vorkenntnisse_monate",
+    }
     unexpected_keys = sorted(set(data.keys()) - allowed_keys)
     if unexpected_keys:
         raise NutzlastValidierungsFehler(
@@ -214,7 +220,13 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
             details={"field": "verkuerzungsgruende", "unexpected": unexpected_keys},
         )
 
-    for key in {"abitur", "realschule", "alter_ueber_21"}:
+    bool_keys = {
+        "abitur",
+        "realschule",
+        "alter_ueber_21",
+        "familien_pflegeverantwortung",
+    }
+    for key in bool_keys:
         value = data.get(key, False)
         if not isinstance(value, bool):
             raise NutzlastValidierungsFehler(
@@ -232,9 +244,16 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
 
 
 def _normalisiere_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]:
+    # Berufserfahrung/Vorkenntnisse: Wenn > 0, wird auf festen 12-Monats-Wert abgebildet
+    vorkenntnisse = data.get("vorkenntnisse_monate", 0)
+    vorkenntnisse_monate = 12 if vorkenntnisse and vorkenntnisse > 0 else 0
+
     return {
         "abitur": bool(data.get("abitur", False)),
         "realschule": bool(data.get("realschule", False)),
         "alter_ueber_21": bool(data.get("alter_ueber_21", False)),
-        "vorkenntnisse_monate": data.get("vorkenntnisse_monate", 0),
+        "familien_pflegeverantwortung": bool(
+            data.get("familien_pflegeverantwortung", False)
+        ),
+        "vorkenntnisse_monate": vorkenntnisse_monate,
     }

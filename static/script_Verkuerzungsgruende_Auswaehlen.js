@@ -7,8 +7,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const abiturKontrollkaestchen = document.getElementById('g-abitur');
   const realschuleKontrollkaestchen = document.getElementById('g-realschule');
-  const vorkSchieberegler = document.getElementById('vork-slider');
-  const vorkWert = document.getElementById('vork-wert');
 
   /* ========== Tooltips (touch-optimiert) ========== */
   document.querySelectorAll('.info-btn').forEach(schaltflaeche => {
@@ -36,20 +34,19 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Exklusives Verhalten für Abitur- und Realschule-Checkboxen
-  abiturKontrollkaestchen.addEventListener('change', () => {
-    if (abiturKontrollkaestchen.checked) {
-      realschuleKontrollkaestchen.checked = false;
-    }
-  });
+  if (abiturKontrollkaestchen) {
+    abiturKontrollkaestchen.addEventListener('change', () => {
+      if (abiturKontrollkaestchen.checked && realschuleKontrollkaestchen) {
+        realschuleKontrollkaestchen.checked = false;
+      }
+    });
+  }
 
-  realschuleKontrollkaestchen.addEventListener('change', () => {
-    if (realschuleKontrollkaestchen.checked) {
-      abiturKontrollkaestchen.checked = false;
-    }
-  });
-
-  vorkSchieberegler.addEventListener('input', () => {
-    const monateBezeichnung = window.I18N?.t("units.months.full", "Monate") || "Monate";
-    vorkWert.textContent = `${vorkSchieberegler.value} ${monateBezeichnung}`;
-  });
+  if (realschuleKontrollkaestchen) {
+    realschuleKontrollkaestchen.addEventListener('change', () => {
+      if (realschuleKontrollkaestchen.checked && abiturKontrollkaestchen) {
+        abiturKontrollkaestchen.checked = false;
+      }
+    });
+  }
 });

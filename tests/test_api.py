@@ -176,7 +176,7 @@ def test_berechnung_mit_vorkenntnissen_erfolgreich(client):
     
     Erwartung:
     - HTTP 200 OK
-    - Verkürzung um 6 Monate (Vorkenntnisse)
+    - Verkürzung um 12 Monate (Vorkenntnisse werden auf festen 12-Monats-Wert normalisiert)
     """
     resp = client.post(
         "/api/calculate",
@@ -188,7 +188,7 @@ def test_berechnung_mit_vorkenntnissen_erfolgreich(client):
     data = resp.get_json()
     
     result = data["result"]
-    assert result["verkuerzung_gesamt_monate"] == 6
+    assert result["verkuerzung_gesamt_monate"] == 12
 
 
 def test_berechnung_mit_stundeneingabe_erfolgreich(client):
