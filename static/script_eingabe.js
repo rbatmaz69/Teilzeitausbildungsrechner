@@ -102,12 +102,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   })
   
-  // Entferne Fehler bei erneutem Tippen
+  // Entferne Fehler bei erneutem Tippen und prüfe Max sofort
   dauerEingabe.addEventListener("input", () => {
+    // Fehler entfernen wenn User wieder tippt
     if (aktuellerFehlerDauer) {
       dauerEingabe.classList.remove('error');
       aktuellerFehlerDauer = null;
       if (fehlerDauer) fehlerDauer.textContent = '';
+    }
+    
+    // Max-Validierung sofort beim Tippen
+    const ausbildungsdauer = parseFloat(dauerEingabe.value);
+    if (!isNaN(ausbildungsdauer) && ausbildungsdauer > 60) {
+      dauerEingabe.value = 60;
+      dauerEingabe.classList.add('error');
+      aktuellerFehlerDauer = "errors.durationMax";
+      if (fehlerDauer) fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Maximal 60 Monate erlaubt");
     }
   })
   
@@ -181,12 +191,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   })
   
-  // Bei manueller Eingabe der Wochenstunden: Fehler löschen (aber Buttons NICHT deselektieren)
+  // Bei manueller Eingabe der Wochenstunden: Fehler löschen und Max sofort prüfen
   wochenstundenEingabe.addEventListener("input", () => {
+    // Fehler entfernen wenn User wieder tippt
     if (aktuellerFehlerRegularStunden) {
       wochenstundenEingabe.classList.remove('error');
       aktuellerFehlerRegularStunden = null;
       if (fehlerRegularStunden) fehlerRegularStunden.textContent = '';
+    }
+    
+    // Max-Validierung sofort beim Tippen
+    const wochenstunden = parseFloat(wochenstundenEingabe.value);
+    if (!isNaN(wochenstunden) && wochenstunden > 48) {
+      wochenstundenEingabe.value = 48;
+      wochenstundenEingabe.classList.add('error');
+      aktuellerFehlerRegularStunden = "errors.regularHoursMax";
+      if (fehlerRegularStunden) fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Maximal 48 Wochenstunden erlaubt");
     }
   })
   
@@ -196,6 +216,12 @@ document.addEventListener("DOMContentLoaded", () => {
     aktiverButtonTyp = null;
     aktiverButtonWert = null;
     loescheAktiveSchaltflaechen();
+    // Entferne Min-Fehler beim erneuten Tippen (User könnte gerade mehr eingeben)
+    if (aktuellerFehlerProzent === "errors.percentMin" || aktuellerFehlerProzent === "errors.invalidPercent") {
+      teilzeitProzentEingabe.classList.remove('error');
+      aktuellerFehlerProzent = null;
+      fehlerProzent.textContent = '';
+    }
     synchronisiereStunden();
   })
   
@@ -211,6 +237,12 @@ document.addEventListener("DOMContentLoaded", () => {
     aktiverButtonTyp = null;
     aktiverButtonWert = null;
     loescheAktiveSchaltflaechen();
+    // Entferne Min-Fehler beim erneuten Tippen (User könnte gerade mehr eingeben)
+    if (aktuellerFehlerStunden === "errors.hoursMin" || aktuellerFehlerStunden === "errors.invalidHours") {
+      teilzeitStundenEingabe.classList.remove('error');
+      aktuellerFehlerStunden = null;
+      fehlerStunden.textContent = '';
+    }
     synchronisiereProzent();
   })
   
@@ -301,13 +333,17 @@ document.addEventListener("DOMContentLoaded", () => {
         teilzeitProzentEingabe.classList.add('error');
         teilzeitStundenEingabe.classList.add('error');
       } else {
-        fehlerProzent.textContent = '';
-        fehlerStunden.textContent = '';
-        aktuellerFehlerProzent = null;
-        aktuellerFehlerStunden = null;
-        // Fehler-Indikation entfernen
-        teilzeitProzentEingabe.classList.remove('error');
-        teilzeitStundenEingabe.classList.remove('error');
+        // Nur Max-Fehler löschen, nicht Min-Fehler (die von pruefeMindestUndMaximal kommen)
+        if (aktuellerFehlerProzent === "errors.percentMax") {
+          fehlerProzent.textContent = '';
+          aktuellerFehlerProzent = null;
+          teilzeitProzentEingabe.classList.remove('error');
+        }
+        if (aktuellerFehlerStunden === "errors.hoursMax") {
+          fehlerStunden.textContent = '';
+          aktuellerFehlerStunden = null;
+          teilzeitStundenEingabe.classList.remove('error');
+        }
       }
       
       teilzeitStundenEingabe.value = formatiereZahl(berechneteStunden);
@@ -339,13 +375,17 @@ document.addEventListener("DOMContentLoaded", () => {
         teilzeitProzentEingabe.classList.add('error');
         teilzeitStundenEingabe.classList.add('error');
       } else {
-        fehlerProzent.textContent = '';
-        fehlerStunden.textContent = '';
-        aktuellerFehlerProzent = null;
-        aktuellerFehlerStunden = null;
-        // Fehler-Indikation entfernen
-        teilzeitProzentEingabe.classList.remove('error');
-        teilzeitStundenEingabe.classList.remove('error');
+        // Nur Max-Fehler löschen, nicht Min-Fehler (die von pruefeMindestUndMaximal kommen)
+        if (aktuellerFehlerProzent === "errors.percentMax") {
+          fehlerProzent.textContent = '';
+          aktuellerFehlerProzent = null;
+          teilzeitProzentEingabe.classList.remove('error');
+        }
+        if (aktuellerFehlerStunden === "errors.hoursMax") {
+          fehlerStunden.textContent = '';
+          aktuellerFehlerStunden = null;
+          teilzeitStundenEingabe.classList.remove('error');
+        }
       }
       
       teilzeitProzentEingabe.value = formatiereZahl(berechneterProzent);
