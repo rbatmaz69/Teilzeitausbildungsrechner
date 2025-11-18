@@ -122,6 +122,9 @@ document.addEventListener("DOMContentLoaded", () => {
           fehlerStunden.textContent = '';
           aktuellerFehlerProzent = null;
           aktuellerFehlerStunden = null;
+          // Visuelle Fehlerindikation entfernen
+          teilzeitProzentEingabe.classList.remove('error');
+          teilzeitStundenEingabe.classList.remove('error');
         }
       } else if (typ === "hours") {
         // Validierung: Stunden-Button nur setzen, wenn Wert ≤ reguläre Wochenstunden
@@ -135,10 +138,14 @@ document.addEventListener("DOMContentLoaded", () => {
           fehlerStunden.textContent = '';
           aktuellerFehlerProzent = null;
           aktuellerFehlerStunden = null;
+          // Visuelle Fehlerindikation entfernen
+          teilzeitProzentEingabe.classList.remove('error');
+          teilzeitStundenEingabe.classList.remove('error');
         } else if (!isNaN(wochenStunden) && wert > wochenStunden) {
           // Wenn Wert über regulären Wochenstunden liegt, Fehler anzeigen und nicht setzen
           aktuellerFehlerStunden = "errors.hoursMax";
           fehlerStunden.textContent = uebersetzung(aktuellerFehlerStunden, "Die Wochenstunden dürfen die regulären Wochenstunden nicht überschreiten");
+          teilzeitStundenEingabe.classList.add('error');
         }
       }
     });
@@ -165,11 +172,17 @@ document.addEventListener("DOMContentLoaded", () => {
         aktuellerFehlerStunden = "errors.hoursMax";
         fehlerProzent.textContent = uebersetzung(aktuellerFehlerProzent, "Der Teilzeit-Anteil darf 100% nicht überschreiten");
         fehlerStunden.textContent = uebersetzung(aktuellerFehlerStunden, "Die Wochenstunden dürfen die regulären Wochenstunden nicht überschreiten");
+        // Visuelle Fehlerindikation
+        teilzeitProzentEingabe.classList.add('error');
+        teilzeitStundenEingabe.classList.add('error');
       } else {
         fehlerProzent.textContent = '';
         fehlerStunden.textContent = '';
         aktuellerFehlerProzent = null;
         aktuellerFehlerStunden = null;
+        // Fehler-Indikation entfernen
+        teilzeitProzentEingabe.classList.remove('error');
+        teilzeitStundenEingabe.classList.remove('error');
       }
       
       teilzeitStundenEingabe.value = berechneteStunden.toFixed(1);
@@ -197,11 +210,17 @@ document.addEventListener("DOMContentLoaded", () => {
         aktuellerFehlerStunden = "errors.hoursMax";
         fehlerProzent.textContent = uebersetzung(aktuellerFehlerProzent, "Der Teilzeit-Anteil darf 100% nicht überschreiten");
         fehlerStunden.textContent = uebersetzung(aktuellerFehlerStunden, "Die Wochenstunden dürfen die regulären Wochenstunden nicht überschreiten");
+        // Visuelle Fehlerindikation
+        teilzeitProzentEingabe.classList.add('error');
+        teilzeitStundenEingabe.classList.add('error');
       } else {
         fehlerProzent.textContent = '';
         fehlerStunden.textContent = '';
         aktuellerFehlerProzent = null;
         aktuellerFehlerStunden = null;
+        // Fehler-Indikation entfernen
+        teilzeitProzentEingabe.classList.remove('error');
+        teilzeitStundenEingabe.classList.remove('error');
       }
       
       teilzeitProzentEingabe.value = berechneterProzent.toFixed(1);
@@ -221,6 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
       teilzeitProzentEingabe.value = teilzeitProzentMinimum;
       aktuellerFehlerProzent = "errors.invalidPercent";
       fehlerProzent.textContent = uebersetzung(aktuellerFehlerProzent, "Bitte geben Sie eine gültige Zahl für den Teilzeit-Anteil ein");
+      teilzeitProzentEingabe.classList.add('error');
     }
 
     // Prüfung des Mindestwerts
@@ -228,6 +248,7 @@ document.addEventListener("DOMContentLoaded", () => {
       teilzeitProzentEingabe.value = teilzeitProzentMinimum;
       aktuellerFehlerProzent = "errors.percentMin";
       fehlerProzent.textContent = uebersetzung(aktuellerFehlerProzent, "Der Teilzeit-Anteil muss mindestens 50% betragen");
+      teilzeitProzentEingabe.classList.add('error');
     }
 
     // Prüfung des Maximalwerts
@@ -235,11 +256,13 @@ document.addEventListener("DOMContentLoaded", () => {
       teilzeitProzentEingabe.value = 100;
       aktuellerFehlerProzent = "errors.percentMax";
       fehlerProzent.textContent = uebersetzung(aktuellerFehlerProzent, "Der Teilzeit-Anteil darf 100% nicht überschreiten");
+      teilzeitProzentEingabe.classList.add('error');
     }
 
     else {
       fehlerProzent.textContent = '';
       aktuellerFehlerProzent = null;
+      teilzeitProzentEingabe.classList.remove('error');
     }
   }
   
@@ -256,6 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
       teilzeitStundenEingabe.value = wochenstundenEingabe.value / 2;
       aktuellerFehlerStunden = "errors.invalidHours";
       fehlerStunden.textContent = uebersetzung(aktuellerFehlerStunden, "Bitte geben Sie eine gültige Zahl für die Teilzeit-Wochenstunden ein");
+      teilzeitStundenEingabe.classList.add('error');
     }
 
     // Prüfung des Mindestwerts
@@ -263,6 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
       teilzeitStundenEingabe.value = wochenstundenEingabe.value / 2;
       aktuellerFehlerStunden = "errors.hoursMin";
       fehlerStunden.textContent = uebersetzung(aktuellerFehlerStunden, "Die Wochenstunden müssen mindestens die Hälfte der regulären Wochenstunden entsprechen");
+      teilzeitStundenEingabe.classList.add('error');
     }
 
     // Prüfung des Maximalwerts
@@ -270,11 +295,13 @@ document.addEventListener("DOMContentLoaded", () => {
       teilzeitStundenEingabe.value = wochenstundenEingabe.value;
       aktuellerFehlerStunden = "errors.hoursMax";
       fehlerStunden.textContent = uebersetzung(aktuellerFehlerStunden, "Die Wochenstunden dürfen die regulären Wochenstunden nicht überschreiten");
+      teilzeitStundenEingabe.classList.add('error');
     }
 
     else {
       fehlerStunden.textContent = '';
       aktuellerFehlerStunden = null;
+      teilzeitStundenEingabe.classList.remove('error');
     }
   }
   
