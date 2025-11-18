@@ -97,10 +97,14 @@
     "invalidHours": "Value corrected to minimum (invalid input)",
     "hoursMin": "Value corrected to minimum (at least 50% required)",
     "hoursMax": "Value corrected to maximum (regular hours)",
-    "regularHoursMin": "Value corrected to 10 hours (minimum)",
-    "regularHoursMax": "Value corrected to 48 hours (maximum)",
-    "durationMin": "Value corrected to 12 months (minimum)",
-    "durationMax": "Value corrected to 60 months (maximum)"
+    "regularHoursMin": "The value must be at least 10 hours",
+    "regularHoursMax": "The value must not exceed 48 hours",
+    "durationMin": "The value must be at least 12 months",
+    "durationMax": "The value must not exceed 60 months",
+    "percentMin": "The value must be at least 50%",
+    "percentMax": "The value must not exceed 100%",
+    "hoursMin": "The value must be at least 50% of regular hours",
+    "hoursMax": "The value must not exceed the regular weekly hours"
   },
   "btn": {
     "calculate": "Show result",

@@ -97,10 +97,14 @@
     "invalidHours": "Wert wurde auf Minimum korrigiert (ungültige Eingabe)",
     "hoursMin": "Wert wurde auf Minimum korrigiert (mindestens 50% erforderlich)",
     "hoursMax": "Wert wurde auf Maximum korrigiert (reguläre Stunden)",
-    "regularHoursMin": "Wert wurde auf 10 Stunden korrigiert (Minimum)",
-    "regularHoursMax": "Wert wurde auf 48 Stunden korrigiert (Maximum)",
-    "durationMin": "Wert wurde auf 12 Monate korrigiert (Minimum)",
-    "durationMax": "Wert wurde auf 60 Monate korrigiert (Maximum)"
+    "regularHoursMin": "Der Wert muss mindestens 10 Stunden betragen",
+    "regularHoursMax": "Der Wert darf maximal 48 Stunden betragen",
+    "durationMin": "Der Wert muss mindestens 12 Monate betragen",
+    "durationMax": "Der Wert darf maximal 60 Monate betragen",
+    "percentMin": "Der Wert muss mindestens 50% betragen",
+    "percentMax": "Der Wert darf maximal 100% betragen",
+    "hoursMin": "Der Wert muss mindestens 50% der regulären Stunden betragen",
+    "hoursMax": "Der Wert darf die regulären Wochenstunden nicht überschreiten"
   },
   "btn": {
     "calculate": "Ergebnis anzeigen",

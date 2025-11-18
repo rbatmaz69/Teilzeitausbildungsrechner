@@ -42,7 +42,7 @@
           <span class="info-icon" data-tooltip="Die normale Dauer Ihrer Ausbildung bei Vollzeit"
                 data-i18n-attr="data-tooltip:inputs.dauer.tooltip" aria-hidden="true">i</span>
         </label>
-        <input type="number" id="dauer" value="36" min="12" max="60" step="1" required aria-describedby="hint-dauer">
+        <input type="number" id="dauer" value="36" step="1" required aria-describedby="hint-dauer">
         <span class="error-message" id="errorDauer"></span>
         <!-- Unsichtbarer Hilfetext spiegelt das Tooltip (für SR) -->
         <span id="hint-dauer" class="sr-only">Die normale Dauer Ihrer Ausbildung bei Vollzeit.</span>
@@ -55,7 +55,7 @@
           <span class="info-icon" data-tooltip="Ihre gesamten Wochenstunden inkl. Berufsschule"
                 data-i18n-attr="data-tooltip:inputs.stunden.tooltip" aria-hidden="true">i</span>
         </label>
-        <input type="number" id="stunden" value="40" min="10" max="48" step="1" required aria-describedby="hint-stunden">
+        <input type="number" id="stunden" value="40" step="1" required aria-describedby="hint-stunden">
         <span class="error-message" id="errorRegularStunden"></span>
         <span id="hint-stunden" class="sr-only">Ihre gesamten Wochenstunden inkl. Berufsschule.</span>
       </div>
@@ -73,7 +73,7 @@
           <div class="input-group half">
             <label for="teilzeitProzent" data-i18n="inputs.teilzeit.percent">Prozent</label>
             <div class="input-with-unit">
-              <input type="number" id="teilzeitProzent" value="75" min="50" max="100" step="5" aria-describedby="hint-teilzeit">
+              <input type="number" id="teilzeitProzent" value="75" step="5" aria-describedby="hint-teilzeit">
               <span class="unit" data-i18n="units.percent">%</span>
             </div>
             <span class="error-message" id="errorProzent"></span>
@@ -91,7 +91,7 @@
           <div class="input-group half">
             <label for="teilzeitStunden" data-i18n="inputs.teilzeit.hours">Stunden</label>
             <div class="input-with-unit">
-              <input type="number" id="teilzeitStunden" value="30" min="5" max="48" step="1" aria-describedby="hint-teilzeit">
+              <input type="number" id="teilzeitStunden" value="30" step="1" aria-describedby="hint-teilzeit">
               <span class="unit" data-i18n="units.hours.short">h</span>
             </div>
             <span class="error-message" id="errorStunden"></span>
