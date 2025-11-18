@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     
     // Bereinige Copy-Paste und andere Eingaben
-    inp.addEventListener('input', (ev) => {
+    inp.addEventListener('input', () => {
       let wert = inp.value.replace(',', '.'); // Komma zu Punkt konvertieren
       wert = wert.replace(/[^0-9.]/g, ''); // Nur Ziffern und Punkt erlauben
       
