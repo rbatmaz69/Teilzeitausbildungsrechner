@@ -174,10 +174,19 @@ document.addEventListener("DOMContentLoaded", () => {
       if (aktiverButtonTyp === "hours" && aktiverButtonWert !== null) {
         // Stunden-Button ist aktiv → Stunden bleiben fest, Prozent passt sich an
         let neueStunden = aktiverButtonWert;
+        const minStunden = wochenStunden / 2; // 50% Minimum
         if (neueStunden > wochenStunden) {
           // Ungültig → Clamp auf Maximum
           neueStunden = wochenStunden;
           aktiverButtonWert = neueStunden; // Neue Referenz
+        } else if (neueStunden < minStunden) {
+          // Ungültig → Clamp auf Minimum (50%)
+          neueStunden = minStunden;
+          aktiverButtonWert = neueStunden; // Neue Referenz
+          // Button-Referenz löschen, da korrigiert wurde
+          aktiverButtonTyp = null;
+          aktiverButtonWert = null;
+          loescheAktiveSchaltflaechen();
         }
         teilzeitStundenEingabe.value = formatiereZahl(neueStunden);
         teilzeitProzentEingabe.value = formatiereZahl((neueStunden / wochenStunden) * 100);
@@ -194,11 +203,13 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // Deaktiviere Stunden-Buttons, die über den regulären Wochenstunden liegen
+    // Deaktiviere Stunden-Buttons, die über den regulären Wochenstunden liegen ODER unter 50% fallen
     buttons.forEach(btn => {
       if (btn.dataset.type === "hours") {
         const schaltflaecheWert = parseFloat(btn.dataset.value);
-        if (schaltflaecheWert > wochenstundenEingabe.value) {
+        const minStunden = wochenstundenEingabe.value / 2; // 50% Minimum
+        // Ungültig wenn über Maximum ODER unter 50%
+        if (schaltflaecheWert > wochenstundenEingabe.value || schaltflaecheWert < minStunden) {
           btn.disabled = true;
           btn.style.visibility = "hidden";
           // Wenn dieser Button aktiv war, deaktiviere ihn
@@ -389,8 +400,27 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!isNaN(gesamt) && !isNaN(stunden) && gesamt > 0) {
       let berechneterProzent = (stunden / gesamt) * 100;
       
+      // Validierung: Prozent darf nicht unter 50% liegen
+      if (berechneterProzent < teilzeitProzentMinimum) {
+        berechneterProzent = teilzeitProzentMinimum;
+        // Stunden entsprechend anpassen (auf Minimum 50%)
+        teilzeitStundenEingabe.value = formatiereZahl(gesamt * teilzeitProzentMinimum / 100);
+        // Nur Stunden-Fehler anzeigen (User hat Wochenstunden erhöht, wodurch Prozent zu niedrig wurde)
+        aktuellerFehlerStunden = "errors.hoursMin";
+        fehlerStunden.textContent = uebersetzung(aktuellerFehlerStunden, "Wert wurde auf Minimum korrigiert (mindestens 50% erforderlich)");
+        teilzeitStundenEingabe.classList.add('error');
+        entferneFehlerMitFadeout(teilzeitStundenEingabe, fehlerStunden, () => aktuellerFehlerStunden = null);
+        // Prozent-Fehler löschen falls vorhanden
+        aktuellerFehlerProzent = null;
+        fehlerProzent.textContent = '';
+        teilzeitProzentEingabe.classList.remove('error');
+        // Button-Referenz löschen, da korrigiert wurde
+        aktiverButtonTyp = null;
+        aktiverButtonWert = null;
+        loescheAktiveSchaltflaechen();
+      }
       // Validierung: Prozent darf nicht über 100% liegen
-      if (berechneterProzent > 100) {
+      else if (berechneterProzent > 100) {
         berechneterProzent = 100;
         // Stunden entsprechend anpassen (auf maximale reguläre Wochenstunden)
         teilzeitStundenEingabe.value = formatiereZahl(gesamt);
