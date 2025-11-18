@@ -33,7 +33,6 @@ function einheiten() {
 // Zustand merken, damit wir bei Sprachwechsel neu rendern können
 let LETZTE_EINGABEN = null;
 let LETZTE_BERECHNUNG = null;
-let fehlerGesamtmonate;
 
 /**
  * Holt die Berechnungsergebnisse vom Backend.
@@ -195,8 +194,6 @@ function fuelleVerkuerzungen(eingaben, berechnung) {
  * @param {Object} berechnung - Kernzahlen der Berechnung (Monate, Wochen, Stunden).
  */
 function fuelleErgebnisse(eingaben, berechnung) {
-  const einh = einheiten();
-
   // Zahl + Einheit lokalisiert
   const monateWort = uebersetzung("units.months.full", "Monate");
   setzeText("#res-total-months", `${berechnung.gesamtMonate} ${monateWort}`);
@@ -298,8 +295,6 @@ function setzeDatenZurueck() {
  * Speichert die letzten Daten, damit sie bei Sprachwechseln wiederverwendet werden können.
  */
 async function initialisiere() {
-  fehlerGesamtmonate = document.getElementById('errorTotalMonths');
-
   $("#btn-share")?.addEventListener("click", teileLink);
   $("#btn-reset")?.addEventListener("click", setzeDatenZurueck);
 
