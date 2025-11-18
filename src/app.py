@@ -142,6 +142,10 @@ if __name__ == "__main__":
     app = create_app()
     port = int(os.getenv("PORT", 8000))
 
+    # Für Handy-Testing: HOST auf 0.0.0.0 setzen (von außen erreichbar)
+    # Später einfach diese Zeile entfernen oder HOST=127.0.0.1 setzen
+    host = os.getenv("HOST", "0.0.0.0")  # 0.0.0.0 = von außen erreichbar
+
     # Prüfe ob Port bereits belegt ist (z.B. AirPlay auf macOS)
     # Falls ja, versuche alternativen Port
     if len(sys.argv) > 1:
@@ -151,9 +155,9 @@ if __name__ == "__main__":
             pass
 
     try:
-        app.run(host="127.0.0.1", port=port, debug=True)
+        app.run(host=host, port=port, debug=True)
     except OSError:
         # Port belegt, versuche alternativen Port
         fallback_port = port + 1
         print(f"⚠️  Port {port} ist belegt, verwende Port {fallback_port}")
-        app.run(host="127.0.0.1", port=fallback_port, debug=True)
+        app.run(host=host, port=fallback_port, debug=True)
