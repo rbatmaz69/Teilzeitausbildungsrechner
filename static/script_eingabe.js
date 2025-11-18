@@ -325,13 +325,14 @@ document.addEventListener("DOMContentLoaded", () => {
         berechneteStunden = gesamt;
         // Prozent entsprechend anpassen (auf 100%)
         teilzeitProzentEingabe.value = 100;
+        // Nur Prozent-Fehler anzeigen (User hat in Prozent-Feld getippt)
         aktuellerFehlerProzent = "errors.percentMax";
-        aktuellerFehlerStunden = "errors.hoursMax";
         fehlerProzent.textContent = uebersetzung(aktuellerFehlerProzent, "Der Teilzeit-Anteil darf 100% nicht überschreiten");
-        fehlerStunden.textContent = uebersetzung(aktuellerFehlerStunden, "Die Wochenstunden dürfen die regulären Wochenstunden nicht überschreiten");
-        // Visuelle Fehlerindikation
         teilzeitProzentEingabe.classList.add('error');
-        teilzeitStundenEingabe.classList.add('error');
+        // Stunden-Fehler löschen falls vorhanden
+        aktuellerFehlerStunden = null;
+        fehlerStunden.textContent = '';
+        teilzeitStundenEingabe.classList.remove('error');
       } else {
         // Nur Max-Fehler löschen, nicht Min-Fehler (die von pruefeMindestUndMaximal kommen)
         if (aktuellerFehlerProzent === "errors.percentMax") {
@@ -367,13 +368,14 @@ document.addEventListener("DOMContentLoaded", () => {
         berechneterProzent = 100;
         // Stunden entsprechend anpassen (auf maximale reguläre Wochenstunden)
         teilzeitStundenEingabe.value = formatiereZahl(gesamt);
-        aktuellerFehlerProzent = "errors.percentMax";
+        // Nur Stunden-Fehler anzeigen (User hat in Stunden-Feld getippt)
         aktuellerFehlerStunden = "errors.hoursMax";
-        fehlerProzent.textContent = uebersetzung(aktuellerFehlerProzent, "Der Teilzeit-Anteil darf 100% nicht überschreiten");
         fehlerStunden.textContent = uebersetzung(aktuellerFehlerStunden, "Die Wochenstunden dürfen die regulären Wochenstunden nicht überschreiten");
-        // Visuelle Fehlerindikation
-        teilzeitProzentEingabe.classList.add('error');
         teilzeitStundenEingabe.classList.add('error');
+        // Prozent-Fehler löschen falls vorhanden
+        aktuellerFehlerProzent = null;
+        fehlerProzent.textContent = '';
+        teilzeitProzentEingabe.classList.remove('error');
       } else {
         // Nur Max-Fehler löschen, nicht Min-Fehler (die von pruefeMindestUndMaximal kommen)
         if (aktuellerFehlerProzent === "errors.percentMax") {
