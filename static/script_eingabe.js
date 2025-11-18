@@ -91,6 +91,36 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /**
+   * Validiert Stunden-Buttons basierend auf regulären Wochenstunden.
+   * Buttons werden ausgegraut (disabled) wenn sie über Maximum oder unter 50% liegen.
+   */
+  function validiereSichtbareButtons() {
+    const wochenstunden = parseFloat(wochenstundenEingabe.value);
+    if (isNaN(wochenstunden) || wochenstunden <= 0) return;
+    
+    buttons.forEach(btn => {
+      if (btn.dataset.type === "hours") {
+        const schaltflaecheWert = parseFloat(btn.dataset.value);
+        const minStunden = wochenstunden / 2; // 50% Minimum
+        // Ungültig wenn über Maximum ODER unter 50%
+        if (schaltflaecheWert > wochenstunden || schaltflaecheWert < minStunden) {
+          btn.disabled = true;
+          // Wenn dieser Button aktiv war, deaktiviere ihn
+          if (btn.classList.contains("active")) {
+            btn.classList.remove("active");
+            // Button-Wert wurde geclampt, neue Referenz ist der geclampte Wert
+            if (aktiverButtonTyp === "hours") {
+              aktiverButtonWert = parseFloat(teilzeitStundenEingabe.value);
+            }
+          }
+        } else {
+          btn.disabled = false;
+        }
+      }
+    });
+  }
+
+  /**
    * Synchronisiert Button-Markierung mit aktuellen Feld-Werten.
    * Aktiviert Button wenn manueller Wert einem Button-Wert entspricht.
    */
@@ -276,29 +306,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // Deaktiviere Stunden-Buttons, die über den regulären Wochenstunden liegen ODER unter 50% fallen
-    buttons.forEach(btn => {
-      if (btn.dataset.type === "hours") {
-        const schaltflaecheWert = parseFloat(btn.dataset.value);
-        const minStunden = wochenstundenEingabe.value / 2; // 50% Minimum
-        // Ungültig wenn über Maximum ODER unter 50%
-        if (schaltflaecheWert > wochenstundenEingabe.value || schaltflaecheWert < minStunden) {
-          btn.disabled = true;
-          btn.style.visibility = "hidden";
-          // Wenn dieser Button aktiv war, deaktiviere ihn
-          if (btn.classList.contains("active")) {
-            btn.classList.remove("active");
-            // Button-Wert wurde geclampt, neue Referenz ist der geclampte Wert
-            if (aktiverButtonTyp === "hours") {
-              aktiverButtonWert = parseFloat(teilzeitStundenEingabe.value);
-            }
-          }
-        } else {
-          btn.disabled = false;
-          btn.style.visibility = "visible";
-        }
-      }
-    });
+    // Validiere sichtbare Buttons basierend auf regulären Wochenstunden
+    validiereSichtbareButtons();
   })
   
   // Bei manueller Eingabe der Wochenstunden: Fehler löschen und Max sofort prüfen
@@ -637,6 +646,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Bei Sprachwechsel Fehlermeldungen aktualisieren
   window.addEventListener("i18n:changed", aktualisiereFehlermeldungen);
 
-  // Initiale Button-Markierung beim Seitenstart (für vorausgefüllte Werte wie 75%)
+  // Initiale Validierung und Button-Markierung beim Seitenstart
+  validiereSichtbareButtons();
   synchronisiereButtonMarkierung();
 });
