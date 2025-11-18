@@ -357,9 +357,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (fehlerRegularStunden) fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Der Wert muss mindestens 10 Stunden betragen");
       entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => aktuellerFehlerRegularStunden = null, timerIdRegularStunden);
     }
-    
-    // Vorherigen Wert aktualisieren
-    vorigeWochenstunden = wochenstunden;
   })
   
   // Wird ausgeführt, nachdem ein neuer Prozentwert eingegeben wurde (Echtzeit bei Pfeilen)
