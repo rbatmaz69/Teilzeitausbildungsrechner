@@ -23,16 +23,62 @@ document.addEventListener("DOMContentLoaded", () => {
   const buttons = document.querySelectorAll(".preset");
   const fehlerProzent = document.getElementById('errorProzent');
   const fehlerStunden = document.getElementById('errorStunden');
+  const fehlerDauer = document.getElementById('errorDauer');
+  const fehlerRegularStunden = document.getElementById('errorRegularStunden');
   
-  // Speichere den aktuellen Fehlerschlüssel für beide Felder
+  // Speichere den aktuellen Fehlerschlüssel für alle Felder
   let aktuellerFehlerProzent = null;
   let aktuellerFehlerStunden = null;
+  let aktuellerFehlerDauer = null;
+  let aktuellerFehlerRegularStunden = null;
+  
+  // Speichere die aktive Button-Referenz (welcher Wert ist fest)
+  let aktiverButtonTyp = null; // "percent" oder "hours"
+  let aktiverButtonWert = null; // Der feste Wert
+
+  /**
+   * Formatiert eine Zahl und entfernt .0 bei ganzen Zahlen
+   * @param {number} zahl - Die zu formatierende Zahl
+   * @param {number} dezimalstellen - Anzahl Dezimalstellen (Standard: 1)
+   * @returns {string} Formatierte Zahl als String
+   */
+  function formatiereZahl(zahl, dezimalstellen = 1) {
+    const gerundet = Number(zahl.toFixed(dezimalstellen));
+    return gerundet % 1 === 0 ? gerundet.toFixed(0) : gerundet.toFixed(dezimalstellen);
+  }
 
   // Sicherheitscheck
   if (!dauerEingabe || !wochenstundenEingabe || !teilzeitProzentEingabe || !teilzeitStundenEingabe) {
     console.error("Ein oder mehrere benötigte Elemente wurden nicht gefunden. Prüfe die IDs in HTML und JS.");
     return;
   }
+
+  // ========== ZEICHEN-FILTERUNG FÜR ALLE NUMERISCHEN EINGABEN ==========
+  const numericInputs = [dauerEingabe, wochenstundenEingabe, teilzeitProzentEingabe, teilzeitStundenEingabe];
+  
+  numericInputs.forEach(inp => {
+    // Blockiere unerwünschte Zeichen bei Tastatur-Eingabe
+    inp.addEventListener('keydown', (ev) => {
+      const verboteneZeichen = ['e', 'E', '+', '-'];
+      if (verboteneZeichen.includes(ev.key)) {
+        ev.preventDefault();
+      }
+    });
+    
+    // Bereinige Copy-Paste und andere Eingaben
+    inp.addEventListener('input', (ev) => {
+      let wert = inp.value.replace(',', '.'); // Komma zu Punkt konvertieren
+      wert = wert.replace(/[^0-9.]/g, ''); // Nur Ziffern und Punkt erlauben
+      
+      // Nur ein Dezimalpunkt erlauben
+      const teile = wert.split('.');
+      if (teile.length > 2) {
+        wert = teile[0] + '.' + teile.slice(1).join('');
+      }
+      
+      inp.value = wert;
+    });
+  });
 
   // Wird ausgeführt, nachdem eine neue Ausbildungsdauer eingegeben wurde
   dauerEingabe.addEventListener("blur", () => {
@@ -41,8 +87,27 @@ document.addEventListener("DOMContentLoaded", () => {
     // Mindest- und Maximalwerte für die reguläre Ausbildungsdauer
     if (isNaN(ausbildungsdauer) || ausbildungsdauer < 12) {
       dauerEingabe.value = 12;
+      dauerEingabe.classList.add('error');
+      aktuellerFehlerDauer = "errors.durationMin";
+      if (fehlerDauer) fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Mindestens 12 Monate erforderlich");
     } else if (ausbildungsdauer > 60) {
       dauerEingabe.value = 60;
+      dauerEingabe.classList.add('error');
+      aktuellerFehlerDauer = "errors.durationMax";
+      if (fehlerDauer) fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Maximal 60 Monate erlaubt");
+    } else {
+      dauerEingabe.classList.remove('error');
+      aktuellerFehlerDauer = null;
+      if (fehlerDauer) fehlerDauer.textContent = '';
+    }
+  })
+  
+  // Entferne Fehler bei erneutem Tippen
+  dauerEingabe.addEventListener("input", () => {
+    if (aktuellerFehlerDauer) {
+      dauerEingabe.classList.remove('error');
+      aktuellerFehlerDauer = null;
+      if (fehlerDauer) fehlerDauer.textContent = '';
     }
   })
   
@@ -53,14 +118,44 @@ document.addEventListener("DOMContentLoaded", () => {
     // Mindest- und Maximalwerte für die regulären Wochenstunden
     if (isNaN(wochenstunden) || wochenstunden < 10) {
       wochenstundenEingabe.value = 10;
+      wochenstundenEingabe.classList.add('error');
+      aktuellerFehlerRegularStunden = "errors.regularHoursMin";
+      if (fehlerRegularStunden) fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Mindestens 10 Wochenstunden erforderlich");
     } else if (wochenstunden > 48) {
       wochenstundenEingabe.value = 48;
+      wochenstundenEingabe.classList.add('error');
+      aktuellerFehlerRegularStunden = "errors.regularHoursMax";
+      if (fehlerRegularStunden) fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Maximal 48 Wochenstunden erlaubt");
+    } else {
+      wochenstundenEingabe.classList.remove('error');
+      aktuellerFehlerRegularStunden = null;
+      if (fehlerRegularStunden) fehlerRegularStunden.textContent = '';
     }
 
-    // Synchronisiere die Teilzeit-Wochenstunden basierend auf dem Prozentwert
-    const prozent = parseInt(teilzeitProzentEingabe.value);
-    if (!isNaN(wochenstunden) && !isNaN(prozent)) {
-      teilzeitStundenEingabe.value = (wochenstundenEingabe.value * prozent / 100).toFixed(1);
+    // Synchronisiere basierend auf aktivem Button
+    const wochenStunden = parseFloat(wochenstundenEingabe.value);
+    if (!isNaN(wochenStunden) && wochenStunden > 0) {
+      if (aktiverButtonTyp === "hours" && aktiverButtonWert !== null) {
+        // Stunden-Button ist aktiv → Stunden bleiben fest, Prozent passt sich an
+        let neueStunden = aktiverButtonWert;
+        if (neueStunden > wochenStunden) {
+          // Ungültig → Clamp auf Maximum
+          neueStunden = wochenStunden;
+          aktiverButtonWert = neueStunden; // Neue Referenz
+        }
+        teilzeitStundenEingabe.value = formatiereZahl(neueStunden);
+        teilzeitProzentEingabe.value = formatiereZahl((neueStunden / wochenStunden) * 100);
+      } else if (aktiverButtonTyp === "percent" && aktiverButtonWert !== null) {
+        // Prozent-Button ist aktiv → Prozent bleibt fest, Stunden passen sich an
+        teilzeitProzentEingabe.value = formatiereZahl(aktiverButtonWert);
+        teilzeitStundenEingabe.value = formatiereZahl(wochenStunden * aktiverButtonWert / 100);
+      } else {
+        // Kein Button aktiv → Prozent bleibt, Stunden passen sich an (altes Verhalten)
+        const prozent = parseFloat(teilzeitProzentEingabe.value);
+        if (!isNaN(prozent)) {
+          teilzeitStundenEingabe.value = formatiereZahl(wochenStunden * prozent / 100);
+        }
+      }
     }
 
     // Deaktiviere Stunden-Buttons, die über den regulären Wochenstunden liegen
@@ -70,7 +165,14 @@ document.addEventListener("DOMContentLoaded", () => {
         if (schaltflaecheWert > wochenstundenEingabe.value) {
           btn.disabled = true;
           btn.style.visibility = "hidden";
-          btn.classList.remove("active");
+          // Wenn dieser Button aktiv war, deaktiviere ihn
+          if (btn.classList.contains("active")) {
+            btn.classList.remove("active");
+            // Button-Wert wurde geclampt, neue Referenz ist der geclampte Wert
+            if (aktiverButtonTyp === "hours") {
+              aktiverButtonWert = parseFloat(teilzeitStundenEingabe.value);
+            }
+          }
         } else {
           btn.disabled = false;
           btn.style.visibility = "visible";
@@ -79,8 +181,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   })
   
+  // Bei manueller Eingabe der Wochenstunden: Fehler löschen (aber Buttons NICHT deselektieren)
+  wochenstundenEingabe.addEventListener("input", () => {
+    if (aktuellerFehlerRegularStunden) {
+      wochenstundenEingabe.classList.remove('error');
+      aktuellerFehlerRegularStunden = null;
+      if (fehlerRegularStunden) fehlerRegularStunden.textContent = '';
+    }
+  })
+  
   // Wird ausgeführt, nachdem ein neuer Prozentwert eingegeben wurde (Echtzeit bei Pfeilen)
   teilzeitProzentEingabe.addEventListener("input", () => {
+    // Manuelle Eingabe → Referenz löschen
+    aktiverButtonTyp = null;
+    aktiverButtonWert = null;
+    loescheAktiveSchaltflaechen();
     synchronisiereStunden();
   })
   
@@ -92,6 +207,10 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Wird ausgeführt, nachdem ein neuer Teilzeit-wochenstundenwert eingegeben wurde (Echtzeit bei Pfeilen)
   teilzeitStundenEingabe.addEventListener("input", () => {
+    // Manuelle Eingabe → Referenz löschen
+    aktiverButtonTyp = null;
+    aktiverButtonWert = null;
+    loescheAktiveSchaltflaechen();
     synchronisiereProzent();
   })
   
@@ -113,9 +232,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (wert <= 100) {
           loescheAktiveSchaltflaechen();
           btn.classList.add("active");
-          teilzeitProzentEingabe.value = wert;
+          // Speichere Button-Referenz
+          aktiverButtonTyp = "percent";
+          aktiverButtonWert = wert;
+          teilzeitProzentEingabe.value = formatiereZahl(wert);
           if (!isNaN(wochenStunden)) {
-            teilzeitStundenEingabe.value = (wochenStunden * wert / 100).toFixed(1);
+            teilzeitStundenEingabe.value = formatiereZahl(wochenStunden * wert / 100);
           }
           // Fehler zurücksetzen
           fehlerProzent.textContent = '';
@@ -131,8 +253,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!isNaN(wochenStunden) && wochenStunden > 0 && wert <= wochenStunden) {
           loescheAktiveSchaltflaechen();
           btn.classList.add("active");
-          teilzeitStundenEingabe.value = wert;
-          teilzeitProzentEingabe.value = ((wert / wochenStunden) * 100).toFixed(1);
+          // Speichere Button-Referenz
+          aktiverButtonTyp = "hours";
+          aktiverButtonWert = wert;
+          teilzeitStundenEingabe.value = formatiereZahl(wert);
+          teilzeitProzentEingabe.value = formatiereZahl((wert / wochenStunden) * 100);
           // Fehler zurücksetzen
           fehlerProzent.textContent = '';
           fehlerStunden.textContent = '';
@@ -185,7 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
         teilzeitStundenEingabe.classList.remove('error');
       }
       
-      teilzeitStundenEingabe.value = berechneteStunden.toFixed(1);
+      teilzeitStundenEingabe.value = formatiereZahl(berechneteStunden);
     }
     loescheAktiveSchaltflaechen();
   }
@@ -205,7 +330,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (berechneterProzent > 100) {
         berechneterProzent = 100;
         // Stunden entsprechend anpassen (auf maximale reguläre Wochenstunden)
-        teilzeitStundenEingabe.value = gesamt.toFixed(1);
+        teilzeitStundenEingabe.value = formatiereZahl(gesamt);
         aktuellerFehlerProzent = "errors.percentMax";
         aktuellerFehlerStunden = "errors.hoursMax";
         fehlerProzent.textContent = uebersetzung(aktuellerFehlerProzent, "Der Teilzeit-Anteil darf 100% nicht überschreiten");
@@ -223,7 +348,7 @@ document.addEventListener("DOMContentLoaded", () => {
         teilzeitStundenEingabe.classList.remove('error');
       }
       
-      teilzeitProzentEingabe.value = berechneterProzent.toFixed(1);
+      teilzeitProzentEingabe.value = formatiereZahl(berechneterProzent);
     }
     loescheAktiveSchaltflaechen();
   }
@@ -308,6 +433,9 @@ document.addEventListener("DOMContentLoaded", () => {
   /** Entfernt den aktiven Zustand aller Preset-Buttons. */
   function loescheAktiveSchaltflaechen() {
     buttons.forEach(btn => btn.classList.remove("active"));
+    // Referenz löschen
+    aktiverButtonTyp = null;
+    aktiverButtonWert = null;
   }
 
   /**
@@ -333,6 +461,24 @@ document.addEventListener("DOMContentLoaded", () => {
         "errors.hoursMax": "Die Wochenstunden dürfen die regulären Wochenstunden nicht überschreiten"
       };
       fehlerStunden.textContent = uebersetzung(aktuellerFehlerStunden, fallbackMap[aktuellerFehlerStunden] || "");
+    }
+
+    // Aktualisiere Dauer-Fehlermeldungen
+    if (aktuellerFehlerDauer && fehlerDauer) {
+      const fallbackMap = {
+        "errors.durationMin": "Mindestens 12 Monate erforderlich",
+        "errors.durationMax": "Maximal 60 Monate erlaubt"
+      };
+      fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, fallbackMap[aktuellerFehlerDauer] || "");
+    }
+
+    // Aktualisiere reguläre Wochenstunden-Fehlermeldungen
+    if (aktuellerFehlerRegularStunden && fehlerRegularStunden) {
+      const fallbackMap = {
+        "errors.regularHoursMin": "Mindestens 10 Wochenstunden erforderlich",
+        "errors.regularHoursMax": "Maximal 48 Wochenstunden erlaubt"
+      };
+      fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, fallbackMap[aktuellerFehlerRegularStunden] || "");
     }
   }
 

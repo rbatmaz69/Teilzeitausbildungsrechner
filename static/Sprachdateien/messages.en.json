@@ -96,7 +96,11 @@
     "percentMax": "The part-time percentage must not exceed 100%",
     "invalidHours": "Please enter a valid number for the part-time hours per week",
     "hoursMin": "The hours per week must be at least half of the regular weekly hours",
-    "hoursMax": "The hours per week must not exceed the regular weekly hours"
+    "hoursMax": "The hours per week must not exceed the regular weekly hours",
+    "regularHoursMin": "At least 10 hours per week required",
+    "regularHoursMax": "Maximum 48 hours per week allowed",
+    "durationMin": "At least 12 months required",
+    "durationMax": "Maximum 60 months allowed"
   },
   "btn": {
     "calculate": "Show result",

@@ -96,7 +96,11 @@
     "percentMax": "Der Teilzeit-Anteil darf 100% nicht überschreiten",
     "invalidHours": "Bitte geben Sie eine gültige Zahl für die Teilzeit-Wochenstunden ein",
     "hoursMin": "Die Wochenstunden müssen mindestens die Hälfte der regulären Wochenstunden entsprechen",
-    "hoursMax": "Die Wochenstunden dürfen die regulären Wochenstunden nicht überschreiten"
+    "hoursMax": "Die Wochenstunden dürfen die regulären Wochenstunden nicht überschreiten",
+    "regularHoursMin": "Mindestens 10 Wochenstunden erforderlich",
+    "regularHoursMax": "Maximal 48 Wochenstunden erlaubt",
+    "durationMin": "Mindestens 12 Monate erforderlich",
+    "durationMax": "Maximal 60 Monate erlaubt"
   },
   "btn": {
     "calculate": "Ergebnis anzeigen",
