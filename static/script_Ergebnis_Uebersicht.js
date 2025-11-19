@@ -92,6 +92,7 @@ async function holeZusammenfassung() {
   const gesamtMonate = Number(ergebnis.finale_dauer_monate || 0);
   const verlaengerungMonate = Number(ergebnis.verlaengerung_durch_teilzeit_monate || 0);
   const gesamteVerkuerzungMonate = Number(ergebnis.verkuerzung_gesamt_monate || 0);
+  const gesamteVerkuerzungMonateOhneBegrenzung = Number(ergebnis.verkuerzung_gesamt_ohne_begrenzung || 0);
   const neueBasis = Number(ergebnis.verkuerzte_dauer_monate || 0);
   const wochen = Math.round(gesamtMonate * 4.33);
 
@@ -112,6 +113,7 @@ async function holeZusammenfassung() {
     berechnung: {
       verlaengerungMonate,
       gesamteVerkuerzungMonate,
+      gesamteVerkuerzungMonateOhneBegrenzung,
       neueBasis,
       gesamtMonate,
       gesamtWochen: wochen
@@ -297,6 +299,8 @@ function setzeDatenZurueck() {
 async function initialisiere() {
   $("#btn-share")?.addEventListener("click", teileLink);
   $("#btn-reset")?.addEventListener("click", setzeDatenZurueck);
+  $("#berechnenBtn")?.addEventListener("click", berechnen);
+
 
   try {
     const { eingaben, berechnung } = await holeZusammenfassung();
@@ -352,10 +356,3 @@ async function berechnen() {
     if (fehlerElement) fehlerElement.textContent = meldung;
   }
 }
-
-
-// Berechnen-Button
-document.getElementById("berechnenBtn").addEventListener("click", () => {
-  berechnen();
-});
-
