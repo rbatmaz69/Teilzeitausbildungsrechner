@@ -187,7 +187,6 @@ header h1 {
 @media (width >= 600px) {
   .vk-category-body {
     flex-direction: row;
-    flex-flow: wrap;
   }
 
   .vk-category .tile {
