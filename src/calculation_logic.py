@@ -31,8 +31,6 @@ MAX_VERLAENGERUNG_FAKTOR = (
     1.5  # § 7a Abs. 2 Satz 1 BBiG - Höchstens 1,5-fache der AO-Dauer
 )
 
-
-
 # ============================================================================
 # BERECHNUNGSFUNKTIONEN
 # ============================================================================
@@ -353,7 +351,11 @@ def berechne_gesamtdauer(
         teilzeit_stunden = berechne_teilzeit_stunden(vollzeit_stunden, teilzeit_eingabe)
 
     # Schritt 0: Verkürzung anwenden (BEVOR Teilzeit berechnet wird)
-    verkuerzte_dauer, verkuerzung_gesamt_ohne_begrenzung = berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende)
+    verkuerzte_dauer, verkuerzung_gesamt_ohne_begrenzung = \
+    berechne_verkuerzung(
+        basis_dauer_monate,
+        verkuerzungsgruende
+    )
 
     # Schritt 1: Automatische Verlängerung durch Teilzeit
     nach_schritt1 = berechne_teilzeit_schritt1(verkuerzte_dauer, teilzeit_prozent)
