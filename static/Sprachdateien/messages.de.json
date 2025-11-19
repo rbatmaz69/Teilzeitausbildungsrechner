@@ -101,7 +101,7 @@
     "percentMax": "Der Wert darf maximal 100% betragen",
     "hoursMin": "Der Wert muss mindestens 50% der regulären Stunden betragen",
     "hoursMax": "Der Wert darf die regulären Wochenstunden nicht überschreiten",
-    "invalidCut": "Die Ausbildung darf höchstens 12 Monate kürzer sein!"
+    "invalidCut": "Deine Verkürzungen ergeben mehr als 12 Monate. Die Ausbildung darf aber höchstens 12 Monate kürzer sein!"
   },
   "btn": {
     "calculate": "Ergebnis anzeigen",

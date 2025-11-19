@@ -101,7 +101,7 @@
     "percentMax": "The value must not exceed 100%",
     "hoursMin": "The value must be at least 50% of regular hours",
     "hoursMax": "The value must not exceed the regular weekly hours",
-    "invalidCut": "Training can be shortened by up to 12 months only!"
+    "invalidCut": "Your reductions add up to more than 12 months. But the training may only be shortened by up to 12 months!"
   },
   "btn": {
     "calculate": "Show result",
