@@ -39,21 +39,27 @@
       <div class="input-group">
         <label for="dauer">
           <span data-i18n="inputs.dauer.label">Reguläre Ausbildungsdauer (Monate)</span>
-          <span class="info-icon" data-tooltip="Die normale Dauer Ihrer Ausbildung bei Vollzeit"
-                data-i18n-attr="data-tooltip:inputs.dauer.tooltip" aria-hidden="true">i</span>
+          <span class="info-icon"
+                data-tooltip="Die normale Dauer Ihrer Ausbildung bei Vollzeit"
+                data-i18n-attr="data-tooltip:inputs.dauer.tooltip"
+                aria-hidden="true">i</span>
         </label>
         <input type="number" id="dauer" value="36" step="1" required aria-describedby="hint-dauer">
         <span class="error-message" id="errorDauer"></span>
         <!-- Unsichtbarer Hilfetext spiegelt das Tooltip (für SR) -->
-        <span id="hint-dauer" class="sr-only">Die normale Dauer Ihrer Ausbildung bei Vollzeit.</span>
+        <span id="hint-dauer" class="sr-only">
+          Die normale Dauer Ihrer Ausbildung bei Vollzeit.
+        </span>
       </div>
 
       <!-- Eingabe reguläre Wochenstunden -->
       <div class="input-group">
         <label for="stunden">
           <span data-i18n="inputs.stunden.label">Reguläre Wochenstunden (gesamt)</span>
-          <span class="info-icon" data-tooltip="Ihre gesamten Wochenstunden inkl. Berufsschule"
-                data-i18n-attr="data-tooltip:inputs.stunden.tooltip" aria-hidden="true">i</span>
+          <span class="info-icon"
+                data-tooltip="Ihre gesamten Wochenstunden inkl. Berufsschule"
+                data-i18n-attr="data-tooltip:inputs.stunden.tooltip"
+                aria-hidden="true">i</span>
         </label>
         <input type="number" id="stunden" value="40" step="1" required aria-describedby="hint-stunden">
         <span class="error-message" id="errorRegularStunden"></span>
@@ -64,8 +70,10 @@
       <div class="input-group">
         <label for="teilzeitProzent">
           <span data-i18n="inputs.teilzeit.label">Teilzeit-Anteil</span>
-          <span class="info-icon" data-tooltip="Mindestens 50% für eine anerkannte Teilzeitausbildung"
-                data-i18n-attr="data-tooltip:inputs.teilzeit.tooltip" aria-hidden="true">i</span>
+          <span class="info-icon"
+                data-tooltip="Mindestens 50% für eine anerkannte Teilzeitausbildung"
+                data-i18n-attr="data-tooltip:inputs.teilzeit.tooltip"
+                aria-hidden="true">i</span>
         </label>
 
         <!-- Prozentanteil -->
@@ -106,109 +114,150 @@
           </div>
         </div>
         <!-- SR-Hinweis für beide Felder aus dem Info-Icon oben -->
-        <span id="hint-teilzeit" class="sr-only">Mindestens 50&nbsp;% für eine anerkannte Teilzeitausbildung.</span>
+        <span id="hint-teilzeit" class="sr-only">
+          Mindestens 50&nbsp;% für eine anerkannte Teilzeitausbildung.
+        </span>
       </div>
     </section>
   </div>
   
   <!-- ================================ VERKÜRZUNGSGRÜNDE AUSWÄHLEN ================================ -->
   <div class="container">
-    <!-- Hauptkarte, optisch hervorgehoben, über aria-labelledby mit der H1 verbunden -->
-    <div class="card" aria-labelledby="vk-heading">
-      <!-- Überschrift des Formularbereichs -->
-      <h1 id="vk-heading" data-i18n="vk.heading">Verkürzungsgründe auswählen</h1>
-      <!-- Kurze Anleitung für den Nutzer -->
-      <p class="helper" id="vk-helper" data-i18n="vk.helper">Wähle alle Gründe aus, die auf dich zutreffen.</p>
+    <h1 id="vk-heading" class="text-2xl font-bold mb-3" data-i18n="vk.heading">
+      Gründe für eine kürzere Ausbildung
+    </h1>
 
-      <!-- Formular für die Auswahl der Verkürzungsgründe -->
-      <form id="vk-form" aria-describedby="vk-helper">
-        <!-- fieldset ohne sichtbaren Rahmen für semantische Gruppierung -->
-        <fieldset style="border:0;padding:0;margin:0">
-          <!-- Legende nur für Screenreader sichtbar, verbessert Barrierefreiheit -->
-          <legend class="sr-only" data-i18n="vk.legend">Verkürzungsgründe</legend>
+    <p id="vk-helper" data-i18n="vk.helper" class="muted-text d-none">
+      Wähle alles aus, was zu dir passt.
+    </p>
 
-          <!-- ====================== ABITUR ====================== -->
-          <label class="tile" for="g-abitur">
-            <!-- Checkbox-Eingabe -->
-            <input id="g-abitur" type="checkbox" aria-describedby="desc-abitur">
-            <!-- Inhalt der Kachel -->
-            <div class="tile-body" style="flex:1">
-              <div class="tile-header">
-                <span><span data-i18n="vk.abitur.label">Abitur / Fachabitur</span> <span class="badge" data-i18n="vk.abitur.badge">−12 Monate</span></span>
-                <button type="button" class="info-btn" aria-label="Info Abitur"
-                        data-tooltip="Wenn sie Abitur haben, ist eine Verkürzung möglich."
-                        data-i18n-attr="data-tooltip:vk.abitur.tooltip">ℹ️</button>
+    <form id="vk-form" class="space-y-3">
+      <fieldset id="vk-fieldset" class="radio-group">
+        <legend class="sr-only" data-i18n="vk.legend">Verkürzungsgründe</legend>
+
+        <!-- ============================== -->
+        <!-- 1. SCHULABSCHLUSS (DROPDOWN)   -->
+        <!-- ============================== -->
+        <div class="vk-category">
+          <h2 class="vk-category-title" data-i18n="vk.school.question">
+            Welchen höchsten Schulabschluss haben Sie erreicht?
+          </h2>
+
+          <div class="vk-category-body">
+            <label for="vk-school-select" class="sr-only" data-i18n="vk.school.label">
+              Schulabschluss
+            </label>
+
+            <select id="vk-school-select" name="vk-school-select" data-vk-type="school-select">
+              <option value="none" data-i18n="vk.school.none">Kein Abschluss</option>
+              <option value="hauptschule" data-i18n="vk.school.hauptschule">Hauptschule</option>
+              <option value="realschule" data-vk-set-fields="realschule" data-i18n="vk.school.realschule">Realschule</option>
+              <option value="abitur" data-vk-set-fields="abitur" data-i18n="vk.school.abitur">Abitur / Hochschulreife</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- ============================== -->
+        <!-- 2. FAMILIENVORSORGE            -->
+        <!-- ============================== -->
+        <div class="vk-category">
+          <h2 class="vk-category-title" data-i18n="vk.familie.question">
+            Haben Sie familiäre Verpflichtungen (Kinderbetreuung oder Pflege von Angehörigen)?
+          </h2>
+
+          <div class="vk-category-body">
+            <label class="tile">
+              <input
+                type="checkbox"
+                aria-describedby="desc-familie"
+                data-vk-field="familien_pflegeverantwortung"
+              >
+              <div class="tile-body" style="flex:1">
+                <div class="tile-header">
+                  <span>
+                    <span data-i18n="vk.familie.label">Familien- und Pflegeverantwortung</span>
+                    <span class="badge" data-i18n="vk.familie.badge">−12 Monate</span>
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="tooltip" role="tooltip" aria-hidden="true"></div>
-          </label>
-          <!-- Unsichtbare, aber lesbare Beschreibung passend zum Info-Icon -->
-          <span id="desc-abitur" class="sr-only">Wenn sie Abitur haben, ist eine Verkürzung möglich.</span>
+            </label>
 
-          <!-- ====================== REALSCHULE ====================== -->
-          <label class="tile" for="g-realschule">
-            <input id="g-realschule" type="checkbox" aria-describedby="desc-realschule">
-            <div class="tile-body" style="flex:1">
-              <div class="tile-header">
-                <span><span data-i18n="vk.realschule.label">Realschulabschluss</span> <span class="badge" data-i18n="vk.realschule.badge">−6 Monate</span></span>
-                <button type="button" class="info-btn" aria-label="Info Realschule"
-                        data-tooltip="Wenn sie einen Realschulabschluss haben, ist eine Verkürzung möglich."
-                        data-i18n-attr="data-tooltip:vk.realschule.tooltip">ℹ️</button>
+            <span id="desc-familie" class="sr-only" data-i18n="vk.familie.sr">
+              Wenn Sie Familien- oder Pflegeverantwortung haben, ist eine Verkürzung möglich.
+            </span>
+          </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- 3. BERUFLICHE QUALIFIKATIONEN                -->
+        <!-- ============================================ -->
+        <div class="vk-category">
+          <h2 class="vk-category-title" data-i18n="vk.qual.question">
+            Welche beruflichen Qualifikationen bringen Sie mit?
+          </h2>
+
+          <div class="vk-category-body">
+            <label class="tile">
+              <input
+                type="checkbox"
+                aria-describedby="desc-vork"
+                data-vk-field="vorkenntnisse_monate"
+                data-vk-months="12"
+              >
+
+              <div class="tile-body">
+                <div class="tile-header">
+                  <span>
+                    <span data-i18n="vk.vork.label">Berufliche Vorkenntnisse</span>
+                    <span class="badge" data-i18n="vk.vork.badge">−12 Monate</span>
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="tooltip" role="tooltip" aria-hidden="true"></div>
-          </label>
-          <span id="desc-realschule" class="sr-only">Wenn sie einen Realschulabschluss haben, ist eine Verkürzung möglich.</span>
+            </label>
 
-          <!-- ====================== ALTER ÜBER 21 ====================== -->
-          <label class="tile" for="g-alter21">
-            <input id="g-alter21" type="checkbox" aria-describedby="desc-alter21">
-            <div class="tile-body" style="flex:1">
-              <div class="tile-header">
-                <span><span data-i18n="vk.alter21.label">Alter über 21 Jahre</span> <span class="badge" data-i18n="vk.alter21.badge">−12 Monate</span></span>
-                <button type="button" class="info-btn" aria-label="Info Alter über 21"
-                        data-tooltip="Bei älteren Auszubildenden ist eine Anrechnung von Vorerfahrungen möglich."
-                        data-i18n-attr="data-tooltip:vk.alter21.tooltip">ℹ️</button>
+            <span id="desc-vork" class="sr-only" data-i18n="vk.vork.sr">
+              Berufliche Vorkenntnisse können Ihre Ausbildungsdauer verkürzen.
+            </span>
+          </div>
+        </div>
+
+        <!-- ============================== -->
+        <!-- 4. WEITERE ASPEKTE             -->
+        <!-- ============================== -->
+        <div class="vk-category">
+          <h2 class="vk-category-title" data-i18n="vk.other.question">
+            Welche weiteren Gründe treffen auf Sie zu?
+          </h2>
+
+          <div class="vk-category-body">
+            <label class="tile">
+              <input
+                type="checkbox"
+                aria-describedby="desc-alter21"
+                data-vk-field="alter_ueber_21"
+              >
+
+              <div class="tile-body">
+                <div class="tile-header">
+                  <span>
+                    <span data-i18n="vk.alter21.label">Alter über 21 Jahre</span>
+                    <span class="badge" data-i18n="vk.alter21.badge">−12 Monate</span>
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="tooltip" role="tooltip" aria-hidden="true"></div>
-          </label>
-          <span id="desc-alter21" class="sr-only">Bei älteren Auszubildenden ist eine Anrechnung von Vorerfahrungen möglich.</span>
+            </label>
 
-          <!-- ====================== BERUFLICHE VORKENNTNISSE ====================== -->
-          <label class="tile" for="g-vork">
-            <input id="g-vork" type="checkbox" aria-describedby="desc-vork">
-            <div class="tile-body" style="flex:1">
-              <div class="tile-header">
-                <span><span data-i18n="vk.vork.label">Berufliche Vorkenntnisse</span> <span class="badge" data-i18n="vk.vork.badge">−12 Monate</span></span>
-                <button type="button" class="info-btn" aria-label="Info Vorkenntnisse"
-                        data-tooltip="Praxiserfahrungen oder Abschlüsse können die Ausbildungsdauer bei Ihnen verkürzen."
-                        data-i18n-attr="data-tooltip:vk.vork.tooltip">ℹ️</button>
-              </div>
-            </div>
-            <div class="tooltip" role="tooltip" aria-hidden="true"></div>
-          </label>
-          <span id="desc-vork" class="sr-only">Praxiserfahrungen oder Abschlüsse können die Ausbildungsdauer bei Ihnen verkürzen.</span>
+            <span id="desc-alter21" class="sr-only" data-i18n="vk.alter21.sr">
+              Wenn Sie über 21 Jahre alt sind, können Vorerfahrungen angerechnet werden.
+            </span>
+          </div>
+        </div>
 
-          <!-- ====================== FAMILIEN- UND PFLEGEVERANTWORTUNG ====================== -->
-          <label class="tile" for="g-familie">
-            <input id="g-familie" type="checkbox" aria-describedby="desc-familie">
-            <div class="tile-body" style="flex:1">
-              <div class="tile-header">
-                <span><span data-i18n="vk.familie.label">Familien- und Pflegeverantwortung</span> <span class="badge" data-i18n="vk.familie.badge">−12 Monate</span></span>
-                <button type="button" class="info-btn" aria-label="Info Familien- und Pflegeverantwortung"
-                        data-tooltip="Wenn Sie Familien- oder Pflegeverantwortung haben, ist eine Verkürzung möglich."
-                        data-i18n-attr="data-tooltip:vk.familie.tooltip">ℹ️</button>
-              </div>
-            </div>
-            <div class="tooltip" role="tooltip" aria-hidden="true"></div>
-          </label>
-          <span id="desc-familie" class="sr-only">Wenn Sie Familien- oder Pflegeverantwortung haben, ist eine Verkürzung möglich.</span>
-
-        </fieldset>
-      </form>
-      <button class="berechnen" id="berechnenBtn" data-i18n="btn.calculate">Berechnen</button>
-    </div>
+        <button class="berechnen" id="berechnenBtn" type="button" data-i18n="btn.calculate">
+          Berechnen
+        </button>
+      </fieldset>
+    </form>
   </div>
 
   <!-- Ergebnisanzeige -->
@@ -216,7 +265,9 @@
     <!-- Hauptkarte, optisch hervorgehoben -->
     <div class="card highlight" aria-labelledby="res-headline">
       <h1 id="res-headline" data-i18n="res.headline">Ihre Teilzeitausbildung</h1>
-      <p class="helper" data-i18n="res.helper">Hier sehen Sie Ihre Eingaben und das berechnete Ergebnis auf einen Blick.</p>
+      <p class="helper" data-i18n="res.helper">
+        Hier sehen Sie Ihre Eingaben und das berechnete Ergebnis auf einen Blick.
+      </p>
 
       <!-- Grid-Layout für Haupt- und Meta-Ergebnisse -->
       <div class="grid">
@@ -272,8 +323,15 @@
 
   <!-- Navigationsleiste (mobil sticky) -->
   <nav class="actionbar" aria-label="Aktionen" data-i18n-attr="aria-label:nav.actions">
-    <button class="btn ghost" id="btn-reset" type="button" aria-label="Zurücksetzen" data-i18n="btn.reset" data-i18n-attr="aria-label:btn.reset">Zurücksetzen</button>
-    <button class="btn outline" id="btn-share" type="button" data-i18n="btn.share">Link teilen</button>
+    <button class="btn ghost" id="btn-reset" type="button"
+            aria-label="Zurücksetzen"
+            data-i18n="btn.reset"
+            data-i18n-attr="aria-label:btn.reset">
+      Zurücksetzen
+    </button>
+    <button class="btn outline" id="btn-share" type="button" data-i18n="btn.share">
+      Link teilen
+    </button>
   </nav>
 
 </body>
