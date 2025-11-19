@@ -100,7 +100,8 @@
     "percentMin": "The value must be at least 50%",
     "percentMax": "The value must not exceed 100%",
     "hoursMin": "The value must be at least 50% of regular hours",
-    "hoursMax": "The value must not exceed the regular weekly hours"
+    "hoursMax": "The value must not exceed the regular weekly hours",
+    "invalidCut": "Training can be shortened by up to 12 months only!"
   },
   "btn": {
     "calculate": "Show result",

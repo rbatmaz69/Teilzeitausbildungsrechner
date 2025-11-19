@@ -1,7 +1,9 @@
 /* script_Ergebnis_Übersicht.js – i18n-fähige Ergebnislogik */
 
+let fehlerVerkuerzungen = null;
+
 document.addEventListener("DOMContentLoaded", () => {
-  // nichts; initialisiere() wird unten registriert
+  
 });
 
 // Kurz-Helfer
@@ -187,6 +189,8 @@ function fuelleVerkuerzungen(eingaben, berechnung) {
   const gesamtBeschriftung = uebersetzung("cuts.total", "Gesamt");
   const neueBasisBeschriftung = uebersetzung("cuts.newBase", "Neue Basis");
   zusammenfassung.textContent = `${gesamtBeschriftung}: −${berechnung.gesamteVerkuerzungMonate} ${monateWortVoll} · ${neueBasisBeschriftung}: ${berechnung.neueBasis} ${monateWortVoll}`;
+
+  pruefeVerkuerzungen(berechnung.gesamteVerkuerzungMonateOhneBegrenzung);
 }
 
 /**
@@ -301,7 +305,6 @@ async function initialisiere() {
   $("#btn-reset")?.addEventListener("click", setzeDatenZurueck);
   $("#berechnenBtn")?.addEventListener("click", berechnen);
 
-
   try {
     const { eingaben, berechnung } = await holeZusammenfassung();
     LETZTE_EINGABEN = eingaben;
@@ -354,5 +357,19 @@ async function berechnen() {
     setzeText('#res-total-weeks', '–');
     const fehlerElement = document.getElementById('errorTotalMonths');
     if (fehlerElement) fehlerElement.textContent = meldung;
+  }
+}
+
+/** Prüft die Gesamtkürzungen und zeigt ggf. eine Fehlermeldung an.
+ *
+ * @param {number} gesamtVerkuerzungen - Die gesamten Verkürzung in Monaten (ohne Begrenzung).
+ */
+function pruefeVerkuerzungen(gesamtVerkuerzungen) {
+  const fehlerVerkuerzungen = document.getElementById("errorVerkuerzungen");
+
+  if (gesamtVerkuerzungen > 12) {
+    fehlerVerkuerzungen.textContent = uebersetzung("errors.invalidCut", "Die Ausbildung darf höchstens 12 Monate kürzer sein!");
+  } else {
+    fehlerVerkuerzungen.textContent = "";
   }
 }

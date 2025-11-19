@@ -36,9 +36,6 @@ MAX_VERLAENGERUNG_FAKTOR = (
 # ============================================================================
 # BERECHNUNGSFUNKTIONEN
 # ============================================================================
-import logging
-
-logging.basicConfig(level=logging.INFO)
 
 def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
     """
