@@ -106,7 +106,6 @@
     "tooShort": "Training can be shortened by up to 12 months only!",
     "tooLong": "Training can be at most 1.5 times longer!",
     "invalidPercent": "Value corrected to 50% (invalid input)",
-<<<<<<< HEAD
     "invalidHours": "Value corrected to minimum (invalid input)",
     "regularHoursMin": "The value must be at least 10 hours",
     "regularHoursMax": "The value must not exceed 48 hours",
@@ -116,17 +115,6 @@
     "percentMax": "The value must not exceed 100%",
     "hoursMin": "The value must be at least 50% of regular hours",
     "hoursMax": "The value must not exceed the regular weekly hours"
-=======
-    "percentMin": "Value corrected to 50% (minimum)",
-    "percentMax": "Value corrected to 100% (maximum)",
-    "invalidHours": "Value corrected to minimum (invalid input)",
-    "hoursMin": "Value corrected to minimum (at least 50% required)",
-    "hoursMax": "Value corrected to maximum (regular hours)",
-    "regularHoursMin": "Value corrected to 10 hours (minimum)",
-    "regularHoursMax": "Value corrected to 48 hours (maximum)",
-    "durationMin": "Value corrected to 12 months (minimum)",
-    "durationMax": "Value corrected to 60 months (maximum)"
->>>>>>> 2fb3af5 (#54 Tooltips wurden entfernt und Verkürzungsgründe wurden in Kacheln unterteilt, die Schulabschlüsse haben jetzt ein Dropdown Menü, visuelle Verbesserungen der Verkürzungsgründe wurden auch vorgenommen)
   },
   "btn": {
     "calculate": "Show result",

@@ -105,7 +105,6 @@
     "unknown": "Unbekannter Fehler",
     "tooShort": "Die Ausbildung darf höchstens 12 Monate kürzer sein!",
     "tooLong": "Die Ausbildung darf höchstens 1,5-mal so lang sein!",
-<<<<<<< HEAD
     "invalidPercent": "Der Wert wurde auf 50% korrigiert (ungültige Eingabe)",
     "invalidHours": "Der Wert wurde auf Minimum korrigiert (ungültige Eingabe)",
     "regularHoursMin": "Der Wert muss mindestens 10 Stunden betragen",
@@ -116,18 +115,6 @@
     "percentMax": "Der Wert darf maximal 100% betragen",
     "hoursMin": "Der Wert muss mindestens 50% der regulären Stunden betragen",
     "hoursMax": "Der Wert darf die regulären Wochenstunden nicht überschreiten"
-=======
-    "invalidPercent": "Wert wurde auf 50% korrigiert (ungültige Eingabe)",
-    "percentMin": "Wert wurde auf 50% korrigiert (Minimum)",
-    "percentMax": "Wert wurde auf 100% korrigiert (Maximum)",
-    "invalidHours": "Wert wurde auf Minimum korrigiert (ungültige Eingabe)",
-    "hoursMin": "Wert wurde auf Minimum korrigiert (mindestens 50% erforderlich)",
-    "hoursMax": "Wert wurde auf Maximum korrigiert (reguläre Stunden)",
-    "regularHoursMin": "Wert wurde auf 10 Stunden korrigiert (Minimum)",
-    "regularHoursMax": "Wert wurde auf 48 Stunden korrigiert (Maximum)",
-    "durationMin": "Wert wurde auf 12 Monate korrigiert (Minimum)",
-    "durationMax": "Wert wurde auf 60 Monate korrigiert (Maximum)"
->>>>>>> 2fb3af5 (#54 Tooltips wurden entfernt und Verkürzungsgründe wurden in Kacheln unterteilt, die Schulabschlüsse haben jetzt ein Dropdown Menü, visuelle Verbesserungen der Verkürzungsgründe wurden auch vorgenommen)
   },
   "btn": {
     "calculate": "Ergebnis anzeigen",
