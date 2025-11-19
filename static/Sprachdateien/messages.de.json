@@ -91,12 +91,16 @@
     "unknown": "Unbekannter Fehler",
     "tooShort": "Die Ausbildung darf höchstens 12 Monate kürzer sein!",
     "tooLong": "Die Ausbildung darf höchstens 1,5-mal so lang sein!",
-    "invalidPercent": "Bitte geben Sie eine gültige Zahl für den Teilzeit-Anteil ein",
-    "percentMin": "Der Teilzeit-Anteil muss mindestens 50% betragen",
-    "percentMax": "Der Teilzeit-Anteil darf 100% nicht überschreiten",
-    "invalidHours": "Bitte geben Sie eine gültige Zahl für die Teilzeit-Wochenstunden ein",
-    "hoursMin": "Die Wochenstunden müssen mindestens die Hälfte der regulären Wochenstunden entsprechen",
-    "hoursMax": "Die Wochenstunden dürfen die regulären Wochenstunden nicht überschreiten"
+    "invalidPercent": "Der Wert wurde auf 50% korrigiert (ungültige Eingabe)",
+    "invalidHours": "Der Wert wurde auf Minimum korrigiert (ungültige Eingabe)",
+    "regularHoursMin": "Der Wert muss mindestens 10 Stunden betragen",
+    "regularHoursMax": "Der Wert darf maximal 48 Stunden betragen",
+    "durationMin": "Der Wert muss mindestens 12 Monate betragen",
+    "durationMax": "Der Wert darf maximal 60 Monate betragen",
+    "percentMin": "Der Wert muss mindestens 50% betragen",
+    "percentMax": "Der Wert darf maximal 100% betragen",
+    "hoursMin": "Der Wert muss mindestens 50% der regulären Stunden betragen",
+    "hoursMax": "Der Wert darf die regulären Wochenstunden nicht überschreiten"
   },
   "btn": {
     "calculate": "Ergebnis anzeigen",

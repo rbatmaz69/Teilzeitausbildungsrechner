@@ -91,12 +91,16 @@
     "unknown": "Unknown error",
     "tooShort": "Training can be shortened by up to 12 months only!",
     "tooLong": "Training can be at most 1.5 times longer!",
-    "invalidPercent": "Please enter a valid number for the part-time percentage",
-    "percentMin": "The part-time percentage must be at least 50%",
-    "percentMax": "The part-time percentage must not exceed 100%",
-    "invalidHours": "Please enter a valid number for the part-time hours per week",
-    "hoursMin": "The hours per week must be at least half of the regular weekly hours",
-    "hoursMax": "The hours per week must not exceed the regular weekly hours"
+    "invalidPercent": "Value corrected to 50% (invalid input)",
+    "invalidHours": "Value corrected to minimum (invalid input)",
+    "regularHoursMin": "The value must be at least 10 hours",
+    "regularHoursMax": "The value must not exceed 48 hours",
+    "durationMin": "The value must be at least 12 months",
+    "durationMax": "The value must not exceed 60 months",
+    "percentMin": "The value must be at least 50%",
+    "percentMax": "The value must not exceed 100%",
+    "hoursMin": "The value must be at least 50% of regular hours",
+    "hoursMax": "The value must not exceed the regular weekly hours"
   },
   "btn": {
     "calculate": "Show result",
