@@ -136,7 +136,29 @@
         <legend class="sr-only" data-i18n="vk.legend">Verkürzungsgründe</legend>
 
         <!-- ============================== -->
-        <!-- 1. FAMILIENVORSORGE            -->
+        <!-- 1. SCHULABSCHLUSS (DROPDOWN)   -->
+        <!-- ============================== -->
+        <div class="vk-category">
+          <h2 class="vk-category-title" data-i18n="vk.school.question">
+            Welchen höchsten Schulabschluss haben Sie erreicht?
+          </h2>
+
+          <div class="vk-category-body">
+            <label for="vk-school-select" class="sr-only" data-i18n="vk.school.label">
+              Schulabschluss
+            </label>
+
+            <select id="vk-school-select" name="vk-school-select" data-vk-type="school-select">
+              <option value="none" data-i18n="vk.school.none">Kein Abschluss</option>
+              <option value="hauptschule" data-i18n="vk.school.hauptschule">Hauptschule</option>
+              <option value="realschule" data-vk-set-fields="realschule" data-i18n="vk.school.realschule">Realschule</option>
+              <option value="abitur" data-vk-set-fields="abitur" data-i18n="vk.school.abitur">Abitur / Hochschulreife</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- ============================== -->
+        <!-- 2. FAMILIENVORSORGE            -->
         <!-- ============================== -->
         <div class="vk-category">
           <h2 class="vk-category-title" data-i18n="vk.familie.question">
@@ -163,28 +185,6 @@
             <span id="desc-familie" class="sr-only" data-i18n="vk.familie.sr">
               Wenn Sie Familien- oder Pflegeverantwortung haben, ist eine Verkürzung möglich.
             </span>
-          </div>
-        </div>
-
-        <!-- ============================== -->
-        <!-- 2. SCHULABSCHLUSS (DROPDOWN)   -->
-        <!-- ============================== -->
-        <div class="vk-category">
-          <h2 class="vk-category-title" data-i18n="vk.school.question">
-            Welchen höchsten Schulabschluss haben Sie erreicht?
-          </h2>
-
-          <div class="vk-category-body">
-            <label for="vk-school-select" class="sr-only" data-i18n="vk.school.label">
-              Schulabschluss
-            </label>
-
-            <select id="vk-school-select" name="vk-school-select" data-vk-type="school-select">
-              <option value="none" data-i18n="vk.school.none">Kein Abschluss</option>
-              <option value="hauptschule" data-i18n="vk.school.hauptschule">Hauptschule</option>
-              <option value="realschule" data-vk-set-fields="realschule" data-i18n="vk.school.realschule">Realschule</option>
-              <option value="abitur" data-vk-set-fields="abitur" data-i18n="vk.school.abitur">Abitur / Hochschulreife</option>
-            </select>
           </div>
         </div>
 

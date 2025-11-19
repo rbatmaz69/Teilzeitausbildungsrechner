@@ -258,7 +258,7 @@ function fuelleVerkuerzungen(eingaben, berechnung) {
         beschriftungsSchluessel = "vk.vork.label";
         break;
       case "familien_pflegeverantwortung":
-        beschriftungsSchluessel = "vk.family.label";
+        beschriftungsSchluessel = "vk.familie.label";
         break;
       default:
         beschriftungsSchluessel = "";
