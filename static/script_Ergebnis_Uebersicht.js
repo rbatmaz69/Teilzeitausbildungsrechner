@@ -1,14 +1,17 @@
 /* script_Ergebnis_Übersicht.js – i18n-fähige Ergebnislogik */
 
-document.addEventListener("DOMContentLoaded", () => {
-  // nichts; initialisiere() wird unten registriert
-});
-
 // Kurz-Helfer
 const $ = (selektor) => document.querySelector(selektor);
-function setzeText(selektor, text) { const element = $(selektor); if (element) element.textContent = text; }
-function zeige(element) { if (element) element.hidden = false; }
-function verberge(element) { if (element) element.hidden = true; }
+function setzeText(selektor, text) {
+  const element = $(selektor);
+  if (element) element.textContent = text;
+}
+function zeige(element) {
+  if (element) element.hidden = false;
+}
+function verberge(element) {
+  if (element) element.hidden = true;
+}
 
 // i18n Helfer (nutzt die globale API aus script_Sprache_Auswaehlen.js)
 function uebersetzung(schluessel, fallback) {
@@ -17,6 +20,7 @@ function uebersetzung(schluessel, fallback) {
   }
   return fallback ?? schluessel;
 }
+
 function aktuelleSprache() {
   return (window.I18N && window.I18N.lang) || "de";
 }
@@ -35,6 +39,63 @@ let LETZTE_EINGABEN = null;
 let LETZTE_BERECHNUNG = null;
 
 /**
+ * Sammelt alle Verkürzungsgründe und gibt sie als Objekt zurück,
+ * das direkt an das Backend geschickt werden kann.
+ */
+function collectVerkuerzungsgruende() {
+  const result = {
+    abitur: false,
+    realschule: false,
+    alter_ueber_21: false,
+    familien_pflegeverantwortung: false,
+    vorkenntnisse_monate: 0
+  };
+
+  // 1) Alle Checkbox-Kacheln mit data-vk-field
+  const checkboxInputs = document.querySelectorAll(
+    '#vk-fieldset input[type="checkbox"][data-vk-field]'
+  );
+
+  checkboxInputs.forEach((input) => {
+    if (!input.checked) return;
+
+    const field = input.dataset.vkField;
+    const months = Number(input.dataset.vkMonths || 0);
+
+    if (field === "vorkenntnisse_monate") {
+      // mehrere Kacheln könnten Monate addieren
+      result.vorkenntnisse_monate += months;
+    } else {
+      // boolsche Flags
+      result[field] = true;
+    }
+  });
+
+  // 2) Schulabschluss-Select (Single-Choice)
+  const schoolSelect = document.querySelector('select[data-vk-type="school-select"]');
+  if (schoolSelect) {
+    const selectedOption = schoolSelect.selectedOptions[0];
+    if (selectedOption) {
+      const fields = (selectedOption.dataset.vkSetFields || "")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+
+      fields.forEach((f) => {
+        if (f in result) {
+          result[f] = true;
+        } else {
+          // falls Backend später neue Felder erwartet
+          result[f] = true;
+        }
+      });
+    }
+  }
+
+  return result;
+}
+
+/**
  * Holt die Berechnungsergebnisse vom Backend.
  *
  * Sammelt Formularwerte, sendet sie an den API-Endpunkt und normalisiert
@@ -45,33 +106,23 @@ async function holeZusammenfassung() {
   const wochenstundenElement = document.getElementById("stunden");
   const prozentElement = document.getElementById("teilzeitProzent");
 
-  const abitur = !!document.getElementById("g-abitur")?.checked;
-  const realschule = !!document.getElementById("g-realschule")?.checked;
-  const alter21 = !!document.getElementById("g-alter21")?.checked;
-  const vork = !!document.getElementById("g-vork")?.checked;
-  const familie = !!document.getElementById("g-familie")?.checked;
-
   const basisMonate = Number(basisMonateElement?.value || 0);
   const wochenstunden = Number(wochenstundenElement?.value || 0);
   const teilzeitProzent = Number(prozentElement?.value || 0);
+
+  const verkuerzungsgruende = collectVerkuerzungsgruende();
 
   const nutzdaten = {
     basis_dauer_monate: basisMonate,
     vollzeit_stunden: wochenstunden,
     teilzeit_eingabe: teilzeitProzent,
     eingabetyp: "prozent",
-    verkuerzungsgruende: {
-      abitur,
-      realschule,
-      alter_ueber_21: alter21,
-      familien_pflegeverantwortung: familie,
-      vorkenntnisse_monate: vork ? 12 : 0
-    }
+    verkuerzungsgruende
   };
 
   const antwort = await fetch("/api/calculate", {
     method: "POST",
-    headers: { "Content-Type": "application/json", "Accept": "application/json" },
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify(nutzdaten)
   });
 
@@ -95,12 +146,27 @@ async function holeZusammenfassung() {
   const neueBasis = Number(ergebnis.verkuerzte_dauer_monate || 0);
   const wochen = Math.round(gesamtMonate * 4.33);
 
+  // Anzeige-Liste der gewählten Verkürzungsgründe aus dem Objekt bauen
   const verkuerzungen = [];
-  if (abitur) verkuerzungen.push({ key: "abitur", months: 12 });
-  if (realschule) verkuerzungen.push({ key: "realschule", months: 6 });
-  if (alter21) verkuerzungen.push({ key: "alter_ueber_21", months: 12 });
-  if (vork) verkuerzungen.push({ key: "vorkenntnisse", months: 12 });
-  if (familie) verkuerzungen.push({ key: "familien_pflegeverantwortung", months: 12 });
+
+  if (verkuerzungsgruende.abitur) {
+    verkuerzungen.push({ key: "abitur", months: 12 });
+  }
+  if (verkuerzungsgruende.realschule) {
+    verkuerzungen.push({ key: "realschule", months: 6 });
+  }
+  if (verkuerzungsgruende.alter_ueber_21) {
+    verkuerzungen.push({ key: "alter_ueber_21", months: 12 });
+  }
+  if (verkuerzungsgruende.vorkenntnisse_monate && verkuerzungsgruende.vorkenntnisse_monate > 0) {
+    verkuerzungen.push({
+      key: "vorkenntnisse",
+      months: verkuerzungsgruende.vorkenntnisse_monate
+    });
+  }
+  if (verkuerzungsgruende.familien_pflegeverantwortung) {
+    verkuerzungen.push({ key: "familien_pflegeverantwortung", months: 12 });
+  }
 
   return {
     eingaben: {
@@ -131,9 +197,15 @@ function fuelleEingabenliste(eingaben) {
   liste.innerHTML = "";
 
   const zeilen = [
-    [ uebersetzung("inputs.dauer.label", "Reguläre Ausbildungsdauer (Monate)"), `${eingaben.basisMonate}` ],
-    [ uebersetzung("inputs.stunden.label", "Reguläre Wochenstunden (gesamt)"), `${eingaben.wochenstunden} ${einh.h}` ],
-    [ uebersetzung("inputs.teilzeit.label", "Teilzeit-Anteil"), `${eingaben.teilzeitProzent}%` ]
+    [
+      uebersetzung("inputs.dauer.label", "Reguläre Ausbildungsdauer (Monate)"),
+      `${eingaben.basisMonate}`
+    ],
+    [
+      uebersetzung("inputs.stunden.label", "Reguläre Wochenstunden (gesamt)"),
+      `${eingaben.wochenstunden} ${einh.h}`
+    ],
+    [uebersetzung("inputs.teilzeit.label", "Teilzeit-Anteil"), `${eingaben.teilzeitProzent}%`]
   ];
 
   for (const [schluessel, wert] of zeilen) {
@@ -158,8 +230,13 @@ function fuelleVerkuerzungen(eingaben, berechnung) {
   if (!bereich || !liste || !zusammenfassung) return;
 
   liste.innerHTML = "";
-  const verkuerzungen = Array.isArray(eingaben.verkuerzungen) ? eingaben.verkuerzungen : [];
-  if (!verkuerzungen.length) { verberge(bereich); return; }
+  const verkuerzungen = Array.isArray(eingaben.verkuerzungen)
+    ? eingaben.verkuerzungen
+    : [];
+  if (!verkuerzungen.length) {
+    verberge(bereich);
+    return;
+  }
   zeige(bereich);
 
   verkuerzungen.forEach((verkuerzung) => {
@@ -168,16 +245,31 @@ function fuelleVerkuerzungen(eingaben, berechnung) {
     // Label aus i18n je Key
     let beschriftungsSchluessel;
     switch (verkuerzung.key) {
-      case "abitur": beschriftungsSchluessel = "vk.abitur.label"; break;
-      case "realschule": beschriftungsSchluessel = "vk.realschule.label"; break;
-      case "alter_ueber_21": beschriftungsSchluessel = "vk.alter21.label"; break;
-      case "vorkenntnisse": beschriftungsSchluessel = "vk.vork.label"; break;
-      case "familien_pflegeverantwortung": beschriftungsSchluessel = "vk.familie.label"; break;
-      default: beschriftungsSchluessel = "";
+      case "abitur":
+        beschriftungsSchluessel = "vk.abitur.label";
+        break;
+      case "realschule":
+        beschriftungsSchluessel = "vk.realschule.label";
+        break;
+      case "alter_ueber_21":
+        beschriftungsSchluessel = "vk.alter21.label";
+        break;
+      case "vorkenntnisse":
+        beschriftungsSchluessel = "vk.vork.label";
+        break;
+      case "familien_pflegeverantwortung":
+        beschriftungsSchluessel = "vk.familie.label";
+        break;
+      default:
+        beschriftungsSchluessel = "";
     }
-    const beschriftung = beschriftungsSchluessel ? uebersetzung(beschriftungsSchluessel, verkuerzung.key) : (verkuerzung.key || "");
+    const beschriftung = beschriftungsSchluessel
+      ? uebersetzung(beschriftungsSchluessel, verkuerzung.key)
+      : verkuerzung.key || "";
     const monateWort = uebersetzung("units.months.short", "Mon.");
-    li.textContent = verkuerzung.months ? `${beschriftung} (−${verkuerzung.months} ${monateWort})` : beschriftung;
+    li.textContent = verkuerzung.months
+      ? `${beschriftung} (−${verkuerzung.months} ${monateWort})`
+      : beschriftung;
     liste.appendChild(li);
   });
 
@@ -200,18 +292,38 @@ function fuelleErgebnisse(eingaben, berechnung) {
 
   // Validierungen mit i18n-Texten
   if (berechnung.gesamtMonate < eingaben.basisMonate - 12) {
-    setzeText('#errorTotalMonths', uebersetzung("errors.tooShort", "Die Gesamtdauer darf maximal um 12 Monate verkürzt werden!"));
+    setzeText(
+      "#errorTotalMonths",
+      uebersetzung(
+        "errors.tooShort",
+        "Die Gesamtdauer darf maximal um 12 Monate verkürzt werden!"
+      )
+    );
   } else if (berechnung.gesamtMonate > eingaben.basisMonate * 1.5) {
-    setzeText('#errorTotalMonths', uebersetzung("errors.tooLong", "Die Gesamtdauer darf maximal das 1,5-fache verlängert werden!"));
+    setzeText(
+      "#errorTotalMonths",
+      uebersetzung(
+        "errors.tooLong",
+        "Die Gesamtdauer darf maximal das 1,5-fache verlängert werden!"
+      )
+    );
   } else {
-    setzeText('#errorTotalMonths', "");
+    setzeText("#errorTotalMonths", "");
   }
 
   // Verlängerungszeile
-  const verlaengerungBeschriftung = uebersetzung("res.extension.plus", "+{n} Monate Verlängerung")
-    .replace("{n}", berechnung.verlaengerungMonate);
-  const keineVerlaengerung = uebersetzung("res.extension.none", "Keine Verlängerung");
-  setzeText("#res-extension", berechnung.verlaengerungMonate > 0 ? verlaengerungBeschriftung : keineVerlaengerung);
+  const verlaengerungBeschriftung = uebersetzung(
+    "res.extension.plus",
+    "+{n} Monate Verlängerung"
+  ).replace("{n}", berechnung.verlaengerungMonate);
+  const keineVerlaengerung = uebersetzung(
+    "res.extension.none",
+    "Keine Verlängerung"
+  );
+  setzeText(
+    "#res-extension",
+    berechnung.verlaengerungMonate > 0 ? verlaengerungBeschriftung : keineVerlaengerung
+  );
 
   // Weitere Felder
   const wochenWort = uebersetzung("units.weeks.short", "Wo.");
@@ -223,7 +335,10 @@ function setzeDatumstempel() {
   const element = $("#stamp-date");
   if (!element) return;
   const sprache = aktuelleSprache();
-  const format = new Intl.DateTimeFormat(sprache === "en" ? "en-US" : "de-DE", { dateStyle: "long" });
+  const format = new Intl.DateTimeFormat(
+    sprache === "en" ? "en-US" : "de-DE",
+    { dateStyle: "long" }
+  );
   const beschriftung = sprache === "en" ? "As of" : "Stand";
   element.textContent = `${beschriftung}: ${format.format(new Date())}`;
 }
@@ -257,7 +372,10 @@ async function teileLink() {
  * Die zuletzt gewählte Sprache wird erneut gespeichert.
  */
 function setzeDatenZurueck() {
-  const meldung = uebersetzung("reset.confirm", "Möchten Sie wirklich alle Daten zurücksetzen?");
+  const meldung = uebersetzung(
+    "reset.confirm",
+    "Möchten Sie wirklich alle Daten zurücksetzen?"
+  );
   if (!confirm(meldung)) return;
 
   // Sprache merken, bevor wir den Storage leeren
@@ -268,16 +386,22 @@ function setzeDatenZurueck() {
     null;
 
   // Alles löschen (Formulardaten etc.)
-  try { localStorage.clear(); } catch (fehler) {
+  try {
+    localStorage.clear();
+  } catch (fehler) {
     console.warn("Konnte localStorage nicht löschen:", fehler);
   }
-  try { sessionStorage.clear(); } catch (fehler) {
+  try {
+    sessionStorage.clear();
+  } catch (fehler) {
     console.warn("Konnte sessionStorage nicht löschen:", fehler);
   }
 
   // Sprache wiederherstellen
   if (gespeicherteSprache) {
-    try { localStorage.setItem(SPRACH_SCHLUESSEL, gespeicherteSprache); } catch (fehler) {
+    try {
+      localStorage.setItem(SPRACH_SCHLUESSEL, gespeicherteSprache);
+    } catch (fehler) {
       console.warn("Konnte Sprache nicht wiederherstellen:", fehler);
     }
   }
@@ -308,11 +432,14 @@ async function initialisiere() {
     setzeDatumstempel();
   } catch (fehler) {
     console.error("Fehler beim Laden der Daten:", fehler);
-    const meldung = (fehler && fehler.message) ? String(fehler.message) : uebersetzung("errors.unknown", "Unbekannter Fehler");
-    setzeText('#res-total-months', '–');
-    setzeText('#res-extension', '');
-    setzeText('#res-total-weeks', '–');
-    const fehlerElement = document.getElementById('errorTotalMonths');
+    const meldung =
+      fehler && fehler.message
+        ? String(fehler.message)
+        : uebersetzung("errors.unknown", "Unbekannter Fehler");
+    setzeText("#res-total-months", "–");
+    setzeText("#res-extension", "");
+    setzeText("#res-total-weeks", "–");
+    const fehlerElement = document.getElementById("errorTotalMonths");
     if (fehlerElement) fehlerElement.textContent = meldung;
   }
 }
@@ -329,13 +456,11 @@ window.addEventListener("i18n:changed", () => {
   setzeDatumstempel();
 });
 
-// Funktion für Berechnen-Button
 /**
  * Führt eine erneute Berechnung aus und aktualisiert die Ergebnisansicht.
  * Fehler werden im UI angezeigt.
  */
 async function berechnen() {
-  // Daten laden und anzeigen
   try {
     const { eingaben, berechnung } = await holeZusammenfassung();
     fuelleEingabenliste(eingaben);
@@ -344,18 +469,23 @@ async function berechnen() {
     setzeDatumstempel();
   } catch (fehler) {
     console.error("Fehler beim Laden der Daten:", fehler);
-    const meldung = (fehler && fehler.message) ? String(fehler.message) : "Unbekannter Fehler";
-    setzeText('#res-total-months', '–');
-    setzeText('#res-extension', '');
-    setzeText('#res-total-weeks', '–');
-    const fehlerElement = document.getElementById('errorTotalMonths');
+    const meldung =
+      fehler && fehler.message ? String(fehler.message) : "Unbekannter Fehler";
+    setzeText("#res-total-months", "–");
+    setzeText("#res-extension", "");
+    setzeText("#res-total-weeks", "–");
+    const fehlerElement = document.getElementById("errorTotalMonths");
     if (fehlerElement) fehlerElement.textContent = meldung;
   }
 }
 
-
 // Berechnen-Button
-document.getElementById("berechnenBtn").addEventListener("click", () => {
-  berechnen();
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("berechnenBtn");
+  if (btn) {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      berechnen();
+    });
+  }
 });
-
