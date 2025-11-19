@@ -137,6 +137,65 @@ header h1 {
 }
 
 /* ==========================================
+   NEU: VERKÜRZUNGSGRÜNDE – KATEGORIEN
+   ========================================== */
+
+.vk-category {
+  border: none; /* Rand entfernt */
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
+  background: var(--card-bg);
+  box-shadow: 0 4px 10px rgb(15 23 42 / 4%);
+}
+
+.vk-category-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: .5rem;
+  color: var(--text);
+}
+
+.vk-category-body {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+#vk-fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+#vk-school-select {
+  width: 100%;
+  padding: .5rem .75rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background-color: #fff;
+  font-size: 1rem;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #9ca3af 50%),
+                    linear-gradient(135deg, #9ca3af 50%, transparent 50%);
+  background-position: calc(100% - 18px) calc(50% - 3px),
+                       calc(100% - 13px) calc(50% - 3px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+@media (width >= 600px) {
+  .vk-category-body {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .vk-category .tile {
+    flex: 1 1 calc(50% - .5rem);
+  }
+}
+
+/* ==========================================
    HEADER & NAVIGATION
    ========================================== */
 
@@ -192,43 +251,7 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
   accent-color: var(--primary);
 }
 
-/* Info-Buttons & Icons bleiben visuell erhalten.
-   Die eigentliche Beschreibung liefern sr-only-Texte im HTML.
-   Icons sind decorative: keine Fokusfalle nötig. */
-.info-btn {
-  appearance: none;
-  border: none;
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 8px;
-}
-
-.info-btn:hover { color: #f00; }
-
-.info-btn:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-}
-
-.tooltip {
-  position: absolute;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 10px 12px;
-  margin-top: 8px;
-  color: var(--muted);
-  font-size: .95rem;
-  box-shadow: var(--shadow);
-  display: none; /* bleibt rein visuell/optional */
-  z-index: 999;
-}
-
-.tooltip.show { display: block; }
-
-/* Info-Icon */
+/* Info-Icon (für Eingabefelder oben) */
 .info-icon {
   display: inline-block;
   margin-left: 6px;
@@ -347,15 +370,26 @@ button.berechnen {
   color: white;
   font-weight: bold;
   border: none;
-  border-radius: 10px;
-  padding: 12px 40px;
+  border-radius: 999px;
+  padding: 12px 32px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out, transform 0.05s ease-in-out, box-shadow 0.15s ease-in-out;
+  box-shadow: var(--shadow);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem;
 }
 
 button.berechnen:hover {
   background-color: #a90000;
+  transform: translateY(1px);
+}
+
+button.berechnen:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
 }
 
 .btn{

@@ -29,30 +29,35 @@
     "heading": "Gründe für eine kürzere Ausbildung",
     "helper": "Wähle alles aus, was zu dir passt.",
     "legend": "Gründe für Verkürzung",
-    "abitur": {
-      "label": "Abitur / Fachabitur",
-      "badge": "12 Monate Verkürzung",
-      "tooltip": "Wenn Sie Abitur haben, ist eine Verkürzung möglich."
+    "familie": {
+      "question": "Haben Sie familiäre Verpflichtungen (Kinderbetreuung oder Pflege von Angehörigen)?",
+      "label": "Familien- und Pflegeverantwortung",
+      "badge": "−12 Monate",
+      "sr": "Wenn Sie Familien- oder Pflegeverantwortung haben, ist eine Verkürzung möglich."
     },
-    "realschule": {
-      "label": "Realschulabschluss",
-      "badge": "6 Monate Verkürzung",
-      "tooltip": "Wenn Sie einen Realschulabschluss haben, ist eine Verkürzung möglich."
+    "school": {
+      "question": "Welchen höchsten Schulabschluss haben Sie erreicht?",
+      "label": "Schulabschluss",
+      "none": "Kein Abschluss",
+      "hauptschule": "Hauptschule",
+      "realschule": "Realschule",
+      "abitur": "Abitur / Hochschulreife"
     },
-    "alter21": {
-      "label": "Alter über 21 Jahre",
-      "badge": "12 Monate Verkürzung",
-      "tooltip": "Bei älteren Auszubildenden ist eine Anrechnung von Vorerfahrungen möglich."
+    "qual": {
+      "question": "Welche beruflichen Qualifikationen bringen Sie mit?"
     },
     "vork": {
       "label": "Berufliche Vorkenntnisse",
       "badge": "−12 Monate",
-      "tooltip": "Praxiserfahrungen oder Abschlüsse können die Ausbildungsdauer verkürzen."
+      "sr": "Berufliche Vorkenntnisse können Ihre Ausbildungsdauer verkürzen."
     },
-    "familie": {
-      "label": "Familien- und Pflegeverantwortung",
+    "other": {
+      "question": "Welche weiteren Gründe treffen auf Sie zu?"
+    },
+    "alter21": {
+      "label": "Alter über 21 Jahre",
       "badge": "−12 Monate",
-      "tooltip": "Wenn Sie Familien- oder Pflegeverantwortung haben, ist eine Verkürzung möglich."
+      "sr": "Wenn Sie über 21 Jahre alt sind, können Vorerfahrungen angerechnet werden."
     }
   },
   "res": {
@@ -80,9 +85,18 @@
     "newBase": "Neue Grundlage"
   },
   "units": {
-    "hours": { "short": "h", "full": "Stunden" },
-    "months": { "short": "Monate", "full": "Monate" },
-    "weeks": { "short": "Wochen", "full": "Wochen" },
+    "hours": {
+      "short": "h",
+      "full": "Stunden"
+    },
+    "months": {
+      "short": "Monate",
+      "full": "Monate"
+    },
+    "weeks": {
+      "short": "Wochen",
+      "full": "Wochen"
+    },
     "percent": "%"
   },
   "errors": {
@@ -91,6 +105,7 @@
     "unknown": "Unbekannter Fehler",
     "tooShort": "Die Ausbildung darf höchstens 12 Monate kürzer sein!",
     "tooLong": "Die Ausbildung darf höchstens 1,5-mal so lang sein!",
+<<<<<<< HEAD
     "invalidPercent": "Der Wert wurde auf 50% korrigiert (ungültige Eingabe)",
     "invalidHours": "Der Wert wurde auf Minimum korrigiert (ungültige Eingabe)",
     "regularHoursMin": "Der Wert muss mindestens 10 Stunden betragen",
@@ -101,6 +116,18 @@
     "percentMax": "Der Wert darf maximal 100% betragen",
     "hoursMin": "Der Wert muss mindestens 50% der regulären Stunden betragen",
     "hoursMax": "Der Wert darf die regulären Wochenstunden nicht überschreiten"
+=======
+    "invalidPercent": "Wert wurde auf 50% korrigiert (ungültige Eingabe)",
+    "percentMin": "Wert wurde auf 50% korrigiert (Minimum)",
+    "percentMax": "Wert wurde auf 100% korrigiert (Maximum)",
+    "invalidHours": "Wert wurde auf Minimum korrigiert (ungültige Eingabe)",
+    "hoursMin": "Wert wurde auf Minimum korrigiert (mindestens 50% erforderlich)",
+    "hoursMax": "Wert wurde auf Maximum korrigiert (reguläre Stunden)",
+    "regularHoursMin": "Wert wurde auf 10 Stunden korrigiert (Minimum)",
+    "regularHoursMax": "Wert wurde auf 48 Stunden korrigiert (Maximum)",
+    "durationMin": "Wert wurde auf 12 Monate korrigiert (Minimum)",
+    "durationMax": "Wert wurde auf 60 Monate korrigiert (Maximum)"
+>>>>>>> 2fb3af5 (#54 Tooltips wurden entfernt und Verkürzungsgründe wurden in Kacheln unterteilt, die Schulabschlüsse haben jetzt ein Dropdown Menü, visuelle Verbesserungen der Verkürzungsgründe wurden auch vorgenommen)
   },
   "btn": {
     "calculate": "Ergebnis anzeigen",
