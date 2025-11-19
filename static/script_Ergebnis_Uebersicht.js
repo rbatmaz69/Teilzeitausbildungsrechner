@@ -303,7 +303,6 @@ function setzeDatenZurueck() {
 async function initialisiere() {
   $("#btn-share")?.addEventListener("click", teileLink);
   $("#btn-reset")?.addEventListener("click", setzeDatenZurueck);
-  $("#berechnenBtn")?.addEventListener("click", berechnen);
 
   try {
     const { eingaben, berechnung } = await holeZusammenfassung();
@@ -359,6 +358,18 @@ async function berechnen() {
     if (fehlerElement) fehlerElement.textContent = meldung;
   }
 }
+
+// Berechnen-Button
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("berechnenBtn");
+  if (btn) {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      berechnen();
+    });
+  }
+});
+
 
 /** Prüft die Gesamtkürzungen und zeigt ggf. eine Fehlermeldung an.
  *
