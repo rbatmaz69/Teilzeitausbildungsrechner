@@ -187,6 +187,10 @@ header h1 {
 @media (width >= 600px) {
   .vk-category-body {
     flex-direction: row;
+<<<<<<< HEAD
+=======
+    flex-flow: wrap;
+>>>>>>> 7a64552 (css.styles für pipeline angepasst)
   }
 
   .vk-category .tile {
