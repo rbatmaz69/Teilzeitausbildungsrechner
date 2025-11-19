@@ -31,22 +31,5 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.tooltip').forEach(tooltip => tooltip.classList.remove('show'));
       document.querySelectorAll('.info-btn[aria-expanded="true"]').forEach(schaltflaeche => schaltflaeche.setAttribute('aria-expanded','false'));
     }
-  });
-
-  // Exklusives Verhalten für Abitur- und Realschule-Checkboxen
-  if (abiturKontrollkaestchen) {
-    abiturKontrollkaestchen.addEventListener('change', () => {
-      if (abiturKontrollkaestchen.checked && realschuleKontrollkaestchen) {
-        realschuleKontrollkaestchen.checked = false;
-      }
-    });
-  }
-
-  if (realschuleKontrollkaestchen) {
-    realschuleKontrollkaestchen.addEventListener('change', () => {
-      if (realschuleKontrollkaestchen.checked && abiturKontrollkaestchen) {
-        abiturKontrollkaestchen.checked = false;
-      }
-    });
-  }
+  })
 });
