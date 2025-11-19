@@ -35,6 +35,7 @@ MAX_VERLAENGERUNG_FAKTOR = (
 # BERECHNUNGSFUNKTIONEN
 # ============================================================================
 
+
 def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
     """
     Berechnet die Gesamtverkürzung der Ausbildungsdauer basierend auf
@@ -352,10 +353,10 @@ def berechne_gesamtdauer(
 
     # Schritt 0: Verkürzung anwenden (BEVOR Teilzeit berechnet wird)
     verkuerzte_dauer, verkuerzung_gesamt_ohne_begrenzung = \
-    berechne_verkuerzung(
-        basis_dauer_monate,
-        verkuerzungsgruende
-    )
+        berechne_verkuerzung(
+            basis_dauer_monate,
+            verkuerzungsgruende
+        )
 
     # Schritt 1: Automatische Verlängerung durch Teilzeit
     nach_schritt1 = berechne_teilzeit_schritt1(verkuerzte_dauer, teilzeit_prozent)
