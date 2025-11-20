@@ -145,7 +145,6 @@ async function holeZusammenfassung() {
   const gesamteVerkuerzungMonate = Number(ergebnis.verkuerzung_gesamt_monate || 0);
   const gesamteVerkuerzungMonateOhneBegrenzung = Number(ergebnis.verkuerzung_gesamt_ohne_begrenzung || 0);
   const neueBasis = Number(ergebnis.verkuerzte_dauer_monate || 0);
-  const wochen = Math.round(gesamtMonate * 4.33);
 
   // Anzeige-Liste der gewählten Verkürzungsgründe aus dem Objekt bauen
   const verkuerzungen = [];
@@ -182,7 +181,7 @@ async function holeZusammenfassung() {
       gesamteVerkuerzungMonateOhneBegrenzung,
       neueBasis,
       gesamtMonate,
-      gesamtWochen: wochen
+      gesamtJahre: Math.round((gesamtMonate / 12) * 10) / 10
     }
   };
 }
@@ -191,96 +190,128 @@ async function holeZusammenfassung() {
  * Füllt die Übersichtstabelle der Eingaben (mit i18n).
  *
  * @param {Object} eingaben - Vorverarbeitete Eingabewerte aus holeZusammenfassung().
+ * @param {Object} berechnung - Berechnungsergebnisse zur Darstellung der Verkürzungen.
  */
-function fuelleEingabenliste(eingaben) {
+function fuelleEingabenliste(eingaben, berechnung) {
   const liste = $("#inputs-list");
   if (!liste) return;
   const einh = einheiten();
   liste.innerHTML = "";
 
+  // Teilzeit-Stunden berechnen
+  const teilzeitStunden = Math.round((eingaben.wochenstunden * eingaben.teilzeitProzent) / 100);
+
   const zeilen = [
     [
-      uebersetzung("inputs.dauer.label", "Reguläre Ausbildungsdauer (Monate)"),
+      uebersetzung("inputs.dauer.labelShort", "Ausbildung (Vollzeit)"),
       `${eingaben.basisMonate}`
     ],
     [
-      uebersetzung("inputs.stunden.label", "Reguläre Wochenstunden (gesamt)"),
+      uebersetzung("inputs.stunden.labelShort", "Wochenstunden (Vollzeit)"),
       `${eingaben.wochenstunden} ${einh.h}`
     ],
-    [uebersetzung("inputs.teilzeit.label", "Teilzeit-Anteil"), `${eingaben.teilzeitProzent}%`]
+    [
+      uebersetzung("inputs.teilzeit.labelShort", "Teilzeit"),
+      `${eingaben.teilzeitProzent}% (${teilzeitStunden} ${einh.h})`
+    ]
   ];
 
   for (const [schluessel, wert] of zeilen) {
+    const wrapper = document.createElement("div");
     const dt = document.createElement("dt");
     dt.textContent = schluessel;
     const dd = document.createElement("dd");
     dd.textContent = wert;
-    liste.append(dt, dd);
+    wrapper.append(dt, dd);
+    liste.append(wrapper);
   }
-}
 
-/**
- * Zeigt Verkürzungsgründe und Zusammenfassung (mit i18n).
- *
- * @param {Object} eingaben - Eingabe-Informationen inklusive ausgewählter Cuts.
- * @param {Object} berechnung - Berechnungsergebnisse zur Darstellung.
- */
-function fuelleVerkuerzungen(eingaben, berechnung) {
-  const bereich = $("#cuts-section");
-  const liste = $("#cuts-list");
-  const zusammenfassung = $("#cuts-summary");
-  if (!bereich || !liste || !zusammenfassung) return;
-
-  liste.innerHTML = "";
+  // Verkürzungen hinzufügen, wenn vorhanden
   const verkuerzungen = Array.isArray(eingaben.verkuerzungen)
     ? eingaben.verkuerzungen
     : [];
-  if (!verkuerzungen.length) {
-    verberge(bereich);
-    return;
-  }
-  zeige(bereich);
-
-  verkuerzungen.forEach((verkuerzung) => {
-    const li = document.createElement("li");
-    li.className = "tag";
-    // Label aus i18n je Key
-    let beschriftungsSchluessel;
-    switch (verkuerzung.key) {
-      case "abitur":
-        beschriftungsSchluessel = "vk.abitur.label";
-        break;
-      case "realschule":
-        beschriftungsSchluessel = "vk.realschule.label";
-        break;
-      case "alter_ueber_21":
-        beschriftungsSchluessel = "vk.alter21.label";
-        break;
-      case "vorkenntnisse":
-        beschriftungsSchluessel = "vk.vork.label";
-        break;
-      case "familien_pflegeverantwortung":
-        beschriftungsSchluessel = "vk.familie.label";
-        break;
-      default:
-        beschriftungsSchluessel = "";
+  
+  if (verkuerzungen.length > 0 && berechnung) {
+    const verkuerzungenWrapper = document.createElement("div");
+    const verkuerzungenDt = document.createElement("dt");
+    verkuerzungenDt.className = "verkuerzungen-label";
+    verkuerzungenDt.textContent = uebersetzung("inputs.verkuerzungen.labelShort", "Verkürzungen");
+    
+    const verkuerzungenDd = document.createElement("dd");
+    verkuerzungenDd.className = "verkuerzungen-content";
+    
+    // Liste der Verkürzungsgründe
+    const verkuerzungenListe = document.createElement("ul");
+    verkuerzungenListe.className = "verkuerzungen-list";
+    
+    verkuerzungen.forEach((verkuerzung) => {
+      const li = document.createElement("li");
+      // Label aus i18n je Key
+      let beschriftungsSchluessel;
+      switch (verkuerzung.key) {
+        case "abitur":
+          beschriftungsSchluessel = "vk.abitur.label";
+          break;
+        case "realschule":
+          beschriftungsSchluessel = "vk.realschule.label";
+          break;
+        case "alter_ueber_21":
+          beschriftungsSchluessel = "vk.alter21.label";
+          break;
+        case "vorkenntnisse":
+          beschriftungsSchluessel = "vk.vork.label";
+          break;
+        case "familien_pflegeverantwortung":
+          beschriftungsSchluessel = "vk.familie.label";
+          break;
+        default:
+          beschriftungsSchluessel = "";
+      }
+      const beschriftung = beschriftungsSchluessel
+        ? uebersetzung(beschriftungsSchluessel, verkuerzung.key)
+        : verkuerzung.key || "";
+      const monateWort = uebersetzung("units.months.short", "Mon.");
+      li.textContent = verkuerzung.months
+        ? `${beschriftung} (−${verkuerzung.months} ${monateWort})`
+        : beschriftung;
+      verkuerzungenListe.appendChild(li);
+    });
+    
+    verkuerzungenDd.appendChild(verkuerzungenListe);
+    
+    // Zusammenfassung unter der Liste
+    const monateWortVoll = uebersetzung("units.months.full", "Monate");
+    const gesamtBeschriftung = uebersetzung("cuts.total", "Gesamt");
+    const neueBasisBeschriftung = uebersetzung("cuts.newBase", "Neue Basis");
+    const zusammenfassung = document.createElement("div");
+    zusammenfassung.className = "verkuerzungen-summary muted";
+    
+    const gesamtZeile = document.createElement("div");
+    gesamtZeile.textContent = `${gesamtBeschriftung}: −${berechnung.gesamteVerkuerzungMonate} ${monateWortVoll}`;
+    zusammenfassung.appendChild(gesamtZeile);
+    
+    const neueBasisZeile = document.createElement("div");
+    neueBasisZeile.textContent = `${neueBasisBeschriftung}: ${berechnung.neueBasis} ${monateWortVoll}`;
+    zusammenfassung.appendChild(neueBasisZeile);
+    
+    verkuerzungenDd.appendChild(zusammenfassung);
+    
+    // Warnhinweis, falls nötig
+    const warnhinweis = document.createElement("p");
+    warnhinweis.className = "error-message verkuerzungen-warning";
+    warnhinweis.id = "errorVerkuerzungenInListe";
+    warnhinweis.style.display = "none";
+    verkuerzungenDd.appendChild(warnhinweis);
+    
+    verkuerzungenWrapper.append(verkuerzungenDt, verkuerzungenDd);
+    liste.append(verkuerzungenWrapper);
+    
+    // Warnhinweis prüfen und anzeigen
+    if (berechnung.gesamteVerkuerzungMonateOhneBegrenzung > 12) {
+      warnhinweis.textContent = uebersetzung("errors.invalidCut", "Hinweis: Ihre gewählten Verkürzungsgründe ergeben zusammen mehr als 12 Monate. Die Gesamtverkürzung wird daher auf maximal 12 Monate begrenzt, wie gesetzlich vorgesehen.");
+      warnhinweis.style.display = "block";
     }
-    const beschriftung = beschriftungsSchluessel
-      ? uebersetzung(beschriftungsSchluessel, verkuerzung.key)
-      : verkuerzung.key || "";
-    const monateWort = uebersetzung("units.months.short", "Mon.");
-    li.textContent = verkuerzung.months
-      ? `${beschriftung} (−${verkuerzung.months} ${monateWort})`
-      : beschriftung;
-    liste.appendChild(li);
-  });
-
-  const monateWortVoll = uebersetzung("units.months.full", "Monate");
-  const gesamtBeschriftung = uebersetzung("cuts.total", "Gesamt");
-  const neueBasisBeschriftung = uebersetzung("cuts.newBase", "Neue Basis");
-  zusammenfassung.textContent = `${gesamtBeschriftung}: −${berechnung.gesamteVerkuerzungMonate} ${monateWortVoll} · ${neueBasisBeschriftung}: ${berechnung.neueBasis} ${monateWortVoll}`;
-
-  pruefeVerkuerzungen(berechnung.gesamteVerkuerzungMonateOhneBegrenzung);
+  }
 }
 
 /**
@@ -293,6 +324,13 @@ function fuelleErgebnisse(eingaben, berechnung) {
   // Zahl + Einheit lokalisiert
   const monateWort = uebersetzung("units.months.full", "Monate");
   setzeText("#res-total-months", `${berechnung.gesamtMonate} ${monateWort}`);
+
+  // Jahre-Anzeige
+  const jahreElement = $("#res-total-years");
+  if (jahreElement && berechnung.gesamtJahre) {
+    const jahreWort = uebersetzung("units.years.full", "Jahre");
+    setzeText("#res-total-years", `≈ ${berechnung.gesamtJahre} ${jahreWort}`);
+  }
 
   // Validierungen mit i18n-Texten
   if (berechnung.gesamtMonate < eingaben.basisMonate - 12) {
@@ -315,23 +353,25 @@ function fuelleErgebnisse(eingaben, berechnung) {
     setzeText("#errorTotalMonths", "");
   }
 
-  // Verlängerungszeile
-  const verlaengerungBeschriftung = uebersetzung(
-    "res.extension.plus",
-    "+{n} Monate Verlängerung"
-  ).replace("{n}", berechnung.verlaengerungMonate);
-  const keineVerlaengerung = uebersetzung(
-    "res.extension.none",
-    "Keine Verlängerung"
-  );
-  setzeText(
-    "#res-extension",
-    berechnung.verlaengerungMonate > 0 ? verlaengerungBeschriftung : keineVerlaengerung
-  );
-
-  // Weitere Felder
-  const wochenWort = uebersetzung("units.weeks.short", "Wo.");
-  setzeText("#res-total-weeks", `${berechnung.gesamtWochen} ${wochenWort}`);
+  // Verlängerungsanzeige: Basis → Pfeil mit Delta → Ziel
+  const extensionWrapper = $("#res-extension-wrapper");
+  if (extensionWrapper) {
+    if (berechnung.verlaengerungMonate > 0) {
+      zeige(extensionWrapper);
+      const monateWort = uebersetzung("units.months.short", "Mon.");
+      
+      // Basis (verkürzte Dauer)
+      setzeText("#res-extension-basis", `${berechnung.neueBasis} ${monateWort}`);
+      
+      // Finale Dauer
+      setzeText("#res-extension-total", `${berechnung.gesamtMonate} ${monateWort}`);
+      
+      // Delta (Verlängerung) - nur als Zahl unter dem Pfeil
+      setzeText("#res-extension-delta", `+${berechnung.verlaengerungMonate}`);
+    } else {
+      verberge(extensionWrapper);
+    }
+  }
 }
 
 /** Setzt das Datum in der Fußzeile (lokalisiert). */
@@ -389,6 +429,35 @@ function setzeDatenZurueck() {
     (window.I18N && window.I18N.lang) ||
     null;
 
+  // Formularfelder zurücksetzen
+  const dauerInput = document.getElementById("dauer");
+  const stundenInput = document.getElementById("stunden");
+  const teilzeitProzentInput = document.getElementById("teilzeitProzent");
+  
+  if (dauerInput) dauerInput.value = "36";
+  if (stundenInput) stundenInput.value = "40";
+  if (teilzeitProzentInput) teilzeitProzentInput.value = "75";
+  
+  // Checkboxes für Verkürzungsgründe zurücksetzen
+  const checkboxes = document.querySelectorAll('input[type="checkbox"][data-vk-field]');
+  checkboxes.forEach(checkbox => {
+    checkbox.checked = false;
+  });
+  
+  // Schulabschluss zurücksetzen
+  const abiturCheckbox = document.getElementById("g-abitur");
+  const realschuleCheckbox = document.getElementById("g-realschule");
+  const schoolSelect = document.getElementById("vk-school-select");
+  if (abiturCheckbox) abiturCheckbox.checked = false;
+  if (realschuleCheckbox) realschuleCheckbox.checked = false;
+  if (schoolSelect) schoolSelect.value = "none";
+  
+  // Vorkenntnisse-Monate zurücksetzen (falls vorhanden)
+  const vorkenntnisseInput = document.querySelector('input[data-vk-field="vorkenntnisse_monate"]');
+  if (vorkenntnisseInput && vorkenntnisseInput.type === "number") {
+    vorkenntnisseInput.value = "";
+  }
+
   // Alles löschen (Formulardaten etc.)
   try {
     localStorage.clear();
@@ -410,6 +479,18 @@ function setzeDatenZurueck() {
     }
   }
 
+  // Ergebnisse zurücksetzen
+  setzeText("#res-total-months", "–");
+  setzeText("#res-total-years", "–");
+  const extensionWrapper = $("#res-extension-wrapper");
+  if (extensionWrapper) verberge(extensionWrapper);
+  const errorTotalMonths = $("#errorTotalMonths");
+  if (errorTotalMonths) errorTotalMonths.textContent = "";
+  
+  // Eingabenliste leeren
+  const inputsList = $("#inputs-list");
+  if (inputsList) inputsList.innerHTML = "";
+
   // Neu laden
   location.reload();
 }
@@ -430,8 +511,7 @@ async function initialisiere() {
     const { eingaben, berechnung } = await holeZusammenfassung();
     LETZTE_EINGABEN = eingaben;
     LETZTE_BERECHNUNG = berechnung;
-    fuelleEingabenliste(eingaben);
-    fuelleVerkuerzungen(eingaben, berechnung);
+    fuelleEingabenliste(eingaben, berechnung);
     fuelleErgebnisse(eingaben, berechnung);
     setzeDatumstempel();
   } catch (fehler) {
@@ -441,8 +521,9 @@ async function initialisiere() {
         ? String(fehler.message)
         : uebersetzung("errors.unknown", "Unbekannter Fehler");
     setzeText("#res-total-months", "–");
-    setzeText("#res-extension", "");
-    setzeText("#res-total-weeks", "–");
+    setzeText("#res-total-years", "–");
+    const extensionWrapper = $("#res-extension-wrapper");
+    if (extensionWrapper) verberge(extensionWrapper);
     const fehlerElement = document.getElementById("errorTotalMonths");
     if (fehlerElement) fehlerElement.textContent = meldung;
   }
@@ -454,8 +535,7 @@ document.addEventListener("DOMContentLoaded", initialisiere);
 // Bei Sprachwechsel nur UI neu rendern (ohne neue API-Calls)
 window.addEventListener("i18n:changed", () => {
   if (!LETZTE_EINGABEN || !LETZTE_BERECHNUNG) return;
-  fuelleEingabenliste(LETZTE_EINGABEN);
-  fuelleVerkuerzungen(LETZTE_EINGABEN, LETZTE_BERECHNUNG);
+  fuelleEingabenliste(LETZTE_EINGABEN, LETZTE_BERECHNUNG);
   fuelleErgebnisse(LETZTE_EINGABEN, LETZTE_BERECHNUNG);
   setzeDatumstempel();
 });
@@ -467,8 +547,7 @@ window.addEventListener("i18n:changed", () => {
 async function berechnen() {
   try {
     const { eingaben, berechnung } = await holeZusammenfassung();
-    fuelleEingabenliste(eingaben);
-    fuelleVerkuerzungen(eingaben, berechnung);
+    fuelleEingabenliste(eingaben, berechnung);
     fuelleErgebnisse(eingaben, berechnung);
     setzeDatumstempel();
   } catch (fehler) {
@@ -476,8 +555,9 @@ async function berechnen() {
     const meldung =
       fehler && fehler.message ? String(fehler.message) : "Unbekannter Fehler";
     setzeText("#res-total-months", "–");
-    setzeText("#res-extension", "");
-    setzeText("#res-total-weeks", "–");
+    setzeText("#res-total-years", "–");
+    const extensionWrapper = $("#res-extension-wrapper");
+    if (extensionWrapper) verberge(extensionWrapper);
     const fehlerElement = document.getElementById("errorTotalMonths");
     if (fehlerElement) fehlerElement.textContent = meldung;
   }
@@ -500,11 +580,14 @@ document.addEventListener("DOMContentLoaded", () => {
  * @param {number} gesamtVerkuerzungen - Die gesamten Verkürzung in Monaten (ohne Begrenzung).
  */
 function pruefeVerkuerzungen(gesamtVerkuerzungen) {
-  const fehlerVerkuerzungen = document.getElementById("errorVerkuerzungen");
+  const fehlerVerkuerzungenInListe = document.getElementById("errorVerkuerzungenInListe");
+  const warnhinweisText = gesamtVerkuerzungen > 12
+    ? uebersetzung("errors.invalidCut", "Hinweis: Ihre gewählten Verkürzungsgründe ergeben zusammen mehr als 12 Monate. Die Gesamtverkürzung wird daher auf maximal 12 Monate begrenzt, wie gesetzlich vorgesehen.")
+    : "";
 
-  if (gesamtVerkuerzungen > 12) {
-    fehlerVerkuerzungen.textContent = uebersetzung("errors.invalidCut", "Die Ausbildung darf höchstens 12 Monate kürzer sein!");
-  } else {
-    fehlerVerkuerzungen.textContent = "";
+  // Element in der Liste
+  if (fehlerVerkuerzungenInListe) {
+    fehlerVerkuerzungenInListe.textContent = warnhinweisText;
+    fehlerVerkuerzungenInListe.style.display = warnhinweisText ? "block" : "none";
   }
 }
