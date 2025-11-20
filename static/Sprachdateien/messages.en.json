@@ -114,7 +114,8 @@
     "percentMin": "The value must be at least 50%",
     "percentMax": "The value must not exceed 100%",
     "hoursMin": "The value must be at least 50% of regular hours",
-    "hoursMax": "The value must not exceed the regular weekly hours"
+    "hoursMax": "The value must not exceed the regular weekly hours",
+    "invalidCut": "Note: Your selected reduction reasons add up to more than 12 months. The total reduction is therefore limited to a maximum of 12 months, as required by law."
   },
   "btn": {
     "calculate": "Show result",

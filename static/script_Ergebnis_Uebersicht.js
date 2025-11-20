@@ -143,6 +143,7 @@ async function holeZusammenfassung() {
   const gesamtMonate = Number(ergebnis.finale_dauer_monate || 0);
   const verlaengerungMonate = Number(ergebnis.verlaengerung_durch_teilzeit_monate || 0);
   const gesamteVerkuerzungMonate = Number(ergebnis.verkuerzung_gesamt_monate || 0);
+  const gesamteVerkuerzungMonateOhneBegrenzung = Number(ergebnis.verkuerzung_gesamt_ohne_begrenzung || 0);
   const neueBasis = Number(ergebnis.verkuerzte_dauer_monate || 0);
   const wochen = Math.round(gesamtMonate * 4.33);
 
@@ -178,6 +179,7 @@ async function holeZusammenfassung() {
     berechnung: {
       verlaengerungMonate,
       gesamteVerkuerzungMonate,
+      gesamteVerkuerzungMonateOhneBegrenzung,
       neueBasis,
       gesamtMonate,
       gesamtWochen: wochen
@@ -277,6 +279,8 @@ function fuelleVerkuerzungen(eingaben, berechnung) {
   const gesamtBeschriftung = uebersetzung("cuts.total", "Gesamt");
   const neueBasisBeschriftung = uebersetzung("cuts.newBase", "Neue Basis");
   zusammenfassung.textContent = `${gesamtBeschriftung}: −${berechnung.gesamteVerkuerzungMonate} ${monateWortVoll} · ${neueBasisBeschriftung}: ${berechnung.neueBasis} ${monateWortVoll}`;
+
+  pruefeVerkuerzungen(berechnung.gesamteVerkuerzungMonateOhneBegrenzung);
 }
 
 /**
@@ -489,3 +493,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+
+/** Prüft die Gesamtkürzungen und zeigt ggf. eine Fehlermeldung an.
+ *
+ * @param {number} gesamtVerkuerzungen - Die gesamten Verkürzung in Monaten (ohne Begrenzung).
+ */
+function pruefeVerkuerzungen(gesamtVerkuerzungen) {
+  const fehlerVerkuerzungen = document.getElementById("errorVerkuerzungen");
+
+  if (gesamtVerkuerzungen > 12) {
+    fehlerVerkuerzungen.textContent = uebersetzung("errors.invalidCut", "Die Ausbildung darf höchstens 12 Monate kürzer sein!");
+  } else {
+    fehlerVerkuerzungen.textContent = "";
+  }
+}

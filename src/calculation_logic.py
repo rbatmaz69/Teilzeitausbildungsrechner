@@ -31,7 +31,6 @@ MAX_VERLAENGERUNG_FAKTOR = (
     1.5  # § 7a Abs. 2 Satz 1 BBiG - Höchstens 1,5-fache der AO-Dauer
 )
 
-
 # ============================================================================
 # BERECHNUNGSFUNKTIONEN
 # ============================================================================
@@ -88,15 +87,15 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
         verkuerzung_gesamt += VERKUERZUNG_VORKENNTNISSE
 
     # Gesamtverkürzung darf maximal 12 Monate betragen (Regel der zuständigen Stelle)
-    verkuerzung_gesamt = min(verkuerzung_gesamt, MAX_GESAMT_VERKUERZUNG_MONATE)
+    verkuerzung_final = min(verkuerzung_gesamt, MAX_GESAMT_VERKUERZUNG_MONATE)
 
     # Verkürzte Dauer berechnen
-    verkuerzte_dauer = basis_dauer_monate - verkuerzung_gesamt
+    verkuerzte_dauer = basis_dauer_monate - verkuerzung_final
 
     # Sicherstellen, dass Dauer nicht negativ wird
     verkuerzte_dauer = max(verkuerzte_dauer, 0)
 
-    return verkuerzte_dauer
+    return verkuerzte_dauer, verkuerzung_gesamt
 
 
 def berechne_teilzeit_schritt1(verkuerzte_dauer_monate, teilzeit_prozent):
@@ -353,7 +352,11 @@ def berechne_gesamtdauer(
         teilzeit_stunden = berechne_teilzeit_stunden(vollzeit_stunden, teilzeit_eingabe)
 
     # Schritt 0: Verkürzung anwenden (BEVOR Teilzeit berechnet wird)
-    verkuerzte_dauer = berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende)
+    verkuerzte_dauer, verkuerzung_gesamt_ohne_begrenzung = \
+        berechne_verkuerzung(
+            basis_dauer_monate,
+            verkuerzungsgruende
+        )
 
     # Schritt 1: Automatische Verlängerung durch Teilzeit
     nach_schritt1 = berechne_teilzeit_schritt1(verkuerzte_dauer, teilzeit_prozent)
@@ -390,6 +393,7 @@ def berechne_gesamtdauer(
         "wochenstunden": teilzeit_stunden,  # Gleiche wie teilzeit_stunden
         "verkuerzung_gesamt_monate": verkuerzung_gesamt,
         "verlaengerung_durch_teilzeit_monate": verlaengerung_durch_teilzeit,
+        "verkuerzung_gesamt_ohne_begrenzung": verkuerzung_gesamt_ohne_begrenzung,
     }
 
 
