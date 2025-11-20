@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Part-time training calculator"
+    "title": "Part-time apprenticeship calculator"
   },
   "lang": {
     "label": "Language",
@@ -11,23 +11,29 @@
   "inputs": {
     "title": "Your details",
     "dauer": {
-      "label": "How long is your training in full-time?",
-      "tooltip": "Write how many months your training usually takes in full-time."
+      "label": "How long is your apprenticeship in full-time?",
+      "labelShort": "Apprenticeship (full-time)",
+      "tooltip": "Enter how many months your apprenticeship usually takes in full-time."
     },
     "stunden": {
-      "label": "How many hours per week does the full-time training have?",
-      "tooltip": "Count all hours, including school hours."
+      "label": "How many hours per week does the full-time apprenticeship have?",
+      "labelShort": "Hours per week (full-time)",
+      "tooltip": "Include all hours, including school hours."
     },
     "teilzeit": {
       "label": "How much of full-time do you want to work?",
-      "tooltip": "For part-time training, you must work at least 50%.",
+      "labelShort": "Part-time",
+      "tooltip": "For part-time apprenticeship, you must work at least 50%.",
       "percent": "Percent",
       "hours": "Hours"
+    },
+    "verkuerzungen": {
+      "labelShort": "Reductions"
     }
   },
   "vk": {
-    "heading": "Reasons for shorter training",
-    "helper": "Choose all options that fit you.",
+    "heading": "Reasons for shorter apprenticeship",
+    "helper": "Choose all options that apply to you.",
     "legend": "Shortening reasons",
     "familie": {
       "question": "Do you have family responsibilities (child care or care for relatives)?",
@@ -49,7 +55,7 @@
     "vork": {
       "label": "Professional experience",
       "badge": "−12 months",
-      "sr": "Professional experience can shorten your training duration."
+      "sr": "Professional experience can shorten your apprenticeship duration."
     },
     "other": {
       "question": "Which other reasons apply to you?"
@@ -61,17 +67,18 @@
     }
   },
   "res": {
-    "headline": "Your part-time training",
+    "headline": "Your part-time apprenticeship",
     "helper": "Here you can see your details and the result.",
     "notesTitle": "Important information",
-    "notes": "<li>This calculation is only a <strong>help</strong>.</li><li>The result is <strong>not official</strong>.</li><li>Talk about the result with your training company.</li><li>Part-time training is possible if you do at least 50% of the normal time.</li>",
+    "notes": "<li>This calculation is only a <strong>help</strong>.</li><li>The result is <strong>not official</strong>.</li><li>Discuss the result with your training company.</li><li>Part-time apprenticeship is possible if you work at least 50% of the normal time.</li>",
     "kv": {
       "total": "Total time",
       "schoolPerWeek": "School per week",
       "workPerWeek": "Work per week"
     },
     "extension": {
-      "plus": "{n} months extension",
+      "label": "Automatic extension due to part-time:",
+      "plus": "+{n} months",
       "none": "No extension"
     },
     "placeholders": {
@@ -97,14 +104,18 @@
       "short": "weeks",
       "full": "weeks"
     },
+    "years": {
+      "short": "Y.",
+      "full": "years"
+    },
     "percent": "%"
   },
   "errors": {
     "placeholder": "",
     "fetch": "Could not load data.",
     "unknown": "Unknown error",
-    "tooShort": "Training can be shortened by up to 12 months only!",
-    "tooLong": "Training can be at most 1.5 times longer!",
+    "tooShort": "Apprenticeship can be shortened by up to 12 months only!",
+    "tooLong": "Apprenticeship can be at most 1.5 times longer!",
     "invalidPercent": "Value corrected to 50% (invalid input)",
     "invalidHours": "Value corrected to minimum (invalid input)",
     "regularHoursMin": "The value must be at least 10 hours",
@@ -115,7 +126,8 @@
     "percentMax": "The value must not exceed 100%",
     "hoursMin": "The value must be at least 50% of regular hours",
     "hoursMax": "The value must not exceed the regular weekly hours",
-    "invalidCut": "Note: Your selected reduction reasons add up to more than 12 months. The total reduction is therefore limited to a maximum of 12 months, as required by law."
+    "invalidCut": "Note: Your selected reduction reasons add up to more than 12 months. The total reduction is therefore limited to a maximum of 12 months, as required by law.",
+    "invalidCutShort": "Note: Reduction limited to max. 12 months"
   },
   "btn": {
     "calculate": "Show result",
@@ -128,9 +140,30 @@
     "copied": "The link has been copied."
   },
   "reset": {
-    "confirm": "Do you really want to reset all data?"
+    "confirm": "Would you like to reset all data?"
   },
   "nav": {
     "actions": "Actions"
+  },
+  "start": {
+    "title": {
+      "prefix": "Plan your ",
+      "accent": "part-time apprenticeship",
+      "suffix": " easily"
+    },
+    "description": "Calculate the optimal balance between working hours and apprenticeship. Our calculator helps you find the right part-time solution for your needs.",
+    "card1": {
+      "title": "Flexible hours",
+      "subtitle": "Individual time planning"
+    },
+    "card2": {
+      "title": "Accurate planning",
+      "subtitle": "Precise calculation"
+    },
+    "card3": {
+      "title": "Successful completion",
+      "subtitle": "Structured path"
+    },
+    "button": "Calculate now"
   }
 }

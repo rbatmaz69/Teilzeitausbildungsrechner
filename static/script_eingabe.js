@@ -735,4 +735,17 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initiale Validierung und Button-Markierung beim Seitenstart
   validiereSichtbareButtons();
   synchronisiereButtonMarkierung();
+
+  // Scroll-Funktion für "Jetzt berechnen" Button
+  const btnStartCalculate = document.getElementById("btn-start-calculate");
+  const inputHeading = document.getElementById("input-heading");
+  
+  if (btnStartCalculate && inputHeading) {
+    btnStartCalculate.addEventListener("click", () => {
+      inputHeading.scrollIntoView({ 
+        behavior: "smooth", 
+        block: "start" 
+      });
+    });
+  }
 });

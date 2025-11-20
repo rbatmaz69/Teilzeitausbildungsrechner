@@ -29,6 +29,68 @@
     </div>
   </nav>
 
+  <!-- ================================ STARTSEITE ================================ -->
+  <div class="container">
+    <section id="startseite" class="startseite">
+      <h1 class="startseite-title">
+        <span data-i18n="start.title.prefix">Planen Sie Ihre </span><span class="startseite-title-accent" data-i18n="start.title.accent">Teilzeitausbildung</span><span data-i18n="start.title.suffix"> ganz einfach</span>
+      </h1>
+      <p class="startseite-description" data-i18n="start.description">
+        Berechnen Sie die optimale Aufteilung zwischen Arbeitszeit und Ausbildung. Unser Rechner hilft Ihnen dabei, die passende Teilzeitlösung für Ihre Bedürfnisse zu finden.
+      </p>
+
+      <div class="info-cards">
+        <div class="info-card">
+          <div class="info-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div class="info-card-content">
+            <h3 class="info-card-title" data-i18n="start.card1.title">Flexible Zeiten</h3>
+            <p class="info-card-subtitle" data-i18n="start.card1.subtitle">Individuelle Stundenplanung</p>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <div class="info-card-content">
+            <h3 class="info-card-title" data-i18n="start.card2.title">Genaue Planung</h3>
+            <p class="info-card-subtitle" data-i18n="start.card2.subtitle">Präzise Berechnung</p>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+          </div>
+          <div class="info-card-content">
+            <h3 class="info-card-title" data-i18n="start.card3.title">Erfolgreicher Abschluss</h3>
+            <p class="info-card-subtitle" data-i18n="start.card3.subtitle">Strukturierter Weg</p>
+          </div>
+        </div>
+      </div>
+
+      <button id="btn-start-calculate" class="btn-start-calculate" type="button" data-i18n="start.button">
+        Jetzt berechnen
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
+    </section>
+  </div>
+
   <div class="container">
     <!-- ================================ EINGABEN DES RECHNERS ================================ -->
 
@@ -174,10 +236,7 @@
               >
               <div class="tile-body" style="flex:1">
                 <div class="tile-header">
-                  <span>
-                    <span data-i18n="vk.familie.label">Familien- und Pflegeverantwortung</span>
-                    <span class="badge" data-i18n="vk.familie.badge">−12 Monate</span>
-                  </span>
+                  <span data-i18n="vk.familie.label">Familien- und Pflegeverantwortung</span>
                 </div>
               </div>
             </label>
@@ -207,10 +266,7 @@
 
               <div class="tile-body">
                 <div class="tile-header">
-                  <span>
-                    <span data-i18n="vk.vork.label">Berufliche Vorkenntnisse</span>
-                    <span class="badge" data-i18n="vk.vork.badge">−12 Monate</span>
-                  </span>
+                  <span data-i18n="vk.vork.label">Berufliche Vorkenntnisse</span>
                 </div>
               </div>
             </label>
@@ -239,10 +295,7 @@
 
               <div class="tile-body">
                 <div class="tile-header">
-                  <span>
-                    <span data-i18n="vk.alter21.label">Alter über 21 Jahre</span>
-                    <span class="badge" data-i18n="vk.alter21.badge">−12 Monate</span>
-                  </span>
+                  <span data-i18n="vk.alter21.label">Alter über 21 Jahre</span>
                 </div>
               </div>
             </label>
@@ -273,17 +326,21 @@
       <div class="grid">
         <div class="highlight-main">
           <p class="big-number" id="res-total-months" aria-live="polite" data-i18n="res.placeholders.months">–</p>
+          <p class="result-years" id="res-total-years">–</p>
           <span class="error-message" id="errorTotalMonths" data-i18n="errors.placeholder"></span>
-          <p class="muted" id="res-extension" data-i18n="res.placeholders.extension">–</p>
-        </div>
-
-        <div class="highlight-meta">
-          <dl class="kv">
-            <div>
-              <dt data-i18n="res.kv.total">Gesamtdauer</dt>
-              <dd id="res-total-weeks">–</dd>
+          
+          <!-- Verlängerungsanzeige: Basis → Pfeil mit Delta → Ziel -->
+          <div class="result-extension-wrapper" id="res-extension-wrapper" hidden>
+            <p class="result-extension-label" data-i18n="res.extension.label">Automatische Verlängerung durch Teilzeit:</p>
+            <div class="result-extension-values">
+              <span class="result-extension-basis" id="res-extension-basis">–</span>
+              <div class="result-extension-arrow-wrapper">
+                <span class="result-extension-arrow">→</span>
+                <span class="result-extension-delta" id="res-extension-delta">+–</span>
+              </div>
+              <span class="result-extension-total" id="res-extension-total">–</span>
             </div>
-          </dl>
+          </div>
         </div>
       </div>
     </div>
@@ -291,17 +348,9 @@
     <!-- Karte: Alle Eingaben -->
     <div class="card" aria-labelledby="inputs-title">
       <h2 id="inputs-title" data-i18n="inputs.title">Ihre Eingaben</h2>
-      <dl class="kv kv-2col" id="inputs-list">
+      <dl class="kv" id="inputs-list">
         <!-- Inhalte werden dynamisch per JS gefüllt -->
       </dl>
-    </div>
-
-    <!-- Karte: Verkürzungsgründe -->
-    <div class="card" aria-labelledby="cuts-title" id="cuts-section" hidden>
-      <h2 id="cuts-title" data-i18n="cuts.title">Verkürzungsgründe</h2>
-      <ul class="tags" id="cuts-list"></ul>
-      <p class="muted" id="cuts-summary"></p>
-      <span class="error-message-big" id="errorVerkuerzungen"></span>
     </div>
 
     <!-- Karte: Hinweise -->
