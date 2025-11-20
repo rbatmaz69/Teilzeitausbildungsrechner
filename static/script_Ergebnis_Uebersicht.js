@@ -250,10 +250,10 @@ function fuelleEingabenliste(eingaben, berechnung) {
       let beschriftungsSchluessel;
       switch (verkuerzung.key) {
         case "abitur":
-          beschriftungsSchluessel = "vk.abitur.label";
+          beschriftungsSchluessel = "vk.school.abitur";
           break;
         case "realschule":
-          beschriftungsSchluessel = "vk.realschule.label";
+          beschriftungsSchluessel = "vk.school.realschule";
           break;
         case "alter_ueber_21":
           beschriftungsSchluessel = "vk.alter21.label";
@@ -282,7 +282,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
     // Zusammenfassung unter der Liste
     const monateWortVoll = uebersetzung("units.months.full", "Monate");
     const gesamtBeschriftung = uebersetzung("cuts.total", "Gesamt");
-    const neueBasisBeschriftung = uebersetzung("cuts.newBase", "Neue Basis");
+    const neueBasisBeschriftung = uebersetzung("cuts.newBase", "Neue Grundlage");
     const zusammenfassung = document.createElement("div");
     zusammenfassung.className = "verkuerzungen-summary muted";
     
