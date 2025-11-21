@@ -856,12 +856,13 @@ input.error,
 }
 
 .btn-start-calculate:hover {
-  background-color: var(--primary-700);
+  background-color: #a90000;
   transform: translateY(-1px);
   box-shadow: 0 8px 20px rgb(0 0 0 / 12%);
 }
 
 .btn-start-calculate:active {
+  background-color: #ff3333;
   transform: translateY(0);
 }
 
