@@ -890,25 +890,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 100);
     }
     
-    // Funktion zum Anwenden der gespeicherten Position
-    function wendeGespeichertePositionAn() {
-      if (gespeichertePosition) {
-        if (gespeichertePosition.left === null) {
-          icon.style.removeProperty('--tooltip-left');
-        } else {
-          icon.style.setProperty('--tooltip-left', `${gespeichertePosition.left}px`);
-        }
-        
-        if (gespeichertePosition.transform === null) {
-          icon.style.removeProperty('--tooltip-transform');
-        } else {
-          icon.style.setProperty('--tooltip-transform', gespeichertePosition.transform);
-        }
-        
-        icon.style.setProperty('--tooltip-max-width', `${gespeichertePosition.maxWidth}px`);
-      }
-    }
-    
     // Positionierung beim Klick/Touch - sofort und korrekt
     // Auf mobilen Geräten: Verwende nur touchstart, um doppelte Events zu vermeiden
     const isTouchDevice = 'ontouchstart' in window;

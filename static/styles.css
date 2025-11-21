@@ -266,6 +266,7 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
   text-align: center;
   cursor: pointer;
   position: relative;
+
   /* Verhindere, dass Klick das Label-Input-Verhalten auslöst */
   pointer-events: auto;
 }
@@ -285,6 +286,7 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
+
   /* KEINE Transition für left/transform, um Ghosting zu vermeiden */
   z-index: 10;
   min-width: 180px;
@@ -293,7 +295,7 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
   white-space: normal;
   text-align: left;
   box-sizing: border-box;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .info-icon::before {
@@ -705,7 +707,7 @@ input.error,
 .verkuerzung-label {
   flex: 1 1 auto;
   min-width: 0;
-  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .verkuerzung-value {
@@ -730,7 +732,7 @@ input.error,
 
 .verkuerzungen-summary {
   font-size: 0.9rem;
-  margin: 0.5rem 0 0 0;
+  margin: 0.5rem 0 0;
   color: var(--muted);
   text-align: left;
   display: flex;
@@ -935,7 +937,7 @@ input.error,
 }
 
 .btn-start-calculate:active {
-  background-color: #ff3333;
+  background-color: #f33;
   transform: translateY(0);
 }
 

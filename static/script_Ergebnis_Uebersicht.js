@@ -195,7 +195,6 @@ async function holeZusammenfassung() {
 function fuelleEingabenliste(eingaben, berechnung) {
   const liste = $("#inputs-list");
   if (!liste) return;
-  const einh = einheiten();
   liste.innerHTML = "";
 
   // Teilzeit-Stunden berechnen
@@ -635,20 +634,3 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-
-/** Prüft die Gesamtkürzungen und zeigt ggf. eine Fehlermeldung an.
- *
- * @param {number} gesamtVerkuerzungen - Die gesamten Verkürzung in Monaten (ohne Begrenzung).
- */
-function pruefeVerkuerzungen(gesamtVerkuerzungen) {
-  const fehlerVerkuerzungenInListe = document.getElementById("errorVerkuerzungenInListe");
-  const warnhinweisText = gesamtVerkuerzungen > 12
-    ? uebersetzung("errors.invalidCut", "Hinweis: Ihre gewählten Verkürzungsgründe ergeben zusammen mehr als 12 Monate. Die Gesamtverkürzung wird daher auf maximal 12 Monate begrenzt, wie gesetzlich vorgesehen.")
-    : "";
-
-  // Element in der Liste
-  if (fehlerVerkuerzungenInListe) {
-    fehlerVerkuerzungenInListe.textContent = warnhinweisText;
-    fehlerVerkuerzungenInListe.style.display = warnhinweisText ? "block" : "none";
-  }
-}

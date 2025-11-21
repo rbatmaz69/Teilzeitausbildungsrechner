@@ -312,7 +312,9 @@ def berechne_gesamtdauer(
 
     # Wert-Validierung: Gültige Bereiche gemäß HTML-Eingabefeldern (IHK: 24-42 Monate)
     if basis_dauer_monate < 24 or basis_dauer_monate > 42:
-        raise ValueError("Ausbildungsdauer muss zwischen 24 und 42 Monaten liegen (IHK-Ausbildungen)")
+        raise ValueError(
+            "Ausbildungsdauer muss zwischen 24 und 42 Monaten liegen (IHK-Ausbildungen)"
+        )
     if vollzeit_stunden < 10 or vollzeit_stunden > 48:
         raise ValueError("Vollzeit-Stunden müssen zwischen 10 und 48 Stunden liegen")
 
