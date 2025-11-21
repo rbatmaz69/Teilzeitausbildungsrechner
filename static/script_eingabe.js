@@ -744,7 +744,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnStartCalculate.addEventListener("click", () => {
       // Scroll zu Section mit Offset, damit Tooltip sichtbar bleibt
       const sectionTop = eingabenSection.getBoundingClientRect().top + window.pageYOffset;
-      const offset = 100; // Offset für Tooltip + Abstand oben
+      const offset = 70; // Offset für Tooltip + Abstand oben
       window.scrollTo({
         top: sectionTop - offset,
         behavior: "smooth"
