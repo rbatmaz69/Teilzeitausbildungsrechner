@@ -220,18 +220,18 @@ document.addEventListener("DOMContentLoaded", () => {
   dauerEingabe.addEventListener("blur", () => {
     const ausbildungsdauer = parseInt(dauerEingabe.value);
 
-    // Mindest- und Maximalwerte für die reguläre Ausbildungsdauer
-    if (isNaN(ausbildungsdauer) || ausbildungsdauer < 12) {
-      dauerEingabe.value = 12;
+    // Mindest- und Maximalwerte für die reguläre Ausbildungsdauer (IHK: 24-42 Monate)
+    if (isNaN(ausbildungsdauer) || ausbildungsdauer < 24) {
+      dauerEingabe.value = 24;
       dauerEingabe.classList.add('error');
       aktuellerFehlerDauer = "errors.durationMin";
-      if (fehlerDauer) fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Der Wert muss mindestens 12 Monate betragen");
+      if (fehlerDauer) fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Der Wert muss mindestens 24 Monate betragen");
       entferneFehlerMitFadeout(dauerEingabe, fehlerDauer, () => aktuellerFehlerDauer = null, timerIdDauer);
-    } else if (ausbildungsdauer > 60) {
-      dauerEingabe.value = 60;
+    } else if (ausbildungsdauer > 42) {
+      dauerEingabe.value = 42;
       dauerEingabe.classList.add('error');
       aktuellerFehlerDauer = "errors.durationMax";
-      if (fehlerDauer) fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Der Wert darf maximal 60 Monate betragen");
+      if (fehlerDauer) fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Der Wert darf maximal 42 Monate betragen");
       entferneFehlerMitFadeout(dauerEingabe, fehlerDauer, () => aktuellerFehlerDauer = null, timerIdDauer);
     } else {
       dauerEingabe.classList.remove('error');
@@ -246,19 +246,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const istSpinner = event.inputType === '' || event.inputType === undefined;
     
     // Max-Validierung: IMMER sofort korrigieren (auch bei manueller Eingabe)
-    if (!isNaN(ausbildungsdauer) && ausbildungsdauer > 60) {
-      dauerEingabe.value = 60;
+    if (!isNaN(ausbildungsdauer) && ausbildungsdauer > 42) {
+      dauerEingabe.value = 42;
       dauerEingabe.classList.add('error');
       aktuellerFehlerDauer = "errors.durationMax";
-      if (fehlerDauer) fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Der Wert darf maximal 60 Monate betragen");
+      if (fehlerDauer) fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Der Wert darf maximal 42 Monate betragen");
       entferneFehlerMitFadeout(dauerEingabe, fehlerDauer, () => aktuellerFehlerDauer = null, timerIdDauer);
     }
     // Min-Validierung: NUR bei Spinner sofort korrigieren
-    else if (istSpinner && !isNaN(ausbildungsdauer) && ausbildungsdauer < 12 && ausbildungsdauer > 0) {
-      dauerEingabe.value = 12;
+    else if (istSpinner && !isNaN(ausbildungsdauer) && ausbildungsdauer < 24 && ausbildungsdauer > 0) {
+      dauerEingabe.value = 24;
       dauerEingabe.classList.add('error');
       aktuellerFehlerDauer = "errors.durationMin";
-      if (fehlerDauer) fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Der Wert muss mindestens 12 Monate betragen");
+      if (fehlerDauer) fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Der Wert muss mindestens 24 Monate betragen");
       entferneFehlerMitFadeout(dauerEingabe, fehlerDauer, () => aktuellerFehlerDauer = null, timerIdDauer);
     }
   })
