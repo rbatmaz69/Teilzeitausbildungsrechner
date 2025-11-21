@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Part-time apprenticeship calculator"
+    "title": "Part-time training calculator"
   },
   "lang": {
     "label": "Language",
@@ -11,19 +11,19 @@
   "inputs": {
     "title": "Your details",
     "dauer": {
-      "label": "How long is your apprenticeship in full-time?",
-      "labelShort": "Apprenticeship (full-time)",
-      "tooltip": "Enter how many months your apprenticeship usually takes in full-time."
+      "label": "How long is your training in full-time?",
+      "labelShort": "Training (full-time)",
+      "tooltip": "Enter how many months your training usually takes in full-time."
     },
     "stunden": {
-      "label": "How many hours per week does the full-time apprenticeship have?",
+      "label": "How many hours per week does the full-time training have?",
       "labelShort": "Hours per week (full-time)",
       "tooltip": "Include all hours, including school hours."
     },
     "teilzeit": {
       "label": "How much of full-time do you want to work?",
       "labelShort": "Part-time",
-      "tooltip": "For part-time apprenticeship, you must work at least 50%.",
+      "tooltip": "For part-time training, you must work at least 50%.",
       "percent": "Percent",
       "hours": "Hours"
     },
@@ -32,7 +32,7 @@
     }
   },
   "vk": {
-    "heading": "Reasons for shorter apprenticeship",
+    "heading": "Reasons for shorter training",
     "helper": "Choose all options that apply to you.",
     "legend": "Shortening reasons",
     "familie": {
@@ -55,7 +55,7 @@
     "vork": {
       "label": "Professional experience",
       "badge": "−12 months",
-      "sr": "Professional experience can shorten your apprenticeship duration."
+      "sr": "Professional experience can shorten your training duration."
     },
     "other": {
       "question": "Which other reasons apply to you?"
@@ -67,10 +67,10 @@
     }
   },
   "res": {
-    "headline": "Your part-time apprenticeship",
+    "headline": "Your part-time training",
     "helper": "Here you can see your details and the result.",
     "notesTitle": "Important information",
-    "notes": "<li>This calculation is only a <strong>help</strong>.</li><li>The result is <strong>not official</strong>.</li><li>Discuss the result with your training company.</li><li>Part-time apprenticeship is possible if you work at least 50% of the normal time.</li>",
+    "notes": "<li>This calculation is only a <strong>help</strong>.</li><li>The result is <strong>not official</strong>.</li><li>Discuss the result with your training company.</li><li>Part-time training is possible if you work at least 50% of the normal time.</li>",
     "kv": {
       "total": "Total time",
       "schoolPerWeek": "School per week",
@@ -114,8 +114,8 @@
     "placeholder": "",
     "fetch": "Could not load data.",
     "unknown": "Unknown error",
-    "tooShort": "Apprenticeship can be shortened by up to 12 months only!",
-    "tooLong": "Apprenticeship can be at most 1.5 times longer!",
+    "tooShort": "Training can be shortened by up to 12 months only!",
+    "tooLong": "Training can be at most 1.5 times longer!",
     "invalidPercent": "Value corrected to 50% (invalid input)",
     "invalidHours": "Value corrected to minimum (invalid input)",
     "regularHoursMin": "The value must be at least 10 hours",
@@ -148,10 +148,10 @@
   "start": {
     "title": {
       "prefix": "Plan your ",
-      "accent": "part-time apprenticeship",
+      "accent": "part-time training",
       "suffix": " easily"
     },
-    "description": "Calculate the optimal balance between working hours and apprenticeship. Our calculator helps you find the right part-time solution for your needs.",
+    "description": "Calculate the optimal balance between working hours and training. Our calculator helps you find the right part-time solution for your needs.",
     "card1": {
       "title": "Flexible hours",
       "subtitle": "Individual time planning"
