@@ -52,10 +52,11 @@
       "sr": "Professional experience can shorten your training duration."
     },
     "other": {
-      "question": "Which other reasons apply to you?"
+      "question": "Are you over 21 years old?"
     },
     "alter21": {
-      "label": "Age over 21",
+      "yes": "Yes",
+      "no": "No",
       "badge": "−12 months",
       "sr": "If you are over 21, previous experience can be credited."
     }

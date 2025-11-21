@@ -5,8 +5,8 @@
  * die Anzeige der Vorkenntnis-Monate mit der aktuellen Sprache.
  */
 document.addEventListener('DOMContentLoaded', () => {
-  const abiturKontrollkaestchen = document.getElementById('g-abitur');
-  const realschuleKontrollkaestchen = document.getElementById('g-realschule');
+  const alter21JaCheckbox = document.getElementById('alter21-ja');
+  const alter21NeinCheckbox = document.getElementById('alter21-nein');
 
   /* ========== Tooltips (touch-optimiert) ========== */
   document.querySelectorAll('.info-btn').forEach(schaltflaeche => {
@@ -32,4 +32,17 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.info-btn[aria-expanded="true"]').forEach(schaltflaeche => schaltflaeche.setAttribute('aria-expanded','false'));
     }
   })
+
+  /* ========== Checkbox-Verhalten ========== */
+  alter21JaCheckbox.addEventListener('change', () => {
+    if (alter21JaCheckbox.checked) {
+      alter21NeinCheckbox.checked = false;
+    }
+  });
+  
+  alter21NeinCheckbox.addEventListener('change', () => {
+    if (alter21NeinCheckbox.checked) {
+      alter21JaCheckbox.checked = false;
+    }
+  });
 });
