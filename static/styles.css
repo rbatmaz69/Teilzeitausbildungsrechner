@@ -295,7 +295,6 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
   white-space: normal;
   text-align: left;
   box-sizing: border-box;
-  overflow-wrap: break-word;
 }
 
 .info-icon::before {

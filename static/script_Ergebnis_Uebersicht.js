@@ -25,14 +25,6 @@ function aktuelleSprache() {
   return (window.I18N && window.I18N.lang) || "de";
 }
 
-// Units/Labels aus i18n
-function einheiten() {
-  return {
-    h: uebersetzung("units.hours.short", "h"),
-    monate: uebersetzung("units.months.short", "Mon."),
-    wochen: uebersetzung("units.weeks.short", "Wo.")
-  };
-}
 
 // Zustand merken, damit wir bei Sprachwechsel neu rendern können
 let LETZTE_EINGABEN = null;

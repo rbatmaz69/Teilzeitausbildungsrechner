@@ -755,8 +755,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Verhindere, dass Klicks auf Info-Icons das Input-Feld fokussieren
   // und positioniere Tooltips zentral
   document.querySelectorAll('.info-icon').forEach(icon => {
-    // Speichere die berechnete Position, damit sie konsistent bleibt
-    let gespeichertePosition = null;
     // Flag, um zu verhindern, dass die Positionierung mehrfach ausgeführt wird
     let positionierungLaeuft = false;
     // Flag, um zu verhindern, dass der Toggle mehrfach ausgeführt wird
@@ -865,9 +863,6 @@ document.addEventListener("DOMContentLoaded", () => {
           maxWidth: tooltipWidth
         };
       }
-      
-      // Speichere die Position für spätere Verwendung
-      gespeichertePosition = positionConfig;
       
       // Wende die Positionierung an
       if (positionConfig.left === null) {
@@ -1009,7 +1004,6 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener('resize', () => {
       if (icon.classList.contains('active')) {
         // Positionierung muss bei Resize neu berechnet werden
-        gespeichertePosition = null; // Zurücksetzen, damit neu berechnet wird
         // Entferne alle Custom-Positionierung, damit Standard-CSS greift
         icon.style.removeProperty('--tooltip-left');
         icon.style.removeProperty('--tooltip-transform');
