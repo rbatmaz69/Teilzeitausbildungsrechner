@@ -99,14 +99,14 @@
       <h1 id="input-heading" class="sr-only" data-i18n="inputs.heading">Eingaben</h1>
 
       <div class="input-group">
-        <label for="dauer">
+        <label id="label-dauer">
           <span data-i18n="inputs.dauer.label">Reguläre Ausbildungsdauer (Monate)</span>
           <span class="info-icon"
                 data-tooltip="Die normale Dauer Ihrer Ausbildung bei Vollzeit"
                 data-i18n-attr="data-tooltip:inputs.dauer.tooltip"
                 aria-hidden="true">i</span>
         </label>
-        <input type="number" id="dauer" value="36" step="1" required aria-describedby="hint-dauer">
+        <input type="number" id="dauer" value="36" step="1" required aria-labelledby="label-dauer" aria-describedby="hint-dauer">
         <span class="error-message" id="errorDauer"></span>
         <!-- Unsichtbarer Hilfetext spiegelt das Tooltip (für SR) -->
         <span id="hint-dauer" class="sr-only">
@@ -116,21 +116,21 @@
 
       <!-- Eingabe reguläre Wochenstunden -->
       <div class="input-group">
-        <label for="stunden">
+        <label id="label-stunden">
           <span data-i18n="inputs.stunden.label">Reguläre Wochenstunden (gesamt)</span>
           <span class="info-icon"
                 data-tooltip="Ihre gesamten Wochenstunden inkl. Berufsschule"
                 data-i18n-attr="data-tooltip:inputs.stunden.tooltip"
                 aria-hidden="true">i</span>
         </label>
-        <input type="number" id="stunden" value="40" step="1" required aria-describedby="hint-stunden">
+        <input type="number" id="stunden" value="40" step="1" required aria-labelledby="label-stunden" aria-describedby="hint-stunden">
         <span class="error-message" id="errorRegularStunden"></span>
         <span id="hint-stunden" class="sr-only">Ihre gesamten Wochenstunden inkl. Berufsschule.</span>
       </div>
 
       <!-- Eingabe Teilzeitanteil -->
       <div class="input-group">
-        <label for="teilzeitProzent">
+        <label id="label-teilzeit">
           <span data-i18n="inputs.teilzeit.label">Teilzeit-Anteil</span>
           <span class="info-icon"
                 data-tooltip="Mindestens 50% für eine anerkannte Teilzeitausbildung"
@@ -141,9 +141,9 @@
         <!-- Prozentanteil -->
         <div class="input-row">
           <div class="input-group half">
-            <label for="teilzeitProzent" data-i18n="inputs.teilzeit.percent">Prozent</label>
+            <label id="label-teilzeit-prozent" data-i18n="inputs.teilzeit.percent">Prozent</label>
             <div class="input-with-unit">
-              <input type="number" id="teilzeitProzent" value="75" step="5" aria-describedby="hint-teilzeit">
+              <input type="number" id="teilzeitProzent" value="75" step="5" aria-labelledby="label-teilzeit-prozent" aria-describedby="hint-teilzeit">
               <span class="unit" data-i18n="units.percent">%</span>
             </div>
             <span class="error-message" id="errorProzent"></span>
@@ -159,9 +159,9 @@
 
           <!-- Stundenanteil -->
           <div class="input-group half">
-            <label for="teilzeitStunden" data-i18n="inputs.teilzeit.hours">Stunden</label>
+            <label id="label-teilzeit-stunden" data-i18n="inputs.teilzeit.hours">Stunden</label>
             <div class="input-with-unit">
-              <input type="number" id="teilzeitStunden" value="30" step="1" aria-describedby="hint-teilzeit">
+              <input type="number" id="teilzeitStunden" value="30" step="1" aria-labelledby="label-teilzeit-stunden" aria-describedby="hint-teilzeit">
               <span class="unit" data-i18n="units.hours.short">h</span>
             </div>
             <span class="error-message" id="errorStunden"></span>

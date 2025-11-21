@@ -738,14 +738,322 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Scroll-Funktion für "Jetzt berechnen" Button
   const btnStartCalculate = document.getElementById("btn-start-calculate");
-  const inputHeading = document.getElementById("input-heading");
+  const eingabenSection = document.querySelector('section.card'); // Erste Eingabe-Section
   
-  if (btnStartCalculate && inputHeading) {
+  if (btnStartCalculate && eingabenSection) {
     btnStartCalculate.addEventListener("click", () => {
-      inputHeading.scrollIntoView({ 
-        behavior: "smooth", 
-        block: "start" 
+      // Scroll zu Section mit Offset, damit Tooltip sichtbar bleibt
+      const sectionTop = eingabenSection.getBoundingClientRect().top + window.pageYOffset;
+      const offset = 100; // Offset für Tooltip + Abstand oben
+      window.scrollTo({
+        top: sectionTop - offset,
+        behavior: "smooth"
       });
     });
   }
+
+  // Verhindere, dass Klicks auf Info-Icons das Input-Feld fokussieren
+  // und positioniere Tooltips zentral
+  document.querySelectorAll('.info-icon').forEach(icon => {
+    // Speichere die berechnete Position, damit sie konsistent bleibt
+    let gespeichertePosition = null;
+    // Flag, um zu verhindern, dass die Positionierung mehrfach ausgeführt wird
+    let positionierungLaeuft = false;
+    // Flag, um zu verhindern, dass der Toggle mehrfach ausgeführt wird
+    let toggleLaeuft = false;
+    
+    // Funktion zur intelligenten Tooltip-Positionierung
+    function positioniereTooltipZentral() {
+      // Verhindere mehrfache Ausführung
+      if (positionierungLaeuft) {
+        return;
+      }
+      positionierungLaeuft = true;
+      const iconRect = icon.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const margin = 20; // Mindestabstand zum Rand
+      
+      // Icon-Position berechnen (relativ zum Viewport)
+      const iconCenterX = iconRect.left + iconRect.width / 2;
+      const iconLeft = iconRect.left;
+      
+      // Standard-Tooltip-Breite
+      const preferredWidth = 280;
+      const minWidth = 180;
+      
+      // Maximale verfügbare Breite (gesamter Viewport minus Margins)
+      const maxAvailableWidth = viewportWidth - margin * 2;
+      
+      // Bestimme die tatsächliche Tooltip-Breite
+      let tooltipWidth = Math.min(preferredWidth, maxAvailableWidth);
+      tooltipWidth = Math.max(minWidth, tooltipWidth);
+      
+      const tooltipHalfWidth = tooltipWidth / 2;
+      
+      // SCHRITT 1: Prüfe, ob die zentrierte Position vollständig sichtbar wäre
+      // Zentrierte Position: Tooltip-Mitte = Icon-Mitte (mit transform: translateX(-50%))
+      const centeredTooltipLeftEdge = iconCenterX - tooltipHalfWidth;
+      const centeredTooltipRightEdge = iconCenterX + tooltipHalfWidth;
+      
+      const wouldOverflowLeft = centeredTooltipLeftEdge < margin;
+      const wouldOverflowRight = centeredTooltipRightEdge > viewportWidth - margin;
+      
+      // SCHRITT 2: Standardmäßig zentriert, nur verschieben wenn wirklich nötig
+      let positionConfig = null;
+      
+      if (!wouldOverflowLeft && !wouldOverflowRight) {
+        // Tooltip ist vollständig sichtbar → zentrierte Position (Standard-CSS)
+        positionConfig = {
+          left: null, // Entfernen = Standard-CSS
+          transform: null, // Entfernen = Standard-CSS
+          maxWidth: tooltipWidth
+        };
+      } else if (wouldOverflowLeft && !wouldOverflowRight) {
+        // Tooltip würde links über den Rand hinausgehen → verschiebe nach RECHTS
+        // Der Tooltip soll bei margin (20px vom linken Viewport-Rand) beginnen
+        // tooltipLeftRelative ist die Position relativ zum linken Rand des Icons
+        // Berechne die absolute Position des Tooltip-Links (im Viewport)
+        const tooltipLeftAbsolute = margin;
+        // Berechne die relative Position vom Icon
+        let tooltipLeftRelative = tooltipLeftAbsolute - iconLeft;
+        // Sicherstellen, dass tooltipLeftRelative nicht negativ wird
+        // Wenn das Icon sehr weit links ist, beginnt der Tooltip rechts vom Icon
+        if (tooltipLeftRelative < 0) {
+          tooltipLeftRelative = 0;
+          // Wenn der Tooltip rechts vom Icon beginnt, müssen wir die Breite anpassen
+          const maxWidthFromIcon = viewportWidth - iconLeft - margin;
+          if (maxWidthFromIcon < tooltipWidth) {
+            tooltipWidth = Math.max(minWidth, maxWidthFromIcon);
+          }
+        }
+        // Finale Prüfung: Stelle sicher, dass der Tooltip vollständig sichtbar ist
+        const finalTooltipRight = iconLeft + tooltipLeftRelative + tooltipWidth;
+        if (finalTooltipRight > viewportWidth - margin) {
+          // Tooltip würde rechts über den Rand hinausgehen → reduziere Breite
+          tooltipWidth = (viewportWidth - margin) - (iconLeft + tooltipLeftRelative);
+          tooltipWidth = Math.max(minWidth, tooltipWidth);
+        }
+        positionConfig = {
+          left: tooltipLeftRelative,
+          transform: 'none',
+          maxWidth: tooltipWidth
+        };
+      } else if (wouldOverflowRight && !wouldOverflowLeft) {
+        // Tooltip würde rechts über den Rand hinausgehen → verschiebe nach LINKS
+        const tooltipRightEdge = viewportWidth - margin;
+        let tooltipLeftEdge = tooltipRightEdge - tooltipWidth;
+        // Sicherstellen, dass linker Rand nicht über margin hinausgeht
+        if (tooltipLeftEdge < margin) {
+          tooltipLeftEdge = margin;
+          tooltipWidth = viewportWidth - margin * 2;
+          tooltipWidth = Math.max(minWidth, tooltipWidth);
+        }
+        const tooltipLeftRelative = tooltipLeftEdge - iconLeft;
+        positionConfig = {
+          left: tooltipLeftRelative,
+          transform: 'none',
+          maxWidth: tooltipWidth
+        };
+      } else if (wouldOverflowLeft && wouldOverflowRight) {
+        // Tooltip würde auf beiden Seiten über den Rand hinausgehen → reduziere Breite
+        tooltipWidth = viewportWidth - margin * 2;
+        tooltipWidth = Math.max(minWidth, tooltipWidth);
+        const tooltipLeftRelative = margin - iconLeft;
+        positionConfig = {
+          left: tooltipLeftRelative,
+          transform: 'none',
+          maxWidth: tooltipWidth
+        };
+      }
+      
+      // Speichere die Position für spätere Verwendung
+      gespeichertePosition = positionConfig;
+      
+      // Wende die Positionierung an
+      if (positionConfig.left === null) {
+        icon.style.removeProperty('--tooltip-left');
+      } else {
+        icon.style.setProperty('--tooltip-left', `${positionConfig.left}px`);
+      }
+      
+      if (positionConfig.transform === null) {
+        icon.style.removeProperty('--tooltip-transform');
+      } else {
+        icon.style.setProperty('--tooltip-transform', positionConfig.transform);
+      }
+      
+      icon.style.setProperty('--tooltip-max-width', `${positionConfig.maxWidth}px`);
+      
+      // Flag zurücksetzen nach kurzer Verzögerung
+      setTimeout(() => {
+        positionierungLaeuft = false;
+      }, 100);
+    }
+    
+    // Funktion zum Anwenden der gespeicherten Position
+    function wendeGespeichertePositionAn() {
+      if (gespeichertePosition) {
+        if (gespeichertePosition.left === null) {
+          icon.style.removeProperty('--tooltip-left');
+        } else {
+          icon.style.setProperty('--tooltip-left', `${gespeichertePosition.left}px`);
+        }
+        
+        if (gespeichertePosition.transform === null) {
+          icon.style.removeProperty('--tooltip-transform');
+        } else {
+          icon.style.setProperty('--tooltip-transform', gespeichertePosition.transform);
+        }
+        
+        icon.style.setProperty('--tooltip-max-width', `${gespeichertePosition.maxWidth}px`);
+      }
+    }
+    
+    // Positionierung beim Klick/Touch - sofort und korrekt
+    // Auf mobilen Geräten: Verwende nur touchstart, um doppelte Events zu vermeiden
+    const isTouchDevice = 'ontouchstart' in window;
+    let lastTouchTime = 0;
+    let lastTouchTarget = null;
+    
+    // Funktion zum Toggle des Tooltips
+    function toggleTooltip(event) {
+      // Verhindere mehrfache Ausführung
+      if (toggleLaeuft) {
+        return;
+      }
+      toggleLaeuft = true;
+      
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      
+      const wasActive = icon.classList.contains('active');
+      
+      if (!wasActive) {
+        // Tooltip wird geöffnet
+        // Entferne zuerst alle Custom-Positionierung, damit Standard-CSS greift
+        icon.style.removeProperty('--tooltip-left');
+        icon.style.removeProperty('--tooltip-transform');
+        icon.style.removeProperty('--tooltip-max-width');
+        
+        // Jetzt erst die active-Klasse setzen, damit der Tooltip angezeigt wird
+        icon.classList.add('active');
+        
+        // Positioniere IMMER neu, um sicherzustellen, dass die Position korrekt ist
+        // Die Positionierung wird synchron ausgeführt, um Race Conditions zu vermeiden
+        positioniereTooltipZentral();
+      } else {
+        // Tooltip wird geschlossen
+        // Entferne zuerst die active-Klasse, damit der Tooltip sofort unsichtbar wird
+        icon.classList.remove('active');
+        // Warte auf das Ende der Opacity-Transition, bevor CSS-Variablen entfernt werden
+        // Das verhindert Ghosting-Effekte
+        setTimeout(() => {
+          if (!icon.classList.contains('active')) {
+            icon.style.removeProperty('--tooltip-left');
+            icon.style.removeProperty('--tooltip-transform');
+            icon.style.removeProperty('--tooltip-max-width');
+          }
+        }, 250); // Nach der Opacity-Transition (200ms + kleine Puffer)
+        // Positionierung bleibt gespeichert, wird beim nächsten Öffnen wiederverwendet
+      }
+      
+      // Schließe andere Tooltips
+      document.querySelectorAll('.info-icon').forEach(otherIcon => {
+        if (otherIcon !== icon) {
+          otherIcon.classList.remove('active');
+          // Warte auf das Ende der Opacity-Transition, bevor CSS-Variablen entfernt werden
+          setTimeout(() => {
+            if (!otherIcon.classList.contains('active')) {
+              otherIcon.style.removeProperty('--tooltip-left');
+              otherIcon.style.removeProperty('--tooltip-transform');
+              otherIcon.style.removeProperty('--tooltip-max-width');
+            }
+          }, 250);
+        }
+      });
+      
+      // Flag nach kurzer Verzögerung zurücksetzen
+      setTimeout(() => {
+        toggleLaeuft = false;
+      }, 300);
+    }
+    
+    // Auf Touch-Geräten: Verwende nur touchstart
+    if (isTouchDevice) {
+      icon.addEventListener('touchstart', (event) => {
+        const now = Date.now();
+        // Verhindere doppelte Auslösung innerhalb von 500ms
+        if (now - lastTouchTime < 500 && lastTouchTarget === event.target) {
+          event.preventDefault();
+          event.stopPropagation();
+          return;
+        }
+        lastTouchTime = now;
+        lastTouchTarget = event.target;
+        toggleTooltip(event);
+      }, { passive: false });
+      
+      // Verhindere, dass click-Event auf Touch-Geräten ausgelöst wird
+      icon.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+      }, true); // useCapture = true, damit es vor anderen click-Events ausgeführt wird
+      
+      // Verhindere auch touchend, um sicherzustellen, dass keine doppelten Events ausgelöst werden
+      icon.addEventListener('touchend', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+      }, { passive: false });
+    } else {
+      // Auf Desktop: Verwende click
+      icon.addEventListener('click', toggleTooltip);
+    }
+    
+    // Positioniere Tooltip auch beim Hover (für Desktop)
+    // WICHTIG: Nur positionieren, wenn Tooltip nicht bereits durch Klick geöffnet wurde
+    // ABER: Auf Touch-Geräten deaktivieren, um Konflikte mit click-Event zu vermeiden
+    icon.addEventListener('mouseenter', () => {
+      // Nur positionieren, wenn Tooltip nicht bereits aktiv ist (durch Klick)
+      // UND wenn es kein Touch-Event ist (um Konflikte zu vermeiden)
+      if (!icon.classList.contains('active') && !('ontouchstart' in window)) {
+        // Berechne Positionierung für Hover (wird gespeichert)
+        positioniereTooltipZentral();
+      }
+    });
+    
+    // Positioniere Tooltip auch bei Resize (nur wenn aktiv)
+    // Bei Resize sollte Positionierung neu berechnet werden
+    window.addEventListener('resize', () => {
+      if (icon.classList.contains('active')) {
+        // Positionierung muss bei Resize neu berechnet werden
+        gespeichertePosition = null; // Zurücksetzen, damit neu berechnet wird
+        // Entferne alle Custom-Positionierung, damit Standard-CSS greift
+        icon.style.removeProperty('--tooltip-left');
+        icon.style.removeProperty('--tooltip-transform');
+        icon.style.removeProperty('--tooltip-max-width');
+        // Positioniere neu
+        positioniereTooltipZentral();
+      }
+    });
+  });
+
+  // Schließe Tooltips beim Klick außerhalb
+  // WICHTIG: useCapture = false, damit das click-Event auf dem Icon zuerst ausgeführt wird
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.info-icon')) {
+      document.querySelectorAll('.info-icon').forEach(icon => {
+        icon.classList.remove('active');
+        // Warte auf das Ende der Opacity-Transition, bevor CSS-Variablen entfernt werden
+        setTimeout(() => {
+          if (!icon.classList.contains('active')) {
+            icon.style.removeProperty('--tooltip-left');
+            icon.style.removeProperty('--tooltip-transform');
+            icon.style.removeProperty('--tooltip-max-width');
+          }
+        }, 250);
+      });
+    }
+  }, false); // useCapture = false, damit click-Event auf Icon zuerst ausgeführt wird
 });

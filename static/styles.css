@@ -266,6 +266,8 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
   text-align: center;
   cursor: pointer;
   position: relative;
+  /* Verhindere, dass Klick das Label-Input-Verhalten auslöst */
+  pointer-events: auto;
 }
 
 /* Tooltip für die Eingabe (visuell, per CSS) */
@@ -273,20 +275,25 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
   content: attr(data-tooltip);
   position: absolute;
   bottom: 130%;
-  left: 50%;
-  transform: translateX(-50%);
+  left: var(--tooltip-left, 50%);
+  transform: var(--tooltip-transform, translateX(-50%));
   background: #111;
   color: #fff;
-  padding: 6px 10px;
+  padding: 8px 12px;
   border-radius: 6px;
   font-size: 0.8rem;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.2s ease;
+  /* KEINE Transition für left/transform, um Ghosting zu vermeiden */
   z-index: 10;
-  max-width: 90vw;
+  min-width: 180px;
+  max-width: var(--tooltip-max-width, min(280px, calc(100vw - 40px)));
   overflow-wrap: break-word;
   white-space: normal;
+  text-align: left;
+  box-sizing: border-box;
+  word-wrap: break-word;
 }
 
 .info-icon::before {
@@ -307,7 +314,7 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
 .info-icon:hover::after,
 .info-icon:hover::before {
   opacity: 1;
-  transform: translateX(-50%) translateY(-2px);
+  transform: var(--tooltip-transform, translateX(-50%)) translateY(-2px);
 }
 
 /* ==========================================
