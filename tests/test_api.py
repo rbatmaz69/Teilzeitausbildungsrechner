@@ -461,7 +461,7 @@ def test_validierungsfehler_negative_werte_gibt_422_zurueck(client):
     assert resp.status_code == 422
     data = resp.get_json()
     assert data["error"]["code"] == "validation_error"
-    assert "zwischen 12 und 60" in data["error"]["message"]
+    assert "zwischen 24 und 42" in data["error"]["message"]
 
 
 def test_validierungsfehler_null_basis_dauer_gibt_422_zurueck(client):
