@@ -204,15 +204,15 @@ function fuelleEingabenliste(eingaben, berechnung) {
   const zeilen = [
     [
       uebersetzung("inputs.dauer.labelShort", "Ausbildung (Vollzeit)"),
-      `${eingaben.basisMonate}`
+      `${eingaben.basisMonate} M`
     ],
     [
       uebersetzung("inputs.stunden.labelShort", "Wochenstunden (Vollzeit)"),
-      `${eingaben.wochenstunden} ${einh.h}`
+      `${eingaben.wochenstunden}h`
     ],
     [
       uebersetzung("inputs.teilzeit.labelShort", "Teilzeit"),
-      `${eingaben.teilzeitProzent}% (${teilzeitStunden} ${einh.h})`
+      `${eingaben.teilzeitProzent}% <-> ${teilzeitStunden}h`
     ]
   ];
 
@@ -270,31 +270,44 @@ function fuelleEingabenliste(eingaben, berechnung) {
       const beschriftung = beschriftungsSchluessel
         ? uebersetzung(beschriftungsSchluessel, verkuerzung.key)
         : verkuerzung.key || "";
-      const monateWort = uebersetzung("units.months.short", "Mon.");
-      li.textContent = verkuerzung.months
-        ? `${beschriftung} (−${verkuerzung.months} ${monateWort})`
-        : beschriftung;
+      
+      // Strukturiertes Format: Label und Wert in separaten Spans
+      if (verkuerzung.months) {
+        const labelSpan = document.createElement("span");
+        labelSpan.className = "verkuerzung-label";
+        labelSpan.textContent = `${beschriftung}:`;
+        
+        const valueSpan = document.createElement("span");
+        valueSpan.className = "verkuerzung-value";
+        // Einheitlich kurze Form "M" für alle Geräte
+        valueSpan.textContent = `${verkuerzung.months} M`;
+        
+        li.appendChild(labelSpan);
+        li.appendChild(valueSpan);
+      } else {
+        li.textContent = beschriftung;
+      }
       verkuerzungenListe.appendChild(li);
     });
     
     verkuerzungenDd.appendChild(verkuerzungenListe);
     
-    // Zusammenfassung unter der Liste
-    const monateWortVoll = uebersetzung("units.months.full", "Monate");
-    const gesamtBeschriftung = uebersetzung("cuts.total", "Gesamt");
-    const neueBasisBeschriftung = uebersetzung("cuts.newBase", "Neue Grundlage");
-    const zusammenfassung = document.createElement("div");
-    zusammenfassung.className = "verkuerzungen-summary muted";
+    // Summe aller Verkürzungen (unbegrenzt)
+    const summeAllerVerkuerzungen = document.createElement("div");
+    summeAllerVerkuerzungen.className = "verkuerzungen-summe";
+    const summeBeschriftung = uebersetzung("cuts.sumAll", "Summe aller Verkürzungen");
     
-    const gesamtZeile = document.createElement("div");
-    gesamtZeile.textContent = `${gesamtBeschriftung}: −${berechnung.gesamteVerkuerzungMonate} ${monateWortVoll}`;
-    zusammenfassung.appendChild(gesamtZeile);
+    const summeLabelSpan = document.createElement("span");
+    summeLabelSpan.className = "verkuerzung-label";
+    summeLabelSpan.textContent = `${summeBeschriftung}:`;
     
-    const neueBasisZeile = document.createElement("div");
-    neueBasisZeile.textContent = `${neueBasisBeschriftung}: ${berechnung.neueBasis} ${monateWortVoll}`;
-    zusammenfassung.appendChild(neueBasisZeile);
+    const summeValueSpan = document.createElement("span");
+    summeValueSpan.className = "verkuerzung-value";
+    summeValueSpan.textContent = `${berechnung.gesamteVerkuerzungMonateOhneBegrenzung} M`;
     
-    verkuerzungenDd.appendChild(zusammenfassung);
+    summeAllerVerkuerzungen.appendChild(summeLabelSpan);
+    summeAllerVerkuerzungen.appendChild(summeValueSpan);
+    verkuerzungenDd.appendChild(summeAllerVerkuerzungen);
     
     // Warnhinweis, falls nötig
     const warnhinweis = document.createElement("p");
@@ -305,6 +318,44 @@ function fuelleEingabenliste(eingaben, berechnung) {
     
     verkuerzungenWrapper.append(verkuerzungenDt, verkuerzungenDd);
     liste.append(verkuerzungenWrapper);
+    
+    // Zusätzliche Berechnungen hinzufügen
+    const nachVerkuerzungBeschriftung = uebersetzung("inputs.afterShortening", "Ausbildungsdauer nach Verkürzung");
+    const nachVerkuerzungWrapper = document.createElement("div");
+    const nachVerkuerzungDt = document.createElement("dt");
+    nachVerkuerzungDt.textContent = nachVerkuerzungBeschriftung;
+    const nachVerkuerzungDd = document.createElement("dd");
+    nachVerkuerzungDd.textContent = `${berechnung.neueBasis} M`;
+    nachVerkuerzungWrapper.append(nachVerkuerzungDt, nachVerkuerzungDd);
+    liste.append(nachVerkuerzungWrapper);
+    
+    const inTeilzeitBeschriftung = uebersetzung("inputs.inPartTime", "Ausbildungsdauer in Teilzeit");
+    const inTeilzeitWrapper = document.createElement("div");
+    const inTeilzeitDt = document.createElement("dt");
+    inTeilzeitDt.textContent = inTeilzeitBeschriftung;
+    const inTeilzeitDd = document.createElement("dd");
+    inTeilzeitDd.className = "teilzeit-formula";
+    
+    // Strukturiertes Format: Formel in separaten Elementen für Mobile/Desktop
+    const formulaContainer = document.createElement("div");
+    formulaContainer.className = "teilzeit-formula-container";
+    
+    // Zeile 1: "24 M / 75%"
+    const formulaLine1 = document.createElement("span");
+    formulaLine1.className = "teilzeit-formula-line1";
+    formulaLine1.textContent = `${berechnung.neueBasis} M / ${eingaben.teilzeitProzent}%`;
+    
+    // Zeile 2: "= 48 M"
+    const formulaLine2 = document.createElement("span");
+    formulaLine2.className = "teilzeit-formula-line2";
+    formulaLine2.textContent = `= ${berechnung.gesamtMonate} M`;
+    
+    formulaContainer.appendChild(formulaLine1);
+    formulaContainer.appendChild(formulaLine2);
+    inTeilzeitDd.appendChild(formulaContainer);
+    
+    inTeilzeitWrapper.append(inTeilzeitDt, inTeilzeitDd);
+    liste.append(inTeilzeitWrapper);
     
     // Warnhinweis prüfen und anzeigen
     if (berechnung.gesamteVerkuerzungMonateOhneBegrenzung > 12) {
@@ -538,6 +589,16 @@ window.addEventListener("i18n:changed", () => {
   fuelleEingabenliste(LETZTE_EINGABEN, LETZTE_BERECHNUNG);
   fuelleErgebnisse(LETZTE_EINGABEN, LETZTE_BERECHNUNG);
   setzeDatumstempel();
+});
+
+// Bei Fenstergrößenänderung neu rendern (für Mobile/Desktop-Umschaltung)
+let resizeTimeout;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    if (!LETZTE_EINGABEN || !LETZTE_BERECHNUNG) return;
+    fuelleEingabenliste(LETZTE_EINGABEN, LETZTE_BERECHNUNG);
+  }, 250);
 });
 
 /**

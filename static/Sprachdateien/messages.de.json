@@ -29,7 +29,9 @@
     },
     "verkuerzungen": {
       "labelShort": "Verkürzungen"
-    }
+    },
+    "afterShortening": "Ausbildungsdauer nach Verkürzung",
+    "inPartTime": "Ausbildungsdauer in Teilzeit"
   },
   "vk": {
     "heading": "Gründe für eine kürzere Ausbildung",
@@ -89,7 +91,8 @@
   "cuts": {
     "title": "Gründe für Verkürzung",
     "total": "Gesamt",
-    "newBase": "Neue Grundlage"
+    "newBase": "Neue Grundlage",
+    "sumAll": "Summe aller Verkürzungen"
   },
   "units": {
     "hours": {

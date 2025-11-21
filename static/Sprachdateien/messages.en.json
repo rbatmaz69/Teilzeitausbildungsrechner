@@ -29,7 +29,9 @@
     },
     "verkuerzungen": {
       "labelShort": "Reductions"
-    }
+    },
+    "afterShortening": "Training duration after shortening",
+    "inPartTime": "Training duration in part-time"
   },
   "vk": {
     "heading": "Reasons for shorter training",
@@ -89,7 +91,8 @@
   "cuts": {
     "title": "Reasons for shortening",
     "total": "Total",
-    "newBase": "New base"
+    "newBase": "New base",
+    "sumAll": "Sum of all shortenings"
   },
   "units": {
     "hours": {
