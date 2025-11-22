@@ -140,7 +140,9 @@
   "share": {
     "title": "Teilzeitrechner – Ergebnis",
     "text": "Hier ist mein Ergebnis.",
-    "copied": "Der Link wurde kopiert."
+    "copied": "Der Link wurde kopiert.",
+    "error": "Fehler beim Teilen. Bitte kopieren Sie den Link manuell.",
+    "noData": "Bitte berechnen Sie zuerst ein Ergebnis, bevor Sie den Link teilen."
   },
   "reset": {
     "confirm": "Möchten Sie wirklich alle Daten zurücksetzen?"

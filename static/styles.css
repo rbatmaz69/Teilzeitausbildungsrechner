@@ -258,6 +258,12 @@ header h1 {
   background: rgb(255 255 255 / 95%);
   border-top: 1px solid var(--border);
   backdrop-filter: blur(6px);
+  touch-action: manipulation; /* Verbessert Touch-Responsiveness auf Mobile */
+}
+
+.actionbar .btn {
+  touch-action: manipulation; /* Verbessert Touch-Responsiveness auf Mobile */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1); /* Sichtbares Feedback beim Tippen */
 }
 .actionbar .spacer{ flex: 1 1 auto; }
 

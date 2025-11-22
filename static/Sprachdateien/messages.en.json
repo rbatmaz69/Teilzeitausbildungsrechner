@@ -140,7 +140,9 @@
   "share": {
     "title": "Part-Time Calculator – result",
     "text": "Here is my result.",
-    "copied": "The link has been copied."
+    "copied": "The link has been copied.",
+    "error": "Error sharing. Please copy the link manually.",
+    "noData": "Please calculate a result first before sharing the link."
   },
   "reset": {
     "confirm": "Would you like to reset all data?"

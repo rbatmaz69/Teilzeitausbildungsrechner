@@ -450,22 +450,147 @@ function setzeDatumstempel() {
    ------------------------------ */
 
 /**
+ * Erstellt eine URL mit kodierten Berechnungsdaten als Parameter.
+ */
+function erstelleShareUrl(eingaben, berechnung) {
+  const baseUrl = new URL(location.href);
+  baseUrl.searchParams.delete('data'); // Alte Parameter entfernen
+  
+  // Daten in kompakter Form kodieren
+  const shareData = {
+    d: eingaben.basisMonate,
+    s: eingaben.wochenstunden,
+    t: eingaben.teilzeitProzent,
+    v: eingaben.verkuerzungen.map(vk => ({ k: vk.key, m: vk.months })),
+    r: {
+      g: berechnung.gesamtMonate,
+      n: berechnung.neueBasis,
+      v: berechnung.gesamteVerkuerzungMonate,
+      vo: berechnung.gesamteVerkuerzungMonateOhneBegrenzung,
+      l: berechnung.verlaengerungMonate || 0
+    }
+  };
+  
+  // Base64-kodieren für URL-Sicherheit
+  try {
+    const jsonString = JSON.stringify(shareData);
+    const encoded = btoa(encodeURIComponent(jsonString));
+    baseUrl.searchParams.set('data', encoded);
+  } catch (error) {
+    console.warn("Fehler beim Kodieren der Daten:", error);
+    return baseUrl.toString();
+  }
+  
+  return baseUrl.toString();
+}
+
+/**
+ * Liest Berechnungsdaten aus URL-Parametern.
+ */
+function ladeDatenAusUrl() {
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const encodedData = urlParams.get('data');
+    
+    if (!encodedData) {
+      return null;
+    }
+    
+    // Base64-dekodieren
+    const jsonString = decodeURIComponent(atob(encodedData));
+    const shareData = JSON.parse(jsonString);
+    
+    // Datenstruktur wiederherstellen
+    return {
+      eingaben: {
+        basisMonate: shareData.d,
+        wochenstunden: shareData.s,
+        teilzeitProzent: shareData.t,
+        verkuerzungen: shareData.v ? shareData.v.map(v => ({ key: v.k, months: v.m })) : []
+      },
+      berechnung: {
+        gesamtMonate: shareData.r.g,
+        neueBasis: shareData.r.n,
+        gesamteVerkuerzungMonate: shareData.r.v,
+        gesamteVerkuerzungMonateOhneBegrenzung: shareData.r.vo,
+        verlaengerungMonate: shareData.r.l || 0, // Verlängerung durch Teilzeit
+        gesamtJahre: Math.round((shareData.r.g / 12) * 10) / 10
+      }
+    };
+  } catch (error) {
+    console.warn("Fehler beim Dekodieren der URL-Daten:", error);
+    return null;
+  }
+}
+
+/**
  * Teilt die Ergebnisübersicht über die Web Share API oder die Zwischenablage.
+ * Die URL enthält kodierte Berechnungsdaten, damit die Ergebnisse beim Öffnen des Links sichtbar sind.
  */
 async function teileLink() {
-  const adresse = new URL(location.href);
+  // Prüfe, ob wir aktuelle Berechnungsdaten haben
+  if (!LETZTE_EINGABEN || !LETZTE_BERECHNUNG) {
+    const meldung = uebersetzung("share.noData", "Bitte berechnen Sie zuerst ein Ergebnis, bevor Sie den Link teilen.");
+    alert(meldung);
+    return;
+  }
+  
+  const adresse = erstelleShareUrl(LETZTE_EINGABEN, LETZTE_BERECHNUNG);
   const titel = uebersetzung("share.title", "Teilzeitrechner – Ergebnis");
   const text = uebersetzung("share.text", "Hier ist meine Ergebnisübersicht.");
   const kopiert = uebersetzung("share.copied", "Link in die Zwischenablage kopiert.");
+  const fehlerText = uebersetzung("share.error", "Fehler beim Teilen. Bitte kopieren Sie den Link manuell.");
+  
   try {
+    // Web Share API (funktioniert auf Mobile-Geräten)
     if (navigator.share) {
-      await navigator.share({ title: titel, text: text, url: adresse.toString() });
-    } else {
-      await navigator.clipboard.writeText(adresse.toString());
+      try {
+        await navigator.share({ 
+          title: titel, 
+          text: text, 
+          url: adresse.toString() 
+        });
+        return; // Erfolgreich geteilt
+      } catch (shareError) {
+        // Benutzer hat geteilt abgebrochen - das ist OK, kein Fehler
+        if (shareError.name === 'AbortError') {
+          return;
+        }
+        // Anderer Fehler - weiter zu Fallback
+        console.warn("Web Share API Fehler:", shareError);
+      }
+    }
+    
+    // Fallback: Zwischenablage (funktioniert über HTTPS)
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(adresse.toString());
+        alert(kopiert);
+        return;
+      } catch (clipboardError) {
+        console.warn("Zwischenablage Fehler:", clipboardError);
+      }
+    }
+    
+    // Letzter Fallback: Textauswahl für manuelles Kopieren
+    const textarea = document.createElement("textarea");
+    textarea.value = adresse.toString();
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand("copy");
       alert(kopiert);
+    } catch (execError) {
+      console.warn("execCommand Fehler:", execError);
+      alert(fehlerText + "\n\n" + adresse.toString());
+    } finally {
+      document.body.removeChild(textarea);
     }
   } catch (fehler) {
-    console.warn("Fehler beim Teilen:", fehler);
+    console.error("Unerwarteter Fehler beim Teilen:", fehler);
+    alert(fehlerText + "\n\n" + adresse.toString());
   }
 }
 
@@ -702,15 +827,47 @@ function initialisiere() {
   $("#btn-share")?.addEventListener("click", teileLink);
   $("#btn-reset")?.addEventListener("click", setzeDatenZurueck);
   
-  // Prüfe, ob ein gespeicherter Zustand vorhanden ist
-  const gespeicherterZustand = ladeZustand();
-  if (gespeicherterZustand && gespeicherterZustand.eingaben && gespeicherterZustand.berechnung) {
-    // Formular wiederherstellen
-    stelleFormularWiederHer(gespeicherterZustand);
+  // Prüfe zuerst URL-Parameter (hat Priorität, da es ein geteilter Link sein könnte)
+  const urlDaten = ladeDatenAusUrl();
+  if (urlDaten && urlDaten.eingaben && urlDaten.berechnung) {
+    // Formular wiederherstellen (nur Basis-Eingaben, da Verkürzungen aus URL kommen)
+    const dauerElement = document.getElementById("dauer");
+    const stundenElement = document.getElementById("stunden");
+    const prozentElement = document.getElementById("teilzeitProzent");
+    
+    if (dauerElement) dauerElement.value = urlDaten.eingaben.basisMonate;
+    if (stundenElement) stundenElement.value = urlDaten.eingaben.wochenstunden;
+    if (prozentElement) prozentElement.value = urlDaten.eingaben.teilzeitProzent;
+    
+    // Verkürzungsgründe wiederherstellen
+    if (urlDaten.eingaben.verkuerzungen && Array.isArray(urlDaten.eingaben.verkuerzungen)) {
+      urlDaten.eingaben.verkuerzungen.forEach(vk => {
+        if (vk.key === "abitur") {
+          const checkbox = document.getElementById("g-abitur");
+          if (checkbox) checkbox.checked = true;
+        }
+        if (vk.key === "realschule") {
+          const checkbox = document.getElementById("g-realschule");
+          if (checkbox) checkbox.checked = true;
+        }
+        if (vk.key === "alter_ueber_21") {
+          const checkbox = document.querySelector('input[data-vk-field="alter_ueber_21"]');
+          if (checkbox) checkbox.checked = true;
+        }
+        if (vk.key === "familien_pflegeverantwortung") {
+          const checkbox = document.querySelector('input[data-vk-field="familien_pflegeverantwortung"]');
+          if (checkbox) checkbox.checked = true;
+        }
+        if (vk.key === "vorkenntnisse" && vk.months > 0) {
+          const input = document.querySelector('input[data-vk-field="vorkenntnisse_monate"]');
+          if (input) input.value = vk.months;
+        }
+      });
+    }
     
     // Ergebnisse wiederherstellen
-    LETZTE_EINGABEN = gespeicherterZustand.eingaben;
-    LETZTE_BERECHNUNG = gespeicherterZustand.berechnung;
+    LETZTE_EINGABEN = urlDaten.eingaben;
+    LETZTE_BERECHNUNG = urlDaten.berechnung;
     
     // Ergebnis-Sektion anzeigen
     const ergebnisContainer = document.getElementById("ergebnis-container");
@@ -719,14 +876,42 @@ function initialisiere() {
     }
     
     // Ergebnisse anzeigen
-    fuelleEingabenliste(gespeicherterZustand.eingaben, gespeicherterZustand.berechnung);
-    fuelleErgebnisse(gespeicherterZustand.eingaben, gespeicherterZustand.berechnung);
+    fuelleEingabenliste(urlDaten.eingaben, urlDaten.berechnung);
+    fuelleErgebnisse(urlDaten.eingaben, urlDaten.berechnung);
     setzeDatumstempel();
+    
+    // URL bereinigen (Parameter entfernen, damit sie nicht beim Refresh bleiben)
+    if (window.history && window.history.replaceState) {
+      const cleanUrl = window.location.pathname;
+      window.history.replaceState({}, document.title, cleanUrl);
+    }
   } else {
-    // Ergebnis-Sektion initial verstecken
-    const ergebnisContainer = document.getElementById("ergebnis-container");
-    if (ergebnisContainer) {
-      ergebnisContainer.hidden = true;
+    // Prüfe, ob ein gespeicherter Zustand vorhanden ist
+    const gespeicherterZustand = ladeZustand();
+    if (gespeicherterZustand && gespeicherterZustand.eingaben && gespeicherterZustand.berechnung) {
+      // Formular wiederherstellen
+      stelleFormularWiederHer(gespeicherterZustand);
+      
+      // Ergebnisse wiederherstellen
+      LETZTE_EINGABEN = gespeicherterZustand.eingaben;
+      LETZTE_BERECHNUNG = gespeicherterZustand.berechnung;
+      
+      // Ergebnis-Sektion anzeigen
+      const ergebnisContainer = document.getElementById("ergebnis-container");
+      if (ergebnisContainer) {
+        ergebnisContainer.hidden = false;
+      }
+      
+      // Ergebnisse anzeigen
+      fuelleEingabenliste(gespeicherterZustand.eingaben, gespeicherterZustand.berechnung);
+      fuelleErgebnisse(gespeicherterZustand.eingaben, gespeicherterZustand.berechnung);
+      setzeDatumstempel();
+    } else {
+      // Ergebnis-Sektion initial verstecken
+      const ergebnisContainer = document.getElementById("ergebnis-container");
+      if (ergebnisContainer) {
+        ergebnisContainer.hidden = true;
+      }
     }
   }
 }
