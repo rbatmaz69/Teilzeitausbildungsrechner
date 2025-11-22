@@ -548,6 +548,16 @@ function setzeDatenZurueck() {
   // Eingabenliste leeren
   const inputsList = $("#inputs-list");
   if (inputsList) inputsList.innerHTML = "";
+  
+  // Ergebnis-Sektion verstecken
+  const ergebnisContainer = document.getElementById("ergebnis-container");
+  if (ergebnisContainer) {
+    ergebnisContainer.hidden = true;
+  }
+  
+  // Gespeicherte Daten zurücksetzen
+  LETZTE_EINGABEN = null;
+  LETZTE_BERECHNUNG = null;
 
   // Neu laden
   location.reload();
@@ -558,32 +568,17 @@ function setzeDatenZurueck() {
    ------------------------------ */
 
 /**
- * Initialisiert die Ergebnisansicht und lädt einmalig die aktuellen Berechnungen.
- * Speichert die letzten Daten, damit sie bei Sprachwechseln wiederverwendet werden können.
+ * Initialisiert die Ergebnisansicht (nur Event-Listener, keine automatische Berechnung).
+ * Die Ergebnisse werden erst beim Klick auf "Ergebnis anzeigen" geladen.
  */
-async function initialisiere() {
+function initialisiere() {
   $("#btn-share")?.addEventListener("click", teileLink);
   $("#btn-reset")?.addEventListener("click", setzeDatenZurueck);
-
-  try {
-    const { eingaben, berechnung } = await holeZusammenfassung();
-    LETZTE_EINGABEN = eingaben;
-    LETZTE_BERECHNUNG = berechnung;
-    fuelleEingabenliste(eingaben, berechnung);
-    fuelleErgebnisse(eingaben, berechnung);
-    setzeDatumstempel();
-  } catch (fehler) {
-    console.error("Fehler beim Laden der Daten:", fehler);
-    const meldung =
-      fehler && fehler.message
-        ? String(fehler.message)
-        : uebersetzung("errors.unknown", "Unbekannter Fehler");
-    setzeText("#res-total-months", "–");
-    setzeText("#res-total-years", "–");
-    const extensionWrapper = $("#res-extension-wrapper");
-    if (extensionWrapper) verberge(extensionWrapper);
-    const fehlerElement = document.getElementById("errorTotalMonths");
-    if (fehlerElement) fehlerElement.textContent = meldung;
+  
+  // Ergebnis-Sektion initial verstecken
+  const ergebnisContainer = document.getElementById("ergebnis-container");
+  if (ergebnisContainer) {
+    ergebnisContainer.hidden = true;
   }
 }
 
@@ -591,7 +586,10 @@ async function initialisiere() {
 document.addEventListener("DOMContentLoaded", initialisiere);
 
 // Bei Sprachwechsel nur UI neu rendern (ohne neue API-Calls)
+// Nur wenn Ergebnisse bereits angezeigt wurden
 window.addEventListener("i18n:changed", () => {
+  const ergebnisContainer = document.getElementById("ergebnis-container");
+  if (!ergebnisContainer || ergebnisContainer.hidden) return;
   if (!LETZTE_EINGABEN || !LETZTE_BERECHNUNG) return;
   fuelleEingabenliste(LETZTE_EINGABEN, LETZTE_BERECHNUNG);
   fuelleErgebnisse(LETZTE_EINGABEN, LETZTE_BERECHNUNG);
@@ -612,6 +610,8 @@ window.addEventListener("resize", () => {
   
   clearTimeout(resizeTimeout);
   resizeTimeout = setTimeout(() => {
+    const ergebnisContainer = document.getElementById("ergebnis-container");
+    if (!ergebnisContainer || ergebnisContainer.hidden) return;
     if (!LETZTE_EINGABEN || !LETZTE_BERECHNUNG) return;
     fuelleEingabenliste(LETZTE_EINGABEN, LETZTE_BERECHNUNG);
   }, 250);
@@ -619,11 +619,22 @@ window.addEventListener("resize", () => {
 
 /**
  * Führt eine erneute Berechnung aus und aktualisiert die Ergebnisansicht.
+ * Zeigt die Ergebnis-Sektion an, wenn sie noch versteckt ist.
  * Fehler werden im UI angezeigt.
  */
 async function berechnen() {
+  // Ergebnis-Sektion anzeigen
+  const ergebnisContainer = document.getElementById("ergebnis-container");
+  if (ergebnisContainer) {
+    ergebnisContainer.hidden = false;
+    // Sanftes Scrollen zur Ergebnis-Sektion
+    ergebnisContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  
   try {
     const { eingaben, berechnung } = await holeZusammenfassung();
+    LETZTE_EINGABEN = eingaben;
+    LETZTE_BERECHNUNG = berechnung;
     fuelleEingabenliste(eingaben, berechnung);
     fuelleErgebnisse(eingaben, berechnung);
     setzeDatumstempel();
