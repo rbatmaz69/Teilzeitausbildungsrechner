@@ -288,8 +288,8 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background-color: #e9e9ee;
-  color: #555;
+  background-color: #dc2626; /* Roter Hintergrund für bessere Sichtbarkeit */
+  color: #fff; /* Weiße Schrift auf rotem Hintergrund */
   font-weight: bold;
   font-size: 0.8rem;
   line-height: 18px;

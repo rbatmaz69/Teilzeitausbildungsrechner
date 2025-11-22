@@ -13,12 +13,12 @@
     "dauer": {
       "label": "How long is your training in full-time?",
       "labelShort": "Training (full-time)",
-      "tooltip": "Enter how many months your training usually takes in full-time."
+      "tooltip": "Enter in months (e.g. 36 months)"
     },
     "stunden": {
       "label": "How many hours per week does the full-time training have?",
       "labelShort": "Hours per week (full-time)",
-      "tooltip": "Include all hours, including school hours."
+      "tooltip": "Regular weekly hours of training (incl. vocational school)"
     },
     "teilzeit": {
       "label": "How much of full-time do you want to work?",

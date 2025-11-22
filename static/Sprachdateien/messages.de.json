@@ -13,12 +13,12 @@
     "dauer": {
       "label": "Wie lange dauert Ihre Ausbildung in Vollzeit?",
       "labelShort": "Ausbildung (Vollzeit)",
-      "tooltip": "Geben Sie an, wie viele Monate Ihre Ausbildung normalerweise dauert."
+      "tooltip": "Angabe in Monaten (z.B. 36 Monate)"
     },
     "stunden": {
       "label": "Wie viele Stunden pro Woche hat die Ausbildung in Vollzeit?",
       "labelShort": "Wochenstunden (Vollzeit)",
-      "tooltip": "Zählen Sie alle Stunden mit, auch die Stunden in der Berufsschule."
+      "tooltip": "Reguläre Wochenstunden der Ausbildung (inkl. Berufsschule)"
     },
     "teilzeit": {
       "label": "Wie viel der Vollzeit möchten Sie arbeiten?",
