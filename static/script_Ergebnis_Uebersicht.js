@@ -516,9 +516,20 @@ function setzeDatenZurueck() {
     vorkenntnisseInput.value = "";
   }
 
-  // Alles löschen (Formulardaten etc.)
+  // Gespeicherten Zustand löschen
   try {
+    localStorage.removeItem("calculatorState");
+  } catch (fehler) {
+    console.warn("Konnte calculatorState nicht löschen:", fehler);
+  }
+  
+  // Alles andere löschen (außer Sprache)
+  try {
+    const gespeicherteSprache = localStorage.getItem(SPRACH_SCHLUESSEL);
     localStorage.clear();
+    if (gespeicherteSprache) {
+      localStorage.setItem(SPRACH_SCHLUESSEL, gespeicherteSprache);
+    }
   } catch (fehler) {
     console.warn("Konnte localStorage nicht löschen:", fehler);
   }
@@ -568,17 +579,155 @@ function setzeDatenZurueck() {
    ------------------------------ */
 
 /**
+ * Speichert den aktuellen Zustand (Eingaben und Berechnung) in localStorage.
+ */
+function speichereZustand(eingaben, berechnung) {
+  try {
+    // Speichere auch die ursprünglichen Formularwerte für die Wiederherstellung
+    const vorkenntnisseInput = document.querySelector('input[data-vk-field="vorkenntnisse_monate"]');
+    const formularWerte = {
+      dauer: document.getElementById("dauer")?.value || null,
+      stunden: document.getElementById("stunden")?.value || null,
+      teilzeitProzent: document.getElementById("teilzeitProzent")?.value || null,
+      schoolSelect: document.querySelector('select[data-vk-type="school-select"]')?.value || null,
+      vorkenntnisseMonate: vorkenntnisseInput?.value || null
+    };
+    
+    const zustand = {
+      eingaben,
+      berechnung,
+      formularWerte,
+      timestamp: Date.now()
+    };
+    localStorage.setItem("calculatorState", JSON.stringify(zustand));
+  } catch (fehler) {
+    console.warn("Konnte Zustand nicht speichern:", fehler);
+  }
+}
+
+/**
+ * Lädt den gespeicherten Zustand aus localStorage.
+ */
+function ladeZustand() {
+  try {
+    const gespeichert = localStorage.getItem("calculatorState");
+    if (!gespeichert) return null;
+    
+    const zustand = JSON.parse(gespeichert);
+    // Prüfe, ob der Zustand nicht älter als 7 Tage ist
+    const maxAge = 7 * 24 * 60 * 60 * 1000; // 7 Tage in Millisekunden
+    if (Date.now() - zustand.timestamp > maxAge) {
+      localStorage.removeItem("calculatorState");
+      return null;
+    }
+    
+    return zustand;
+  } catch (fehler) {
+    console.warn("Konnte Zustand nicht laden:", fehler);
+    return null;
+  }
+}
+
+/**
+ * Stellt die Formularwerte aus dem gespeicherten Zustand wieder her.
+ */
+function stelleFormularWiederHer(zustand) {
+  if (!zustand) return;
+  
+  const formularWerte = zustand.formularWerte || {};
+  const eingaben = zustand.eingaben;
+  
+  // Basis-Eingaben wiederherstellen
+  const dauerElement = document.getElementById("dauer");
+  const stundenElement = document.getElementById("stunden");
+  const prozentElement = document.getElementById("teilzeitProzent");
+  
+  if (dauerElement && formularWerte.dauer) {
+    dauerElement.value = formularWerte.dauer;
+  }
+  if (stundenElement && formularWerte.stunden) {
+    stundenElement.value = formularWerte.stunden;
+  }
+  if (prozentElement && formularWerte.teilzeitProzent) {
+    prozentElement.value = formularWerte.teilzeitProzent;
+  }
+  
+  // Schulabschluss-Select wiederherstellen
+  if (formularWerte.schoolSelect) {
+    const schoolSelect = document.querySelector('select[data-vk-type="school-select"]');
+    if (schoolSelect) {
+      schoolSelect.value = formularWerte.schoolSelect;
+    }
+  }
+  
+  // Verkürzungsgründe wiederherstellen
+  if (eingaben && eingaben.verkuerzungen && Array.isArray(eingaben.verkuerzungen)) {
+    eingaben.verkuerzungen.forEach(vk => {
+      if (vk.key === "abitur") {
+        const checkbox = document.getElementById("g-abitur");
+        if (checkbox) checkbox.checked = true;
+      }
+      if (vk.key === "realschule") {
+        const checkbox = document.getElementById("g-realschule");
+        if (checkbox) checkbox.checked = true;
+      }
+      if (vk.key === "alter_ueber_21") {
+        const checkbox = document.querySelector('input[data-vk-field="alter_ueber_21"]');
+        if (checkbox) checkbox.checked = true;
+      }
+      if (vk.key === "familien_pflegeverantwortung") {
+        const checkbox = document.querySelector('input[data-vk-field="familien_pflegeverantwortung"]');
+        if (checkbox) checkbox.checked = true;
+      }
+      if (vk.key === "vorkenntnisse" && vk.months > 0) {
+        const input = document.querySelector('input[data-vk-field="vorkenntnisse_monate"]');
+        if (input) input.value = vk.months;
+      }
+    });
+    
+    // Vorkenntnisse-Monate direkt aus formularWerte wiederherstellen (falls vorhanden)
+    if (formularWerte.vorkenntnisseMonate) {
+      const input = document.querySelector('input[data-vk-field="vorkenntnisse_monate"]');
+      if (input) input.value = formularWerte.vorkenntnisseMonate;
+    }
+  }
+}
+
+/**
  * Initialisiert die Ergebnisansicht (nur Event-Listener, keine automatische Berechnung).
  * Die Ergebnisse werden erst beim Klick auf "Ergebnis anzeigen" geladen.
+ * Beim Laden der Seite wird geprüft, ob ein gespeicherter Zustand vorhanden ist.
  */
 function initialisiere() {
   $("#btn-share")?.addEventListener("click", teileLink);
   $("#btn-reset")?.addEventListener("click", setzeDatenZurueck);
   
-  // Ergebnis-Sektion initial verstecken
-  const ergebnisContainer = document.getElementById("ergebnis-container");
-  if (ergebnisContainer) {
-    ergebnisContainer.hidden = true;
+  // Prüfe, ob ein gespeicherter Zustand vorhanden ist
+  const gespeicherterZustand = ladeZustand();
+  if (gespeicherterZustand && gespeicherterZustand.eingaben && gespeicherterZustand.berechnung) {
+    // Formular wiederherstellen
+    stelleFormularWiederHer(gespeicherterZustand);
+    
+    // Ergebnisse wiederherstellen
+    LETZTE_EINGABEN = gespeicherterZustand.eingaben;
+    LETZTE_BERECHNUNG = gespeicherterZustand.berechnung;
+    
+    // Ergebnis-Sektion anzeigen
+    const ergebnisContainer = document.getElementById("ergebnis-container");
+    if (ergebnisContainer) {
+      ergebnisContainer.hidden = false;
+    }
+    
+    // Ergebnisse anzeigen
+    fuelleEingabenliste(gespeicherterZustand.eingaben, gespeicherterZustand.berechnung);
+    fuelleErgebnisse(gespeicherterZustand.eingaben, gespeicherterZustand.berechnung);
+    setzeDatumstempel();
+  } else {
+    // Ergebnis-Sektion initial verstecken
+    const ergebnisContainer = document.getElementById("ergebnis-container");
+    if (ergebnisContainer) {
+      ergebnisContainer.hidden = true;
+    }
   }
 }
 
@@ -635,6 +784,10 @@ async function berechnen() {
     const { eingaben, berechnung } = await holeZusammenfassung();
     LETZTE_EINGABEN = eingaben;
     LETZTE_BERECHNUNG = berechnung;
+    
+    // Zustand speichern
+    speichereZustand(eingaben, berechnung);
+    
     fuelleEingabenliste(eingaben, berechnung);
     fuelleErgebnisse(eingaben, berechnung);
     setzeDatumstempel();
