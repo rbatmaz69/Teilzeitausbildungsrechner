@@ -713,8 +713,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Aktualisiere Dauer-Fehlermeldungen
     if (aktuellerFehlerDauer && fehlerDauer) {
       const fallbackMap = {
-        "errors.durationMin": "Der Wert muss mindestens 12 Monate betragen",
-        "errors.durationMax": "Der Wert darf maximal 60 Monate betragen"
+        "errors.durationMin": "Der Wert muss mindestens 24 Monate betragen",
+        "errors.durationMax": "Der Wert darf maximal 42 Monate betragen"
       };
       fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, fallbackMap[aktuellerFehlerDauer] || "");
     }
