@@ -106,7 +106,10 @@
                 data-i18n-attr="data-tooltip:inputs.dauer.tooltip"
                 aria-hidden="true">i</span>
         </label>
-        <input type="number" id="dauer" value="36" step="1" required aria-labelledby="label-dauer" aria-describedby="hint-dauer">
+        <div class="input-with-unit">
+          <input type="number" id="dauer" value="36" min="24" max="42" step="1" required aria-labelledby="label-dauer" aria-describedby="hint-dauer">
+          <span class="unit">M</span>
+        </div>
         <span class="error-message" id="errorDauer"></span>
         <!-- Unsichtbarer Hilfetext spiegelt das Tooltip (für SR) -->
         <span id="hint-dauer" class="sr-only">
@@ -123,7 +126,10 @@
                 data-i18n-attr="data-tooltip:inputs.stunden.tooltip"
                 aria-hidden="true">i</span>
         </label>
-        <input type="number" id="stunden" value="40" step="1" required aria-labelledby="label-stunden" aria-describedby="hint-stunden">
+        <div class="input-with-unit">
+          <input type="number" id="stunden" value="40" step="1" required aria-labelledby="label-stunden" aria-describedby="hint-stunden">
+          <span class="unit" data-i18n="units.hours.short">St</span>
+        </div>
         <span class="error-message" id="errorRegularStunden"></span>
         <span id="hint-stunden" class="sr-only">Ihre gesamten Wochenstunden inkl. Berufsschule.</span>
       </div>

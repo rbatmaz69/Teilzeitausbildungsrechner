@@ -215,11 +215,11 @@ function fuelleEingabenliste(eingaben, berechnung) {
     ],
     [
       uebersetzung("inputs.stunden.labelShort", "Wochenstunden (Vollzeit)"),
-      `${eingaben.wochenstunden}h`
+      `${eingaben.wochenstunden} ${uebersetzung("units.hours.short", "h")}`
     ],
     [
       uebersetzung("inputs.teilzeit.labelShort", "Teilzeit"),
-      `${eingaben.teilzeitProzent}% <-> ${teilzeitStunden}h`
+      `${eingaben.teilzeitProzent}% <-> ${teilzeitStunden} ${uebersetzung("units.hours.short", "h")}`
     ]
   ];
 
@@ -366,7 +366,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
     
     // Warnhinweis prüfen und anzeigen
     if (berechnung.gesamteVerkuerzungMonateOhneBegrenzung > 12) {
-      warnhinweis.textContent = uebersetzung("errors.invalidCut", "Hinweis: Ihre gewählten Verkürzungsgründe ergeben zusammen mehr als 12 Monate. Die Gesamtverkürzung wird daher auf maximal 12 Monate begrenzt, wie gesetzlich vorgesehen.");
+      warnhinweis.textContent = uebersetzung("errors.invalidCut", "Hinweis: Ihre gewählten Verkürzungsgründe ergeben zusammen mehr als 12 Monate. Die Gesamtverkürzung wird daher auf maximal 12 Monate begrenzt, wie vorgegeben.");
       warnhinweis.style.display = "block";
     }
   }

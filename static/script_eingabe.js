@@ -312,7 +312,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Prozent-Button ist aktiv → Prozent bleibt fest, Stunden passen sich an
         teilzeitProzentEingabe.value = formatiereZahl(aktiverButtonWert);
         teilzeitStundenEingabe.value = formatiereZahl(wochenStunden * aktiverButtonWert / 100);
-      } else {
+        } else {
         // Kein Button aktiv → Prozent bleibt, Stunden passen sich an (altes Verhalten)
         const prozent = parseFloat(teilzeitProzentEingabe.value);
         if (!isNaN(prozent)) {
@@ -524,7 +524,7 @@ document.addEventListener("DOMContentLoaded", () => {
         aktuellerFehlerProzent = "errors.percentMax";
         fehlerProzent.textContent = uebersetzung(aktuellerFehlerProzent, "Der Wert darf maximal 100% betragen");
         entferneFehlerMitFadeout(teilzeitProzentEingabe, fehlerProzent, () => aktuellerFehlerProzent = null, timerIdProzent);
-      }
+    }
       else {
         // Nur Max-Fehler löschen, nicht Min-Fehler (die von pruefeMindestUndMaximal kommen)
         if (aktuellerFehlerProzent === "errors.percentMax") {
@@ -578,7 +578,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (aktuellerFehlerStunden === "errors.hoursMax") {
           fehlerStunden.textContent = '';
           aktuellerFehlerStunden = null;
-          teilzeitStundenEingabe.classList.remove('error');
+        teilzeitStundenEingabe.classList.remove('error');
         }
       }
       
@@ -729,12 +729,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Bei Sprachwechsel Fehlermeldungen aktualisieren
-  window.addEventListener("i18n:changed", aktualisiereFehlermeldungen);
+  /**
+   * Aktualisiert die Button-Texte für Stunden-Buttons basierend auf der aktuellen Sprache.
+   */
+  function aktualisiereButtonTexte() {
+    buttons.forEach(btn => {
+      if (btn.dataset.type === "hours") {
+        const wert = btn.dataset.value;
+        const einheit = uebersetzung("units.hours.short", "h");
+        btn.textContent = `${wert} ${einheit}`;
+      }
+    });
+  }
+
+  // Bei Sprachwechsel Fehlermeldungen und Button-Texte aktualisieren
+  window.addEventListener("i18n:changed", () => {
+    aktualisiereFehlermeldungen();
+    aktualisiereButtonTexte();
+  });
 
   // Initiale Validierung und Button-Markierung beim Seitenstart
   validiereSichtbareButtons();
   synchronisiereButtonMarkierung();
+  aktualisiereButtonTexte();
 
   // Scroll-Funktion für "Jetzt berechnen" Button
   const btnStartCalculate = document.getElementById("btn-start-calculate");

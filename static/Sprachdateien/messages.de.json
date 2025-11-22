@@ -96,7 +96,7 @@
   },
   "units": {
     "hours": {
-      "short": "h",
+      "short": "St",
       "full": "Stunden"
     },
     "months": {
@@ -129,7 +129,7 @@
     "percentMax": "Der Wert darf maximal 100% betragen",
     "hoursMin": "Der Wert muss mindestens 50% der regulären Stunden betragen",
     "hoursMax": "Der Wert darf die regulären Wochenstunden nicht überschreiten",
-    "invalidCut": "Hinweis: Ihre gewählten Verkürzungsgründe ergeben zusammen mehr als 12 Monate. Die Gesamtverkürzung wird daher auf maximal 12 Monate begrenzt, wie gesetzlich vorgesehen.",
+    "invalidCut": "Hinweis: Ihre gewählten Verkürzungsgründe ergeben zusammen mehr als 12 Monate. Die Gesamtverkürzung wird daher auf maximal 12 Monate begrenzt, wie vorgegeben.",
     "invalidCutShort": "Hinweis: Verkürzung auf max. 12 Monate begrenzt"
   },
   "btn": {
