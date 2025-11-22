@@ -187,6 +187,22 @@ async function holeZusammenfassung() {
 function fuelleEingabenliste(eingaben, berechnung) {
   const liste = $("#inputs-list");
   if (!liste) return;
+  
+  // Prüfe zuerst, ob wir überhaupt Daten haben
+  // Wenn keine Daten vorhanden sind, nicht leeren (behalte bestehenden Inhalt)
+  if (!eingaben || !berechnung) {
+    return;
+  }
+  
+  // Prüfe auch, ob die notwendigen Eigenschaften vorhanden sind
+  if (typeof eingaben.basisMonate === 'undefined' || 
+      typeof eingaben.wochenstunden === 'undefined' || 
+      typeof eingaben.teilzeitProzent === 'undefined' ||
+      typeof berechnung.gesamtMonate === 'undefined') {
+    return;
+  }
+  
+  // Jetzt können wir sicher leeren, da wir vollständige Daten haben
   liste.innerHTML = "";
 
   // Teilzeit-Stunden berechnen
@@ -234,33 +250,33 @@ function fuelleEingabenliste(eingaben, berechnung) {
     // Liste der Verkürzungsgründe
     const verkuerzungenListe = document.createElement("ul");
     verkuerzungenListe.className = "verkuerzungen-list";
-    
-    verkuerzungen.forEach((verkuerzung) => {
-      const li = document.createElement("li");
-      // Label aus i18n je Key
-      let beschriftungsSchluessel;
-      switch (verkuerzung.key) {
-        case "abitur":
+
+  verkuerzungen.forEach((verkuerzung) => {
+    const li = document.createElement("li");
+    // Label aus i18n je Key
+    let beschriftungsSchluessel;
+    switch (verkuerzung.key) {
+      case "abitur":
           beschriftungsSchluessel = "vk.school.abitur";
-          break;
-        case "realschule":
+        break;
+      case "realschule":
           beschriftungsSchluessel = "vk.school.realschule";
-          break;
-        case "alter_ueber_21":
-          beschriftungsSchluessel = "vk.alter21.label";
-          break;
-        case "vorkenntnisse":
-          beschriftungsSchluessel = "vk.vork.label";
-          break;
-        case "familien_pflegeverantwortung":
-          beschriftungsSchluessel = "vk.familie.label";
-          break;
-        default:
-          beschriftungsSchluessel = "";
-      }
-      const beschriftung = beschriftungsSchluessel
-        ? uebersetzung(beschriftungsSchluessel, verkuerzung.key)
-        : verkuerzung.key || "";
+        break;
+      case "alter_ueber_21":
+        beschriftungsSchluessel = "vk.alter21.label";
+        break;
+      case "vorkenntnisse":
+        beschriftungsSchluessel = "vk.vork.label";
+        break;
+      case "familien_pflegeverantwortung":
+        beschriftungsSchluessel = "vk.familie.label";
+        break;
+      default:
+        beschriftungsSchluessel = "";
+    }
+    const beschriftung = beschriftungsSchluessel
+      ? uebersetzung(beschriftungsSchluessel, verkuerzung.key)
+      : verkuerzung.key || "";
       
       // Strukturiertes Format: Label und Wert in separaten Spans
       if (verkuerzung.months) {
@@ -407,7 +423,7 @@ function fuelleErgebnisse(eingaben, berechnung) {
       
       // Finale Dauer
       setzeText("#res-extension-total", `${berechnung.gesamtMonate} ${monateWort}`);
-      
+
       // Delta (Verlängerung) - nur als Zahl unter dem Pfeil
       setzeText("#res-extension-delta", `+${berechnung.verlaengerungMonate}`);
     } else {
@@ -583,8 +599,17 @@ window.addEventListener("i18n:changed", () => {
 });
 
 // Bei Fenstergrößenänderung neu rendern (für Mobile/Desktop-Umschaltung)
+// Nur bei Änderungen der Breite, nicht der Höhe (um Scroll-Events zu vermeiden)
 let resizeTimeout;
+let lastWindowWidth = window.innerWidth;
 window.addEventListener("resize", () => {
+  const currentWidth = window.innerWidth;
+  // Nur neu rendern, wenn sich die Breite geändert hat (nicht die Höhe)
+  if (currentWidth === lastWindowWidth) {
+    return;
+  }
+  lastWindowWidth = currentWidth;
+  
   clearTimeout(resizeTimeout);
   resizeTimeout = setTimeout(() => {
     if (!LETZTE_EINGABEN || !LETZTE_BERECHNUNG) return;
