@@ -386,9 +386,13 @@
       Gründe für eine kürzere Ausbildung
     </h1>
 
-    <p id="vk-helper" data-i18n="vk.helper" class="muted-text d-none">
-      Wähle alles aus, was zu dir passt.
-    </p>
+    <div class="row">
+      <p id="vk-helper" data-i18n="vk.helper" class="muted-text d-none">
+        Wähle alles aus, was zu dir passt.
+      </p>
+
+
+    </div>
 
     <form id="vk-form" class="space-y-3">
       <fieldset id="vk-fieldset" class="radio-group">
@@ -436,7 +440,7 @@
   
                 <div class="tile-body">
                   <div class="tile-header">
-                      <span data-i18n="vk.alter21.yes">Ja</span>
+                    <span data-i18n="vk.alter21.yes">Ja</span>
                   </div>
                 </div>
               </label>
@@ -449,7 +453,7 @@
   
                 <div class="tile-body">
                   <div class="tile-header">
-                      <span data-i18n="vk.alter21.no">Nein</span>
+                    <span data-i18n="vk.alter21.no">Nein</span>
                   </div>
                 </div>
               </label>
@@ -469,6 +473,7 @@
             Haben Sie familiäre Verpflichtungen (Kinderbetreuung oder Pflege von Angehörigen)?
           </h2>
 
+          <!-- Kinderbetreuung -->
           <div class="vk-category-body">
             <label class="tile">
               <input
@@ -478,13 +483,33 @@
               >
               <div class="tile-body" style="flex:1">
                 <div class="tile-header">
-                    <span data-i18n="vk.familie.label">Familien- und Pflegeverantwortung</span>
+                  <span data-i18n="vk.familie.label_kinder">Kinderbetreuung</span>
                 </div>
               </div>
             </label>
 
             <span id="desc-familie" class="sr-only" data-i18n="vk.familie.sr">
-              Wenn Sie Familien- oder Pflegeverantwortung haben, ist eine Verkürzung möglich.
+              Wenn Sie ein Kind betreuen müssen, ist eine Verkürzung möglich.
+            </span>
+          </div>
+
+          <!-- Pflege von Angehörigen -->
+          <div class="vk-category-body">
+            <label class="tile">
+              <input
+                type="checkbox"
+                aria-describedby="desc-familie"
+                data-vk-field="familien_pflegeverantwortung"
+              >
+              <div class="tile-body" style="flex:1">
+                <div class="tile-header">
+                  <span data-i18n="vk.familie.label_pflege">Pflege von Angehörigen</span>
+                </div>
+              </div>
+            </label>
+
+            <span id="desc-familie" class="sr-only" data-i18n="vk.familie.sr">
+              Wenn Sie einen Angehörigen pflegen müssen, ist eine Verkürzung möglich.
             </span>
           </div>
         </div>
@@ -497,6 +522,7 @@
             Welche beruflichen Qualifikationen bringen Sie mit?
           </h2>
 
+          <!-- Beispielhafte Einträge für berufliche Vorkenntnisse -->
           <div class="vk-category-body">
             <label class="tile">
               <input
@@ -508,7 +534,73 @@
 
               <div class="tile-body">
                 <div class="tile-header">
-                    <span data-i18n="vk.vork.label">Berufliche Vorkenntnisse</span>
+                    <span data-i18n="vk.vork.label1">Berufliche Vorkenntnisse</span>
+                </div>
+              </div>
+            </label>
+
+            <span id="desc-vork" class="sr-only" data-i18n="vk.vork.sr">
+              Berufliche Vorkenntnisse können Ihre Ausbildungsdauer verkürzen.
+            </span>
+          </div>
+
+          <!-- Wiederholte Einträge als Platzhalter -->
+          <div class="vk-category-body">
+            <label class="tile">
+              <input
+                type="checkbox"
+                aria-describedby="desc-vork"
+                data-vk-field="vorkenntnisse_monate"
+                data-vk-months="12"
+              >
+
+              <div class="tile-body">
+                <div class="tile-header">
+                    <span data-i18n="vk.vork.label2">Berufliche Vorkenntnisse</span>
+                </div>
+              </div>
+            </label>
+
+            <span id="desc-vork" class="sr-only" data-i18n="vk.vork.sr">
+              Berufliche Vorkenntnisse können Ihre Ausbildungsdauer verkürzen.
+            </span>
+          </div>
+
+          <!-- Weitere wiederholte Einträge als Platzhalter -->
+          <div class="vk-category-body">
+            <label class="tile">
+              <input
+                type="checkbox"
+                aria-describedby="desc-vork"
+                data-vk-field="vorkenntnisse_monate"
+                data-vk-months="12"
+              >
+
+              <div class="tile-body">
+                <div class="tile-header">
+                    <span data-i18n="vk.vork.label3">Berufliche Vorkenntnisse</span>
+                </div>
+              </div>
+            </label>
+
+            <span id="desc-vork" class="sr-only" data-i18n="vk.vork.sr">
+              Berufliche Vorkenntnisse können Ihre Ausbildungsdauer verkürzen.
+            </span>
+          </div>
+
+          <!-- Weitere wiederholte Einträge als Platzhalter -->
+          <div class="vk-category-body">
+            <label class="tile">
+              <input
+                type="checkbox"
+                aria-describedby="desc-vork"
+                data-vk-field="vorkenntnisse_monate"
+                data-vk-months="12"
+              >
+
+              <div class="tile-body">
+                <div class="tile-header">
+                    <span data-i18n="vk.vork.label4">Berufliche Vorkenntnisse</span>
                 </div>
               </div>
             </label>
