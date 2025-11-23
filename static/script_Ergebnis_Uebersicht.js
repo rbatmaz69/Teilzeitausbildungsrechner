@@ -137,6 +137,7 @@ async function holeZusammenfassung() {
   const gesamteVerkuerzungMonate = Number(ergebnis.verkuerzung_gesamt_monate || 0);
   const gesamteVerkuerzungMonateOhneBegrenzung = Number(ergebnis.verkuerzung_gesamt_ohne_begrenzung || 0);
   const neueBasis = Number(ergebnis.verkuerzte_dauer_monate || 0);
+  const regel8Abs3Angewendet = Boolean(ergebnis.regel_8_abs_3_angewendet || false);
 
   // Anzeige-Liste der gewählten Verkürzungsgründe aus dem Objekt bauen
   const verkuerzungen = [];
@@ -173,7 +174,8 @@ async function holeZusammenfassung() {
       gesamteVerkuerzungMonateOhneBegrenzung,
       neueBasis,
       gesamtMonate,
-      gesamtJahre: Math.round((gesamtMonate / 12) * 10) / 10
+      gesamtJahre: Math.round((gesamtMonate / 12) * 10) / 10,
+      regel8Abs3Angewendet
     }
   };
 }
@@ -371,6 +373,19 @@ function fuelleEingabenliste(eingaben, berechnung) {
     }
   }
   
+  // Warnhinweis für § 8 Abs. 3 BBiG (immer anzeigen, wenn Regel angewendet wurde)
+  if (berechnung && berechnung.regel8Abs3Angewendet) {
+    const warnhinweis8Abs3 = document.createElement("p");
+    warnhinweis8Abs3.className = "error-message verkuerzungen-warning";
+    warnhinweis8Abs3.id = "errorRegel8Abs3";
+    warnhinweis8Abs3.textContent = uebersetzung(
+      "errors.regel8Abs3",
+      "Hinweis: Nach § 8 Abs. 3 BBiG wurde die Ausbildungsdauer auf die Regelausbildungsdauer reduziert, da die Überschreitung maximal 6 Monate beträgt."
+    );
+    warnhinweis8Abs3.style.display = "block";
+    liste.appendChild(warnhinweis8Abs3);
+  }
+  
   // Legende für Abkürzungen hinzufügen
   const legende = document.createElement("p");
   legende.className = "units-legend";
@@ -473,7 +488,8 @@ function erstelleShareUrl(eingaben, berechnung) {
       n: berechnung.neueBasis,
       v: berechnung.gesamteVerkuerzungMonate,
       vo: berechnung.gesamteVerkuerzungMonateOhneBegrenzung,
-      l: berechnung.verlaengerungMonate || 0
+      l: berechnung.verlaengerungMonate || 0,
+      r8: berechnung.regel8Abs3Angewendet || false
     }
   };
   
@@ -520,7 +536,8 @@ function ladeDatenAusUrl() {
         gesamteVerkuerzungMonate: shareData.r.v,
         gesamteVerkuerzungMonateOhneBegrenzung: shareData.r.vo,
         verlaengerungMonate: shareData.r.l || 0, // Verlängerung durch Teilzeit
-        gesamtJahre: Math.round((shareData.r.g / 12) * 10) / 10
+        gesamtJahre: Math.round((shareData.r.g / 12) * 10) / 10,
+        regel8Abs3Angewendet: shareData.r.r8 || false
       }
     };
   } catch (error) {

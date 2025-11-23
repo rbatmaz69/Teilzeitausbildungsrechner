@@ -20,3 +20,7 @@ htmlcov/
 # OS
 .DS_Store
 Thumbs.db
+
+# Lokale Entwicklungs-Tools (nicht committen)
+generate_qr.py
+ngrok_qr.png

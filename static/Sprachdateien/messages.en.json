@@ -131,7 +131,8 @@
     "hoursMin": "The value must be at least 50% of regular hours",
     "hoursMax": "The value must not exceed the regular weekly hours",
     "invalidCut": "Note: Your selected reduction reasons add up to more than 12 months. The total reduction is therefore limited to a maximum of 12 months, as specified.",
-    "invalidCutShort": "Note: Reduction limited to max. 12 months"
+    "invalidCutShort": "Note: Reduction limited to max. 12 months",
+    "regel8Abs3": "Note: According to § 8 para. 3 BBiG, the training duration was reduced to the standard training duration, as the excess is at most 6 months."
   },
   "btn": {
     "calculate": "Show result",

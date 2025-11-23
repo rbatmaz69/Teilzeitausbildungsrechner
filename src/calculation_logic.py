@@ -373,10 +373,12 @@ def berechne_gesamtdauer(
     # Wenn die berechnete Ausbildungsdauer die Regelausbildungszeit
     # um höchstens 6 Monate überschreitet, ist die Regelausbildungszeit
     # als Ergebnis zu setzen (kein Nachteil für Auszubildende).
+    regel_8_abs_3_angewendet = False
     if finale_dauer > basis_dauer_monate:
         differenz = finale_dauer - basis_dauer_monate
         if differenz <= 6:
             finale_dauer = basis_dauer_monate
+            regel_8_abs_3_angewendet = True
 
     # Zusätzliche Informationen berechnen
     verkuerzung_gesamt = basis_dauer_monate - verkuerzte_dauer
@@ -396,6 +398,7 @@ def berechne_gesamtdauer(
         "verkuerzung_gesamt_monate": verkuerzung_gesamt,
         "verlaengerung_durch_teilzeit_monate": verlaengerung_durch_teilzeit,
         "verkuerzung_gesamt_ohne_begrenzung": verkuerzung_gesamt_ohne_begrenzung,
+        "regel_8_abs_3_angewendet": regel_8_abs_3_angewendet,
     }
 
 
