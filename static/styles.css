@@ -774,6 +774,17 @@ input.error,
   font-variant-numeric: tabular-nums;
 }
 
+/* Legende für Abkürzungen */
+.units-legend {
+  margin: 0.75rem 0 0 0;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--border);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-style: italic;
+  text-align: right;
+}
+
 /* Teilzeit-Formel: Mobile = vertikal, Desktop = horizontal */
 .teilzeit-formula-container {
   display: flex;

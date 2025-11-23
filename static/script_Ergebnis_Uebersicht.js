@@ -370,6 +370,12 @@ function fuelleEingabenliste(eingaben, berechnung) {
       warnhinweis.style.display = "block";
     }
   }
+  
+  // Legende für Abkürzungen hinzufügen
+  const legende = document.createElement("p");
+  legende.className = "units-legend";
+  legende.textContent = uebersetzung("inputs.unitsLegend", "St = Stunden, M = Monate");
+  liste.append(legende);
 }
 
 /**
