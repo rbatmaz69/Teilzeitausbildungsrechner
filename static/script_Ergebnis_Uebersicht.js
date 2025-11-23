@@ -374,7 +374,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
   // Legende für Abkürzungen hinzufügen
   const legende = document.createElement("p");
   legende.className = "units-legend";
-  legende.textContent = uebersetzung("inputs.unitsLegend", "St = Stunden, M = Monate");
+  legende.textContent = uebersetzung("inputs.unitsLegend", "Std = Stunden, M = Monate");
   liste.append(legende);
 }
 
