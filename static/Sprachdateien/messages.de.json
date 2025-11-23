@@ -61,10 +61,11 @@
       "sr": "Berufliche Vorkenntnisse können Ihre Ausbildungsdauer verkürzen."
     },
     "other": {
-      "question": "Welche weiteren Gründe treffen auf Sie zu?"
+      "question": "Sind Sie über 21 Jahre alt?"
     },
     "alter21": {
-      "label": "Alter über 21 Jahre",
+      "yes": "Ja",
+      "no": "Nein",
       "badge": "−12 Monate",
       "sr": "Wenn Sie über 21 Jahre alt sind, können Vorerfahrungen angerechnet werden."
     }
