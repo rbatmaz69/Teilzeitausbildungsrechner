@@ -310,9 +310,11 @@ def berechne_gesamtdauer(
     if not isinstance(teilzeit_eingabe, (int, float)):
         raise TypeError("Teilzeit-Wert muss eine Zahl sein")
 
-    # Wert-Validierung: Gültige Bereiche gemäß HTML-Eingabefeldern
-    if basis_dauer_monate < 12 or basis_dauer_monate > 60:
-        raise ValueError("Ausbildungsdauer muss zwischen 12 und 60 Monaten liegen")
+    # Wert-Validierung: Gültige Bereiche gemäß HTML-Eingabefeldern (IHK: 24-42 Monate)
+    if basis_dauer_monate < 24 or basis_dauer_monate > 42:
+        raise ValueError(
+            "Ausbildungsdauer muss zwischen 24 und 42 Monaten liegen (IHK-Ausbildungen)"
+        )
     if vollzeit_stunden < 10 or vollzeit_stunden > 48:
         raise ValueError("Vollzeit-Stunden müssen zwischen 10 und 48 Stunden liegen")
 

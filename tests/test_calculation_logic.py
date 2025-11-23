@@ -325,9 +325,9 @@ def test_negative_monate_fehler():
     """
     Test: Negative Ausbildungsdauer ist ungültig.
     
-    Erwartung: ValueError mit Hinweis auf 12-60 Monate Bereich.
+    Erwartung: ValueError mit Hinweis auf 24-42 Monate Bereich.
     """
-    with pytest.raises(ValueError, match="zwischen 12 und 60"):
+    with pytest.raises(ValueError, match="zwischen 24 und 42"):
         berechne_gesamtdauer(**UNGUELTIG_NEGATIVE_MONATE)
 
 
@@ -345,12 +345,12 @@ def test_null_ausbildungsdauer_fehler():
     """
     Test: Ausbildungsdauer von 0 Monaten ist ungültig.
     
-    Erwartung: ValueError mit Hinweis auf 12-60 Monate Bereich.
+    Erwartung: ValueError mit Hinweis auf 24-42 Monate Bereich.
     """
     data = VOLLZEIT_OHNE_VERKUERZUNG.copy()
     data["basis_dauer_monate"] = 0
     
-    with pytest.raises(ValueError, match="zwischen 12 und 60"):
+    with pytest.raises(ValueError, match="zwischen 24 und 42"):
         berechne_gesamtdauer(**data)
 
 

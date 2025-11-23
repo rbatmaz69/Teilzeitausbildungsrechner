@@ -5,9 +5,6 @@
  * die Anzeige der Vorkenntnis-Monate mit der aktuellen Sprache.
  */
 document.addEventListener('DOMContentLoaded', () => {
-  const abiturKontrollkaestchen = document.getElementById('g-abitur');
-  const realschuleKontrollkaestchen = document.getElementById('g-realschule');
-
   /* ========== Tooltips (touch-optimiert) ========== */
   document.querySelectorAll('.info-btn').forEach(schaltflaeche => {
     const kurzinfo = schaltflaeche.closest('.tile')?.querySelector('.tooltip');

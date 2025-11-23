@@ -29,6 +29,68 @@
     </div>
   </nav>
 
+  <!-- ================================ STARTSEITE ================================ -->
+  <div class="container">
+    <section id="startseite" class="startseite">
+      <h1 class="startseite-title">
+        <span data-i18n="start.title.prefix">Planen Sie Ihre </span><span class="startseite-title-accent" data-i18n="start.title.accent">Teilzeitausbildung</span><span data-i18n="start.title.suffix"> ganz einfach</span>
+      </h1>
+      <p class="startseite-description" data-i18n="start.description">
+        Berechnen Sie die optimale Aufteilung zwischen Arbeitszeit und Ausbildung. Unser Rechner hilft Ihnen dabei, die passende Teilzeitlösung für Ihre Bedürfnisse zu finden.
+      </p>
+
+      <div class="info-cards">
+        <div class="info-card">
+          <div class="info-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div class="info-card-content">
+            <h3 class="info-card-title" data-i18n="start.card1.title">Flexible Zeiten</h3>
+            <p class="info-card-subtitle" data-i18n="start.card1.subtitle">Individuelle Stundenplanung</p>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <div class="info-card-content">
+            <h3 class="info-card-title" data-i18n="start.card2.title">Genaue Planung</h3>
+            <p class="info-card-subtitle" data-i18n="start.card2.subtitle">Präzise Berechnung</p>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+          </div>
+          <div class="info-card-content">
+            <h3 class="info-card-title" data-i18n="start.card3.title">Erfolgreicher Abschluss</h3>
+            <p class="info-card-subtitle" data-i18n="start.card3.subtitle">Strukturierter Weg</p>
+          </div>
+        </div>
+      </div>
+
+      <button id="btn-start-calculate" class="btn-start-calculate" type="button" data-i18n="start.button">
+        Jetzt berechnen
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
+    </section>
+  </div>
+
   <div class="container">
     <!-- ================================ EINGABEN DES RECHNERS ================================ -->
 
@@ -37,14 +99,17 @@
       <h1 id="input-heading" class="sr-only" data-i18n="inputs.heading">Eingaben</h1>
 
       <div class="input-group">
-        <label for="dauer">
+        <label id="label-dauer">
           <span data-i18n="inputs.dauer.label">Reguläre Ausbildungsdauer (Monate)</span>
           <span class="info-icon"
                 data-tooltip="Die normale Dauer Ihrer Ausbildung bei Vollzeit"
                 data-i18n-attr="data-tooltip:inputs.dauer.tooltip"
                 aria-hidden="true">i</span>
         </label>
-        <input type="number" id="dauer" value="36" step="1" required aria-describedby="hint-dauer">
+        <div class="input-with-unit">
+          <input type="number" id="dauer" value="36" min="24" max="42" step="1" required aria-labelledby="label-dauer" aria-describedby="hint-dauer">
+          <span class="unit">M</span>
+        </div>
         <span class="error-message" id="errorDauer"></span>
         <!-- Unsichtbarer Hilfetext spiegelt das Tooltip (für SR) -->
         <span id="hint-dauer" class="sr-only">
@@ -54,21 +119,24 @@
 
       <!-- Eingabe reguläre Wochenstunden -->
       <div class="input-group">
-        <label for="stunden">
+        <label id="label-stunden">
           <span data-i18n="inputs.stunden.label">Reguläre Wochenstunden (gesamt)</span>
           <span class="info-icon"
                 data-tooltip="Ihre gesamten Wochenstunden inkl. Berufsschule"
                 data-i18n-attr="data-tooltip:inputs.stunden.tooltip"
                 aria-hidden="true">i</span>
         </label>
-        <input type="number" id="stunden" value="40" step="1" required aria-describedby="hint-stunden">
+        <div class="input-with-unit">
+          <input type="number" id="stunden" value="40" step="1" required aria-labelledby="label-stunden" aria-describedby="hint-stunden">
+          <span class="unit" data-i18n="units.hours.short">Std</span>
+        </div>
         <span class="error-message" id="errorRegularStunden"></span>
         <span id="hint-stunden" class="sr-only">Ihre gesamten Wochenstunden inkl. Berufsschule.</span>
       </div>
 
       <!-- Eingabe Teilzeitanteil -->
       <div class="input-group">
-        <label for="teilzeitProzent">
+        <label id="label-teilzeit">
           <span data-i18n="inputs.teilzeit.label">Teilzeit-Anteil</span>
           <span class="info-icon"
                 data-tooltip="Mindestens 50% für eine anerkannte Teilzeitausbildung"
@@ -79,35 +147,31 @@
         <!-- Prozentanteil -->
         <div class="input-row">
           <div class="input-group half">
-            <label for="teilzeitProzent" data-i18n="inputs.teilzeit.percent">Prozent</label>
+            <label id="label-teilzeit-prozent" data-i18n="inputs.teilzeit.percent">Prozent</label>
             <div class="input-with-unit">
-              <input type="number" id="teilzeitProzent" value="75" step="5" aria-describedby="hint-teilzeit">
+              <input type="number" id="teilzeitProzent" value="75" step="5" aria-labelledby="label-teilzeit-prozent" aria-describedby="hint-teilzeit">
               <span class="unit" data-i18n="units.percent">%</span>
             </div>
             <span class="error-message" id="errorProzent"></span>
             <div class="button-container">
               <div class="button-row">
                 <button class="preset" data-type="percent" data-value="50">50%</button>
-                <button class="preset" data-type="percent" data-value="60">60%</button>
                 <button class="preset" data-type="percent" data-value="75">75%</button>
-                <button class="preset" data-type="percent" data-value="100">100%</button>
               </div>
             </div>
           </div>
 
           <!-- Stundenanteil -->
           <div class="input-group half">
-            <label for="teilzeitStunden" data-i18n="inputs.teilzeit.hours">Stunden</label>
+            <label id="label-teilzeit-stunden" data-i18n="inputs.teilzeit.hours">Stunden</label>
             <div class="input-with-unit">
-              <input type="number" id="teilzeitStunden" value="30" step="1" aria-describedby="hint-teilzeit">
+              <input type="number" id="teilzeitStunden" value="30" step="1" aria-labelledby="label-teilzeit-stunden" aria-describedby="hint-teilzeit">
               <span class="unit" data-i18n="units.hours.short">h</span>
             </div>
             <span class="error-message" id="errorStunden"></span>
             <div class="button-container">
               <div class="button-row">
-                <button class="preset" data-type="hours" data-value="20">20 h</button>
                 <button class="preset" data-type="hours" data-value="24">24 h</button>
-                <button class="preset" data-type="hours" data-value="30">30 h</button>
                 <button class="preset" data-type="hours" data-value="32">32 h</button>
               </div>
             </div>
@@ -174,10 +238,7 @@
               >
               <div class="tile-body" style="flex:1">
                 <div class="tile-header">
-                  <span>
                     <span data-i18n="vk.familie.label">Familien- und Pflegeverantwortung</span>
-                    <span class="badge" data-i18n="vk.familie.badge">−12 Monate</span>
-                  </span>
                 </div>
               </div>
             </label>
@@ -207,10 +268,7 @@
 
               <div class="tile-body">
                 <div class="tile-header">
-                  <span>
                     <span data-i18n="vk.vork.label">Berufliche Vorkenntnisse</span>
-                    <span class="badge" data-i18n="vk.vork.badge">−12 Monate</span>
-                  </span>
                 </div>
               </div>
             </label>
@@ -239,10 +297,7 @@
 
               <div class="tile-body">
                 <div class="tile-header">
-                  <span>
                     <span data-i18n="vk.alter21.label">Alter über 21 Jahre</span>
-                    <span class="badge" data-i18n="vk.alter21.badge">−12 Monate</span>
-                  </span>
                 </div>
               </div>
             </label>
@@ -261,7 +316,7 @@
   </div>
 
   <!-- Ergebnisanzeige -->
-  <div class="container">
+  <div class="container" id="ergebnis-container" hidden>
     <!-- Hauptkarte, optisch hervorgehoben -->
     <div class="card highlight" aria-labelledby="res-headline">
       <h1 id="res-headline" data-i18n="res.headline">Ihre Teilzeitausbildung</h1>
@@ -273,17 +328,21 @@
       <div class="grid">
         <div class="highlight-main">
           <p class="big-number" id="res-total-months" aria-live="polite" data-i18n="res.placeholders.months">–</p>
+          <p class="result-years" id="res-total-years">–</p>
           <span class="error-message" id="errorTotalMonths" data-i18n="errors.placeholder"></span>
-          <p class="muted" id="res-extension" data-i18n="res.placeholders.extension">–</p>
+          
+          <!-- Verlängerungsanzeige: Basis → Pfeil mit Delta → Ziel -->
+          <div class="result-extension-wrapper" id="res-extension-wrapper" hidden>
+            <p class="result-extension-label" data-i18n="res.extension.label">Automatische Verlängerung durch Teilzeit:</p>
+            <div class="result-extension-values">
+              <span class="result-extension-basis" id="res-extension-basis">–</span>
+              <div class="result-extension-arrow-wrapper">
+                <span class="result-extension-arrow">→</span>
+                <span class="result-extension-delta" id="res-extension-delta">+–</span>
         </div>
-
-        <div class="highlight-meta">
-          <dl class="kv">
-            <div>
-              <dt data-i18n="res.kv.total">Gesamtdauer</dt>
-              <dd id="res-total-weeks">–</dd>
+              <span class="result-extension-total" id="res-extension-total">–</span>
             </div>
-          </dl>
+          </div>
         </div>
       </div>
     </div>
@@ -291,17 +350,9 @@
     <!-- Karte: Alle Eingaben -->
     <div class="card" aria-labelledby="inputs-title">
       <h2 id="inputs-title" data-i18n="inputs.title">Ihre Eingaben</h2>
-      <dl class="kv kv-2col" id="inputs-list">
+      <dl class="kv" id="inputs-list">
         <!-- Inhalte werden dynamisch per JS gefüllt -->
       </dl>
-    </div>
-
-    <!-- Karte: Verkürzungsgründe -->
-    <div class="card" aria-labelledby="cuts-title" id="cuts-section" hidden>
-      <h2 id="cuts-title" data-i18n="cuts.title">Verkürzungsgründe</h2>
-      <ul class="tags" id="cuts-list"></ul>
-      <p class="muted" id="cuts-summary"></p>
-      <span class="error-message-big" id="errorVerkuerzungen"></span>
     </div>
 
     <!-- Karte: Hinweise -->
