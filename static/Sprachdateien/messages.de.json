@@ -43,8 +43,9 @@
     "helper": "Wählen Sie alles aus, was auf Sie zutrifft.",
     "legend": "Gründe für Verkürzung",
     "familie": {
-      "question": "Haben Sie familiäre Verpflichtungen (Kinderbetreuung oder Pflege von Angehörigen)?",
-      "label": "Familien- und Pflegeverantwortung",
+      "question": "Haben Sie familiäre Verpflichtungen?",
+      "label_kinder": "Kinderbetreuung",
+      "label_pflege": "Pflege von Angehörigen",
       "badge": "−12 Monate",
       "sr": "Wenn Sie Familien- oder Pflegeverantwortung haben, ist eine Verkürzung möglich."
     },
@@ -60,7 +61,10 @@
       "question": "Welche beruflichen Qualifikationen bringen Sie mit?"
     },
     "vork": {
-      "label": "Berufliche Vorkenntnisse",
+      "label1": "Abgeschlossene Berufsausbildung",
+      "label2": "Nachweis einer einschlägigen beruflichen Grundausbildung",
+      "label3": "Einschlägige Berufstätigkeit",
+      "label4": "Arbeitserfahrung im Berufsfeld",
       "badge": "−12 Monate",
       "sr": "Berufliche Vorkenntnisse können Ihre Ausbildungsdauer verkürzen."
     },
