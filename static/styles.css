@@ -449,6 +449,27 @@ button.berechnen:active {
   box-sizing: border-box;
 }
 
+.btn{
+  -webkit-tap-highlight-color: transparent;
+  appearance: none;
+  border: none;
+  border-radius: 999px;
+  padding: .8rem 1.1rem;
+  background: var(--brand);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+.btn:hover{ filter: brightness(.95); }
+.btn:active{ transform: translateY(1px); }
+
+.btn.ghost {
+  background: #fff;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
 .button-group .btn.ghost {
   flex: 1;
   padding: 12px 32px; /* Gleiches Padding wie berechnen Button */
@@ -471,27 +492,6 @@ button.berechnen:active {
 
 .button-group .btn.ghost:active {
   transform: translateY(2px);
-}
-
-.btn{
-  -webkit-tap-highlight-color: transparent;
-  appearance: none;
-  border: none;
-  border-radius: 999px;
-  padding: .8rem 1.1rem;
-  background: var(--brand);
-  color: #fff;
-  font-weight: 700;
-  box-shadow: var(--shadow);
-  cursor: pointer;
-}
-.btn:hover{ filter: brightness(.95); }
-.btn:active{ transform: translateY(1px); }
-
-.btn.ghost{
-  background: #fff;
-  color: var(--text);
-  border: 1px solid var(--border);
 }
 
 .actionbar .btn {
@@ -776,7 +776,7 @@ input.error,
 
 /* Legende für Abkürzungen */
 .units-legend {
-  margin: 0.75rem 0 0 0;
+  margin: 0.75rem 0 0;
   padding-top: 0.5rem;
   border-top: 1px dashed var(--border);
   color: var(--muted);
