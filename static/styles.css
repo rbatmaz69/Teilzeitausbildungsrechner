@@ -1130,19 +1130,6 @@ input.error,
     margin: 0 auto !important;
   }
 
-  /* Spezifischer Selektor: Container direkt vor Rechner-Bereich (enthält Startseite) */
-  .container:not(.rechner-bereich):has(#startseite),
-  #startseite {
-    max-width: 100% !important;
-    width: 100% !important;
-  }
-
-  /* Rechner-Container behalten ihre normale Breite (auch wenn ausgeblendet) */
-  .rechner-bereich.container {
-    max-width: 480px !important;
-    padding: 1rem !important;
-  }
-
   .startseite {
     min-height: 100vh;
     display: flex;
@@ -1191,12 +1178,31 @@ input.error,
   }
 
   /* Container-Regel für Startseite komplett überschreiben */
-  .container:has(.startseite),
   .startseite > .container {
     max-width: 100% !important;
     width: 100% !important;
     padding: 0 !important;
     margin: 0 auto !important;
+  }
+
+  .container:has(.startseite) {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+  }
+
+  /* Spezifischer Selektor: Container direkt vor Rechner-Bereich (enthält Startseite) */
+  .container:not(.rechner-bereich):has(#startseite),
+  #startseite {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Rechner-Container behalten ihre normale Breite (auch wenn ausgeblendet) */
+  .rechner-bereich.container {
+    max-width: 480px !important;
+    padding: 1rem !important;
   }
 
   /* Rechner-Bereich auf Desktop KOMPLETT ausblenden (vorübergehend, wird später anders gestaltet) */
@@ -1205,6 +1211,7 @@ input.error,
   }
 
   /* Rechner-Bereich bleibt auf Desktop ausgeblendet, auch wenn show-rechner gesetzt ist */
+
   /* (wird in späterer User Story neu gestaltet) */
   body.show-rechner .rechner-bereich {
     display: none !important;
