@@ -1098,3 +1098,397 @@ input.error,
   width: 16px;
   height: 16px;
 }
+
+/* ==========================================
+   DESKTOP STARTSEITE (ab 1024px)
+   ========================================== */
+
+/* Mobile/Desktop Toggle */
+.startseite-mobile {
+  display: block;
+}
+
+.startseite-desktop {
+  display: none;
+}
+
+/* Desktop Layout */
+@media (width >= 1024px) {
+  .startseite-mobile {
+    display: none;
+  }
+
+  /* Startseite nimmt volle Viewport-Höhe ein, aber Scrollen ist erlaubt */
+  /* Container der Startseite auf Desktop komplett anders behandeln */
+  /* Spezifischer Selektor: Container direkt vor Rechner-Bereich (enthält Startseite) */
+  .container:not(.rechner-bereich):has(#startseite),
+  #startseite {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  
+  /* Fallback für Browser ohne :has() Support */
+  .container:not(.rechner-bereich) {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+  }
+  
+  /* Rechner-Container behalten ihre normale Breite (auch wenn ausgeblendet) */
+  .rechner-bereich.container {
+    max-width: 480px !important;
+    padding: 1rem !important;
+  }
+
+  .startseite {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    /* Verhindert Abschneiden */
+    overflow: visible;
+    padding: 2rem 0;
+    /* Sicherstellen, dass nichts abgeschnitten wird */
+    box-sizing: border-box;
+  }
+
+  .startseite .container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Verhindert Abschneiden */
+    overflow: visible;
+    box-sizing: border-box;
+  }
+
+  .startseite-desktop {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    padding: 4rem 6rem;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    /* 16:9 Aspect Ratio Container - flexibel, kein max-height */
+    min-height: 90vh;
+    box-sizing: border-box;
+    /* Verhindert Abschneiden */
+    overflow: visible;
+  }
+
+  /* Sicherstellen, dass Startseite-Container nicht von allgemeiner Container-Regel beeinflusst wird */
+  /* Container-Regel für Startseite komplett überschreiben */
+  .container:has(.startseite),
+  .startseite .container,
+  .startseite > .container {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+  }
+
+  /* Rechner-Bereich auf Desktop KOMPLETT ausblenden (vorübergehend, wird später anders gestaltet) */
+  .rechner-bereich {
+    display: none !important;
+  }
+
+  /* Rechner-Bereich bleibt auf Desktop ausgeblendet, auch wenn show-rechner gesetzt ist */
+  /* (wird in späterer User Story neu gestaltet) */
+  body.show-rechner .rechner-bereich {
+    display: none !important;
+  }
+
+  body.show-rechner .rechner-bereich.actionbar {
+    display: none !important;
+  }
+
+  /* Container für Rechner-Bereich wieder normal */
+  body.show-rechner .rechner-bereich.container {
+    max-width: 480px;
+    padding: 1rem;
+  }
+
+  @media (width >= 900px) {
+    body.show-rechner .rechner-bereich.container {
+      max-width: 720px;
+      padding: 2rem;
+    }
+  }
+
+  @media (width >= 1200px) {
+    body.show-rechner .rechner-bereich.container {
+      max-width: 960px;
+    }
+  }
+
+  /* Left Side: Calendar Visualization */
+  .startseite-desktop-left {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .calendar-visualization {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+  }
+
+  .calendar-device {
+    background: #2d2d2d;
+    border-radius: 32px;
+    padding: 20px;
+    box-shadow: 0 12px 32px rgb(0 0 0 / 25%);
+    position: relative;
+    width: 100%;
+    max-width: 550px;
+  }
+
+  .calendar-screen {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    min-height: 700px;
+    height: auto;
+  }
+
+  .calendar-month {
+    padding: 1.5rem;
+  }
+
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+  }
+
+  .calendar-month-name {
+    font-size: 1.5rem;
+    color: var(--text);
+  }
+
+  .calendar-year {
+    font-size: 1.2rem;
+    color: var(--muted);
+  }
+
+  .calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .calendar-weekdays span {
+    text-align: center;
+    padding: 0.5rem;
+  }
+
+  .calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+  }
+
+  .calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: var(--text);
+    background: #f5f5f5;
+    border-radius: 8px;
+    cursor: default;
+    font-weight: 500;
+  }
+
+  .calendar-day.other-month {
+    color: #bbb;
+    background: transparent;
+  }
+
+  .calendar-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0.5rem 0;
+  }
+
+  /* Accent Icons - Größer */
+  .accent-icon {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid #ff6666; /* Hellerer Rotton für Icons */
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgb(255 102 102 / 20%);
+    z-index: 10;
+  }
+
+  .accent-icon svg {
+    width: 36px;
+    height: 36px;
+    color: #ff6666; /* Hellerer Rotton für Icons */
+  }
+
+  .accent-icon-clock {
+    top: -20px;
+    right: -20px;
+  }
+
+  .accent-icon-graduation {
+    bottom: 30px;
+    left: -25px;
+  }
+
+  /* Right Side: Content */
+  .startseite-desktop-right {
+    max-width: 700px;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: visible;
+  }
+
+  .startseite-title-desktop {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: var(--space-5);
+    color: var(--text);
+  }
+
+  .startseite-description-desktop {
+    color: var(--muted);
+    margin-bottom: var(--space-6);
+    line-height: 1.7;
+    font-size: 1.3rem;
+    max-width: 70ch; /* 60-80 Zeichen optimal */
+  }
+
+  /* Desktop Feature Cards - Größer */
+  .info-cards-desktop {
+    display: flex;
+    gap: var(--space-5);
+    margin-bottom: var(--space-6);
+  }
+
+  .info-card-desktop {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-5);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 12px rgb(0 0 0 / 6%);
+    transition: box-shadow 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+  }
+
+  .info-card-desktop:hover {
+    box-shadow: 0 6px 20px rgb(0 0 0 / 10%);
+    transform: translateY(-3px);
+    background: #fafafa;
+  }
+
+  .info-card-icon-desktop {
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ff6666; /* Hellerer Rotton für Icons */
+    color: white;
+    border-radius: 16px;
+    margin-bottom: var(--space-4);
+  }
+
+  .info-card-icon-desktop svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .info-card-content-desktop {
+    flex: 1;
+  }
+
+  .info-card-title-desktop {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0 0 var(--space-2) 0;
+    color: var(--text);
+  }
+
+  .info-card-subtitle-desktop {
+    font-size: 1.05rem;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Desktop CTA Button - Größer */
+  .btn-start-calculate-desktop {
+    min-width: 280px;
+    background-color: var(--primary);
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 999px;
+    padding: 20px 50px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, transform 0.05s ease-in-out, box-shadow 0.15s ease-in-out;
+    box-shadow: 0 6px 20px rgb(224 0 0 / 25%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .btn-start-calculate-desktop:hover {
+    background-color: #a90000;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgb(0 0 0 / 20%);
+  }
+
+  .btn-start-calculate-desktop:active {
+    background-color: #f33;
+    transform: translateY(0);
+  }
+
+  .btn-start-calculate-desktop svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* Desktop Container Anpassung */
+  .startseite .container {
+    max-width: 100%;
+  }
+}
