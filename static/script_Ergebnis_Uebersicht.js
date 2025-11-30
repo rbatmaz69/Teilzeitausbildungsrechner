@@ -718,8 +718,12 @@ function setzeDatenZurueck() {
   LETZTE_EINGABEN = null;
   LETZTE_BERECHNUNG = null;
 
-  // Neu laden
-  location.reload();
+  // Nach Bestätigung sanft zum Eingabebereich scrollen
+  const inputHeading = document.getElementById("input-heading");
+  if (inputHeading) {
+    const targetSection = inputHeading.closest("section") || inputHeading;
+    targetSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 /* ------------------------------
