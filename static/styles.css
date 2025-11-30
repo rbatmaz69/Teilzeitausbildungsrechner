@@ -1205,20 +1205,18 @@ input.error,
     padding: 1rem !important;
   }
 
-  /* Rechner-Bereich auf Desktop KOMPLETT ausblenden (vorübergehend, wird später anders gestaltet) */
+  /* Rechner-Bereich auf Desktop initial verstecken */
   .rechner-bereich {
-    display: none !important;
+    display: none;
   }
 
-  /* Rechner-Bereich bleibt auf Desktop ausgeblendet, auch wenn show-rechner gesetzt ist */
-
-  /* (wird in späterer User Story neu gestaltet) */
+  /* Rechner-Bereich sichtbar machen, wenn show-rechner gesetzt ist */
   body.show-rechner .rechner-bereich {
-    display: none !important;
+    display: block;
   }
 
   body.show-rechner .rechner-bereich.actionbar {
-    display: none !important;
+    display: flex;
   }
 
   /* Container für Rechner-Bereich wieder normal */
