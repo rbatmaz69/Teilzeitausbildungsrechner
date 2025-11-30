@@ -1119,14 +1119,9 @@ input.error,
   }
 
   /* Startseite nimmt volle Viewport-Höhe ein, aber Scrollen ist erlaubt */
+
   /* Container der Startseite auf Desktop komplett anders behandeln */
-  /* Spezifischer Selektor: Container direkt vor Rechner-Bereich (enthält Startseite) */
-  .container:not(.rechner-bereich):has(#startseite),
-  #startseite {
-    max-width: 100% !important;
-    width: 100% !important;
-  }
-  
+
   /* Fallback für Browser ohne :has() Support */
   .container:not(.rechner-bereich) {
     max-width: 100% !important;
@@ -1134,7 +1129,14 @@ input.error,
     padding: 0 !important;
     margin: 0 auto !important;
   }
-  
+
+  /* Spezifischer Selektor: Container direkt vor Rechner-Bereich (enthält Startseite) */
+  .container:not(.rechner-bereich):has(#startseite),
+  #startseite {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
   /* Rechner-Container behalten ihre normale Breite (auch wenn ausgeblendet) */
   .rechner-bereich.container {
     max-width: 480px !important;
@@ -1148,9 +1150,11 @@ input.error,
     justify-content: center;
     width: 100%;
     position: relative;
+
     /* Verhindert Abschneiden */
     overflow: visible;
     padding: 2rem 0;
+
     /* Sicherstellen, dass nichts abgeschnitten wird */
     box-sizing: border-box;
   }
@@ -1162,6 +1166,7 @@ input.error,
     display: flex;
     align-items: center;
     justify-content: center;
+
     /* Verhindert Abschneiden */
     overflow: visible;
     box-sizing: border-box;
@@ -1176,17 +1181,17 @@ input.error,
     width: 100%;
     max-width: 1600px;
     margin: 0 auto;
+
     /* 16:9 Aspect Ratio Container - flexibel, kein max-height */
     min-height: 90vh;
     box-sizing: border-box;
+
     /* Verhindert Abschneiden */
     overflow: visible;
   }
 
-  /* Sicherstellen, dass Startseite-Container nicht von allgemeiner Container-Regel beeinflusst wird */
   /* Container-Regel für Startseite komplett überschreiben */
   .container:has(.startseite),
-  .startseite .container,
   .startseite > .container {
     max-width: 100% !important;
     width: 100% !important;
@@ -1339,7 +1344,7 @@ input.error,
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    border: 3px solid #ff6666; /* Hellerer Rotton für Icons */
+    border: 3px solid #f66; /* Hellerer Rotton für Icons */
     background: #fff;
     display: flex;
     align-items: center;
@@ -1351,7 +1356,7 @@ input.error,
   .accent-icon svg {
     width: 36px;
     height: 36px;
-    color: #ff6666; /* Hellerer Rotton für Icons */
+    color: #f66; /* Hellerer Rotton für Icons */
   }
 
   .accent-icon-clock {
@@ -1423,7 +1428,7 @@ input.error,
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ff6666; /* Hellerer Rotton für Icons */
+    background: #f66; /* Hellerer Rotton für Icons */
     color: white;
     border-radius: 16px;
     margin-bottom: var(--space-4);
@@ -1485,10 +1490,5 @@ input.error,
   .btn-start-calculate-desktop svg {
     width: 22px;
     height: 22px;
-  }
-
-  /* Desktop Container Anpassung */
-  .startseite .container {
-    max-width: 100%;
   }
 }

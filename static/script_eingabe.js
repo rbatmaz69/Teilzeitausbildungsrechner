@@ -753,20 +753,48 @@ document.addEventListener("DOMContentLoaded", () => {
   synchronisiereButtonMarkierung();
   aktualisiereButtonTexte();
 
-  // Scroll-Funktion für "Jetzt berechnen" Button
+  // Scroll-Funktion für "Jetzt berechnen" Button (Mobile und Desktop)
   const btnStartCalculate = document.getElementById("btn-start-calculate");
+  const btnStartCalculateDesktop = document.getElementById("btn-start-calculate-desktop");
   const eingabenSection = document.querySelector('section.card'); // Erste Eingabe-Section
+  const rechnerBereich = document.getElementById("rechner-bereich");
+  const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
   
-  if (btnStartCalculate && eingabenSection) {
-    btnStartCalculate.addEventListener("click", () => {
-      // Scroll zu Section mit Offset, damit Tooltip sichtbar bleibt
-      const sectionTop = eingabenSection.getBoundingClientRect().top + window.pageYOffset;
-      const offset = 70; // Offset für Tooltip + Abstand oben
-      window.scrollTo({
-        top: sectionTop - offset,
-        behavior: "smooth"
-      });
-    });
+  const scrollToCalculator = () => {
+    // Auf Desktop: Rechner-Bereich sichtbar machen (aber Startseite bleibt sichtbar)
+    if (isDesktop && rechnerBereich) {
+      document.body.classList.add("show-rechner");
+      // Kurze Verzögerung, damit CSS-Transition greift
+      setTimeout(() => {
+        if (eingabenSection) {
+          // Scroll zu Section mit Offset, damit Tooltip sichtbar bleibt
+          const sectionTop = eingabenSection.getBoundingClientRect().top + window.pageYOffset;
+          const offset = 70; // Offset für Tooltip + Abstand oben
+          window.scrollTo({
+            top: sectionTop - offset,
+            behavior: "smooth"
+          });
+        }
+      }, 50);
+    } else {
+      // Auf Mobile: Einfach scrollen (Rechner ist immer sichtbar)
+      if (eingabenSection) {
+        const sectionTop = eingabenSection.getBoundingClientRect().top + window.pageYOffset;
+        const offset = 70; // Offset für Tooltip + Abstand oben
+        window.scrollTo({
+          top: sectionTop - offset,
+          behavior: "smooth"
+        });
+      }
+    }
+  };
+  
+  if (btnStartCalculate) {
+    btnStartCalculate.addEventListener("click", scrollToCalculator);
+  }
+  
+  if (btnStartCalculateDesktop) {
+    btnStartCalculateDesktop.addEventListener("click", scrollToCalculator);
   }
 
   // Verhindere, dass Klicks auf Info-Icons das Input-Feld fokussieren

@@ -24,20 +24,20 @@ if venv_path.exists():
     # Finde site-packages in venv
     python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
     venv_site_packages = venv_path / "lib" / f"python{python_version}" / "site-packages"
-    
+
     if venv_site_packages.exists():
         # Füge venv site-packages zum Python-Pfad hinzu
         if str(venv_site_packages) not in sys.path:
             sys.path.insert(0, str(venv_site_packages))
-    
+
     # Setze VIRTUAL_ENV für Kompatibilität
     os.environ["VIRTUAL_ENV"] = str(venv_path)
 
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request  # noqa: E402
 
 # Import der zentralen Berechnungslogik
 # Diese enthält die komplette Implementierung gemäß BBiG § 7a und § 8
-from .api import verarbeite_berechnungsanfrage
+from .api import verarbeite_berechnungsanfrage  # noqa: E402
 
 
 def create_app() -> Flask:
