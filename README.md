@@ -1,6 +1,7 @@
 # Teilzeitrechner - Group 04
 
-> ⚠️ **Work in Progress** - Dieses Projekt befindet sich aktuell in Entwicklung.
+> ⚠️ **Work in Progress** - Dieses Projekt befindet sich aktuell in Entwicklung.  
+> 📌 **Meilenstein 2 abgeschlossen** - Die Kernfunktionalität ist implementiert und getestet. Weitere Features folgen in Meilenstein 3.
 
 Ein Python-basierter Rechner für Teilzeitberufsausbildungen gemäß BBiG § 7a und § 8.
 
@@ -31,7 +32,7 @@ Tests im Ordner `tests/` decken jede Schicht ab (Unit-Tests für Logik und Servi
 ### ✨ Features
 
 - **Vollständige Berechnungslogik** für Teilzeitausbildungen
-- **Verkürzungsgründe** (Abitur, Realschule, Alter, Vorkenntnisse)
+- **Verkürzungsgründe** (Abitur, Realschule, Alter, Vorkenntnisse, Familien- und Pflegeverantwortung)
 - **Flexible Eingabe** (Prozentsatz oder Stunden)
 - **4-Schritt-Verfahren** (Verkürzung → Verlängerung → Obergrenze → Rundung)
 - **Umfassende Tests** mit realistischen Szenarien
@@ -77,7 +78,7 @@ flask run --port=8001
 
 ### Web-UI + API
 
-Nach dem Start ist die Oberfläche unter `http://localhost:5000/` erreichbar. Die Berechnung erfolgt serverseitig über die API.
+Nach dem Start ist die Oberfläche unter `http://localhost:8000/` erreichbar. Die Berechnung erfolgt serverseitig über die API.
 
 API-Endpoint:
 
@@ -90,10 +91,11 @@ Content-Type: application/json
   "vollzeit_stunden": 40,
   "teilzeit_eingabe": 75,
   "eingabetyp": "prozent",           # oder "stunden"
-  "verkuerzungsgruende": {
+    "verkuerzungsgruende": {
     "abitur": true,
     "realschule": false,
     "alter_ueber_21": false,
+    "familien_pflegeverantwortung": false,
     "vorkenntnisse_monate": 0
   }
 }
@@ -138,6 +140,7 @@ ergebnis = berechne_gesamtdauer(
         'abitur': True,
         'realschule': False,
         'alter_ueber_21': False,
+        'familien_pflegeverantwortung': False,
         'vorkenntnisse_monate': 0
     },
     eingabetyp='prozent'
@@ -154,7 +157,8 @@ ergebnis = berechne_gesamtdauer(
     vollzeit_stunden=40,
     teilzeit_eingabe=30,  # 30 Stunden
     verkuerzungsgruende={'abitur': False, 'realschule': False, 
-                        'alter_ueber_21': False, 'vorkenntnisse_monate': 0},
+                        'alter_ueber_21': False, 'familien_pflegeverantwortung': False,
+                        'vorkenntnisse_monate': 0},
     eingabetyp='stunden'
 )
 ```
@@ -165,7 +169,8 @@ ergebnis = berechne_gesamtdauer(
 - **Abitur/Hochschulreife**: 12 Monate
 - **Realschulabschluss**: 6 Monate  
 - **Alter über 21**: 12 Monate
-- **Berufliche Vorkenntnisse**: 6-12 Monate
+- **Berufliche Vorkenntnisse**: bis zu 12 Monate
+- **Familien- und Pflegeverantwortung**: bis zu 12 Monate
 
 ### Teilzeit-Regelungen (§ 7a BBiG)
 - **Mindest-Teilzeit**: 50% der Vollzeit
@@ -212,7 +217,11 @@ group-04/
 │   ├── script_eingabe.js              # Eingabe-Logik (Teilzeit-Prozent/Stunden)
 │   ├── script_Ergebnis_Uebersicht.js  # Ergebnis-Anzeige (API-Integration)
 │   ├── script_Verkuerzungsgruende_Auswaehlen.js  # Verkürzungsgründe-UI
-│   └── styles.css                     # Styling
+│   ├── script_Sprache_Auswaehlen.js   # Mehrsprachigkeits-Unterstützung
+│   ├── styles.css                     # Styling
+│   └── Sprachdateien/                 # Übersetzungsdateien
+│       ├── messages.de.json           # Deutsche Übersetzungen
+│       └── messages.en.json           # Englische Übersetzungen
 ├── templates/
 │   └── index.html          # Haupt-HTML-Template
 ├── tests/
@@ -232,7 +241,8 @@ group-04/
 ├── pytest.ini              # Pytest-Konfiguration
 ├── requirements.txt        # Python-Dependencies
 ├── wsgi.py                 # WSGI-Entry für Production-Server
-└── README.md               # Diese Datei
+├── README.md               # Diese Datei
+└── MERGE_REQUEST_MEILENSTEIN_2.md  # Merge Request Beschreibung für Meilenstein 2
 ```
 
 ## 🔧 Git Workflow
@@ -372,18 +382,18 @@ isort src/            # Python Imports sortieren
 - Beispiel-Start mit Gunicorn:
 
 ```bash
-gunicorn 'wsgi:app' --bind 0.0.0.0:5000 --workers 2
+gunicorn 'wsgi:app' --bind 0.0.0.0:8000 --workers 2
 ```
 
 - In Docker kann das als `CMD` verwendet werden. Bei späterer Trennung von UI/API kann optional CORS aktiviert werden.
 
 ## 🔧 Troubleshooting
 
-### Port 5000 ist belegt
+### Port 8000 ist belegt
 Wenn beim Start eine Fehlermeldung wie "Address already in use" erscheint:
-- **macOS**: Port 5000 wird oft von AirPlay Receiver verwendet
-- **Lösung**: Der Server versucht automatisch Port 5001
-- **Manuell**: `python -m src.app 5001` oder `flask run --port=5001`
+- **Standard-Port**: 8000 (kann über Umgebungsvariable `PORT` geändert werden)
+- **Lösung**: Der Server versucht automatisch den nächsten freien Port
+- **Manuell**: `python -m src.app 8001` oder `flask run --port=8001`
 
 ### Static Files oder Templates werden nicht gefunden
 - Stelle sicher, dass du im Projekt-Root-Verzeichnis startest
