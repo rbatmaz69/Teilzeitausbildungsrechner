@@ -32,66 +32,215 @@
   <!-- ================================ STARTSEITE ================================ -->
   <div class="container">
     <section id="startseite" class="startseite">
-      <h1 class="startseite-title">
-        <span data-i18n="start.title.prefix">Planen Sie Ihre </span><span class="startseite-title-accent" data-i18n="start.title.accent">Teilzeitausbildung</span><span data-i18n="start.title.suffix"> ganz einfach</span>
-      </h1>
-      <p class="startseite-description" data-i18n="start.description">
-        Berechnen Sie die optimale Aufteilung zwischen Arbeitszeit und Ausbildung. Unser Rechner hilft Ihnen dabei, die passende Teilzeitlösung für Ihre Bedürfnisse zu finden.
-      </p>
+      <!-- Mobile Version (default) -->
+      <div class="startseite-mobile">
+        <h1 class="startseite-title">
+          <span data-i18n="start.title.prefix">Planen Sie Ihre </span><span class="startseite-title-accent" data-i18n="start.title.accent">Teilzeitausbildung</span><span data-i18n="start.title.suffix"> ganz einfach</span>
+        </h1>
+        <p class="startseite-description" data-i18n="start.description">
+          Berechnen Sie die optimale Aufteilung zwischen Arbeitszeit und Ausbildung. Unser Rechner hilft Ihnen dabei, die passende Teilzeitlösung für Ihre Bedürfnisse zu finden.
+        </p>
 
-      <div class="info-cards">
-        <div class="info-card">
-          <div class="info-card-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="12 6 12 12 16 14"></polyline>
-            </svg>
+        <div class="info-cards">
+          <div class="info-card">
+            <div class="info-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div class="info-card-content">
+              <h3 class="info-card-title" data-i18n="start.card1.title">Flexible Zeiten</h3>
+              <p class="info-card-subtitle" data-i18n="start.card1.subtitle">Individuelle Stundenplanung</p>
+            </div>
           </div>
-          <div class="info-card-content">
-            <h3 class="info-card-title" data-i18n="start.card1.title">Flexible Zeiten</h3>
-            <p class="info-card-subtitle" data-i18n="start.card1.subtitle">Individuelle Stundenplanung</p>
+
+          <div class="info-card">
+            <div class="info-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+            </div>
+            <div class="info-card-content">
+              <h3 class="info-card-title" data-i18n="start.card2.title">Genaue Planung</h3>
+              <p class="info-card-subtitle" data-i18n="start.card2.subtitle">Präzise Berechnung</p>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+              </svg>
+            </div>
+            <div class="info-card-content">
+              <h3 class="info-card-title" data-i18n="start.card3.title">Erfolgreicher Abschluss</h3>
+              <p class="info-card-subtitle" data-i18n="start.card3.subtitle">Strukturierter Weg</p>
+            </div>
           </div>
         </div>
-
-        <div class="info-card">
-          <div class="info-card-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="16" y1="2" x2="16" y2="6"></line>
-              <line x1="8" y1="2" x2="8" y2="6"></line>
-              <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-          </div>
-          <div class="info-card-content">
-            <h3 class="info-card-title" data-i18n="start.card2.title">Genaue Planung</h3>
-            <p class="info-card-subtitle" data-i18n="start.card2.subtitle">Präzise Berechnung</p>
-          </div>
-        </div>
-
-        <div class="info-card">
-          <div class="info-card-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-            </svg>
-          </div>
-          <div class="info-card-content">
-            <h3 class="info-card-title" data-i18n="start.card3.title">Erfolgreicher Abschluss</h3>
-            <p class="info-card-subtitle" data-i18n="start.card3.subtitle">Strukturierter Weg</p>
-          </div>
-        </div>
-      </div>
 
       <button id="btn-start-calculate" class="btn-start-calculate" type="button" data-i18n="start.button">
-        Jetzt berechnen
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
-      </button>
+        Zum Rechner
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Desktop Version (ab 1024px) -->
+      <div class="startseite-desktop">
+        <!-- Left Side: Calendar Visualization -->
+        <div class="startseite-desktop-left">
+          <div class="calendar-visualization">
+            <div class="calendar-device">
+              <div class="calendar-screen">
+                <div class="calendar-month">
+                  <div class="calendar-header">
+                    <span class="calendar-month-name">Jan</span>
+                    <span class="calendar-year">2026</span>
+                  </div>
+                  <div class="calendar-weekdays">
+                    <span>Mon</span>
+                    <span>Tue</span>
+                    <span>Wed</span>
+                    <span>Thu</span>
+                    <span>Fri</span>
+                    <span>Sat</span>
+                    <span>Sun</span>
+                  </div>
+                  <div class="calendar-days">
+                    <span class="calendar-day other-month">27</span>
+                    <span class="calendar-day other-month">28</span>
+                    <span class="calendar-day other-month">29</span>
+                    <span class="calendar-day other-month">30</span>
+                    <span class="calendar-day other-month">31</span>
+                    <span class="calendar-day">1</span>
+                    <span class="calendar-day">2</span>
+                    <span class="calendar-day">3</span>
+                    <span class="calendar-day">4</span>
+                    <span class="calendar-day">5</span>
+                    <span class="calendar-day">6</span>
+                    <span class="calendar-day">7</span>
+                    <span class="calendar-day">8</span>
+                    <span class="calendar-day">9</span>
+                    <span class="calendar-day">10</span>
+                    <span class="calendar-day">11</span>
+                    <span class="calendar-day">12</span>
+                    <span class="calendar-day">13</span>
+                    <span class="calendar-day">14</span>
+                    <span class="calendar-day">15</span>
+                    <span class="calendar-day">16</span>
+                    <span class="calendar-day">17</span>
+                    <span class="calendar-day">18</span>
+                    <span class="calendar-day">19</span>
+                    <span class="calendar-day">20</span>
+                    <span class="calendar-day">21</span>
+                    <span class="calendar-day">22</span>
+                    <span class="calendar-day">23</span>
+                    <span class="calendar-day">24</span>
+                    <span class="calendar-day">25</span>
+                    <span class="calendar-day">26</span>
+                    <span class="calendar-day">27</span>
+                    <span class="calendar-day">28</span>
+                    <span class="calendar-day">29</span>
+                    <span class="calendar-day">30</span>
+                    <span class="calendar-day">31</span>
+                  </div>
+                </div>
+                <div class="calendar-divider"></div>
+                <div class="calendar-month">
+                  <div class="calendar-header">
+                    <span class="calendar-month-name">Feb</span>
+                    <span class="calendar-year">2026</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Accent Icons -->
+            <div class="accent-icon accent-icon-clock" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div class="accent-icon accent-icon-graduation" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Text Content -->
+        <div class="startseite-desktop-right">
+          <h1 class="startseite-title-desktop">
+            <span data-i18n="start.title.prefix">Planen Sie Ihre </span><span class="startseite-title-accent" data-i18n="start.title.accent">Teilzeitausbildung</span><span data-i18n="start.title.suffix"> ganz einfach</span>
+          </h1>
+          <p class="startseite-description-desktop" data-i18n="start.description">
+            Berechnen Sie die optimale Aufteilung zwischen Arbeitszeit und Ausbildung. Unser Rechner hilft Ihnen dabei, die passende Teilzeitlösung für Ihre Bedürfnisse zu finden.
+          </p>
+
+          <div class="info-cards-desktop">
+            <div class="info-card-desktop">
+              <div class="info-card-icon-desktop">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <div class="info-card-content-desktop">
+                <h3 class="info-card-title-desktop" data-i18n="start.card1.title">Flexible Zeiten</h3>
+                <p class="info-card-subtitle-desktop" data-i18n="start.card1.subtitle">Individuelle Stundenplanung</p>
+              </div>
+            </div>
+
+            <div class="info-card-desktop">
+              <div class="info-card-icon-desktop">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+              </div>
+              <div class="info-card-content-desktop">
+                <h3 class="info-card-title-desktop" data-i18n="start.card2.title">Genaue Planung</h3>
+                <p class="info-card-subtitle-desktop" data-i18n="start.card2.subtitle">Präzise Berechnung</p>
+              </div>
+            </div>
+
+            <div class="info-card-desktop">
+              <div class="info-card-icon-desktop">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                  <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                </svg>
+              </div>
+              <div class="info-card-content-desktop">
+                <h3 class="info-card-title-desktop" data-i18n="start.card3.title">Erfolgreicher Abschluss</h3>
+                <p class="info-card-subtitle-desktop" data-i18n="start.card3.subtitle">Strukturierter Weg</p>
+              </div>
+            </div>
+          </div>
+
+          <button id="btn-start-calculate-desktop" class="btn-start-calculate-desktop" type="button" data-i18n="start.button">
+            Zum Rechner
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
     </section>
   </div>
 
-  <div class="container">
+  <div class="container rechner-bereich" id="rechner-bereich">
     <!-- ================================ EINGABEN DES RECHNERS ================================ -->
 
     <!-- Eingabe reguläre Ausbildungsdauer -->
@@ -186,7 +335,7 @@
   </div>
   
   <!-- ================================ VERKÜRZUNGSGRÜNDE AUSWÄHLEN ================================ -->
-  <div class="container">
+  <div class="container rechner-bereich">
     <h1 id="vk-heading" class="text-2xl font-bold mb-3" data-i18n="vk.heading">
       Gründe für eine kürzere Ausbildung
     </h1>
@@ -316,7 +465,7 @@
   </div>
 
   <!-- Ergebnisanzeige -->
-  <div class="container" id="ergebnis-container" hidden>
+  <div class="container rechner-bereich" id="ergebnis-container" hidden>
     <!-- Hauptkarte, optisch hervorgehoben -->
     <div class="card highlight" aria-labelledby="res-headline">
       <h1 id="res-headline" data-i18n="res.headline">Ihre Teilzeitausbildung</h1>
@@ -373,7 +522,7 @@
   </div>
 
   <!-- Navigationsleiste (mobil sticky) -->
-  <nav class="actionbar" aria-label="Aktionen" data-i18n-attr="aria-label:nav.actions">
+  <nav class="actionbar rechner-bereich" aria-label="Aktionen" data-i18n-attr="aria-label:nav.actions">
     <button class="btn ghost" id="btn-reset" type="button"
             aria-label="Zurücksetzen"
             data-i18n="btn.reset"
