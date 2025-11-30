@@ -1402,11 +1402,23 @@ input.error,
     max-width: 70ch; /* 60-80 Zeichen optimal */
   }
 
-  /* Desktop Feature Cards - Größer */
+  /* Desktop Feature Cards - Als zusammenhängende Box */
   .info-cards-desktop {
     display: flex;
-    gap: var(--space-5);
+    gap: 0;
     margin-bottom: var(--space-6);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 12px rgb(0 0 0 / 6%);
+    overflow: hidden;
+    transition: box-shadow 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+  }
+
+  .info-cards-desktop:hover {
+    box-shadow: 0 6px 20px rgb(0 0 0 / 10%);
+    transform: translateY(-2px);
+    background: #fafafa;
   }
 
   .info-card-desktop {
@@ -1416,17 +1428,16 @@ input.error,
     align-items: center;
     text-align: center;
     padding: var(--space-5);
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    box-shadow: 0 4px 12px rgb(0 0 0 / 6%);
-    transition: box-shadow 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    transition: none;
   }
 
   .info-card-desktop:hover {
-    box-shadow: 0 6px 20px rgb(0 0 0 / 10%);
-    transform: translateY(-3px);
-    background: #fafafa;
+    background: transparent;
+    transform: none;
   }
 
   .info-card-icon-desktop {
