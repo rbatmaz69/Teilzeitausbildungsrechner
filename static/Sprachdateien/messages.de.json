@@ -1,0 +1,176 @@
+{
+  "app": {
+    "title": "Teilzeitausbildungsrechner"
+  },
+  "lang": {
+    "label": "Sprache",
+    "aria": "Sprache wählen",
+    "de": "Deutsch",
+    "en": "Englisch"
+  },
+  "inputs": {
+    "title": "Ihre Angaben",
+    "unitsLegend": "Std = Stunden, M = Monate",
+    "dauer": {
+      "label": "Wie lange dauert Ihre Ausbildung in Vollzeit?",
+      "labelShort": "Ausbildung (Vollzeit)",
+      "tooltip": "Angabe in Monaten (z.B. 36 Monate)"
+    },
+    "stunden": {
+      "label": "Wie viele Stunden pro Woche hat die Ausbildung in Vollzeit?",
+      "labelShort": "Wochenstunden (Vollzeit)",
+      "tooltip": "Reguläre Wochenstunden der Ausbildung (inkl. Berufsschule)"
+    },
+    "teilzeit": {
+      "label": "Wie viel der Vollzeit möchten Sie arbeiten?",
+      "labelShort": "Teilzeit",
+      "tooltip": "Für eine Teilzeitausbildung müssen Sie mindestens 50 % arbeiten.",
+      "percent": "Prozent",
+      "hours": "Stunden"
+    },
+    "verkuerzungen": {
+      "labelShort": "Verkürzungen"
+    },
+    "afterShortening": "Ausbildungsdauer nach Verkürzung",
+    "inPartTime": "Ausbildungsdauer in Teilzeit"
+  },
+  "vk": {
+    "heading": "Gründe für eine kürzere Ausbildung",
+    "helper": "Wählen Sie alles aus, was auf Sie zutrifft.",
+    "legend": "Gründe für Verkürzung",
+    "familie": {
+      "question": "Haben Sie familiäre Verpflichtungen (Kinderbetreuung oder Pflege von Angehörigen)?",
+      "label": "Familien- und Pflegeverantwortung",
+      "badge": "−12 Monate",
+      "sr": "Wenn Sie Familien- oder Pflegeverantwortung haben, ist eine Verkürzung möglich."
+    },
+    "school": {
+      "question": "Welchen höchsten Schulabschluss haben Sie erreicht?",
+      "label": "Schulabschluss",
+      "none": "Kein Abschluss",
+      "hauptschule": "Hauptschule",
+      "realschule": "Realschule",
+      "abitur": "Abitur / Hochschulreife"
+    },
+    "qual": {
+      "question": "Welche beruflichen Qualifikationen bringen Sie mit?"
+    },
+    "vork": {
+      "label": "Berufliche Vorkenntnisse",
+      "badge": "−12 Monate",
+      "sr": "Berufliche Vorkenntnisse können Ihre Ausbildungsdauer verkürzen."
+    },
+    "other": {
+      "question": "Welche weiteren Gründe treffen auf Sie zu?"
+    },
+    "alter21": {
+      "label": "Alter über 21 Jahre",
+      "badge": "−12 Monate",
+      "sr": "Wenn Sie über 21 Jahre alt sind, können Vorerfahrungen angerechnet werden."
+    }
+  },
+  "res": {
+    "headline": "Ihre Teilzeitausbildung",
+    "helper": "Hier sehen Sie Ihre Angaben und das Ergebnis.",
+    "notesTitle": "Wichtige Hinweise",
+    "notes": "<li>Die Berechnung ist eine <strong>Hilfe</strong>.</li><li>Das Ergebnis ist <strong>nicht verbindlich</strong>.</li><li>Sprechen Sie das Ergebnis mit Ihrem Ausbildungsbetrieb ab.</li><li>Eine Teilzeitausbildung ist möglich, wenn Sie mindestens 50 % der normalen Zeit arbeiten.</li>",
+    "kv": {
+      "total": "Gesamtdauer",
+      "schoolPerWeek": "Ausbildung pro Woche",
+      "workPerWeek": "Arbeit pro Woche"
+    },
+    "extension": {
+      "label": "Automatische Verlängerung durch Teilzeit:",
+      "plus": "+{n} Monate",
+      "none": "Keine Verlängerung"
+    },
+    "placeholders": {
+      "months": "–",
+      "extension": "–"
+    }
+  },
+  "cuts": {
+    "title": "Gründe für Verkürzung",
+    "total": "Gesamt",
+    "newBase": "Neue Grundlage",
+    "sumAll": "Summe aller Verkürzungen"
+  },
+  "units": {
+    "hours": {
+      "short": "Std",
+      "full": "Stunden"
+    },
+    "months": {
+      "short": "Monate",
+      "full": "Monate"
+    },
+    "weeks": {
+      "short": "Wochen",
+      "full": "Wochen"
+    },
+    "years": {
+      "short": "J.",
+      "full": "Jahre"
+    },
+    "percent": "%"
+  },
+  "errors": {
+    "placeholder": "",
+    "fetch": "Daten konnten nicht geladen werden.",
+    "unknown": "Unbekannter Fehler",
+    "tooShort": "Die Ausbildung darf höchstens 12 Monate kürzer sein!",
+    "tooLong": "Die Ausbildung darf höchstens 1,5-mal so lang sein!",
+    "invalidPercent": "Der Wert wurde auf 50% korrigiert (ungültige Eingabe)",
+    "invalidHours": "Der Wert wurde auf Minimum korrigiert (ungültige Eingabe)",
+    "regularHoursMin": "Der Wert muss mindestens 10 Stunden betragen",
+    "regularHoursMax": "Der Wert darf maximal 48 Stunden betragen",
+    "durationMin": "Der Wert muss mindestens 24 Monate betragen",
+    "durationMax": "Der Wert darf maximal 42 Monate betragen",
+    "percentMin": "Der Wert muss mindestens 50% betragen",
+    "percentMax": "Der Wert darf maximal 100% betragen",
+    "hoursMin": "Der Wert muss mindestens 50% der regulären Stunden betragen",
+    "hoursMax": "Der Wert darf die regulären Wochenstunden nicht überschreiten",
+    "invalidCut": "Hinweis: Ihre gewählten Verkürzungsgründe ergeben zusammen mehr als 12 Monate. Die Gesamtverkürzung wird daher auf maximal 12 Monate begrenzt, wie vorgegeben.",
+    "invalidCutShort": "Hinweis: Verkürzung auf max. 12 Monate begrenzt",
+    "regel8Abs3": "Hinweis: Nach § 8 Abs. 3 BBiG wurde die Ausbildungsdauer auf die Regelausbildungsdauer reduziert, da die Überschreitung maximal 6 Monate beträgt."
+  },
+  "btn": {
+    "calculate": "Ergebnis anzeigen",
+    "reset": "Zurücksetzen",
+    "share": "Link teilen"
+  },
+  "share": {
+    "title": "Teilzeitrechner – Ergebnis",
+    "text": "Hier ist mein Ergebnis.",
+    "copied": "Der Link wurde kopiert.",
+    "error": "Fehler beim Teilen. Bitte kopieren Sie den Link manuell.",
+    "noData": "Bitte berechnen Sie zuerst ein Ergebnis, bevor Sie den Link teilen."
+  },
+  "reset": {
+    "confirm": "Möchten Sie wirklich alle Daten zurücksetzen?"
+  },
+  "nav": {
+    "actions": "Aktionen"
+  },
+  "start": {
+    "title": {
+      "prefix": "Planen Sie Ihre ",
+      "accent": "Teilzeitausbildung",
+      "suffix": " ganz einfach"
+    },
+    "description": "Berechnen Sie die optimale Aufteilung zwischen Arbeitszeit und Ausbildung. Unser Rechner hilft Ihnen dabei, die passende Teilzeitlösung für Ihre Bedürfnisse zu finden.",
+    "card1": {
+      "title": "Flexible Zeiten",
+      "subtitle": "Individuelle Stundenplanung"
+    },
+    "card2": {
+      "title": "Genaue Planung",
+      "subtitle": "Präzise Berechnung"
+    },
+    "card3": {
+      "title": "Erfolgreicher Abschluss",
+      "subtitle": "Strukturierter Weg"
+    },
+    "button": "Jetzt berechnen"
+  }
+}

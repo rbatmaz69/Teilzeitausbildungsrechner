@@ -1,0 +1,79 @@
+# CI Pipeline for Linting & Code Quality
+# Runs on merge requests to develop/main and on direct pushes to develop
+
+stages:
+  - lint
+  - test
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+    - node_modules/
+
+# ====================== PYTHON LINTING ======================
+
+lint:python:
+  image: python:3.12
+  before_script:
+    - python --version
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+  stage: lint
+  script:
+    - echo "🔍 Running Python code quality checks..."
+    - flake8 src/
+    - isort --check-only src/
+  only:
+    refs:
+      - merge_requests
+      - develop
+      - main
+  allow_failure: false
+
+# ====================== FRONTEND LINTING ======================
+
+lint:frontend:
+  image: node:20-alpine
+  before_script:
+    - npm install
+  stage: lint
+  script:
+    - echo "🔍 Running Frontend linting (ESLint, Stylelint, HTMLHint)..."
+    - npm run lint
+  only:
+    refs:
+      - merge_requests
+      - develop
+      - main
+  allow_failure: false
+
+# ====================== TESTING ======================
+
+test:
+  image: python:3.12
+  before_script:
+    - python --version
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+  stage: test
+  script:
+    - echo "🧪 Running unit tests with pytest and coverage..."
+    - pytest --cov=src --cov-report=term --cov-report=xml -v
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    paths:
+      - coverage.xml
+    expire_in: 1 week
+  only:
+    refs:
+      - merge_requests
+      - develop
+      - main
+  allow_failure: false

@@ -1,0 +1,176 @@
+{
+  "app": {
+    "title": "Part-time training calculator"
+  },
+  "lang": {
+    "label": "Language",
+    "aria": "Choose language",
+    "de": "German",
+    "en": "English"
+  },
+  "inputs": {
+    "title": "Your details",
+    "unitsLegend": "h = Hours, M = Months",
+    "dauer": {
+      "label": "How long is your training in full-time?",
+      "labelShort": "Training (full-time)",
+      "tooltip": "Enter in months (e.g. 36 months)"
+    },
+    "stunden": {
+      "label": "How many hours per week does the full-time training have?",
+      "labelShort": "Hours per week (full-time)",
+      "tooltip": "Regular weekly hours of training (incl. vocational school)"
+    },
+    "teilzeit": {
+      "label": "How much of full-time do you want to work?",
+      "labelShort": "Part-time",
+      "tooltip": "For part-time training, you must work at least 50%.",
+      "percent": "Percent",
+      "hours": "Hours"
+    },
+    "verkuerzungen": {
+      "labelShort": "Reductions"
+    },
+    "afterShortening": "Training duration after shortening",
+    "inPartTime": "Training duration in part\u2011time"
+  },
+  "vk": {
+    "heading": "Reasons for shorter training",
+    "helper": "Choose all options that apply to you.",
+    "legend": "Shortening reasons",
+    "familie": {
+      "question": "Do you have family responsibilities (child care or care for relatives)?",
+      "label": "Family and care responsibilities",
+      "badge": "−12 months",
+      "sr": "If you have family or care responsibilities, a shortening may be possible."
+    },
+    "school": {
+      "question": "What is your highest level of school education?",
+      "label": "School degree",
+      "none": "No degree",
+      "hauptschule": "Lower secondary school",
+      "realschule": "Intermediate secondary school",
+      "abitur": "Abitur / university entrance qualification"
+    },
+    "qual": {
+      "question": "What professional qualifications do you have?"
+    },
+    "vork": {
+      "label": "Professional experience",
+      "badge": "−12 months",
+      "sr": "Professional experience can shorten your training duration."
+    },
+    "other": {
+      "question": "Which other reasons apply to you?"
+    },
+    "alter21": {
+      "label": "Age over 21",
+      "badge": "−12 months",
+      "sr": "If you are over 21, previous experience can be credited."
+    }
+  },
+  "res": {
+    "headline": "Your part-time training",
+    "helper": "Here you can see your details and the result.",
+    "notesTitle": "Important information",
+    "notes": "<li>This calculation is only a <strong>help</strong>.</li><li>The result is <strong>not official</strong>.</li><li>Discuss the result with your training company.</li><li>Part-time training is possible if you work at least 50% of the normal time.</li>",
+    "kv": {
+      "total": "Total time",
+      "schoolPerWeek": "School per week",
+      "workPerWeek": "Work per week"
+    },
+    "extension": {
+      "label": "Automatic extension due to part-time:",
+      "plus": "+{n} months",
+      "none": "No extension"
+    },
+    "placeholders": {
+      "months": "–",
+      "extension": "–"
+    }
+  },
+  "cuts": {
+    "title": "Reasons for shortening",
+    "total": "Total",
+    "newBase": "New base",
+    "sumAll": "Sum of all shortenings"
+  },
+  "units": {
+    "hours": {
+      "short": "h",
+      "full": "hours"
+    },
+    "months": {
+      "short": "months",
+      "full": "months"
+    },
+    "weeks": {
+      "short": "weeks",
+      "full": "weeks"
+    },
+    "years": {
+      "short": "Y.",
+      "full": "years"
+    },
+    "percent": "%"
+  },
+  "errors": {
+    "placeholder": "",
+    "fetch": "Could not load data.",
+    "unknown": "Unknown error",
+    "tooShort": "Training can be shortened by up to 12 months only!",
+    "tooLong": "Training can be at most 1.5 times longer!",
+    "invalidPercent": "Value corrected to 50% (invalid input)",
+    "invalidHours": "Value corrected to minimum (invalid input)",
+    "regularHoursMin": "The value must be at least 10 hours",
+    "regularHoursMax": "The value must not exceed 48 hours",
+    "durationMin": "The value must be at least 24 months",
+    "durationMax": "The value must not exceed 42 months",
+    "percentMin": "The value must be at least 50%",
+    "percentMax": "The value must not exceed 100%",
+    "hoursMin": "The value must be at least 50% of regular hours",
+    "hoursMax": "The value must not exceed the regular weekly hours",
+    "invalidCut": "Note: Your selected reduction reasons add up to more than 12 months. The total reduction is therefore limited to a maximum of 12 months, as specified.",
+    "invalidCutShort": "Note: Reduction limited to max. 12 months",
+    "regel8Abs3": "Note: According to § 8 para. 3 BBiG, the training duration was reduced to the standard training duration, as the excess is at most 6 months."
+  },
+  "btn": {
+    "calculate": "Show result",
+    "reset": "Reset",
+    "share": "Share link"
+  },
+  "share": {
+    "title": "Part-Time Calculator – result",
+    "text": "Here is my result.",
+    "copied": "The link has been copied.",
+    "error": "Error sharing. Please copy the link manually.",
+    "noData": "Please calculate a result first before sharing the link."
+  },
+  "reset": {
+    "confirm": "Would you like to reset all data?"
+  },
+  "nav": {
+    "actions": "Actions"
+  },
+  "start": {
+    "title": {
+      "prefix": "Plan your ",
+      "accent": "part-time training",
+      "suffix": " easily"
+    },
+    "description": "Calculate the optimal balance between working hours and training. Our calculator helps you find the right part-time solution for your needs.",
+    "card1": {
+      "title": "Flexible hours",
+      "subtitle": "Individual time planning"
+    },
+    "card2": {
+      "title": "Accurate planning",
+      "subtitle": "Precise calculation"
+    },
+    "card3": {
+      "title": "Successful completion",
+      "subtitle": "Structured path"
+    },
+    "button": "Calculate now"
+  }
+}

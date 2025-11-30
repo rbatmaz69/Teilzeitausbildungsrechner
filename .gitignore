@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Node.js
+node_modules/
+
+# Coverage & test artifacts
+.coverage
+coverage.xml
+htmlcov/
+.cache/
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Lokale Entwicklungs-Tools (nicht committen)
+generate_qr.py
+ngrok_qr.png

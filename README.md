@@ -1,6 +1,7 @@
 # Teilzeitrechner - Group 04
 
-> ⚠️ **Work in Progress** - Dieses Projekt befindet sich aktuell in Entwicklung.
+> ⚠️ **Work in Progress** - Dieses Projekt befindet sich aktuell in Entwicklung.  
+> 📌 **Meilenstein 2 abgeschlossen** - Die Kernfunktionalität ist implementiert und getestet. Weitere Features folgen in Meilenstein 3.
 
 Ein Python-basierter Rechner für Teilzeitberufsausbildungen gemäß BBiG § 7a und § 8.
 
@@ -8,10 +9,30 @@ Ein Python-basierter Rechner für Teilzeitberufsausbildungen gemäß BBiG § 7a 
 
 Dieses Projekt implementiert die gesetzlichen Vorgaben für Teilzeitberufsausbildungen basierend auf der Empfehlung des Hauptausschusses des Bundesinstituts für Berufsbildung vom 10. Juni 2021.
 
+## 🏗️ Architekturüberblick
+
+Der Teilzeitrechner ist als klassische Drei-Schichten-Anwendung aufgebaut:
+
+- **Frontend (Static Assets in `static/` + Templates in `templates/`)**  
+  Eine schlanke HTML-Oberfläche (`templates/index.html`) liefert die Eingabe- und Ausgabemasken.  
+  JavaScript-Module (`static/script_eingabe.js`, `static/script_Verkuerzungsgruende_Auswaehlen.js`, `static/script_Ergebnis_Uebersicht.js`, `static/script_Sprache_Auswaehlen.js`) übernehmen Formularvalidierung, Mehrsprachigkeit und die Kommunikation mit der API.
+
+- **Service-/API-Schicht (`src/api/`)**  
+  `src/api/calculation_service.py` kapselt Request-Validierung, Fehlercodes und die Ankopplung an die Berechnungslogik. Über `src/api/__init__.py` wird eine stabile öffentliche Schnittstelle (`verarbeite_berechnungsanfrage`) bereitgestellt, die von der Flask-App konsumiert wird.
+
+- **Berechnungslogik (`src/calculation_logic.py`)**  
+  Enthält das fachliche Herzstück mit den vier Berechnungsschritten (Verkürzung, automatische Verlängerung, gesetzliche Obergrenze, Rundung) sowie Helfern für Stunden-/Prozent-Umrechnungen. Die Funktionen sind so dokumentiert, dass sie auch unabhängig vom Web-Layer test- und nachvollziehbar bleiben.
+
+Die Schichten werden über die Flask-App (`src/app.py`) verdrahtet. `create_app()` registriert zwei Routen:
+1. `GET /` liefert die Benutzeroberfläche
+2. `POST /api/calculate` verarbeitet Berechnungsanfragen, ruft den Service-Layer auf und liefert strukturierte Ergebnisse zurück
+
+Tests im Ordner `tests/` decken jede Schicht ab (Unit-Tests für Logik und Service, Integrationstests für die API). Dummy-Daten für manuelle Tests stehen in `tests/dummy_data.py` bereit.
+
 ### ✨ Features
 
 - **Vollständige Berechnungslogik** für Teilzeitausbildungen
-- **Verkürzungsgründe** (Abitur, Realschule, Alter, Vorkenntnisse)
+- **Verkürzungsgründe** (Abitur, Realschule, Alter, Vorkenntnisse, Familien- und Pflegeverantwortung)
 - **Flexible Eingabe** (Prozentsatz oder Stunden)
 - **4-Schritt-Verfahren** (Verkürzung → Verlängerung → Obergrenze → Rundung)
 - **Umfassende Tests** mit realistischen Szenarien
@@ -57,7 +78,7 @@ flask run --port=8001
 
 ### Web-UI + API
 
-Nach dem Start ist die Oberfläche unter `http://localhost:5000/` erreichbar. Die Berechnung erfolgt serverseitig über die API.
+Nach dem Start ist die Oberfläche unter `http://localhost:8000/` erreichbar. Die Berechnung erfolgt serverseitig über die API.
 
 API-Endpoint:
 
@@ -66,14 +87,15 @@ POST /api/calculate
 Content-Type: application/json
 
 {
-  "base_duration_months": 36,
+  "basis_dauer_monate": 36,
   "vollzeit_stunden": 40,
-  "teilzeit_input": 75,
-  "input_type": "prozent",           # oder "stunden"
-  "verkuerzungsgruende": {
+  "teilzeit_eingabe": 75,
+  "eingabetyp": "prozent",           # oder "stunden"
+    "verkuerzungsgruende": {
     "abitur": true,
     "realschule": false,
     "alter_ueber_21": false,
+    "familien_pflegeverantwortung": false,
     "vorkenntnisse_monate": 0
   }
 }
@@ -107,20 +129,21 @@ Fehler (400/422/500):
 
 ### Grundlegende Berechnung
 ```python
-from calculation_logic import calculate_gesamtdauer
+from src.calculation_logic import berechne_gesamtdauer
 
 # Beispiel: 36 Monate Ausbildung, 75% Teilzeit
-ergebnis = calculate_gesamtdauer(
-    base_duration_months=36,
+ergebnis = berechne_gesamtdauer(
+    basis_dauer_monate=36,
     vollzeit_stunden=40,
-    teilzeit_input=75,  # 75% Teilzeit
+    teilzeit_eingabe=75,  # 75% Teilzeit
     verkuerzungsgruende={
         'abitur': True,
         'realschule': False,
         'alter_ueber_21': False,
+        'familien_pflegeverantwortung': False,
         'vorkenntnisse_monate': 0
     },
-    input_type='prozent'
+    eingabetyp='prozent'
 )
 
 print(f"Finale Ausbildungsdauer: {ergebnis['finale_dauer_monate']} Monate")
@@ -129,13 +152,14 @@ print(f"Finale Ausbildungsdauer: {ergebnis['finale_dauer_monate']} Monate")
 ### Mit Stunden-Input
 ```python
 # Beispiel: 30 Stunden statt 75%
-ergebnis = calculate_gesamtdauer(
-    base_duration_months=36,
+ergebnis = berechne_gesamtdauer(
+    basis_dauer_monate=36,
     vollzeit_stunden=40,
-    teilzeit_input=30,  # 30 Stunden
+    teilzeit_eingabe=30,  # 30 Stunden
     verkuerzungsgruende={'abitur': False, 'realschule': False, 
-                        'alter_ueber_21': False, 'vorkenntnisse_monate': 0},
-    input_type='stunden'
+                        'alter_ueber_21': False, 'familien_pflegeverantwortung': False,
+                        'vorkenntnisse_monate': 0},
+    eingabetyp='stunden'
 )
 ```
 
@@ -145,7 +169,8 @@ ergebnis = calculate_gesamtdauer(
 - **Abitur/Hochschulreife**: 12 Monate
 - **Realschulabschluss**: 6 Monate  
 - **Alter über 21**: 12 Monate
-- **Berufliche Vorkenntnisse**: 6-12 Monate
+- **Berufliche Vorkenntnisse**: bis zu 12 Monate
+- **Familien- und Pflegeverantwortung**: bis zu 12 Monate
 
 ### Teilzeit-Regelungen (§ 7a BBiG)
 - **Mindest-Teilzeit**: 50% der Vollzeit
@@ -192,7 +217,11 @@ group-04/
 │   ├── script_eingabe.js              # Eingabe-Logik (Teilzeit-Prozent/Stunden)
 │   ├── script_Ergebnis_Uebersicht.js  # Ergebnis-Anzeige (API-Integration)
 │   ├── script_Verkuerzungsgruende_Auswaehlen.js  # Verkürzungsgründe-UI
-│   └── styles.css                     # Styling
+│   ├── script_Sprache_Auswaehlen.js   # Mehrsprachigkeits-Unterstützung
+│   ├── styles.css                     # Styling
+│   └── Sprachdateien/                 # Übersetzungsdateien
+│       ├── messages.de.json           # Deutsche Übersetzungen
+│       └── messages.en.json           # Englische Übersetzungen
 ├── templates/
 │   └── index.html          # Haupt-HTML-Template
 ├── tests/
@@ -212,7 +241,8 @@ group-04/
 ├── pytest.ini              # Pytest-Konfiguration
 ├── requirements.txt        # Python-Dependencies
 ├── wsgi.py                 # WSGI-Entry für Production-Server
-└── README.md               # Diese Datei
+├── README.md               # Diese Datei
+└── MERGE_REQUEST_MEILENSTEIN_2.md  # Merge Request Beschreibung für Meilenstein 2
 ```
 
 ## 🔧 Git Workflow
@@ -260,6 +290,16 @@ Alle Funktionen sind ausführlich dokumentiert mit:
 - Berechnungsbeispielen
 - Gesetzesbegründungen
 - Quellenangaben
+
+### Automatische Docstring-Dokumentation
+Eine Markdown-Referenz der Python-Module kann jederzeit generiert werden:
+
+```bash
+python scripts/generate_docs.py            # erzeugt docs/api_reference.md
+python scripts/generate_docs.py -o docs/custom.md  # eigener Ausgabepfad
+```
+
+Das Skript wertet die Docstrings der Kernmodule (`src/calculation_logic.py`, `src/api/calculation_service.py`, `src/app.py`) aus und aktualisiert die Referenz im Ordner `docs/`.
 
 ## 👥 Autoren
 
@@ -342,18 +382,18 @@ isort src/            # Python Imports sortieren
 - Beispiel-Start mit Gunicorn:
 
 ```bash
-gunicorn 'wsgi:app' --bind 0.0.0.0:5000 --workers 2
+gunicorn 'wsgi:app' --bind 0.0.0.0:8000 --workers 2
 ```
 
 - In Docker kann das als `CMD` verwendet werden. Bei späterer Trennung von UI/API kann optional CORS aktiviert werden.
 
 ## 🔧 Troubleshooting
 
-### Port 5000 ist belegt
+### Port 8000 ist belegt
 Wenn beim Start eine Fehlermeldung wie "Address already in use" erscheint:
-- **macOS**: Port 5000 wird oft von AirPlay Receiver verwendet
-- **Lösung**: Der Server versucht automatisch Port 5001
-- **Manuell**: `python -m src.app 5001` oder `flask run --port=5001`
+- **Standard-Port**: 8000 (kann über Umgebungsvariable `PORT` geändert werden)
+- **Lösung**: Der Server versucht automatisch den nächsten freien Port
+- **Manuell**: `python -m src.app 8001` oder `flask run --port=8001`
 
 ### Static Files oder Templates werden nicht gefunden
 - Stelle sicher, dass du im Projekt-Root-Verzeichnis startest
