@@ -753,7 +753,7 @@ document.addEventListener("DOMContentLoaded", () => {
   synchronisiereButtonMarkierung();
   aktualisiereButtonTexte();
 
-  // Scroll-Funktion für "Jetzt berechnen" Button (Mobile und Desktop)
+  // Scroll-Funktion für "Zum Rechner" Button (Mobile und Desktop)
   const btnStartCalculate = document.getElementById("btn-start-calculate");
   const btnStartCalculateDesktop = document.getElementById("btn-start-calculate-desktop");
   const eingabenSection = document.querySelector('section.card'); // Erste Eingabe-Section
