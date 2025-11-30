@@ -20,17 +20,13 @@ import json
 import pytest
 
 from src.app import create_app
-from tests.dummy_data import (
-    MIT_ALTER_21,
-    MIT_REALSCHULE,
-    MIT_VORKENNTNISSE_6,
-    STUNDEN_INPUT_30_VON_40,
-    TEILZEIT_75_MIT_ABITUR,
-    UNGUELTIG_STUNDEN_UEBER_VOLLZEIT,
-    UNGUELTIG_TEILZEIT_UEBER_100,
-    UNGUELTIG_TEILZEIT_UNTER_50,
-    VOLLZEIT_OHNE_VERKUERZUNG,
-)
+from tests.dummy_data import (MIT_ALTER_21, MIT_REALSCHULE,
+                              MIT_VORKENNTNISSE_6, STUNDEN_INPUT_30_VON_40,
+                              TEILZEIT_75_MIT_ABITUR,
+                              UNGUELTIG_STUNDEN_UEBER_VOLLZEIT,
+                              UNGUELTIG_TEILZEIT_UEBER_100,
+                              UNGUELTIG_TEILZEIT_UNTER_50,
+                              VOLLZEIT_OHNE_VERKUERZUNG)
 
 
 @pytest.fixture()
