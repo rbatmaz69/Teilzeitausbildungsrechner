@@ -963,7 +963,7 @@ input.error,
    STARTSEITE
    ========================================== */
 .startseite {
-  padding: 0.1rem 0 var(--space-5) 0;
+  padding: 0.5rem 0 var(--space-5) 0;
   margin-bottom: var(--space-5);
 }
 
@@ -990,7 +990,7 @@ input.error,
                        calc(100% - 7px) 50%;
   background-size: 5px 5px, 5px 5px;
   background-repeat: no-repeat;
-  padding: 0.3rem 1.5rem 0.3rem 0.5rem;
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
   border: 1px solid var(--border);
   border-radius: 6px;
   font-size: 0.95rem;
@@ -1025,40 +1025,27 @@ input.error,
 
 .startseite-description {
   color: var(--muted);
-  margin-bottom: 0.369rem;
+  margin-bottom: 1.25rem;
   line-height: 1.6;
 }
 
-/* Zusammenhängendes Informationsfeld: auf Mobile keine separate Box, auf Tablet+ als Box */
+/* Zusammenhängendes Informationsfeld statt separater Karten */
 .info-section {
-  /* Mobile first: keine eigene Box, direkt in Startseite eingebunden */
   display: flex;
   flex-direction: column;
   gap: 0;
-  margin-bottom: 0.75rem; /* etwas enger zum Startseiten-Text */
-  background: transparent; /* kein eigenes Panel auf Mobile */
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-  overflow: visible;
-}
-
-/* Ab Tablet (>=600px) soll die Info-Section wieder als zusammenhängende Box erscheinen */
-@media (width >= 600px) {
-  .info-section {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    box-shadow: 0 4px 12px rgb(0 0 0 / 6%);
-    overflow: hidden;
-  }
+  margin-bottom: 1.25rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
 .info-item {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-1); /* noch enger zusammenrücken */
-  padding: 0.6rem; /* kompakteres Erscheinungsbild */
+  gap: var(--space-3);
+  padding: 1rem;
   /* auf Mobile keine Trennlinie, damit es als eine Box wirkt */
   border-bottom: none;
   transition: background-color 0.2s ease;
@@ -1104,14 +1091,14 @@ input.error,
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fafafa; 
-  color: var(--primary); /* Rot wie Titelakzent */
-  border-radius: 50%; /* Kreis statt Quadrat */
+  background: #f66;
+  color: white;
+  border-radius: 8px;
 }
 
 .info-item-icon svg {
-  width: 33px;
-  height: 33px;
+  width: 28px;
+  height: 28px;
 }
 
 .info-item-content {
@@ -1139,7 +1126,6 @@ input.error,
   border: none;
   border-radius: 999px;
   padding: 14px 32px;
-  margin-top: 1rem; /* stärkere Trennung vom Informationsbereich auf Mobile */
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out, transform 0.05s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -1208,7 +1194,7 @@ input.error,
   .info-item {
     border-bottom: none;
     border-right: 1px solid var(--border);
-    padding: var(--space-3); /* weniger Innenabstand auf Tablet/Desktop */
+    padding: var(--space-4);
   }
 
   .info-item:last-child {
@@ -1593,15 +1579,15 @@ input.error,
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--primary); /* Rot wie Titelakzent */
+    background: #f66;
     color: white;
-    border-radius: 50%; /* Kreis statt Quadrat */
+    border-radius: 16px;
     margin-bottom: var(--space-4);
   }
 
   .info-card-icon-desktop svg {
-    width: 43px;
-    height: 43px;
+    width: 36px;
+    height: 36px;
   }
 
   .info-card-content-desktop {
@@ -1625,7 +1611,6 @@ input.error,
   /* Desktop CTA Button - Größer */
   .btn-start-calculate-desktop {
     min-width: 280px;
-    margin-top: 3.5rem; /* stärkere Trennung auf Desktop */
     background-color: var(--primary);
     color: white;
     font-weight: bold;
