@@ -179,8 +179,9 @@ ergebnis = berechne_gesamtdauer(
 
 ## 🧪 Tests
 
+### Unit & Integration Tests (Python)
 ```bash
-# Alle Tests ausführen
+# Alle Backend-Tests ausführen
 python3 -m pytest tests/ -v
 
 # Nur Unit-Tests (Berechnungslogik)
@@ -201,6 +202,25 @@ python3 -m pytest tests/ --cov=src --cov-report=term
 - `tests/test_calculation_service.py` - Unit-Tests für Service-Layer
 - `tests/test_api.py` - Integration-Tests für Flask-API
 - `tests/dummy_data.py` - Zentrale Testdaten (von allen Tests verwendet)
+
+### End-to-End Tests (Playwright)
+```bash
+# E2E-Tests im Headless-Modus
+npm run test:e2e
+
+# Tests mit UI (zum Debuggen)
+npm run test:e2e:ui
+
+# Tests mit sichtbarem Browser
+npm run test:e2e:headed
+```
+
+Die E2E-Tests validieren die gesamte Anwendung im Browser (26 Tests):
+- **Happy Path** (8): Vollzeit, Teilzeit, Verkürzungen, Sprachwechsel
+- **Validation** (8): Min/Max-Werte, Input-Validierung, Fehlerbehandlung
+- **Error Scenarios** (10): Edge Cases, BBiG-Regelungen (§ 7a, § 8), API-Fehler
+
+**Konfiguration:** `playwright.config.js` (automatischer Flask-Server-Start)
 
 ## 📁 Projektstruktur
 
@@ -229,6 +249,11 @@ group-04/
 │   ├── test_calculation_logic.py  # Unit-Tests für Berechnungslogik
 │   ├── test_calculation_service.py # Unit-Tests für Service-Layer
 │   └── dummy_data.py       # Zentrale Testdaten (User Story 30)
+├── e2e/
+│   ├── happy-path.spec.js       # E2E: Hauptnutzerflüsse (8 Tests)
+│   ├── validation.spec.js       # E2E: Input-Validierung (8 Tests)
+│   └── error-scenarios.spec.js  # E2E: Edge Cases & BBiG-Regeln (10 Tests)
+├── playwright.config.js    # Playwright E2E-Test-Konfiguration
 ├── .flake8                 # Flake8 Linter-Konfiguration
 ├── eslint.config.js        # ESLint 9 Config (nutzt recommended + browser globals)
 ├── .stylelintrc.json       # Stylelint Config (nutzt stylelint-config-standard)
@@ -319,6 +344,7 @@ Das Skript wertet die Docstrings der Kernmodule (`src/calculation_logic.py`, `sr
   - CSS: Stylelint
   - HTML: HTMLHint
 - [x] **Test** - Pytest mit Coverage-Report (90%)
+- [x] **E2E** - Playwright End-to-End Tests (26 Tests)
 - [x] **Coverage Report** - Automatische Coverage-Artefakte
 - [ ] **Deployment** - Automatisches Deployment nach Tests
 - [ ] **Status Badges** - Build-Status in README
