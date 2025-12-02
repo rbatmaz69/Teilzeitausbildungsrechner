@@ -1071,9 +1071,8 @@ input.error,
 
 /* Visuelles Feedback: nur auf Geräten mit Hover (Maus). */
 @media (hover: hover) and (pointer: fine) {
-  /* Entferne Hover-Hintergrund, damit Info-Bereiche nicht interaktiv wirken */
   .info-item:hover {
-    background-color: transparent;
+    background-color: #fafafa;
   }
 }
 
@@ -1089,11 +1088,10 @@ input.error,
   .info-item:active {
     background-color: transparent;
   }
-  /* Keine auffällige Hover-Interaktion auf Desktop */
-  .info-cards-desktop:hover {
-    box-shadow: none;
-    transform: none;
-    background: transparent;
+}
+
+/* Sicherstellen, dass die Items nicht klickbar wirken */
+.info-item {
   cursor: default;
   user-select: none;
   -webkit-user-select: none;
@@ -1106,8 +1104,8 @@ input.error,
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #ff6b6b; /* helleres Rot */
-  color: white;
+  background: #fafafa; 
+  color: var(--primary); /* Rot wie Titelakzent */
   border-radius: 50%; /* Kreis statt Quadrat */
 }
 
@@ -1222,28 +1220,6 @@ input.error,
 @media (width >= 1024px) {
   .startseite-mobile {
     display: none;
-  }
-
-  /* Desktop: Info-Section nicht als separate Box darstellen - Karten direkt in Startseite integrieren */
-  .info-section {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    overflow: visible !important;
-  }
-
-  /* Desktop: info-cards container ebenfalls entboxen */
-  .info-cards-desktop {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    overflow: visible !important;
-  }
-
-  /* Desktop: keine Trennlinien zwischen den Items, damit sie als Teil der Startseite wirken */
-  .info-section .info-item,
-  .info-cards-desktop .info-card-desktop {
-    border-right: none !important;
   }
 
   /* Startseite nimmt volle Viewport-Höhe ein, aber Scrollen ist erlaubt */
@@ -1617,7 +1593,7 @@ input.error,
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ff6b6b; /* helleres Rot */
+    background: var(--primary); /* Rot wie Titelakzent */
     color: white;
     border-radius: 50%; /* Kreis statt Quadrat */
     margin-bottom: var(--space-4);
@@ -1687,6 +1663,4 @@ input.error,
     width: 22px;
     height: 22px;
   }
-}
-
 }
