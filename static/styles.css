@@ -1029,16 +1029,18 @@ input.error,
   line-height: 1.6;
 }
 
-/* Zusammenhängendes Informationsfeld statt separater Karten */
+/* Zusammenhängendes Informationsfeld: direkt in Startseite integriert (kein separater Kasten) */
 .info-section {
   display: flex;
   flex-direction: column;
   gap: 0;
   margin-bottom: 1.25rem;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
+  /* kein eigener Kasten: transparent, keine Ränder oder Schatten */
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
 }
 
 .info-item {
@@ -1189,11 +1191,15 @@ input.error,
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 0;
     margin-bottom: 1.5rem;
+    /* weiterhin integriert: kein Kasten-Style */
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
   }
 
   .info-item {
     border-bottom: none;
-    border-right: 1px solid var(--border);
+    border-right: none; /* keine Trennlinien zwischen Items */
     padding: var(--space-4);
   }
 
@@ -1537,18 +1543,20 @@ input.error,
     display: flex;
     gap: 0;
     margin-bottom: 2rem;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    box-shadow: 0 4px 12px rgb(0 0 0 / 6%);
-    overflow: hidden;
+    /* Integriert in Startseite: kein separates Panel */
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
     transition: box-shadow 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
   }
 
   .info-cards-desktop:hover {
-    box-shadow: 0 6px 20px rgb(0 0 0 / 10%);
-    transform: translateY(-2px);
-    background: #fafafa;
+    /* keine Hover-Lift oder Hintergrundänderung */
+    box-shadow: none;
+    transform: none;
+    background: transparent;
   }
 
   .info-card-desktop {
