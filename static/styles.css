@@ -971,7 +971,7 @@ input.error,
 .startseite-header {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.2rem; /* sehr dicht, damit Titel nah am Dropdown sitzt */
 }
 
 /* Language Switcher - Mobile */
@@ -990,7 +990,7 @@ input.error,
                        calc(100% - 7px) 50%;
   background-size: 5px 5px, 5px 5px;
   background-repeat: no-repeat;
-  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  padding: 0.3rem 1.5rem 0.4rem 0.5rem;
   border: 1px solid var(--border);
   border-radius: 6px;
   font-size: 0.95rem;
@@ -1015,7 +1015,7 @@ input.error,
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.3;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.4rem;
   color: var(--text);
 }
 
@@ -1025,7 +1025,7 @@ input.error,
 
 .startseite-description {
   color: var(--muted);
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.6rem; /* näher an die Info-Punkte auf Mobile */
   line-height: 1.6;
 }
 
@@ -1034,7 +1034,7 @@ input.error,
   display: flex;
   flex-direction: column;
   gap: 0;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.6rem; /* enger zum Startseiten-Text auf Mobile */
   /* kein eigener Kasten: transparent, keine Ränder oder Schatten */
   background: transparent !important;
   border: none !important;
@@ -1046,8 +1046,8 @@ input.error,
 .info-item {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-3);
-  padding: 1rem;
+  gap: 0.5rem; /* ~50% enger */
+  padding: 0.5rem; /* ~50% weniger Innenabstand */
   /* auf Mobile keine Trennlinie, damit es als eine Box wirkt */
   border-bottom: none;
   transition: background-color 0.2s ease;
@@ -1122,6 +1122,7 @@ input.error,
 
 .btn-start-calculate {
   width: 100%;
+  margin-top: 1rem;
   background-color: var(--primary);
   color: white;
   font-weight: bold;
