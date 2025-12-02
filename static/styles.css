@@ -1296,41 +1296,30 @@ input.error,
     width: 100% !important;
   }
 
-  /* Rechner-Container behalten ihre normale Breite (auch wenn ausgeblendet) */
-  .rechner-bereich.container {
-    max-width: 480px !important;
-    padding: 1rem !important;
-  }
-
-  /* Rechner-Bereich auf Desktop initial verstecken */
+  /* Rechner-Bereich auf Desktop standardmäßig sichtbar (wie auf Mobile) */
   .rechner-bereich {
-    display: none;
-  }
-
-  /* Rechner-Bereich sichtbar machen, wenn show-rechner gesetzt ist */
-  body.show-rechner .rechner-bereich {
     display: block;
   }
 
-  body.show-rechner .rechner-bereich.actionbar {
+  .rechner-bereich.actionbar {
     display: flex;
   }
 
-  /* Container für Rechner-Bereich wieder normal */
-  body.show-rechner .rechner-bereich.container {
+  /* Container für Rechner-Bereich auf Desktop */
+  .rechner-bereich.container {
     max-width: 480px;
     padding: 1rem;
   }
 
   @media (width >= 900px) {
-    body.show-rechner .rechner-bereich.container {
+    .rechner-bereich.container {
       max-width: 720px;
       padding: 2rem;
     }
   }
 
   @media (width >= 1200px) {
-    body.show-rechner .rechner-bereich.container {
+    .rechner-bereich.container {
       max-width: 960px;
     }
   }
