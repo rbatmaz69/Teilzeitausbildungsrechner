@@ -5,8 +5,8 @@
  * die Anzeige der Vorkenntnis-Monate mit der aktuellen Sprache.
  */
 document.addEventListener('DOMContentLoaded', () => {
-  const alter21JaCheckbox = document.getElementById('alter21-ja');
-  const alter21NeinCheckbox = document.getElementById('alter21-nein');
+  const alter = document.getElementById('alter');
+
 
   /* ========== Tooltips (touch-optimiert) ========== */
   document.querySelectorAll('.info-btn').forEach(schaltflaeche => {
@@ -33,16 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
-  /* ========== Checkbox-Verhalten ========== */
-  alter21JaCheckbox.addEventListener('change', () => {
-    if (alter21JaCheckbox.checked) {
-      alter21NeinCheckbox.checked = false;
-    }
-  });
-  
-  alter21NeinCheckbox.addEventListener('change', () => {
-    if (alter21NeinCheckbox.checked) {
-      alter21JaCheckbox.checked = false;
+  // Alter-Eingabe validieren
+  alter.addEventListener('blur', () => {
+    const alterInt = parseInt(alter.value);
+
+    if (isNaN(alterInt) || alterInt < 0) {
+      alter.value = null;
+    } else if (alterInt > 100) {
+      alter.value = null;
     }
   });
 });

@@ -388,39 +388,12 @@
         <!-- ============================== -->
         <div class="vk-category">
           <h2 class="vk-category-title" data-i18n="vk.other.question">
-            Sind Sie über 21 Jahre alt?
+            Wie alt sind Sie?
           </h2>
 
           <div class="vk-category-body">
-            <div class="tile-group">
-              <label class="tile">
-                <input
-                  id="alter21-ja"
-                  type="checkbox"
-                  aria-describedby="desc-alter21"
-                  data-vk-field="alter_ueber_21"
-                >
-  
-                <div class="tile-body">
-                  <div class="tile-header">
-                    <span data-i18n="vk.alter21.yes">Ja</span>
-                  </div>
-                </div>
-              </label>
-  
-              <label class="tile">
-                <input
-                  id="alter21-nein"
-                  type="checkbox"
-                >
-  
-                <div class="tile-body">
-                  <div class="tile-header">
-                    <span data-i18n="vk.alter21.no">Nein</span>
-                  </div>
-                </div>
-              </label>
-            </div>
+            <input type="number" id="alter" step="1">
+
             <span id="desc-alter21" class="sr-only" data-i18n="vk.alter21.sr">
               Wenn Sie über 21 Jahre alt sind, können Vorerfahrungen angerechnet werden.
             </span>
