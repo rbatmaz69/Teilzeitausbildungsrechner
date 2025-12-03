@@ -836,16 +836,10 @@ function stelleFormularWiederHer(zustand) {
         if (checkbox) checkbox.checked = true;
       }
       if (vk.key === "vorkenntnisse" && vk.months > 0) {
-        const input = document.querySelector('input[data-vk-field="vorkenntnisse_monate"]');
-        if (input) input.value = vk.months;
+        const checkbox = document.querySelector('input[data-vk-field="vorkenntnisse_monate"]');
+        if (checkbox) checkbox.checked = true;
       }
     });
-    
-    // Vorkenntnisse-Monate direkt aus formularWerte wiederherstellen (falls vorhanden)
-    if (formularWerte.vorkenntnisseMonate) {
-      const input = document.querySelector('input[data-vk-field="vorkenntnisse_monate"]');
-      if (input) input.value = formularWerte.vorkenntnisseMonate;
-    }
   }
 }
 
@@ -886,8 +880,8 @@ function initialisiere() {
           if (checkbox) checkbox.checked = true;
         }
         if (vk.key === "vorkenntnisse" && vk.months > 0) {
-          const input = document.querySelector('input[data-vk-field="vorkenntnisse_monate"]');
-          if (input) input.value = vk.months;
+          const checkbox = document.querySelector('input[data-vk-field="vorkenntnisse_monate"]');
+          if (checkbox) checkbox.checked = true;
         }
       });
     }
