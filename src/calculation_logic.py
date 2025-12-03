@@ -19,6 +19,8 @@ VERKUERZUNG_REALSCHULE = 6  # § 8 Abs. 1 BBiG - Fachoberschulreife/Realschulabs
 VERKUERZUNG_ALTER_21 = 12  # § 8 Abs. 1 BBiG - Alter über 21 Jahre
 # § 8 Abs. 1 BBiG - Berufliche Vorkenntnisse (bis zu 12 Monate → fester Wert 12)
 VERKUERZUNG_VORKENNTNISSE = 12
+# Kinderbetreuung (bis zu 12 Monate → fester Wert 12)
+VERKUERZUNG_KINDERBETREUUNG = 12
 # Familien- und Pflegeverantwortung (bis zu 12 Monate → fester Wert 12)
 VERKUERZUNG_FAMILIEN_PFLEGE = 12
 
@@ -50,8 +52,8 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
             - 'abitur' (bool): Hat Abitur/Hochschulreife
             - 'realschule' (bool): Hat Realschulabschluss/Fachoberschulreife
             - 'alter_ueber_21' (bool): Ist über 21 Jahre alt
-            - 'familien_pflegeverantwortung' (bool): Hat Familien- oder
-              Pflegeverantwortung
+            - 'familien_kinderbetreuung' (bool): Hat Kinderbetreuungsverantwortung
+            - 'familien_pflegeverantwortung' (bool): Hat Pflegeverantwortung
             - 'vorkenntnisse_monate' (int): Berufliche Vorkenntnisse,
               wird auf einen festen Wert von 12 Monaten abgebildet, sobald > 0
 
@@ -76,6 +78,9 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
     # Alter über 21: 12 Monate Verkürzung
     if verkuerzungsgruende.get("alter_ueber_21", False):
         verkuerzung_gesamt += VERKUERZUNG_ALTER_21
+
+    if (verkuerzungsgruende.get("familien_kinderbetreuung", False)):
+        verkuerzung_gesamt += VERKUERZUNG_KINDERBETREUUNG
 
     # Familien- und Pflegeverantwortung: 12 Monate Verkürzung
     if verkuerzungsgruende.get("familien_pflegeverantwortung", False):

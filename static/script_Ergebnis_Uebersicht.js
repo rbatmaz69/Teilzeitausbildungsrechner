@@ -37,6 +37,7 @@ function collectVerkuerzungsgruende() {
     abitur: false,
     realschule: false,
     alter_ueber_21: false,
+    familien_kinderbetreuung: false,
     familien_pflegeverantwortung: false,
     vorkenntnisse_monate: 0
   };
@@ -109,7 +110,7 @@ async function holeZusammenfassung() {
   const wochenstunden = Number(wochenstundenElement?.value || 0);
   const teilzeitProzent = Number(prozentElement?.value || 0);
 
-  const verkuerzungsgruende = collectVerkuerzungsgruende();
+  const verkuerzungsgruende = collectVerkuerzungsgruende();  
 
   const nutzdaten = {
     basis_dauer_monate: basisMonate,
@@ -137,7 +138,7 @@ async function holeZusammenfassung() {
   }
 
   const daten = await antwort.json();
-  const ergebnis = daten.result || {};
+  const ergebnis = daten.result || {};  
 
   const gesamtMonate = Number(ergebnis.finale_dauer_monate || 0);
   const verlaengerungMonate = Number(ergebnis.verlaengerung_durch_teilzeit_monate || 0);
@@ -164,9 +165,12 @@ async function holeZusammenfassung() {
       months: verkuerzungsgruende.vorkenntnisse_monate
     });
   }
+  if (verkuerzungsgruende.familien_kinderbetreuung) {
+    verkuerzungen.push({ key: "familien_kinderbetreuung", months: 12 });
+  }
   if (verkuerzungsgruende.familien_pflegeverantwortung) {
     verkuerzungen.push({ key: "familien_pflegeverantwortung", months: 12 });
-  }
+  }  
 
   return {
     eingaben: {
@@ -285,7 +289,10 @@ function fuelleEingabenliste(eingaben, berechnung) {
         beschriftungsSchluessel = "vk.vork.label";
         break;
       case "familien_pflegeverantwortung":
-        beschriftungsSchluessel = "vk.familie.label";
+        beschriftungsSchluessel = "vk.familie.label_pflege";
+        break;
+      case "familien_kinderbetreuung":
+        beschriftungsSchluessel = "vk.familie.label_kinder";
         break;
       default:
         beschriftungsSchluessel = "";
