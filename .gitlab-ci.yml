@@ -85,8 +85,8 @@ test:e2e:
   image: mcr.microsoft.com/playwright:v1.48.0-focal
   before_script:
     - npm install
-    - pip install --upgrade pip
-    - pip install -r requirements.txt
+    - python3 -m pip install --upgrade pip
+    - python3 -m pip install -r requirements.txt
   stage: e2e
   script:
     - echo "🎭 Running End-to-End tests with Playwright..."
