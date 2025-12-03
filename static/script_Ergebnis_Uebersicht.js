@@ -873,13 +873,9 @@ function initialisiere() {
     // Verkürzungsgründe wiederherstellen
     if (urlDaten.eingaben.verkuerzungen && Array.isArray(urlDaten.eingaben.verkuerzungen)) {
       urlDaten.eingaben.verkuerzungen.forEach(vk => {
-        if (vk.key === "abitur") {
-          const checkbox = document.getElementById("g-abitur");
-          if (checkbox) checkbox.checked = true;
-        }
-        if (vk.key === "realschule") {
-          const checkbox = document.getElementById("g-realschule");
-          if (checkbox) checkbox.checked = true;
+        if (vk.key === "abitur" || vk.key === "realschule" || vk.key === "hauptschule" || vk.key === "none") {
+          const dropdown = document.getElementById("vk-school-select");
+          if (dropdown) dropdown.value = vk.key;
         }
         if (vk.key === "alter_ueber_21") {
           const checkbox = document.querySelector('input[data-vk-field="alter_ueber_21"]');
