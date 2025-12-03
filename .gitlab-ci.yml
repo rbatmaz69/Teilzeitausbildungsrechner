@@ -82,7 +82,7 @@ test:
 # ====================== E2E TESTING ======================
 
 test:e2e:
-  image: mcr.microsoft.com/playwright:v1.48.0-focal
+  image: mcr.microsoft.com/playwright:v1.57.0-focal
   before_script:
     - npm install
     - apt-get update && apt-get install -y python3-pip
