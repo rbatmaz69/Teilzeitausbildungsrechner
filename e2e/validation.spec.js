@@ -123,9 +123,12 @@ test.describe('Validierung: Teilzeit-Prozent', () => {
     // Blur triggern
     await clickButton(page, '#dauer');
     
+    // Prüfe Fehlermeldung sofort (verschwindet nach 4s!)
+    // Fehlermeldung ist auf Deutsch (Browser-Standard hat localStorage-Sprache)
+    await expect(page.locator('#errorProzent')).toContainText('mindestens 50%');
+    
     // Sollte auf 50 korrigiert sein
     await expect(page.locator('#teilzeitProzent')).toHaveValue('50');
-    await expect(page.locator('#errorProzent')).toContainText('mindestens 50%');
   });
 
   test('Maximum 100% wird erzwungen', async ({ page }) => {

@@ -74,18 +74,42 @@ test.describe('Happy Path: Vollzeit Berechnungen', () => {
 
 test.describe('Happy Path: Teilzeit Berechnungen', () => {
   
-  test('Teilzeit 75%: (36 Monate * 100/75) = 48 Monate', async ({ page }) => {
+  test('Teilzeit 75%: (36 Monate * 100/75) = 48 Monate (Preset-Button)', async ({ page }) => {
     await gotoCalculator(page);
     
     // Eingaben: 36 Monate, 40h
     // 75% Button klicken
     await clickButton(page, '[data-value="75"][data-type="percent"]');
     
+    // Prüfe dass Button den Wert gesetzt hat
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('75');
+    await expect(page.locator('#teilzeitStunden')).toHaveValue('30');
+    
     // Berechnen
     await clickButton(page, '#berechnenBtn');
     
     // Ergebnis: 36 * (100/75) = 48 Monate
     await expect(page.locator('#res-total-months')).toContainText('48');
+  });
+
+  test('Teilzeit 50%: Preset-Button und manuelle Prozent-Eingabe', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // 50% Button klicken
+    await clickButton(page, '[data-type="percent"][data-value="50"]');
+    
+    // Prüfe dass Button den Wert gesetzt hat
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('50');
+    await expect(page.locator('#teilzeitStunden')).toHaveValue('20');
+    
+    // Ändere manuell auf 55%
+    await page.fill('#teilzeitProzent', '55');
+    
+    // Berechnen
+    await clickButton(page, '#berechnenBtn');
+    
+    // Ergebnis: 36 * (100/55) ≈ 65.45 → 65M, aber max 1.5x = 54M
+    await expect(page.locator('#res-total-months')).toContainText('54');
   });
 
   test('Teilzeit 75% mit Abitur: (36-12) * 100/75 = 32 Monate', async ({ page }) => {
@@ -124,7 +148,7 @@ test.describe('Happy Path: Teilzeit Berechnungen', () => {
 
 test.describe('Happy Path: Stunden-Eingabe', () => {
   
-  test('30 von 40 Stunden = 75%', async ({ page }) => {
+  test('30 von 40 Stunden = 75% (manuelle Eingabe)', async ({ page }) => {
     await gotoCalculator(page);
     
     // Teilzeit-Stunden direkt eingeben: 30 Stunden
@@ -135,6 +159,44 @@ test.describe('Happy Path: Stunden-Eingabe', () => {
     
     // Ergebnis: 30h von 40h = 75% → 36 * (100/75) = 48 Monate
     await expect(page.locator('#res-total-months')).toContainText('48');
+  });
+
+  test('24h Preset-Button setzt korrekte Stunden', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // 24h Button klicken
+    await clickButton(page, '[data-type="hours"][data-value="24"]');
+    
+    // Prüfe ob Stunden-Feld korrekt gesetzt wurde
+    await expect(page.locator('#teilzeitStunden')).toHaveValue('24');
+    
+    // Prozent-Feld sollte automatisch auf 60% gesetzt sein (24/40)
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('60');
+    
+    // Berechnen
+    await clickButton(page, '#berechnenBtn');
+    
+    // Ergebnis: 24h von 40h = 60% → 36 * (100/60) = 60 Monate, max 1.5x = 54M
+    await expect(page.locator('#res-total-months')).toContainText('54');
+  });
+
+  test('32h Preset-Button setzt korrekte Stunden', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // 32h Button klicken
+    await clickButton(page, '[data-type="hours"][data-value="32"]');
+    
+    // Prüfe ob Stunden-Feld korrekt gesetzt wurde
+    await expect(page.locator('#teilzeitStunden')).toHaveValue('32');
+    
+    // Prozent-Feld sollte automatisch auf 80% gesetzt sein (32/40)
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('80');
+    
+    // Berechnen
+    await clickButton(page, '#berechnenBtn');
+    
+    // Ergebnis: 32h von 40h = 80% → 36 * (100/80) = 45 Monate
+    await expect(page.locator('#res-total-months')).toContainText('45');
   });
 });
 
@@ -149,13 +211,157 @@ test.describe('Happy Path: Sprachwechsel', () => {
     // Prüfe deutsche Überschrift (auf Startseite)
     await expect(page.locator('.startseite-title-accent').first()).toContainText('Teilzeitausbildung');
     
-    // Wechsle zu Englisch
-    await page.selectOption('#lang-switcher', 'en');
+    // Wechsle zu Englisch (Desktop-Ansicht in Playwright)
+    await page.selectOption('#lang-switcher-desktop', 'en');
     
     // Warte kurz auf Übersetzung
     await page.waitForTimeout(500);
     
     // Prüfe englische Überschrift
     await expect(page.locator('.startseite-title-accent').first()).toContainText('part-time training');
+  });
+});
+
+test.describe('Happy Path: Reset-Button', () => {
+  
+  test('Reset-Button setzt alle Felder zurück', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // Mock confirm Dialog mit Zähler - nur ersten Aufruf bestätigen
+    await page.evaluate(() => {
+      let confirmCount = 0;
+      window.confirm = () => {
+        confirmCount++;
+        return confirmCount === 1; // Nur beim ersten Mal true (für Reset)
+      };
+    });
+    
+    // Fülle Formular aus
+    await page.fill('#dauer', '42');
+    await page.fill('#stunden', '35');
+    await page.fill('#teilzeitProzent', '80');
+    await page.selectOption('#vk-school-select', 'realschule');
+    
+    // Berechne Ergebnis
+    await clickButton(page, '#berechnenBtn');
+    
+    // Prüfe dass Ergebnis sichtbar ist
+    await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
+    
+    // Reset-Button klicken
+    await clickButton(page, '#btn-reset');
+    
+    // Warte auf DOM-Updates nach Reset
+    await page.waitForTimeout(500);
+    
+    // Prüfe dass Felder zurückgesetzt wurden
+    await expect(page.locator('#dauer')).toHaveValue('36');
+    await expect(page.locator('#stunden')).toHaveValue('40');
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('75');
+    await expect(page.locator('#vk-school-select')).toHaveValue('none');
+    
+    // Prüfe dass Ergebnis hidden-Attribut hat
+    await expect(page.locator('#ergebnis-container')).toHaveAttribute('hidden', '');
+  });
+});
+
+test.describe('Happy Path: Share-Button', () => {
+
+  test('Share-Button erstellt URL mit Berechnungsdaten', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // ERSTER SHARE: Fülle Formular mit "none" als Schulabschluss
+    await page.fill('#dauer', '30');
+    await page.fill('#stunden', '38');
+    await clickButton(page, '[data-type="percent"][data-value="75"]');
+    await page.selectOption('#vk-school-select', 'none');
+    // Keine Checkboxen aktiviert
+    
+    // Berechne Ergebnis
+    await clickButton(page, '#berechnenBtn');
+    
+    // Warte auf Ergebnis
+    await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
+    
+    // Mock clipboard API und alert für Test
+    await page.evaluate(() => {
+      window.copiedText = '';
+      window.alert = () => {};
+      if (!navigator.clipboard) {
+        navigator.clipboard = {};
+      }
+      navigator.clipboard.writeText = async (text) => {
+        window.copiedText = text;
+        return Promise.resolve();
+      };
+    });
+    
+    // Share-Button klicken
+    await clickButton(page, '#btn-share');
+    
+    // Warte auf async clipboard operation
+    await page.waitForTimeout(300);
+    
+    // Hole kopierten Link
+    const copiedUrl = await page.evaluate(() => window.copiedText);
+    
+    // Prüfe dass URL Daten enthält
+    expect(copiedUrl).toContain('?data=');
+    
+    // Navigiere zu kopiertem Link
+    await page.goto(copiedUrl);
+    await page.waitForLoadState('networkidle');
+    
+    // Prüfe dass Ergebnis direkt angezeigt wird
+    await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
+    
+    // Prüfe dass die Werte korrekt geladen wurden
+    await expect(page.locator('#dauer')).toHaveValue('30');
+    await expect(page.locator('#stunden')).toHaveValue('38');
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('75');
+    await expect(page.locator('#vk-school-select')).toHaveValue('none');
+    await expect(page.locator('[data-vk-field="alter_ueber_21"]')).not.toBeChecked();
+    await expect(page.locator('[data-vk-field="familien_pflegeverantwortung"]')).not.toBeChecked();
+    
+    // ZWEITER SHARE: Ändere auf Abitur und aktiviere Checkboxen
+    await page.selectOption('#vk-school-select', 'abitur');
+    await page.check('[data-vk-field="alter_ueber_21"]');
+    
+    // Berechne erneut
+    await clickButton(page, '#berechnenBtn');
+    await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
+    
+    // Mock clipboard API erneut (nach page.goto wurde die Seite neu geladen)
+    await page.evaluate(() => {
+      window.copiedText = '';
+      window.alert = () => {};
+      if (!navigator.clipboard) {
+        navigator.clipboard = {};
+      }
+      navigator.clipboard.writeText = async (text) => {
+        window.copiedText = text;
+        return Promise.resolve();
+      };
+    });
+    
+    // Teile erneut
+    await clickButton(page, '#btn-share');
+    await page.waitForTimeout(300);
+    
+    // Hole neuen Link
+    const copiedUrl2 = await page.evaluate(() => window.copiedText);
+    expect(copiedUrl2).toContain('?data=');
+    
+    // Navigiere zu neuem Link
+    await page.goto(copiedUrl2);
+    await page.waitForLoadState('networkidle');
+    
+    // Prüfe dass die GEÄNDERTEN Werte korrekt geladen wurden
+    await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
+    await expect(page.locator('#dauer')).toHaveValue('30');
+    await expect(page.locator('#stunden')).toHaveValue('38');
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('75');
+    await expect(page.locator('#vk-school-select')).toHaveValue('abitur');
+    await expect(page.locator('[data-vk-field="alter_ueber_21"]')).toBeChecked();
   });
 });

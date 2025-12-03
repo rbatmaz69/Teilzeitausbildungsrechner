@@ -130,7 +130,7 @@ test.describe('Edge Cases: Grenzwerte', () => {
 
 test.describe('Business Rules: Verkürzungen', () => {
   
-  test('Maximale Verkürzung 12 Monate: Abitur alleine', async ({ page }) => {
+  test('Maximale Verkürzung 12 Monate: Nur Abitur (Dropdown)', async ({ page }) => {
     await gotoCalculator(page);
     
     // Basis-Dauer 36 Monate
@@ -147,7 +147,63 @@ test.describe('Business Rules: Verkürzungen', () => {
     await expect(page.locator('#res-total-months')).toContainText('32');
   });
 
-  test('Maximale Verkürzung 12 Monate: Alle Gründe kombiniert', async ({ page }) => {
+  test('Verkürzung mit einzelner Checkbox: Familie/Pflege', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // Basis-Dauer 36 Monate, Vollzeit
+    await page.fill('#dauer', '36');
+    await page.fill('#teilzeitProzent', '100');
+    
+    // Nur Familie/Pflege aktivieren
+    await page.check('[data-vk-field="familien_pflegeverantwortung"]');
+    
+    // Berechnen
+    await clickButton(page, '#berechnenBtn');
+    
+    // Ergebnis: Familie/Pflege gibt 12 Monate Verkürzung
+    // 36 - 12 = 24 Monate Vollzeit
+    await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
+    await expect(page.locator('#res-total-months')).toContainText('24');
+  });
+
+  test('Verkürzung mit einzelner Checkbox: Alter über 21', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // Basis-Dauer 36 Monate, Vollzeit
+    await page.fill('#dauer', '36');
+    await page.fill('#teilzeitProzent', '100');
+    
+    // Nur Alter über 21 aktivieren
+    await page.check('[data-vk-field="alter_ueber_21"]');
+    
+    // Berechnen
+    await clickButton(page, '#berechnenBtn');
+    
+    // Ergebnis: Alter 21+ gibt 12 Monate Verkürzung
+    // 36 - 12 = 24 Monate Vollzeit
+    await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
+    await expect(page.locator('#res-total-months')).toContainText('24');
+  });
+
+  test('Realschule (Dropdown) + Vorkenntnisse (Checkbox)', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // Basis-Dauer 36 Monate
+    await page.fill('#dauer', '36');
+    
+    // Realschule (6M) + Vorkenntnisse (12M) = 18M, max ist aber 12M
+    await page.selectOption('#vk-school-select', 'realschule');
+    await page.check('[data-vk-field="vorkenntnisse_monate"]');
+    
+    // Berechnen
+    await clickButton(page, '#berechnenBtn');
+    
+    // Ergebnis: 36 - 12 (max) = 24 mit 75% → 32 Monate
+    await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
+    await expect(page.locator('#res-total-months')).toContainText('32');
+  });
+
+  test('Maximale Verkürzung 12 Monate: Alle Checkbox-Gründe kombiniert', async ({ page }) => {
     await gotoCalculator(page);
     
     // Basis-Dauer 36 Monate (Vollzeit ist Standard 75%)
@@ -162,18 +218,19 @@ test.describe('Business Rules: Verkürzungen', () => {
     // Berechnen
     await clickButton(page, '#berechnenBtn');
     
-    // Ergebnis: 36 - 12 = 24 Monate mit 75% Teilzeit → 32 Monate
+    // Ergebnis: 36 - 12 (max) = 24 Monate mit 75% Teilzeit → 32 Monate
     await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
     await expect(page.locator('#res-total-months')).toContainText('32');
   });
 
-  test('Mindestdauer 24 Monate wird eingehalten', async ({ page }) => {
+  test('Mindestdauer 24 Monate wird eingehalten (keine Verkürzung)', async ({ page }) => {
     await gotoCalculator(page);
     
     // Minimale Basis-Dauer 24 Monate mit Standard 75% Teilzeit
     await page.fill('#dauer', '24');
     
-    // Keine Verkürzung ausgewählt
+    // Keine Verkürzung ausgewählt - Dropdown bleibt auf "none"
+    // Keine Checkboxen aktiviert
     
     // Berechnen
     await clickButton(page, '#berechnenBtn');
