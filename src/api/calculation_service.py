@@ -210,6 +210,7 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
         "abitur",
         "realschule",
         "alter_ueber_21",
+        "familien_kinderbetreuung",
         "familien_pflegeverantwortung",
         "vorkenntnisse_monate",
     }
@@ -254,6 +255,9 @@ def _normalisiere_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]
         "alter_ueber_21": bool(data.get("alter_ueber_21", False)),
         "familien_pflegeverantwortung": bool(
             data.get("familien_pflegeverantwortung", False)
+        ),
+        "familien_kinderbetreuung": bool(
+            data.get("familien_kinderbetreuung", False)
         ),
         "vorkenntnisse_monate": vorkenntnisse_monate,
     }
