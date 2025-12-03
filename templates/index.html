@@ -17,23 +17,24 @@
 </head>
 <body>
 
-  <!-- Sprachleiste oben -->
-  <nav class="langbar" aria-label="Sprache">
-    <label id="label-lang" class="sr-only" for="lang-switcher" data-i18n="lang.label">Sprache</label>
-    <div class="langbar-right">
-      <!-- Beides bleibt bestehen; wir priorisieren das sichtbare Label über aria-labelledby -->
-      <select id="lang-switcher" aria-label="Sprache wählen" aria-labelledby="label-lang" data-i18n-attr="aria-label:lang.aria">
-        <option value="de" data-i18n="lang.de">Deutsch</option>
-        <option value="en" data-i18n="lang.en">English</option>
-      </select>
-    </div>
-  </nav>
+  <!-- Sprachleiste wird in die Startseite verlagert -->
 
   <!-- ================================ STARTSEITE ================================ -->
   <div class="container">
     <section id="startseite" class="startseite">
       <!-- Mobile Version (default) -->
       <div class="startseite-mobile">
+        <!-- Sprachumschalter oben rechts -->
+        <div class="startseite-header">
+          <label id="label-lang" class="sr-only" for="lang-switcher" data-i18n="lang.label">Sprache</label>
+          <div class="language-switcher">
+            <select id="lang-switcher" aria-label="Sprache wählen" aria-labelledby="label-lang" data-i18n-attr="aria-label:lang.aria">
+              <option value="de" data-i18n="lang.de"></option>
+              <option value="en" data-i18n="lang.en"></option>
+            </select>
+          </div>
+        </div>
+
         <h1 class="startseite-title">
           <span data-i18n="start.title.prefix">Planen Sie Ihre </span><span class="startseite-title-accent" data-i18n="start.title.accent">Teilzeitausbildung</span><span data-i18n="start.title.suffix"> ganz einfach</span>
         </h1>
@@ -41,52 +42,53 @@
           Berechnen Sie die optimale Aufteilung zwischen Arbeitszeit und Ausbildung. Unser Rechner hilft Ihnen dabei, die passende Teilzeitlösung für Ihre Bedürfnisse zu finden.
         </p>
 
-        <div class="info-cards">
-          <div class="info-card">
-            <div class="info-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Zusammenhängendes Informationsfeld statt separater Karten -->
+        <div class="info-section" role="region" aria-label="Vorteile des Rechners">
+          <div class="info-item">
+            <div class="info-item-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="10"></circle>
                 <polyline points="12 6 12 12 16 14"></polyline>
               </svg>
             </div>
-            <div class="info-card-content">
-              <h3 class="info-card-title" data-i18n="start.card1.title">Flexible Zeiten</h3>
-              <p class="info-card-subtitle" data-i18n="start.card1.subtitle">Individuelle Stundenplanung</p>
+            <div class="info-item-content">
+              <h3 class="info-item-title" data-i18n="start.card1.title">Flexible Zeiten</h3>
+              <p class="info-item-subtitle" data-i18n="start.card1.subtitle">Individuelle Stundenplanung</p>
             </div>
           </div>
 
-          <div class="info-card">
-            <div class="info-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <div class="info-item">
+            <div class="info-item-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                 <line x1="16" y1="2" x2="16" y2="6"></line>
                 <line x1="8" y1="2" x2="8" y2="6"></line>
                 <line x1="3" y1="10" x2="21" y2="10"></line>
               </svg>
             </div>
-            <div class="info-card-content">
-              <h3 class="info-card-title" data-i18n="start.card2.title">Genaue Planung</h3>
-              <p class="info-card-subtitle" data-i18n="start.card2.subtitle">Präzise Berechnung</p>
+            <div class="info-item-content">
+              <h3 class="info-item-title" data-i18n="start.card2.title">Genaue Planung</h3>
+              <p class="info-item-subtitle" data-i18n="start.card2.subtitle">Präzise Berechnung</p>
             </div>
           </div>
 
-          <div class="info-card">
-            <div class="info-card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <div class="info-item">
+            <div class="info-item-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
                 <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
               </svg>
             </div>
-            <div class="info-card-content">
-              <h3 class="info-card-title" data-i18n="start.card3.title">Erfolgreicher Abschluss</h3>
-              <p class="info-card-subtitle" data-i18n="start.card3.subtitle">Strukturierter Weg</p>
+            <div class="info-item-content">
+              <h3 class="info-item-title" data-i18n="start.card3.title">Erfolgreicher Abschluss</h3>
+              <p class="info-item-subtitle" data-i18n="start.card3.subtitle">Strukturierter Weg</p>
             </div>
           </div>
         </div>
 
       <button id="btn-start-calculate" class="btn-start-calculate" type="button" data-i18n="start.button">
         Zum Rechner
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
         </button>
@@ -179,6 +181,15 @@
 
         <!-- Right Side: Text Content -->
         <div class="startseite-desktop-right">
+          <!-- Sprachumschalter oben rechts (Desktop) -->
+          <div class="language-switcher-desktop">
+            <label id="label-lang-desktop" class="sr-only" for="lang-switcher-desktop" data-i18n="lang.label">Sprache</label>
+            <select id="lang-switcher-desktop" aria-label="Sprache wählen" aria-labelledby="label-lang-desktop" data-i18n-attr="aria-label:lang.aria">
+              <option value="de" data-i18n="lang.de"></option>
+              <option value="en" data-i18n="lang.en"></option>
+            </select>
+          </div>
+
           <h1 class="startseite-title-desktop">
             <span data-i18n="start.title.prefix">Planen Sie Ihre </span><span class="startseite-title-accent" data-i18n="start.title.accent">Teilzeitausbildung</span><span data-i18n="start.title.suffix"> ganz einfach</span>
           </h1>
@@ -186,10 +197,10 @@
             Berechnen Sie die optimale Aufteilung zwischen Arbeitszeit und Ausbildung. Unser Rechner hilft Ihnen dabei, die passende Teilzeitlösung für Ihre Bedürfnisse zu finden.
           </p>
 
-          <div class="info-cards-desktop">
+          <div class="info-cards-desktop" role="region" aria-label="Vorteile des Rechners">
             <div class="info-card-desktop">
               <div class="info-card-icon-desktop">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <circle cx="12" cy="12" r="10"></circle>
                   <polyline points="12 6 12 12 16 14"></polyline>
                 </svg>
@@ -202,7 +213,7 @@
 
             <div class="info-card-desktop">
               <div class="info-card-icon-desktop">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                   <line x1="16" y1="2" x2="16" y2="6"></line>
                   <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -217,7 +228,7 @@
 
             <div class="info-card-desktop">
               <div class="info-card-icon-desktop">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
                   <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
                 </svg>
@@ -231,7 +242,7 @@
 
           <button id="btn-start-calculate-desktop" class="btn-start-calculate-desktop" type="button" data-i18n="start.button">
             Zum Rechner
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
           </button>

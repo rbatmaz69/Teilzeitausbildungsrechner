@@ -718,11 +718,15 @@ function setzeDatenZurueck() {
   LETZTE_EINGABEN = null;
   LETZTE_BERECHNUNG = null;
 
-  // Nach Bestätigung sanft zum Eingabebereich scrollen
-  const inputHeading = document.getElementById("input-heading");
-  if (inputHeading) {
-    const targetSection = inputHeading.closest("section") || inputHeading;
-    targetSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  // Nach Bestätigung sanft zum Eingabebereich scrollen (gleiche Logik wie "Zum Rechner" Button)
+  const eingabenSection = document.querySelector('section.card'); // Erste Eingabe-Section
+  if (eingabenSection) {
+    const sectionTop = eingabenSection.getBoundingClientRect().top + window.pageYOffset;
+    const offset = 70; // Offset für Tooltip + Abstand oben (gleich wie bei "Zum Rechner" Button)
+    window.scrollTo({
+      top: sectionTop - offset,
+      behavior: "smooth"
+    });
   }
 }
 
