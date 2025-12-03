@@ -81,7 +81,8 @@
       "workPerWeek": "Work per week"
     },
     "extension": {
-      "label": "Automatic extension due to part-time:",
+      "label1": "Shortening due to reasons for shorter training:",
+      "label2": "Extension due to part-time work:",
       "plus": "+{n} months",
       "none": "No extension"
     },
@@ -102,7 +103,7 @@
       "full": "hours"
     },
     "months": {
-      "short": "months",
+      "short": "m",
       "full": "months"
     },
     "weeks": {

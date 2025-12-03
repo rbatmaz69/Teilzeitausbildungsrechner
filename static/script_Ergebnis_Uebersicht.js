@@ -377,55 +377,150 @@ function fuelleEingabenliste(eingaben, berechnung) {
  * @param {Object} berechnung - Kernzahlen der Berechnung (Monate, Wochen, Stunden).
  */
 function fuelleErgebnisse(eingaben, berechnung) {
-  // Zahl + Einheit lokalisiert
-  const monateWort = uebersetzung("units.months.full", "Monate");
-  setzeText("#res-total-months", `${berechnung.gesamtMonate} ${monateWort}`);
+ if (!berechnung) return;
 
-  // Jahre-Anzeige
-  const jahreElement = $("#res-total-years");
-  if (jahreElement && berechnung.gesamtJahre) {
-    const jahreWort = uebersetzung("units.years.full", "Jahre");
-    setzeText("#res-total-years", `≈ ${berechnung.gesamtJahre} ${jahreWort}`);
-  }
+  // --- Haupt-Ergebnis: Gesamtmonate / -jahre ---
+  const totalMonths =
+    typeof berechnung.gesamtMonate === "number"
+      ? berechnung.gesamtMonate
+      : null;
 
-  // Validierungen mit i18n-Texten
-  if (berechnung.gesamtMonate < eingaben.basisMonate - 12) {
-    setzeText(
-      "#errorTotalMonths",
-      uebersetzung(
-        "errors.tooShort",
-        "Die Gesamtdauer darf maximal um 12 Monate verkürzt werden!"
-      )
-    );
-  } else if (berechnung.gesamtMonate > eingaben.basisMonate * 1.5) {
-    setzeText(
-      "#errorTotalMonths",
-      uebersetzung(
-        "errors.tooLong",
-        "Die Gesamtdauer darf maximal das 1,5-fache verlängert werden!"
-      )
-    );
+  const totalYears =
+    typeof berechnung.gesamtJahre === "number"
+      ? berechnung.gesamtJahre
+      : null;
+
+  // Monate mit Einheit ("32 Monate" / "32 months")
+  if (totalMonths !== null) {
+    const unitMonths = uebersetzung("units.months.full", "Monate");
+    setzeText("#res-total-months", `${totalMonths} ${unitMonths}`);
   } else {
-    setzeText("#errorTotalMonths", "");
+    setzeText("#res-total-months", "–");
   }
 
-  // Verlängerungsanzeige: Basis → Pfeil mit Delta → Ziel
-  const extensionWrapper = $("#res-extension-wrapper");
-  if (extensionWrapper) {
-    if (berechnung.verlaengerungMonate > 0) {
-      zeige(extensionWrapper);
-      const monateWort = uebersetzung("units.months.full", "Monate");
-      
-      // Basis (verkürzte Dauer)
-      setzeText("#res-extension-basis", `${berechnung.neueBasis} ${monateWort}`);
-      
-      // Finale Dauer
-      setzeText("#res-extension-total", `${berechnung.gesamtMonate} ${monateWort}`);
+  // Jahre mit Einheit, lokal formatiert ("2,7 Jahre" / "2.7 years")
+  if (totalYears !== null) {
+    const sprache = aktuelleSprache();
+    const formatter = new Intl.NumberFormat(
+      sprache === "en" ? "en-US" : "de-DE",
+      { minimumFractionDigits: 0, maximumFractionDigits: 1 }
+    );
+    const formattedYears = formatter.format(totalYears);
+    const unitYears = uebersetzung("units.years.full", "Jahre");
+    setzeText("#res-total-years", `${formattedYears} ${unitYears}`);
+  } else {
+    setzeText("#res-total-years", "–");
+  }
 
-      // Delta (Verlängerung) - nur als Zahl unter dem Pfeil
-      setzeText("#res-extension-delta", `+${berechnung.verlaengerungMonate}`);
+  const errorTotalMonths = $("#errorTotalMonths");
+  if (errorTotalMonths) {
+    errorTotalMonths.textContent = "";
+  }
+
+  // --- 1. Block: Verkürzung durch Verkürzungsgründe ---
+  const shorteningWrapper = document.getElementById("res-shortening-wrapper");
+  if (shorteningWrapper) {
+    const vollzeitMonate =
+      typeof eingaben?.basisMonate === "number"
+        ? eingaben.basisMonate
+        : undefined;
+    const verkuerzungMonate =
+      typeof berechnung.gesamteVerkuerzungMonate === "number"
+        ? berechnung.gesamteVerkuerzungMonate
+        : undefined;
+    const basisNachVerkuerzung =
+      typeof berechnung.neueBasis === "number"
+        ? berechnung.neueBasis
+        : undefined;
+
+    if (
+      typeof vollzeitMonate === "number" &&
+      typeof verkuerzungMonate === "number" &&
+      typeof basisNachVerkuerzung === "number"
+    ) {
+      // z.B. "36 Monate"
+      setzeText(
+        "#res-extension-vollzeit",
+        `${vollzeitMonate} ${uebersetzung("units.months.full", "Monate")}`
+      );
+
+      // z.B. "-6 Monate"
+      const vorzeichen = verkuerzungMonate > 0 ? "-" : "";
+      setzeText(
+        "#res-extension-verkuerzungsdauer",
+        `${vorzeichen}${Math.abs(
+          verkuerzungMonate
+        )} ${uebersetzung("units.months.short", "M")}`
+      );
+
+      // z.B. "30 Monate"
+      setzeText(
+        "#res-shortening-total",
+        `${basisNachVerkuerzung} ${uebersetzung(
+          "units.months.full",
+          "Monate"
+        )}`
+      );
+
+      shorteningWrapper.hidden = false;
     } else {
-      verberge(extensionWrapper);
+      // Falls keine Daten → Block ausblenden und Platzhalter setzen
+      shorteningWrapper.hidden = true;
+      setzeText("#res-extension-vollzeit", "–");
+      setzeText("#res-extension-verkuerzungsdauer", "+–");
+      setzeText("#res-shortening-total", "–");
+    }
+  }
+
+  // --- 2. Block: Verlängerung durch Teilzeit ---
+  const extensionWrapper = document.getElementById("res-extension-wrapper");
+  if (extensionWrapper) {
+    // Basis für Teilzeit ist deine neue Basis (nach Verkürzung)
+    const basisMonate =
+      typeof berechnung.neueBasis === "number"
+        ? berechnung.neueBasis
+        : undefined;
+
+    const teilzeitDelta =
+      typeof berechnung.verlaengerungMonate === "number"
+        ? berechnung.verlaengerungMonate
+        : undefined;
+
+    const zielMonate = totalMonths;
+
+    if (
+      typeof basisMonate === "number" &&
+      typeof teilzeitDelta === "number" &&
+      typeof zielMonate === "number"
+    ) {
+      // z.B. "30 Monate"
+      setzeText(
+        "#res-extension-basis",
+        `${basisMonate} ${uebersetzung("units.months.full", "Monate")}`
+      );
+
+      // z.B. "+12 Monate"
+      const sign = teilzeitDelta >= 0 ? "+" : "";
+      setzeText(
+        "#res-extension-delta",
+        `${sign}${teilzeitDelta} ${uebersetzung(
+          "units.months.short",
+          "M"
+        )}`
+      );
+
+      // z.B. "42 Monate"
+      setzeText(
+        "#res-extension-total",
+        `${zielMonate} ${uebersetzung("units.months.full", "Monate")}`
+      );
+
+      extensionWrapper.hidden = false;
+    } else {
+      extensionWrapper.hidden = true;
+      setzeText("#res-extension-basis", "–");
+      setzeText("#res-extension-delta", "+–");
+      setzeText("#res-extension-total", "–");
     }
   }
 }
@@ -676,10 +771,27 @@ function setzeDatenZurueck() {
   // Ergebnisse zurücksetzen
   setzeText("#res-total-months", "–");
   setzeText("#res-total-years", "–");
+
+  const shorteningWrapper = document.getElementById("res-shortening-wrapper");
+  if (shorteningWrapper) {
+    shorteningWrapper.hidden = true;
+  }
+  setzeText("#res-extension-vollzeit", "–");
+  setzeText("#res-extension-verkuerzungsdauer", "+–");
+  setzeText("#res-shortening-total", "–");
+
   const extensionWrapper = $("#res-extension-wrapper");
-  if (extensionWrapper) verberge(extensionWrapper);
+  if (extensionWrapper) {
+    verberge(extensionWrapper); // hattest du schon
+  }
+  setzeText("#res-extension-basis", "–");
+  setzeText("#res-extension-delta", "+–");
+  setzeText("#res-extension-total", "–");
+
   const errorTotalMonths = $("#errorTotalMonths");
-  if (errorTotalMonths) errorTotalMonths.textContent = "";
+  if (errorTotalMonths) {
+    errorTotalMonths.textContent = "";
+  }
   
   // Eingabenliste leeren
   const inputsList = $("#inputs-list");

@@ -81,7 +81,8 @@
       "workPerWeek": "Arbeit pro Woche"
     },
     "extension": {
-      "label": "Automatische Verlängerung durch Teilzeit:",
+      "label1": "1. Verkürzung durch Verkürzungründe:",
+      "label2": "2. Verlängerung durch Teilzeit:",
       "plus": "+{n} Monate",
       "none": "Keine Verlängerung"
     },
@@ -102,7 +103,7 @@
       "full": "Stunden"
     },
     "months": {
-      "short": "Monate",
+      "short": "M",
       "full": "Monate"
     },
     "weeks": {
