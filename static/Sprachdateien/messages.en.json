@@ -56,32 +56,30 @@
     "familie": {
       "question": "Do you have family responsibilities (child care or care for relatives)?",
       "label": "Family and care responsibilities",
-      "badge": "−12 months",
       "sr": "If you have family or care responsibilities, a shortening may be possible."
     },
     "school": {
       "question": "What is your highest level of school education?",
       "label": "School degree",
       "none": "No degree",
-      "hauptschule": "Lower secondary school (Hauptschule)",
-      "realschule": "Intermediate secondary school (Realschule)",
-      "abitur": "University entrance qualification (Abitur)"
+      "hauptschule": "Lower secondary school (german: Hauptschule)",
+      "realschule": "Intermediate secondary school (german: Realschule)",
+      "abitur": "University entrance qualification (german: Abitur / Hochschulreife)"
     },
     "qual": {
       "question": "What professional qualifications do you have?"
     },
     "vork": {
       "label": "Professional experience",
-      "badge": "−12 months",
       "sr": "Professional experience can shorten your training duration."
     },
     "other": {
-      "question": "Are you over 21 years old?"
+      "question": "How old are you?"
     },
     "alter21": {
+      "label": "Over 21 years old",
       "yes": "Yes",
       "no": "No",
-      "badge": "−12 months",
       "sr": "If you are over 21, previous experience can be credited."
     }
   },
