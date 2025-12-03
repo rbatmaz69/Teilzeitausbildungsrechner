@@ -53,13 +53,14 @@ export default defineConfig({
 
   // Automatischer Server-Start
   webServer: {
-    command: 'python -m flask run --port 5000',
+    command: process.env.CI ? 'python3 -m src.app 5000' : 'python -m flask run --port 5000',
     url: 'http://localhost:5000',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
     env: {
       FLASK_APP: 'src/app.py',
       FLASK_ENV: 'development',
+      PORT: '5000',
     },
   },
 });

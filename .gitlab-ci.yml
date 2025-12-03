@@ -85,6 +85,7 @@ test:e2e:
   image: mcr.microsoft.com/playwright:v1.48.0-focal
   before_script:
     - npm install
+    - apt-get update && apt-get install -y python3-pip
     - python3 -m pip install --upgrade pip
     - python3 -m pip install -r requirements.txt
   stage: e2e
