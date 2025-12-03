@@ -1697,8 +1697,8 @@ input.error,
     gap: 0.4rem;
     padding: 0.45rem 0.9rem;
     border-radius: 999px;
-    border: 2px solid #1663c7;
-    background: #1663c7;
+    border: 2px solid #587dad;
+    background: #587dad;
     color: #ffffff;
     font-size: 0.95rem;
     font-weight: 600;
@@ -1729,10 +1729,16 @@ input.error,
   /* Wenn geöffnet – Hintergrund und Text ändern, Pfeil drehen, Label ändern */
   .inputs-collapsible[open] {
     background: #ffffff;
-    border-color: #1b6fe0;
+    border-color: #d5e7ff;
   }
 
   .inputs-collapsible[open] .summary-icon {
     transform: rotate(90deg);
+  }
+
+  .inputs-collapsible > dl {
+    margin-top: 1rem;            
+    padding-top: 1rem;             
+    border-top: 2px solid #d5e7ff; 
   }
 }
