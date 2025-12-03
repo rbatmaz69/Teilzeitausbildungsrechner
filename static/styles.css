@@ -1700,10 +1700,10 @@ input.error,
   border-radius: 999px;
   border: 2px solid #587dad;
   background: #587dad;
-  color: #ffffff;
+  color: #fff;
   font-size: 0.95rem;
   font-weight: 600;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 6px rgb(0, 0, 0, 12%);
   transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -1724,12 +1724,12 @@ input.error,
 .inputs-collapsible > .summary-toggle:hover .summary-pill {
   background: #1b6fe0;
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 4px 10px rgb(0, 0, 0, 18%);
 }
 
 /* Wenn geöffnet – Hintergrund und Text ändern, Pfeil drehen, Label ändern */
 .inputs-collapsible[open] {
-  background: #ffffff;
+  background: #fff;
   border-color: #d5e7ff;
 }
 

@@ -6,9 +6,7 @@ function setzeText(selektor, text) {
   const element = $(selektor);
   if (element) element.textContent = text;
 }
-function zeige(element) {
-  if (element) element.hidden = false;
-}
+
 function verberge(element) {
   if (element) element.hidden = true;
 }
