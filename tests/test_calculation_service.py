@@ -3,8 +3,10 @@
 import pytest
 
 from src.api.calculation_service import verarbeite_berechnungsanfrage
-from tests.dummy_data import (TEILZEIT_75_MIT_ABITUR,
-                              UNGUELTIG_TEILZEIT_UNTER_50)
+from tests.dummy_data import (
+    TEILZEIT_75_MIT_ABITUR,
+    UNGUELTIG_TEILZEIT_UNTER_50,
+)
 
 
 def test_berechnung_erfolgreich():

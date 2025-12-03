@@ -20,20 +20,28 @@ Testabdeckung:
 import pytest
 
 from src.calculation_logic import berechne_gesamtdauer, formatiere_ergebnis
-from tests.dummy_data import (DAUER_24_MONATE, DAUER_42_MONATE,
-                              KOMBINATION_ABITUR_REALSCHULE,
-                              KOMBINATION_UEBER_12_MONATE, MIT_ALTER_21,
-                              MIT_FAMILIEN_PFLEGE, MIT_REALSCHULE,
-                              MIT_VORKENNTNISSE_6, MIT_VORKENNTNISSE_12,
-                              SONDERREGEL_6_MONATE, STUNDEN_INPUT_20_VON_40,
-                              STUNDEN_INPUT_30_VON_40, TEILZEIT_50_PROZENT,
-                              TEILZEIT_75_MIT_ABITUR,
-                              UNGUELTIG_NEGATIVE_MONATE,
-                              UNGUELTIG_STUNDEN_UEBER_VOLLZEIT,
-                              UNGUELTIG_TEILZEIT_0,
-                              UNGUELTIG_TEILZEIT_UEBER_100,
-                              UNGUELTIG_TEILZEIT_UNTER_50,
-                              VOLLZEIT_OHNE_VERKUERZUNG)
+from tests.dummy_data import (
+    DAUER_24_MONATE,
+    DAUER_42_MONATE,
+    KOMBINATION_ABITUR_REALSCHULE,
+    KOMBINATION_UEBER_12_MONATE,
+    MIT_ALTER_21,
+    MIT_FAMILIEN_PFLEGE,
+    MIT_REALSCHULE,
+    MIT_VORKENNTNISSE_6,
+    MIT_VORKENNTNISSE_12,
+    SONDERREGEL_6_MONATE,
+    STUNDEN_INPUT_20_VON_40,
+    STUNDEN_INPUT_30_VON_40,
+    TEILZEIT_50_PROZENT,
+    TEILZEIT_75_MIT_ABITUR,
+    UNGUELTIG_NEGATIVE_MONATE,
+    UNGUELTIG_STUNDEN_UEBER_VOLLZEIT,
+    UNGUELTIG_TEILZEIT_0,
+    UNGUELTIG_TEILZEIT_UEBER_100,
+    UNGUELTIG_TEILZEIT_UNTER_50,
+    VOLLZEIT_OHNE_VERKUERZUNG,
+)
 
 # ============================================================
 # Basis-Tests: Vollzeit und Standard-Teilzeit
