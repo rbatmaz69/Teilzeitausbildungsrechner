@@ -508,12 +508,30 @@
     </div>
 
     <!-- Karte: Alle Eingaben -->
-    <div class="card" aria-labelledby="inputs-title">
-      <h2 id="inputs-title" data-i18n="inputs.title">Ihre Eingaben</h2>
+    <details class="card-collapsible inputs-collapsible" id="inputs-section">
+      <summary class="summary-toggle">
+        <div class="summary-text">
+          <span class="summary-title" id="inputs-title" data-i18n="inputs.title">
+            Ihre Eingaben
+          </span>
+          <span class="summary-hint" data-i18n="inputs.toggleHint">
+            Bereich zum Anzeigen / Ausklappen anklicken
+          </span>
+        </div>
+        <span class="summary-pill" aria-hidden="true">
+          <span class="summary-pill-label" data-i18n="inputs.toggleLabel">
+            Aufklappen
+          </span>
+          <span class="summary-icon">▸</span>
+        </span>
+      </summary>
+
       <dl class="kv" id="inputs-list">
-        <!-- Inhalte werden dynamisch per JS gefüllt -->
+        <!-- Inhalte per JS -->
       </dl>
-    </div>
+    </details>
+ 
+
 
     <!-- Karte: Hinweise -->
     <div class="card" aria-labelledby="notes-title">

@@ -10,7 +10,6 @@
   },
   "inputs": {
     "title": "Your details",
-    "unitsLegend": "h = Hours, M = Months",
     "dauer": {
       "label": "How long is your training in full-time?",
       "labelShort": "Training (full-time)",
@@ -32,7 +31,9 @@
       "labelShort": "Reductions"
     },
     "afterShortening": "Training duration after shortening",
-    "inPartTime": "Training duration in part\u2011time"
+    "inPartTime": "Training duration in part\u2011time",
+    "toggleHint": "Click to show / hide this section",
+    "toggleLabel": "Expand"
   },
   "vk": {
     "heading": "Reasons for shorter training",
@@ -137,7 +138,7 @@
   "btn": {
     "calculate": "Show result",
     "reset": "Reset",
-    "share": "Share link"
+    "share": "Share result"
   },
   "share": {
     "title": "Part-Time Calculator – result",

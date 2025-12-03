@@ -10,7 +10,6 @@
   },
   "inputs": {
     "title": "Ihre Angaben",
-    "unitsLegend": "Std = Stunden, M = Monate",
     "dauer": {
       "label": "Wie lange dauert Ihre Ausbildung in Vollzeit?",
       "labelShort": "Ausbildung (Vollzeit)",
@@ -32,7 +31,9 @@
       "labelShort": "Verkürzungen"
     },
     "afterShortening": "Ausbildungsdauer nach Verkürzung",
-    "inPartTime": "Ausbildungsdauer in Teilzeit"
+    "inPartTime": "Ausbildungsdauer in Teilzeit",
+    "toggleHint": "Bereich zum Anzeigen / Schließen anklicken",
+    "toggleLabel": "Aufklappen"
   },
   "vk": {
     "heading": "Gründe für eine kürzere Ausbildung",
@@ -137,7 +138,7 @@
   "btn": {
     "calculate": "Ergebnis anzeigen",
     "reset": "Zurücksetzen",
-    "share": "Link teilen"
+    "share": "Ergebnis teilen"
   },
   "share": {
     "title": "Teilzeitrechner – Ergebnis",
