@@ -46,7 +46,6 @@
       "question": "Haben Sie familiäre Verpflichtungen?",
       "label_kinder": "Kinderbetreuung",
       "label_pflege": "Pflege von Angehörigen",
-      "badge": "−12 Monate",
       "sr": "Wenn Sie Familien- oder Pflegeverantwortung haben, ist eine Verkürzung möglich."
     },
     "school": {
@@ -65,16 +64,15 @@
       "label2": "Nachweis einer einschlägigen beruflichen Grundausbildung",
       "label3": "Einschlägige Berufstätigkeit",
       "label4": "Arbeitserfahrung im Berufsfeld",
-      "badge": "−12 Monate",
       "sr": "Berufliche Vorkenntnisse können Ihre Ausbildungsdauer verkürzen."
     },
     "other": {
-      "question": "Sind Sie über 21 Jahre alt?"
+      "question": "Wie alt sind Sie?"
     },
     "alter21": {
+      "label": "Über 21 Jahre alt",
       "yes": "Ja",
       "no": "Nein",
-      "badge": "−12 Monate",
       "sr": "Wenn Sie über 21 Jahre alt sind, können Vorerfahrungen angerechnet werden."
     }
   },
