@@ -43,7 +43,6 @@ from tests.dummy_data import (
     VOLLZEIT_OHNE_VERKUERZUNG,
 )
 
-
 # ============================================================
 # Basis-Tests: Vollzeit und Standard-Teilzeit
 # ============================================================

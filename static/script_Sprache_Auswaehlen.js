@@ -94,16 +94,21 @@
       });
     });
 
+    // Synchronisiere beide Sprachumschalter (Mobile und Desktop)
     const sprachAuswahl = document.getElementById("lang-switcher");
-    if (sprachAuswahl) {
-      [...sprachAuswahl.options].forEach((option) => {
-        const schluessel = option.dataset.i18n;
-        if (!schluessel) return;
-        const wert = aufloesung(woerterbuch, schluessel);
-        if (wert != null) option.textContent = String(wert);
-      });
-      sprachAuswahl.value = zustand.sprache;
-    }
+    const sprachAuswahlDesktop = document.getElementById("lang-switcher-desktop");
+    
+    [sprachAuswahl, sprachAuswahlDesktop].forEach((select) => {
+      if (select) {
+        [...select.options].forEach((option) => {
+          const schluessel = option.dataset.i18n;
+          if (!schluessel) return;
+          const wert = aufloesung(woerterbuch, schluessel);
+          if (wert != null) option.textContent = String(wert);
+        });
+        select.value = zustand.sprache;
+      }
+    });
   };
 
   /** Registriert eine globale I18N-Hilfs-API auf `window`. */
@@ -145,6 +150,7 @@
 
   document.addEventListener("DOMContentLoaded", async () => {
     const sprachAuswahl = document.getElementById("lang-switcher");
+    const sprachAuswahlDesktop = document.getElementById("lang-switcher-desktop");
     const anfaenglicheSprache =
       holeGespeicherteSprache() ||
       (navigator.language || navigator.userLanguage || "de").slice(0, 2);
@@ -152,6 +158,7 @@
     const startSprache = UNTERSTUETZT.includes(anfaenglicheSprache) ? anfaenglicheSprache : STANDARD_SPRACHE;
 
     if (sprachAuswahl) sprachAuswahl.value = startSprache;
+    if (sprachAuswahlDesktop) sprachAuswahlDesktop.value = startSprache;
 
     await ladeUndWendeAn(startSprache);
     speichereSprache(startSprache);
@@ -159,6 +166,16 @@
     if (sprachAuswahl) {
       sprachAuswahl.addEventListener("change", async (ereignis) => {
         const neueSprache = ereignis.target.value;
+        if (sprachAuswahlDesktop) sprachAuswahlDesktop.value = neueSprache;
+        speichereSprache(neueSprache);
+        await ladeUndWendeAn(neueSprache);
+      });
+    }
+
+    if (sprachAuswahlDesktop) {
+      sprachAuswahlDesktop.addEventListener("change", async (ereignis) => {
+        const neueSprache = ereignis.target.value;
+        if (sprachAuswahl) sprachAuswahl.value = neueSprache;
         speichereSprache(neueSprache);
         await ladeUndWendeAn(neueSprache);
       });

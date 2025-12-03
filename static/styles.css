@@ -218,36 +218,7 @@ header h1 {
    HEADER & NAVIGATION
    ========================================== */
 
-/* Sprachwahl */
-.langbar {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: .5rem;
-  padding: .5rem 1rem;
-  border-bottom: 1px solid var(--border, #e5e7eb);
-  background: var(--surface, #fff);
-}
-
-.langbar-right {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-}
-
-#lang-switcher {
-  color: var(--text, #000); /* Explizit schwarze Schrift für Safari */
-  /* stylelint-disable-next-line property-no-vendor-prefix */
-  -webkit-appearance: none; /* Safari-spezifisch */
-  appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, #9ca3af 50%),
-                    linear-gradient(135deg, #9ca3af 50%, transparent 50%);
-  background-position: calc(100% - 18px) 50%,
-                       calc(100% - 13px) 50%;
-  background-size: 5px 5px, 5px 5px;
-  background-repeat: no-repeat;
-  padding-right: 2.5rem; /* Platz für Pfeil */
-}
+/* Sprach-Dropdown (wurde aus langbar in startseite verschoben) */
 
 .actionbar{
   position: sticky;
@@ -992,15 +963,59 @@ input.error,
    STARTSEITE
    ========================================== */
 .startseite {
-  padding: var(--space-4) 0;
+  padding: 0.5rem 0 var(--space-5) 0;
   margin-bottom: var(--space-5);
+}
+
+/* Header mit Sprachumschalter (Mobile) */
+.startseite-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.2rem; /* sehr dicht, damit Titel nah am Dropdown sitzt */
+}
+
+/* Language Switcher - Mobile */
+.language-switcher {
+  position: relative;
+}
+
+#lang-switcher {
+  color: var(--text, #000);
+  /* stylelint-disable-next-line property-no-vendor-prefix */
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #9ca3af 50%),
+                    linear-gradient(135deg, #9ca3af 50%, transparent 50%);
+  background-position: calc(100% - 12px) 50%,
+                       calc(100% - 7px) 50%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding: 0.3rem 1.5rem 0.4rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background-color: #fff;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+#lang-switcher:hover,
+#lang-switcher:focus {
+  border-color: var(--primary);
+  background-color: #fafafa;
+}
+
+#lang-switcher:focus-visible {
+  outline: 3px solid #a5b4fc;
+  outline-offset: 2px;
 }
 
 .startseite-title {
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.3;
-  margin-bottom: var(--space-3);
+  margin-bottom: 0.4rem;
   color: var(--text);
 }
 
@@ -1010,56 +1025,93 @@ input.error,
 
 .startseite-description {
   color: var(--muted);
-  margin-bottom: var(--space-5);
+  margin-bottom: 0.6rem; /* näher an die Info-Punkte auf Mobile */
   line-height: 1.6;
 }
 
-.info-cards {
+/* Zusammenhängendes Informationsfeld: direkt in Startseite integriert (kein separater Kasten) */
+.info-section {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  margin-bottom: var(--space-5);
+  gap: 0;
+  margin-bottom: 0.6rem; /* enger zum Startseiten-Text auf Mobile */
+
+  /* kein eigener Kasten: transparent, keine Ränder oder Schatten */
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
 }
 
-.info-card {
+.info-item {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-3);
-  padding: var(--space-3);
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  gap: 0.5rem; /* ~50% enger */
+  padding: 0.5rem; /* ~50% weniger Innenabstand */
+
+  /* auf Mobile keine Trennlinie, damit es als eine Box wirkt */
+  border-bottom: none;
+  transition: background-color 0.2s ease;
+
+  /* Auf Touch-Geräten kein Tap-Highlight oder aktive Rückmeldung auf Info-Items,
+     damit die gesamte Box als Einheit wahrgenommen wird. */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+
+  /* Sicherstellen, dass die Items nicht klickbar wirken */
+  cursor: default;
+  user-select: none;
 }
 
-.info-card-icon {
+/* Letztes Element ohne unterer Border */
+.info-item:last-child {
+  border-bottom: none;
+}
+
+/* Visuelles Feedback: nur auf Geräten mit Hover (Maus). */
+@media (hover: hover) and (pointer: fine) {
+  .info-item:hover {
+    background-color: #fafafa;
+  }
+}
+
+@media (hover: none) {
+  .info-item:hover,
+  .info-item:active {
+    background-color: transparent;
+  }
+}
+
+.info-item-icon {
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--primary);
+  background: #f66;
   color: white;
   border-radius: 8px;
 }
 
-.info-card-icon svg {
-  width: 24px;
-  height: 24px;
+.info-item-icon svg {
+  width: 28px;
+  height: 28px;
 }
 
-.info-card-content {
+.info-item-content {
   flex: 1;
 }
 
-.info-card-title {
+.info-item-title {
   font-size: 1rem;
   font-weight: 700;
   margin: 0 0 var(--space-1) 0;
   color: var(--text);
 }
 
-.info-card-subtitle {
+.info-item-subtitle {
   font-size: 0.9rem;
   color: var(--muted);
   margin: 0;
@@ -1067,6 +1119,7 @@ input.error,
 
 .btn-start-calculate {
   width: 100%;
+  margin-top: 1rem;
   background-color: var(--primary);
   color: white;
   font-weight: bold;
@@ -1076,7 +1129,7 @@ input.error,
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out, transform 0.05s ease-in-out, box-shadow 0.15s ease-in-out;
-  box-shadow: var(--shadow);
+  box-shadow: 0 6px 20px rgb(224 0 0 / 25%);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1086,12 +1139,18 @@ input.error,
 .btn-start-calculate:hover {
   background-color: #a90000;
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgb(0 0 0 / 12%);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 15%);
 }
 
 .btn-start-calculate:active {
-  background-color: #f33;
+  background-color: #c60000;
   transform: translateY(0);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+}
+
+.btn-start-calculate:focus-visible {
+  outline: 3px solid #a5b4fc;
+  outline-offset: 2px;
 }
 
 .btn-start-calculate svg {
@@ -1110,6 +1169,42 @@ input.error,
 
 .startseite-desktop {
   display: none;
+}
+
+/* Tablet Optimierungen (≥600px) */
+@media (width >= 600px) {
+  .startseite-title {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .startseite-description {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+  }
+
+  .info-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0;
+    margin-bottom: 1.5rem;
+
+    /* weiterhin integriert: kein Kasten-Style */
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .info-item {
+    border-bottom: none;
+    border-right: none; /* keine Trennlinien zwischen Items */
+    padding: var(--space-4);
+  }
+
+  .info-item:last-child {
+    border-right: none;
+  }
 }
 
 /* Desktop Layout */
@@ -1175,6 +1270,7 @@ input.error,
 
     /* Verhindert Abschneiden */
     overflow: visible;
+    position: relative; /* Für absolute Positionierung des Language-Buttons */
   }
 
   /* Container-Regel für Startseite komplett überschreiben */
@@ -1199,13 +1295,7 @@ input.error,
     width: 100% !important;
   }
 
-  /* Rechner-Container behalten ihre normale Breite */
-  .rechner-bereich.container {
-    max-width: 480px !important;
-    padding: 1rem !important;
-  }
-
-  /* Rechner-Bereich ist immer sichtbar und scrollbar (Button ist nur Shortcut) */
+  /* Rechner-Bereich auf Desktop standardmäßig sichtbar (wie auf Mobile) */
   .rechner-bereich {
     display: block;
   }
@@ -1214,7 +1304,7 @@ input.error,
     display: flex;
   }
 
-  /* Container für Rechner-Bereich normal */
+  /* Container für Rechner-Bereich auf Desktop */
   .rechner-bereich.container {
     max-width: 480px;
     padding: 1rem;
@@ -1379,39 +1469,85 @@ input.error,
     overflow: visible;
   }
 
+  /* Language Switcher Desktop - unabhängig positioniert, am oberen Rand der Kalender-Umrandung */
+  .language-switcher-desktop {
+    position: absolute;
+    top: 17rem; /* Entspricht padding-top von startseite-desktop = oberster Punkt der Kalender-Umrandung */
+    right: 7rem; /* Entspricht padding-right von startseite-desktop */
+    z-index: 10;
+
+    /* Unabhängig von anderen Elementen - wird nicht von Textlänge beeinflusst */
+  }
+
+  #lang-switcher-desktop {
+    color: var(--text, #000);
+    /* stylelint-disable-next-line property-no-vendor-prefix */
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, #9ca3af 50%),
+                      linear-gradient(135deg, #9ca3af 50%, transparent 50%);
+    background-position: calc(100% - 12px) 50%,
+                         calc(100% - 7px) 50%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    padding: 0.5rem 2rem 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  #lang-switcher-desktop:hover,
+  #lang-switcher-desktop:focus {
+    border-color: var(--primary);
+    background-color: #fafafa;
+  }
+
+  #lang-switcher-desktop:focus-visible {
+    outline: 3px solid #a5b4fc;
+    outline-offset: 2px;
+  }
+
   .startseite-title-desktop {
     font-size: 3.5rem;
     font-weight: 700;
     line-height: 1.2;
-    margin-bottom: var(--space-5);
+    margin-bottom: 1.5rem;
+    margin-top: 0;
     color: var(--text);
   }
 
   .startseite-description-desktop {
     color: var(--muted);
-    margin-bottom: var(--space-6);
+    margin-bottom: 2rem;
     line-height: 1.7;
     font-size: 1.3rem;
-    max-width: 70ch; /* 60-80 Zeichen optimal */
+    max-width: 70ch;
   }
 
   /* Desktop Feature Cards - Als zusammenhängende Box */
   .info-cards-desktop {
     display: flex;
     gap: 0;
-    margin-bottom: var(--space-6);
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    box-shadow: 0 4px 12px rgb(0 0 0 / 6%);
-    overflow: hidden;
+    margin-bottom: 2rem;
+
+    /* Integriert in Startseite: kein separates Panel */
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
     transition: box-shadow 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
   }
 
   .info-cards-desktop:hover {
-    box-shadow: 0 6px 20px rgb(0 0 0 / 10%);
-    transform: translateY(-2px);
-    background: #fafafa;
+    /* keine Hover-Lift oder Hintergrundänderung */
+    box-shadow: none;
+    transform: none;
+    background: transparent;
   }
 
   .info-card-desktop {
@@ -1426,6 +1562,8 @@ input.error,
     border-radius: 0;
     box-shadow: none;
     transition: none;
+    cursor: default;
+    user-select: none;
   }
 
   .info-card-desktop:hover {
@@ -1439,7 +1577,7 @@ input.error,
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f66; /* Hellerer Rotton für Icons */
+    background: #f66;
     color: white;
     border-radius: 16px;
     margin-bottom: var(--space-4);
@@ -1494,8 +1632,14 @@ input.error,
   }
 
   .btn-start-calculate-desktop:active {
-    background-color: #f33;
+    background-color: #c60000;
     transform: translateY(0);
+    box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+  }
+
+  .btn-start-calculate-desktop:focus-visible {
+    outline: 3px solid #a5b4fc;
+    outline-offset: 2px;
   }
 
   .btn-start-calculate-desktop svg {
