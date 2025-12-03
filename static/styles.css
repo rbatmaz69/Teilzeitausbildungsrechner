@@ -1035,6 +1035,7 @@ input.error,
   flex-direction: column;
   gap: 0;
   margin-bottom: 0.6rem; /* enger zum Startseiten-Text auf Mobile */
+
   /* kein eigener Kasten: transparent, keine Ränder oder Schatten */
   background: transparent !important;
   border: none !important;
@@ -1048,9 +1049,19 @@ input.error,
   align-items: flex-start;
   gap: 0.5rem; /* ~50% enger */
   padding: 0.5rem; /* ~50% weniger Innenabstand */
+
   /* auf Mobile keine Trennlinie, damit es als eine Box wirkt */
   border-bottom: none;
   transition: background-color 0.2s ease;
+
+  /* Auf Touch-Geräten kein Tap-Highlight oder aktive Rückmeldung auf Info-Items,
+     damit die gesamte Box als Einheit wahrgenommen wird. */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+
+  /* Sicherstellen, dass die Items nicht klickbar wirken */
+  cursor: default;
+  user-select: none;
 }
 
 /* Letztes Element ohne unterer Border */
@@ -1065,25 +1076,11 @@ input.error,
   }
 }
 
-/* Auf Touch-Geräten kein Tap-Highlight oder aktive Rückmeldung auf Info-Items,
-   damit die gesamte Box als Einheit wahrgenommen wird. */
-.info-item {
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-
 @media (hover: none) {
   .info-item:hover,
   .info-item:active {
     background-color: transparent;
   }
-}
-
-/* Sicherstellen, dass die Items nicht klickbar wirken */
-.info-item {
-  cursor: default;
-  user-select: none;
-  -webkit-user-select: none;
 }
 
 .info-item-icon {
@@ -1192,6 +1189,7 @@ input.error,
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 0;
     margin-bottom: 1.5rem;
+
     /* weiterhin integriert: kein Kasten-Style */
     background: transparent !important;
     border: none !important;
@@ -1477,6 +1475,7 @@ input.error,
     top: 17rem; /* Entspricht padding-top von startseite-desktop = oberster Punkt der Kalender-Umrandung */
     right: 7rem; /* Entspricht padding-right von startseite-desktop */
     z-index: 10;
+
     /* Unabhängig von anderen Elementen - wird nicht von Textlänge beeinflusst */
   }
 
@@ -1534,6 +1533,7 @@ input.error,
     display: flex;
     gap: 0;
     margin-bottom: 2rem;
+
     /* Integriert in Startseite: kein separates Panel */
     background: transparent !important;
     border: none !important;
@@ -1564,7 +1564,6 @@ input.error,
     transition: none;
     cursor: default;
     user-select: none;
-    -webkit-user-select: none;
   }
 
   .info-card-desktop:hover {
