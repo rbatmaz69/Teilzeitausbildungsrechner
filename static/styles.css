@@ -1272,6 +1272,7 @@ input.error,
 
     /* Verhindert Abschneiden */
     overflow: visible;
+    position: relative; /* Für absolute Positionierung des Language-Buttons */
   }
 
   /* Container-Regel für Startseite komplett überschreiben */
@@ -1468,15 +1469,15 @@ input.error,
     flex-direction: column;
     justify-content: center;
     overflow: visible;
-    position: relative;
   }
 
-  /* Language Switcher Desktop - oben rechts */
+  /* Language Switcher Desktop - unabhängig positioniert, am oberen Rand der Kalender-Umrandung */
   .language-switcher-desktop {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 17rem; /* Entspricht padding-top von startseite-desktop = oberster Punkt der Kalender-Umrandung */
+    right: 7rem; /* Entspricht padding-right von startseite-desktop */
     z-index: 10;
+    /* Unabhängig von anderen Elementen - wird nicht von Textlänge beeinflusst */
   }
 
   #lang-switcher-desktop {
