@@ -233,12 +233,12 @@ function fuelleEingabenliste(eingaben, berechnung) {
     liste.append(wrapper);
   }
 
-  // Verkürzungen hinzufügen, wenn vorhanden
+  // Verkürzungen hinzufügen (immer anzeigen, auch wenn keine vorhanden)
   const verkuerzungen = Array.isArray(eingaben.verkuerzungen)
     ? eingaben.verkuerzungen
     : [];
   
-  if (verkuerzungen.length > 0 && berechnung) {
+  if (berechnung) {
     const verkuerzungenWrapper = document.createElement("div");
     const verkuerzungenDt = document.createElement("dt");
     verkuerzungenDt.className = "verkuerzungen-label";
@@ -247,9 +247,16 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const verkuerzungenDd = document.createElement("dd");
     verkuerzungenDd.className = "verkuerzungen-content";
     
-    // Liste der Verkürzungsgründe
-    const verkuerzungenListe = document.createElement("ul");
-    verkuerzungenListe.className = "verkuerzungen-list";
+    // Warnhinweis-Element erstellen (wird später ggf. verwendet)
+    const warnhinweis = document.createElement("p");
+    warnhinweis.className = "error-message verkuerzungen-warning";
+    warnhinweis.id = "errorVerkuerzungenInListe";
+    warnhinweis.style.display = "none";
+    
+    if (verkuerzungen.length > 0) {
+      // Liste der Verkürzungsgründe
+      const verkuerzungenListe = document.createElement("ul");
+      verkuerzungenListe.className = "verkuerzungen-list";
 
   verkuerzungen.forEach((verkuerzung) => {
     const li = document.createElement("li");
@@ -297,14 +304,15 @@ function fuelleEingabenliste(eingaben, berechnung) {
       verkuerzungenListe.appendChild(li);
     });
     
-    verkuerzungenDd.appendChild(verkuerzungenListe);
-    
-    // Warnhinweis, falls nötig
-    const warnhinweis = document.createElement("p");
-    warnhinweis.className = "error-message verkuerzungen-warning";
-    warnhinweis.id = "errorVerkuerzungenInListe";
-    warnhinweis.style.display = "none";
-    verkuerzungenDd.appendChild(warnhinweis);
+      verkuerzungenDd.appendChild(verkuerzungenListe);
+      verkuerzungenDd.appendChild(warnhinweis);
+    } else {
+      // Keine Verkürzungen ausgewählt
+      const keineVerkuerzung = document.createElement("p");
+      keineVerkuerzung.className = "keine-verkuerzung";
+      keineVerkuerzung.textContent = uebersetzung("inputs.noShortening", "Keine Verkürzung ausgewählt");
+      verkuerzungenDd.appendChild(keineVerkuerzung);
+    }
     
     verkuerzungenWrapper.append(verkuerzungenDt, verkuerzungenDd);
     liste.append(verkuerzungenWrapper);

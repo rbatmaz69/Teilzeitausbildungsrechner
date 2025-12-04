@@ -33,6 +33,7 @@
     },
     "afterShortening": "Training duration after shortening",
     "inPartTime": "Training duration in part\u2011time",
+    "noShortening": "No reductions selected",
     "toggleHint": "Click to show / hide this section",
     "toggleLabel": "More Info",
     "toggleLabelOpen": "Less Info"

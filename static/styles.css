@@ -867,6 +867,7 @@ input.error,
 .verkuerzungen-warning {
   display: block;
   font-size: 0.9rem;
+  font-weight: normal;
   color: #19c530;
   margin: 0;
   margin-top: 0.5rem;

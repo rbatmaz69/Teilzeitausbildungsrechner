@@ -33,6 +33,7 @@
     },
     "afterShortening": "Ausbildungsdauer nach Verkürzung",
     "inPartTime": "Ausbildungsdauer in Teilzeit",
+    "noShortening": "Keine Verkürzung ausgewählt",
     "toggleHint": "Bereich zum Anzeigen / Schließen anklicken",
     "toggleLabel": "Mehr Infos",
     "toggleLabelOpen": "Weniger Infos"
