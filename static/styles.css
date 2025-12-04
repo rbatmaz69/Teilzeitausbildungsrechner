@@ -867,7 +867,7 @@ input.error,
 .verkuerzungen-warning {
   display: block;
   font-size: 0.9rem;
-  font-weight: normal;
+  font-weight: 600;
   color: #19c530;
   margin: 0;
   margin-top: 0.5rem;
@@ -1677,8 +1677,8 @@ input.error,
 
 /* Titel „Ihre Eingaben“ – groß und fett */
 .summary-title {
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: bold;
   flex: 1;
 }
 
