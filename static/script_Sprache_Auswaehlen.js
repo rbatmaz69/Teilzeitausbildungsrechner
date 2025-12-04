@@ -163,6 +163,38 @@
     await ladeUndWendeAn(startSprache);
     speichereSprache(startSprache);
 
+    // Konsistente Position des Desktop-Sprachwechslers über Engines hinweg
+    const switcherDesktopWrapper = document.querySelector(".language-switcher-desktop");
+
+    const positioniereDesktopSwitcher = () => {
+      if (!switcherDesktopWrapper) return;
+      // Fixe Referenz-Position: hält sich unabhängig von Textlängen/Layouts stabil
+      // Werte orientieren sich am Firefox-Layout (vorherige Overlay-Position)
+      const FIX_TOP = 100; // px, weiter nach oben (~100% zusätzlicher Versatz)
+      const FIX_RIGHT = 112; // px
+      switcherDesktopWrapper.style.top = `${FIX_TOP}px`;
+      switcherDesktopWrapper.style.right = `${FIX_RIGHT}px`;
+      switcherDesktopWrapper.style.position = "absolute";
+      switcherDesktopWrapper.style.zIndex = "10";
+    };
+
+    // Initial positionieren und bei verschiedenen Ereignissen neu berechnen
+    // 1) Direkt nach DOMContentLoaded
+    positioniereDesktopSwitcher();
+    // 2) Nach vollständigem Laden (inkl. Bilder/Fonts)
+    window.addEventListener("load", positioniereDesktopSwitcher);
+    // 3) Bei History/Page Cache (Chrome/Edge: bfcache)
+    window.addEventListener("pageshow", positioniereDesktopSwitcher);
+    // 4) Nach Fonts-Loading, da Typo-Metriken die Berechnung beeinflussen können
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(positioniereDesktopSwitcher).catch(() => {});
+    }
+    // 5) Bei Resize/Orientation
+    window.addEventListener("resize", positioniereDesktopSwitcher, { passive: true });
+    window.addEventListener("orientationchange", positioniereDesktopSwitcher);
+    // 6) Beobachte Layout-Änderungen in der Startseite (i18n-Updates etc.)
+    // Keine MutationObserver-Kopplung an Titel/Content – Position bleibt fix unabhängig vom Inhalt
+
     if (sprachAuswahl) {
       sprachAuswahl.addEventListener("change", async (ereignis) => {
         const neueSprache = ereignis.target.value;
