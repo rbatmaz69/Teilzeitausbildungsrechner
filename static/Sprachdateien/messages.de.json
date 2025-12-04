@@ -135,9 +135,9 @@
     "percentMax": "Der Wert darf maximal 100% betragen",
     "hoursMin": "Der Wert muss mindestens 50% der regulären Stunden betragen",
     "hoursMax": "Der Wert darf die regulären Wochenstunden nicht überschreiten",
-    "invalidCut": "Hinweis: Ihre gewählten Verkürzungsgründe ergeben zusammen mehr als 12 Monate. Die Gesamtverkürzung wird daher auf maximal 12 Monate begrenzt, wie vorgegeben.",
+    "invalidCut": "Hinweis: Ihre gewählten Verkürzungsgründe ergeben zusammen mehr als 12 Monate. Die Verkürzung wird daher auf maximal 12 Monate begrenzt.",
     "invalidCutShort": "Hinweis: Verkürzung auf max. 12 Monate begrenzt",
-    "regel8Abs3": "Hinweis: Nach § 8 Abs. 3 BBiG wurde die Ausbildungsdauer auf die Regelausbildungsdauer reduziert, da die Überschreitung maximal 6 Monate beträgt."
+    "regel8Abs3": "Hinweis: Da Ihre Teilzeitausbildung nur bis zu 6 Monate länger dauern würde, endet sie bereits nach der normalen Vollzeit-Ausbildungsdauer (§ 8 Abs. 3 BBiG)."
   },
   "btn": {
     "calculate": "Ergebnis anzeigen",
