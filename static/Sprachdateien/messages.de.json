@@ -10,6 +10,7 @@
   },
   "inputs": {
     "title": "Ihre Angaben",
+    "unitsLegend": "Std = Stunden, M = Monate",
     "dauer": {
       "label": "Wie lange dauert Ihre Ausbildung in Vollzeit?",
       "labelShort": "Ausbildung (Vollzeit)",

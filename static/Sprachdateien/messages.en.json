@@ -10,6 +10,7 @@
   },
   "inputs": {
     "title": "Your details",
+    "unitsLegend": "h = Hours, M = Months",
     "dauer": {
       "label": "How long is your training in full-time?",
       "labelShort": "Training (full-time)",
