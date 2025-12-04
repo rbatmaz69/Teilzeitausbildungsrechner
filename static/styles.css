@@ -867,7 +867,7 @@ input.error,
 .verkuerzungen-warning {
   display: block;
   font-size: 0.9rem;
-  color: #1963c5;
+  color: #19c530;
   margin: 0;
   margin-top: 0.5rem;
   text-align: left;
@@ -1698,12 +1698,12 @@ input.error,
   gap: 0.4rem;
   padding: 0.45rem 0.9rem;
   border-radius: 999px;
-  border: 2px solid #587dad;
-  background: #587dad;
+  border: 2px solid #873431;
+  background: #873431;
   color: #fff;
   font-size: 0.95rem;
   font-weight: 600;
-  box-shadow: 0 2px 6px #000;
+  box-shadow: 0 2px 6px #2b2828;
   transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -1722,15 +1722,15 @@ input.error,
 
 /* Hover-Effekt insgesamt */
 .inputs-collapsible > .summary-toggle:hover .summary-pill {
-  background: #1b6fe0;
+  background: #c60000;
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px #000;
+  box-shadow: 0 4px 10px #2b2828;
 }
 
 /* Wenn geöffnet – Hintergrund und Text ändern, Pfeil drehen, Label ändern */
 .inputs-collapsible[open] {
   background: #fff;
-  border-color: #d5e7ff;
+  border-color: #cb4c36;
 }
 
 .inputs-collapsible[open] .summary-icon {
@@ -1740,5 +1740,5 @@ input.error,
 .inputs-collapsible > dl {
   margin-top: 1rem;            
   padding-top: 1rem;             
-  border-top: 2px solid #d5e7ff; 
+  border-top: 2px solid #e08979; 
   }
