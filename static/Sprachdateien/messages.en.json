@@ -34,7 +34,8 @@
     "afterShortening": "Training duration after shortening",
     "inPartTime": "Training duration in part\u2011time",
     "toggleHint": "Click to show / hide this section",
-    "toggleLabel": "Expand"
+    "toggleLabel": "More Info",
+    "toggleLabelOpen": "Less Info"
   },
   "vk": {
     "heading": "Reasons for shorter training",

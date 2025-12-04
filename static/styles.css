@@ -1673,24 +1673,14 @@ input.error,
    display: none;
 }
 
-/* Linker Textblock (Titel + Hinweis) */
-.summary-text {
-  display: flex;
-  flex-direction: column;
-  gap: 1.0rem;
-}
 
 /* Titel „Ihre Eingaben“ – groß und fett */
 .summary-title {
   font-size: 1.4rem;
   font-weight: 700;
+  flex: 1;
 }
 
-/* Kleiner Hinweis-Text darunter */
-.summary-hint {
-  font-size: 0.9rem;
-  opacity: 0.8;
-}
 
 /* Rechter, großer "Button" fürs Auf-/Zuklappen */
 .summary-pill {
@@ -1705,9 +1695,7 @@ input.error,
   font-weight: 600;
   box-shadow: 0 2px 6px #2b2828;
   transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
-  align-self: flex-start;
-  margin-top: 0.5rem;
-  width: auto;
+  flex-shrink: 0;
 }
 
 /* Labeltext im Pill-Button */
@@ -1737,6 +1725,16 @@ input.error,
 
 .inputs-collapsible[open] .summary-icon {
   transform: rotate(90deg);
+}
+
+/* Button-Text ändern wenn geöffnet */
+.inputs-collapsible[open] .summary-pill-label {
+  font-size: 0; /* Original-Text ausblenden */
+}
+
+.inputs-collapsible[open] .summary-pill-label::before {
+  content: attr(data-label-open);
+  font-size: 0.8rem; /* Schriftgröße wiederherstellen */
 }
 
 .inputs-collapsible > dl {

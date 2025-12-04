@@ -34,7 +34,8 @@
     "afterShortening": "Ausbildungsdauer nach Verkürzung",
     "inPartTime": "Ausbildungsdauer in Teilzeit",
     "toggleHint": "Bereich zum Anzeigen / Schließen anklicken",
-    "toggleLabel": "Aufklappen"
+    "toggleLabel": "Mehr Infos",
+    "toggleLabelOpen": "Weniger Infos"
   },
   "vk": {
     "heading": "Gründe für eine kürzere Ausbildung",
