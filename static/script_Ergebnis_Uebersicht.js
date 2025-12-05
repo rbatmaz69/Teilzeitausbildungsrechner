@@ -818,6 +818,12 @@ function setzeDatenZurueck() {
     ergebnisContainer.hidden = true;
   }
   
+  // Rote Border von Ergebnis-Box entfernen
+  const highlightBox = document.querySelector(".card.highlight");
+  if (highlightBox) {
+    highlightBox.classList.remove("active");
+  }
+  
   // Gespeicherte Daten zurücksetzen
   LETZTE_EINGABEN = null;
   LETZTE_BERECHNUNG = null;
@@ -1037,6 +1043,12 @@ function initialisiere() {
         ergebnisContainer.hidden = false;
       }
       
+      // Rote Border zur Ergebnis-Box hinzufügen
+      const highlightBox = document.querySelector(".card.highlight");
+      if (highlightBox) {
+        highlightBox.classList.add("active");
+      }
+      
       // Ergebnisse anzeigen
       fuelleEingabenliste(gespeicherterZustand.eingaben, gespeicherterZustand.berechnung);
       fuelleErgebnisse(gespeicherterZustand.eingaben, gespeicherterZustand.berechnung);
@@ -1098,6 +1110,12 @@ async function berechnen() {
     ergebnisContainer.hidden = false;
     // Sanftes Scrollen zur Ergebnis-Sektion
     ergebnisContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  
+  // Rote Border zur Ergebnis-Box hinzufügen
+  const highlightBox = document.querySelector(".card.highlight");
+  if (highlightBox) {
+    highlightBox.classList.add("active");
   }
   
   try {
