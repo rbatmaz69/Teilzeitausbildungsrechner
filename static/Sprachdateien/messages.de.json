@@ -9,21 +9,21 @@
     "en": "🇬🇧 English"
   },
   "inputs": {
-    "title": "Ihre Angaben",
+    "title": "Ihre Berechnung",
     "unitsLegend": "Std = Stunden, M = Monate",
     "dauer": {
       "label": "Wie lange dauert Ihre Ausbildung in Vollzeit?",
-      "labelShort": "Ausbildung (Vollzeit)",
+      "labelShort": "Ausbildung in Vollzeit",
       "tooltip": "Angabe in Monaten (z.B. 36 Monate)"
     },
     "stunden": {
       "label": "Wie viele Stunden pro Woche hat die Ausbildung in Vollzeit?",
-      "labelShort": "Wochenstunden (Vollzeit)",
+      "labelShort": "Wochenstunden in Vollzeit",
       "tooltip": "Reguläre Wochenstunden der Ausbildung (inkl. Berufsschule)"
     },
     "teilzeit": {
       "label": "Wie viel der Vollzeit möchten Sie arbeiten?",
-      "labelShort": "Teilzeit",
+      "labelShort": "Teilzeitanteil",
       "tooltip": "Für eine Teilzeitausbildung müssen Sie mindestens 50 % arbeiten.",
       "percent": "Prozent",
       "hours": "Stunden"
@@ -31,8 +31,12 @@
     "verkuerzungen": {
       "labelShort": "Verkürzungen"
     },
-    "afterShortening": "Ausbildungsdauer nach Verkürzung",
-    "inPartTime": "Ausbildungsdauer in Teilzeit"
+    "afterShortening": "Dauer nach Verkürzung",
+    "inPartTime": "Dauer in Teilzeit",
+    "noShortening": "Keine Verkürzung ausgewählt",
+    "toggleHint": "Bereich zum Anzeigen / Schließen anklicken",
+    "toggleLabel": "Details anzeigen",
+    "toggleLabelOpen": "Details ausblenden"
   },
   "vk": {
     "heading": "Gründe für eine kürzere Ausbildung",
@@ -73,14 +77,15 @@
     "headline": "Ihre Teilzeitausbildung",
     "helper": "Hier sehen Sie Ihre Angaben und das Ergebnis.",
     "notesTitle": "Wichtige Hinweise",
-    "notes": "<li>Die Berechnung ist eine <strong>Hilfe</strong>.</li><li>Das Ergebnis ist <strong>nicht verbindlich</strong>.</li><li>Sprechen Sie das Ergebnis mit Ihrem Ausbildungsbetrieb ab.</li><li>Eine Teilzeitausbildung ist möglich, wenn Sie mindestens 50 % der normalen Zeit arbeiten.</li>",
+    "notes": "<li>Die Berechnung ist nur eine <strong>Hilfe</strong> und reine <strong>Orientierung</strong>.</li><li>Das Ergebnis ist <strong>nicht verbindlich</strong>.</li><li>Sprechen Sie das Ergebnis mit Ihrem Ausbildungsbetrieb ab.</li><li>Eine Teilzeitausbildung ist nur dann möglich, wenn Sie mindestens die hälfte der normalen Ausbildungszeit arbeiten.</li>",
     "kv": {
       "total": "Gesamtdauer",
       "schoolPerWeek": "Ausbildung pro Woche",
       "workPerWeek": "Arbeit pro Woche"
     },
     "extension": {
-      "label": "Automatische Verlängerung durch Teilzeit:",
+      "label1": "1. Verkürzung durch Verkürzungründe:",
+      "label2": "2. Verlängerung durch Teilzeit:",
       "plus": "+{n} Monate",
       "none": "Keine Verlängerung"
     },
@@ -101,7 +106,7 @@
       "full": "Stunden"
     },
     "months": {
-      "short": "Monate",
+      "short": "M",
       "full": "Monate"
     },
     "weeks": {
@@ -130,14 +135,14 @@
     "percentMax": "Der Wert darf maximal 100% betragen",
     "hoursMin": "Der Wert muss mindestens 50% der regulären Stunden betragen",
     "hoursMax": "Der Wert darf die regulären Wochenstunden nicht überschreiten",
-    "invalidCut": "Hinweis: Ihre gewählten Verkürzungsgründe ergeben zusammen mehr als 12 Monate. Die Gesamtverkürzung wird daher auf maximal 12 Monate begrenzt, wie vorgegeben.",
+    "invalidCut": "Hinweis: Ihre gewählten Verkürzungsgründe ergeben zusammen mehr als 12 Monate. Die Verkürzung wird daher auf maximal 12 Monate begrenzt.",
     "invalidCutShort": "Hinweis: Verkürzung auf max. 12 Monate begrenzt",
-    "regel8Abs3": "Hinweis: Nach § 8 Abs. 3 BBiG wurde die Ausbildungsdauer auf die Regelausbildungsdauer reduziert, da die Überschreitung maximal 6 Monate beträgt."
+    "regel8Abs3": "Hinweis: Da Ihre Teilzeitausbildung nur bis zu 6 Monate länger dauern würde, endet sie bereits nach der normalen Vollzeit-Ausbildungsdauer (§ 8 Abs. 3 BBiG)."
   },
   "btn": {
     "calculate": "Ergebnis anzeigen",
     "reset": "Zurücksetzen",
-    "share": "Link teilen"
+    "share": "Ergebnis teilen"
   },
   "share": {
     "title": "Teilzeitrechner – Ergebnis",

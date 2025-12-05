@@ -9,21 +9,21 @@
     "en": "🇬🇧 English"
   },
   "inputs": {
-    "title": "Your details",
-    "unitsLegend": "h = Hours, M = Months",
+    "title": "Your Calculation",
+    "unitsLegend": "h = hours, m = months",
     "dauer": {
       "label": "How long is your training in full-time?",
-      "labelShort": "Training (full-time)",
+      "labelShort": "Training in full-time",
       "tooltip": "Enter in months (e.g. 36 months)"
     },
     "stunden": {
       "label": "How many hours per week does the full-time training have?",
-      "labelShort": "Hours per week (full-time)",
+      "labelShort": "Hours per week in full-time",
       "tooltip": "Regular weekly hours of training (incl. vocational school)"
     },
     "teilzeit": {
       "label": "How much of full-time do you want to work?",
-      "labelShort": "Part-time",
+      "labelShort": "Part-time share",
       "tooltip": "For part-time training, you must work at least 50%.",
       "percent": "Percent",
       "hours": "Hours"
@@ -31,8 +31,12 @@
     "verkuerzungen": {
       "labelShort": "Reductions"
     },
-    "afterShortening": "Training duration after shortening",
-    "inPartTime": "Training duration in part\u2011time"
+    "afterShortening": "Duration after shortening",
+    "inPartTime": "Duration in part-time",
+    "noShortening": "No reductions selected",
+    "toggleHint": "Click to show / hide this section",
+    "toggleLabel": "Show Details",
+    "toggleLabelOpen": "Hide Details"
   },
   "vk": {
     "heading": "Reasons for shorter training",
@@ -48,9 +52,9 @@
       "question": "What is your highest level of school education?",
       "label": "School degree",
       "none": "No degree",
-      "hauptschule": "Lower secondary school",
-      "realschule": "Intermediate secondary school",
-      "abitur": "Abitur / university entrance qualification"
+      "hauptschule": "Lower secondary school (Hauptschule)",
+      "realschule": "Intermediate secondary school (Realschule)",
+      "abitur": "University entrance qualification (Abitur)"
     },
     "qual": {
       "question": "What professional qualifications do you have?"
@@ -73,14 +77,15 @@
     "headline": "Your part-time training",
     "helper": "Here you can see your details and the result.",
     "notesTitle": "Important information",
-    "notes": "<li>This calculation is only a <strong>help</strong>.</li><li>The result is <strong>not official</strong>.</li><li>Discuss the result with your training company.</li><li>Part-time training is possible if you work at least 50% of the normal time.</li>",
+    "notes": "<li>This calculation is only a <strong>help</strong> and an <strong>orientation</strong>.</li><li>The result is <strong>not binding</strong>.</li><li>Discuss the result with your training company.</li><li>Part-time training is only possible if you work at least half of the normal training hours.</li>",
     "kv": {
       "total": "Total time",
       "schoolPerWeek": "School per week",
       "workPerWeek": "Work per week"
     },
     "extension": {
-      "label": "Automatic extension due to part-time:",
+      "label1": "Shortening due to reasons for shorter training:",
+      "label2": "Extension due to part-time work:",
       "plus": "+{n} months",
       "none": "No extension"
     },
@@ -101,7 +106,7 @@
       "full": "hours"
     },
     "months": {
-      "short": "months",
+      "short": "m",
       "full": "months"
     },
     "weeks": {
@@ -130,14 +135,14 @@
     "percentMax": "The value must not exceed 100%",
     "hoursMin": "The value must be at least 50% of regular hours",
     "hoursMax": "The value must not exceed the regular weekly hours",
-    "invalidCut": "Note: Your selected reduction reasons add up to more than 12 months. The total reduction is therefore limited to a maximum of 12 months, as specified.",
+    "invalidCut": "Note: Your selected reduction reasons add up to more than 12 months. The reduction is therefore limited to a maximum of 12 months.",
     "invalidCutShort": "Note: Reduction limited to max. 12 months",
-    "regel8Abs3": "Note: According to § 8 para. 3 BBiG, the training duration was reduced to the standard training duration, as the excess is at most 6 months."
+    "regel8Abs3": "Note: Since your part-time training would only take up to 6 months longer, it ends after the normal full-time training duration (§ 8 para. 3 BBiG)."
   },
   "btn": {
     "calculate": "Show result",
     "reset": "Reset",
-    "share": "Share link"
+    "share": "Share result"
   },
   "share": {
     "title": "Part-Time Calculator – result",
