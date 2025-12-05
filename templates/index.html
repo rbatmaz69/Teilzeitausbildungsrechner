@@ -491,15 +491,28 @@
           <p class="result-years" id="res-total-years">–</p>
           <span class="error-message" id="errorTotalMonths" data-i18n="errors.placeholder"></span>
           
+          <!-- Verlängerungsanzeige: Ausbildung(Vollzeit) → Pfeil mit Verkürzungsdauer → Basis -->
+          <div class="result-extension-wrapper" id="res-shortening-wrapper" hidden>
+            <p class="result-extension-label" data-i18n="res.extension.label1">1. Verkürzung durch Verkürzungründe</p>
+            <div class="result-extension-values">
+              <span class="result-extension-basis" id="res-extension-vollzeit">–</span>
+              <div class="result-extension-arrow-wrapper">
+                <span class="result-extension-arrow">→</span>
+                <span class="result-extension-delta" id="res-extension-verkuerzungsdauer">+–</span>
+              </div>
+              <span class="result-extension-total" id="res-shortening-total">–</span>
+            </div>
+          </div>
+
           <!-- Verlängerungsanzeige: Basis → Pfeil mit Delta → Ziel -->
           <div class="result-extension-wrapper" id="res-extension-wrapper" hidden>
-            <p class="result-extension-label" data-i18n="res.extension.label">Automatische Verlängerung durch Teilzeit:</p>
+            <p class="result-extension-label" data-i18n="res.extension.label2">2. Verlängerung durch Teilzeit:</p>
             <div class="result-extension-values">
               <span class="result-extension-basis" id="res-extension-basis">–</span>
               <div class="result-extension-arrow-wrapper">
                 <span class="result-extension-arrow">→</span>
                 <span class="result-extension-delta" id="res-extension-delta">+–</span>
-        </div>
+              </div>
               <span class="result-extension-total" id="res-extension-total">–</span>
             </div>
           </div>
@@ -508,12 +521,25 @@
     </div>
 
     <!-- Karte: Alle Eingaben -->
-    <div class="card" aria-labelledby="inputs-title">
-      <h2 id="inputs-title" data-i18n="inputs.title">Ihre Eingaben</h2>
+    <details class="card-collapsible inputs-collapsible" id="inputs-section">
+      <summary class="summary-toggle">
+        <span class="summary-title" id="inputs-title" data-i18n="inputs.title">
+          Ihre Berechnung
+        </span>
+        <span class="summary-pill">
+          <span class="summary-pill-label" data-i18n="inputs.toggleLabel" data-i18n-open="inputs.toggleLabelOpen">
+            Details anzeigen
+          </span>
+          <span class="summary-icon">▸</span>
+        </span>
+      </summary>
+
       <dl class="kv" id="inputs-list">
-        <!-- Inhalte werden dynamisch per JS gefüllt -->
+        <!-- Inhalte per JS -->
       </dl>
-    </div>
+    </details>
+ 
+
 
     <!-- Karte: Hinweise -->
     <div class="card" aria-labelledby="notes-title">

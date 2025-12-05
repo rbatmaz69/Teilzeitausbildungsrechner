@@ -6,9 +6,7 @@ function setzeText(selektor, text) {
   const element = $(selektor);
   if (element) element.textContent = text;
 }
-function zeige(element) {
-  if (element) element.hidden = false;
-}
+
 function verberge(element) {
   if (element) element.hidden = true;
 }
@@ -213,15 +211,15 @@ function fuelleEingabenliste(eingaben, berechnung) {
   const zeilen = [
     [
       uebersetzung("inputs.dauer.labelShort", "Ausbildung (Vollzeit)"),
-      `${eingaben.basisMonate} M`
+      `${eingaben.basisMonate} ${uebersetzung("units.months.short", "M")}`
     ],
     [
       uebersetzung("inputs.stunden.labelShort", "Wochenstunden (Vollzeit)"),
-      `${eingaben.wochenstunden} ${uebersetzung("units.hours.short", "h")}`
+      `${eingaben.wochenstunden} ${uebersetzung("units.hours.short", "Std")}`
     ],
     [
       uebersetzung("inputs.teilzeit.labelShort", "Teilzeit"),
-      `${eingaben.teilzeitProzent}% <-> ${teilzeitStunden} ${uebersetzung("units.hours.short", "h")}`
+      `${eingaben.teilzeitProzent}% <-> ${teilzeitStunden} ${uebersetzung("units.hours.short", "Std")}`
     ]
   ];
 
@@ -235,12 +233,12 @@ function fuelleEingabenliste(eingaben, berechnung) {
     liste.append(wrapper);
   }
 
-  // Verkürzungen hinzufügen, wenn vorhanden
+  // Verkürzungen hinzufügen (immer anzeigen, auch wenn keine vorhanden)
   const verkuerzungen = Array.isArray(eingaben.verkuerzungen)
     ? eingaben.verkuerzungen
     : [];
   
-  if (verkuerzungen.length > 0 && berechnung) {
+  if (berechnung) {
     const verkuerzungenWrapper = document.createElement("div");
     const verkuerzungenDt = document.createElement("dt");
     verkuerzungenDt.className = "verkuerzungen-label";
@@ -249,9 +247,16 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const verkuerzungenDd = document.createElement("dd");
     verkuerzungenDd.className = "verkuerzungen-content";
     
-    // Liste der Verkürzungsgründe
-    const verkuerzungenListe = document.createElement("ul");
-    verkuerzungenListe.className = "verkuerzungen-list";
+    // Warnhinweis-Element erstellen (wird später ggf. verwendet)
+    const warnhinweis = document.createElement("p");
+    warnhinweis.className = "error-message verkuerzungen-warning";
+    warnhinweis.id = "errorVerkuerzungenInListe";
+    warnhinweis.style.display = "none";
+    
+    if (verkuerzungen.length > 0) {
+      // Liste der Verkürzungsgründe
+      const verkuerzungenListe = document.createElement("ul");
+      verkuerzungenListe.className = "verkuerzungen-list";
 
   verkuerzungen.forEach((verkuerzung) => {
     const li = document.createElement("li");
@@ -289,7 +294,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
         const valueSpan = document.createElement("span");
         valueSpan.className = "verkuerzung-value";
         // Einheitlich kurze Form "M" für alle Geräte
-        valueSpan.textContent = `${verkuerzung.months} M`;
+        valueSpan.textContent = `${verkuerzung.months} ${uebersetzung("units.months.short", "M")}`;
         
         li.appendChild(labelSpan);
         li.appendChild(valueSpan);
@@ -299,31 +304,15 @@ function fuelleEingabenliste(eingaben, berechnung) {
       verkuerzungenListe.appendChild(li);
     });
     
-    verkuerzungenDd.appendChild(verkuerzungenListe);
-    
-    // Summe aller Verkürzungen (unbegrenzt)
-    const summeAllerVerkuerzungen = document.createElement("div");
-    summeAllerVerkuerzungen.className = "verkuerzungen-summe";
-    const summeBeschriftung = uebersetzung("cuts.sumAll", "Summe aller Verkürzungen");
-    
-    const summeLabelSpan = document.createElement("span");
-    summeLabelSpan.className = "verkuerzung-label";
-    summeLabelSpan.textContent = `${summeBeschriftung}:`;
-    
-    const summeValueSpan = document.createElement("span");
-    summeValueSpan.className = "verkuerzung-value";
-    summeValueSpan.textContent = `${berechnung.gesamteVerkuerzungMonateOhneBegrenzung} M`;
-    
-    summeAllerVerkuerzungen.appendChild(summeLabelSpan);
-    summeAllerVerkuerzungen.appendChild(summeValueSpan);
-    verkuerzungenDd.appendChild(summeAllerVerkuerzungen);
-    
-    // Warnhinweis, falls nötig
-    const warnhinweis = document.createElement("p");
-    warnhinweis.className = "error-message verkuerzungen-warning";
-    warnhinweis.id = "errorVerkuerzungenInListe";
-    warnhinweis.style.display = "none";
-    verkuerzungenDd.appendChild(warnhinweis);
+      verkuerzungenDd.appendChild(verkuerzungenListe);
+      verkuerzungenDd.appendChild(warnhinweis);
+    } else {
+      // Keine Verkürzungen ausgewählt
+      const keineVerkuerzung = document.createElement("p");
+      keineVerkuerzung.className = "keine-verkuerzung";
+      keineVerkuerzung.textContent = uebersetzung("inputs.noShortening", "Keine Verkürzung ausgewählt");
+      verkuerzungenDd.appendChild(keineVerkuerzung);
+    }
     
     verkuerzungenWrapper.append(verkuerzungenDt, verkuerzungenDd);
     liste.append(verkuerzungenWrapper);
@@ -334,7 +323,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const nachVerkuerzungDt = document.createElement("dt");
     nachVerkuerzungDt.textContent = nachVerkuerzungBeschriftung;
     const nachVerkuerzungDd = document.createElement("dd");
-    nachVerkuerzungDd.textContent = `${berechnung.neueBasis} M`;
+    nachVerkuerzungDd.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.short", "M")}`;
     nachVerkuerzungWrapper.append(nachVerkuerzungDt, nachVerkuerzungDd);
     liste.append(nachVerkuerzungWrapper);
     
@@ -343,7 +332,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const inTeilzeitDt = document.createElement("dt");
     inTeilzeitDt.textContent = inTeilzeitBeschriftung;
     const inTeilzeitDd = document.createElement("dd");
-    inTeilzeitDd.className = "teilzeit-formula";
+    inTeilzeitDd.className = "teilzeit-formular";
     
     // Strukturiertes Format: Formel in separaten Elementen für Mobile/Desktop
     const formulaContainer = document.createElement("div");
@@ -352,12 +341,12 @@ function fuelleEingabenliste(eingaben, berechnung) {
     // Zeile 1: "24 M / 75%"
     const formulaLine1 = document.createElement("span");
     formulaLine1.className = "teilzeit-formula-line1";
-    formulaLine1.textContent = `${berechnung.neueBasis} M / ${eingaben.teilzeitProzent}%`;
+    formulaLine1.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.short", "M")} / ${eingaben.teilzeitProzent}%`;
     
     // Zeile 2: "= 48 M"
     const formulaLine2 = document.createElement("span");
     formulaLine2.className = "teilzeit-formula-line2";
-    formulaLine2.textContent = `= ${berechnung.gesamtMonate} M`;
+    formulaLine2.textContent = ` = ${berechnung.gesamtMonate} ${uebersetzung("units.months.short", "M")}`;
     
     formulaContainer.appendChild(formulaLine1);
     formulaContainer.appendChild(formulaLine2);
@@ -385,12 +374,15 @@ function fuelleEingabenliste(eingaben, berechnung) {
     warnhinweis8Abs3.style.display = "block";
     liste.appendChild(warnhinweis8Abs3);
   }
-  
-  // Legende für Abkürzungen hinzufügen
+
+  // Einheiten-Legende
   const legende = document.createElement("p");
   legende.className = "units-legend";
-  legende.textContent = uebersetzung("inputs.unitsLegend", "Std = Stunden, M = Monate");
-  liste.append(legende);
+  legende.textContent = uebersetzung(
+    "inputs.unitsLegend",
+    "Std = Stunden, M = Monate"
+  );
+  liste.appendChild(legende);
 }
 
 /**
@@ -400,55 +392,150 @@ function fuelleEingabenliste(eingaben, berechnung) {
  * @param {Object} berechnung - Kernzahlen der Berechnung (Monate, Wochen, Stunden).
  */
 function fuelleErgebnisse(eingaben, berechnung) {
-  // Zahl + Einheit lokalisiert
-  const monateWort = uebersetzung("units.months.full", "Monate");
-  setzeText("#res-total-months", `${berechnung.gesamtMonate} ${monateWort}`);
+ if (!berechnung) return;
 
-  // Jahre-Anzeige
-  const jahreElement = $("#res-total-years");
-  if (jahreElement && berechnung.gesamtJahre) {
-    const jahreWort = uebersetzung("units.years.full", "Jahre");
-    setzeText("#res-total-years", `≈ ${berechnung.gesamtJahre} ${jahreWort}`);
-  }
+  // --- Haupt-Ergebnis: Gesamtmonate / -jahre ---
+  const totalMonths =
+    typeof berechnung.gesamtMonate === "number"
+      ? berechnung.gesamtMonate
+      : null;
 
-  // Validierungen mit i18n-Texten
-  if (berechnung.gesamtMonate < eingaben.basisMonate - 12) {
-    setzeText(
-      "#errorTotalMonths",
-      uebersetzung(
-        "errors.tooShort",
-        "Die Gesamtdauer darf maximal um 12 Monate verkürzt werden!"
-      )
-    );
-  } else if (berechnung.gesamtMonate > eingaben.basisMonate * 1.5) {
-    setzeText(
-      "#errorTotalMonths",
-      uebersetzung(
-        "errors.tooLong",
-        "Die Gesamtdauer darf maximal das 1,5-fache verlängert werden!"
-      )
-    );
+  const totalYears =
+    typeof berechnung.gesamtJahre === "number"
+      ? berechnung.gesamtJahre
+      : null;
+
+  // Monate mit Einheit ("32 Monate" / "32 months")
+  if (totalMonths !== null) {
+    const unitMonths = uebersetzung("units.months.full", "Monate");
+    setzeText("#res-total-months", `${totalMonths} ${unitMonths}`);
   } else {
-    setzeText("#errorTotalMonths", "");
+    setzeText("#res-total-months", "–");
   }
 
-  // Verlängerungsanzeige: Basis → Pfeil mit Delta → Ziel
-  const extensionWrapper = $("#res-extension-wrapper");
-  if (extensionWrapper) {
-    if (berechnung.verlaengerungMonate > 0) {
-      zeige(extensionWrapper);
-      const monateWort = uebersetzung("units.months.short", "Mon.");
-      
-      // Basis (verkürzte Dauer)
-      setzeText("#res-extension-basis", `${berechnung.neueBasis} ${monateWort}`);
-      
-      // Finale Dauer
-      setzeText("#res-extension-total", `${berechnung.gesamtMonate} ${monateWort}`);
+  // Jahre mit Einheit, lokal formatiert ("2,7 Jahre" / "2.7 years")
+  if (totalYears !== null) {
+    const sprache = aktuelleSprache();
+    const formatter = new Intl.NumberFormat(
+      sprache === "en" ? "en-US" : "de-DE",
+      { minimumFractionDigits: 0, maximumFractionDigits: 1 }
+    );
+    const formattedYears = formatter.format(totalYears);
+    const unitYears = uebersetzung("units.years.full", "Jahre");
+    setzeText("#res-total-years", `${formattedYears} ${unitYears}`);
+  } else {
+    setzeText("#res-total-years", "–");
+  }
 
-      // Delta (Verlängerung) - nur als Zahl unter dem Pfeil
-      setzeText("#res-extension-delta", `+${berechnung.verlaengerungMonate}`);
+  const errorTotalMonths = $("#errorTotalMonths");
+  if (errorTotalMonths) {
+    errorTotalMonths.textContent = "";
+  }
+
+  // --- 1. Block: Verkürzung durch Verkürzungsgründe ---
+  const shorteningWrapper = document.getElementById("res-shortening-wrapper");
+  if (shorteningWrapper) {
+    const vollzeitMonate =
+      typeof eingaben?.basisMonate === "number"
+        ? eingaben.basisMonate
+        : undefined;
+    const verkuerzungMonate =
+      typeof berechnung.gesamteVerkuerzungMonate === "number"
+        ? berechnung.gesamteVerkuerzungMonate
+        : undefined;
+    const basisNachVerkuerzung =
+      typeof berechnung.neueBasis === "number"
+        ? berechnung.neueBasis
+        : undefined;
+
+    if (
+      typeof vollzeitMonate === "number" &&
+      typeof verkuerzungMonate === "number" &&
+      typeof basisNachVerkuerzung === "number"
+    ) {
+      // z.B. "36 Monate"
+      setzeText(
+        "#res-extension-vollzeit",
+        `${vollzeitMonate} ${uebersetzung("units.months.full", "Monate")}`
+      );
+
+      // z.B. "-6 Monate"
+      const vorzeichen = verkuerzungMonate > 0 ? "-" : "";
+      setzeText(
+        "#res-extension-verkuerzungsdauer",
+        `${vorzeichen}${Math.abs(
+          verkuerzungMonate
+        )} ${uebersetzung("units.months.short", "M")}`
+      );
+
+      // z.B. "30 Monate"
+      setzeText(
+        "#res-shortening-total",
+        `${basisNachVerkuerzung} ${uebersetzung(
+          "units.months.full",
+          "Monate"
+        )}`
+      );
+
+      shorteningWrapper.hidden = false;
     } else {
-      verberge(extensionWrapper);
+      // Falls keine Daten → Block ausblenden und Platzhalter setzen
+      shorteningWrapper.hidden = true;
+      setzeText("#res-extension-vollzeit", "–");
+      setzeText("#res-extension-verkuerzungsdauer", "+–");
+      setzeText("#res-shortening-total", "–");
+    }
+  }
+
+  // --- 2. Block: Verlängerung durch Teilzeit ---
+  const extensionWrapper = document.getElementById("res-extension-wrapper");
+  if (extensionWrapper) {
+    // Basis für Teilzeit ist deine neue Basis (nach Verkürzung)
+    const basisMonate =
+      typeof berechnung.neueBasis === "number"
+        ? berechnung.neueBasis
+        : undefined;
+
+    const teilzeitDelta =
+      typeof berechnung.verlaengerungMonate === "number"
+        ? berechnung.verlaengerungMonate
+        : undefined;
+
+    const zielMonate = totalMonths;
+
+    if (
+      typeof basisMonate === "number" &&
+      typeof teilzeitDelta === "number" &&
+      typeof zielMonate === "number"
+    ) {
+      // z.B. "30 Monate"
+      setzeText(
+        "#res-extension-basis",
+        `${basisMonate} ${uebersetzung("units.months.full", "Monate")}`
+      );
+
+      // z.B. "+12 Monate"
+      const sign = teilzeitDelta >= 0 ? "+" : "";
+      setzeText(
+        "#res-extension-delta",
+        `${sign}${teilzeitDelta} ${uebersetzung(
+          "units.months.short",
+          "M"
+        )}`
+      );
+
+      // z.B. "42 Monate"
+      setzeText(
+        "#res-extension-total",
+        `${zielMonate} ${uebersetzung("units.months.full", "Monate")}`
+      );
+
+      extensionWrapper.hidden = false;
+    } else {
+      extensionWrapper.hidden = true;
+      setzeText("#res-extension-basis", "–");
+      setzeText("#res-extension-delta", "+–");
+      setzeText("#res-extension-total", "–");
     }
   }
 }
@@ -699,10 +786,27 @@ function setzeDatenZurueck() {
   // Ergebnisse zurücksetzen
   setzeText("#res-total-months", "–");
   setzeText("#res-total-years", "–");
+
+  const shorteningWrapper = document.getElementById("res-shortening-wrapper");
+  if (shorteningWrapper) {
+    shorteningWrapper.hidden = true;
+  }
+  setzeText("#res-extension-vollzeit", "–");
+  setzeText("#res-extension-verkuerzungsdauer", "+–");
+  setzeText("#res-shortening-total", "–");
+
   const extensionWrapper = $("#res-extension-wrapper");
-  if (extensionWrapper) verberge(extensionWrapper);
+  if (extensionWrapper) {
+    verberge(extensionWrapper); // hattest du schon
+  }
+  setzeText("#res-extension-basis", "–");
+  setzeText("#res-extension-delta", "+–");
+  setzeText("#res-extension-total", "–");
+
   const errorTotalMonths = $("#errorTotalMonths");
-  if (errorTotalMonths) errorTotalMonths.textContent = "";
+  if (errorTotalMonths) {
+    errorTotalMonths.textContent = "";
+  }
   
   // Eingabenliste leeren
   const inputsList = $("#inputs-list");
@@ -712,6 +816,12 @@ function setzeDatenZurueck() {
   const ergebnisContainer = document.getElementById("ergebnis-container");
   if (ergebnisContainer) {
     ergebnisContainer.hidden = true;
+  }
+  
+  // Rote Border von Ergebnis-Box entfernen
+  const highlightBox = document.querySelector(".card.highlight");
+  if (highlightBox) {
+    highlightBox.classList.remove("active");
   }
   
   // Gespeicherte Daten zurücksetzen
@@ -933,6 +1043,12 @@ function initialisiere() {
         ergebnisContainer.hidden = false;
       }
       
+      // Rote Border zur Ergebnis-Box hinzufügen
+      const highlightBox = document.querySelector(".card.highlight");
+      if (highlightBox) {
+        highlightBox.classList.add("active");
+      }
+      
       // Ergebnisse anzeigen
       fuelleEingabenliste(gespeicherterZustand.eingaben, gespeicherterZustand.berechnung);
       fuelleErgebnisse(gespeicherterZustand.eingaben, gespeicherterZustand.berechnung);
@@ -994,6 +1110,12 @@ async function berechnen() {
     ergebnisContainer.hidden = false;
     // Sanftes Scrollen zur Ergebnis-Sektion
     ergebnisContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  
+  // Rote Border zur Ergebnis-Box hinzufügen
+  const highlightBox = document.querySelector(".card.highlight");
+  if (highlightBox) {
+    highlightBox.classList.add("active");
   }
   
   try {
