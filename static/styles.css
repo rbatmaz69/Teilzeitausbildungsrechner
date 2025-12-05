@@ -337,6 +337,7 @@ button.preset {
   box-shadow: var(--shadow);
   transition: all 0.2s ease;
   font-size: 0.95rem;
+  -webkit-tap-highlight-color: transparent;
 }
 
 button.preset:hover {
@@ -388,8 +389,9 @@ button.berechnen {
   padding: 12px 32px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out, transform 0.05s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: background-color 0.15s ease-out, transform 0.15s ease-out, box-shadow 0.15s ease-in-out;
   box-shadow: 0 6px 20px rgb(224 0 0 / 25%);
+  -webkit-tap-highlight-color: transparent;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -404,8 +406,8 @@ button.berechnen:hover {
 
 button.berechnen:active {
   background-color: #c60000;
-  transform: translateY(0);
-  box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
 }
 
 button.berechnen:focus-visible {
@@ -1149,8 +1151,9 @@ input.error,
   padding: 14px 32px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out, transform 0.05s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: background-color 0.15s ease-out, transform 0.15s ease-out, box-shadow 0.15s ease-in-out;
   box-shadow: 0 6px 20px rgb(224 0 0 / 25%);
+  -webkit-tap-highlight-color: transparent;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1165,8 +1168,8 @@ input.error,
 
 .btn-start-calculate:active {
   background-color: #c60000;
-  transform: translateY(0);
-  box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
 }
 
 .btn-start-calculate:focus-visible {
@@ -1707,12 +1710,14 @@ input.error,
 .summary-pill {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.45rem 0.9rem;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.75rem;
+  min-width: 10rem;
   border-radius: 999px;
   background: var(--primary);
   color: #fff;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: bold;
   box-shadow: 0 6px 20px rgb(224 0 0 / 25%);
   transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
@@ -1723,7 +1728,7 @@ input.error,
 .summary-pill-label {
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
 }
 
 /* Pfeil-Icon */
@@ -1732,20 +1737,29 @@ input.error,
    transition: transform 0.25s ease;
 }
 
-/* Hover-Effekt insgesamt */
-.inputs-collapsible > .summary-toggle:hover .summary-pill {
+/* Hover-Effekt nur auf Button */
+.summary-toggle {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.summary-toggle:hover .summary-pill {
   background: #a90000;
   transform: translateY(-1px);
   box-shadow: 0 8px 24px rgb(0 0 0 / 15%);
 }
 
-.inputs-collapsible > .summary-toggle:active .summary-pill {
+.summary-toggle:active .summary-pill {
   background-color: #c60000;
   transform: translateY(0);
   box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
 }
 
-.inputs-collapsible > .summary-toggle:focus-visible .summary-pill {
+.summary-toggle:focus-visible {
+  outline: none;
+}
+
+.summary-toggle:focus-visible .summary-pill {
   outline: 3px solid #a5b4fc;
   outline-offset: 2px;
 }
@@ -1767,7 +1781,7 @@ input.error,
 
 .inputs-collapsible[open] .summary-pill-label::before {
   content: attr(data-label-open);
-  font-size: 0.8rem; /* Schriftgröße wiederherstellen */
+  font-size: 0.75rem; /* Schriftgröße wiederherstellen */
 }
 
 .inputs-collapsible > dl {
