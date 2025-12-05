@@ -237,3 +237,141 @@ test.describe('Validation: English Language Tests', () => {
     await expect(page.locator('#errorProzent')).toContainText('at least 50%');
   });
 });
+
+// ============================================================================
+// MOBILE VALIDATION TESTS
+// ============================================================================
+
+test.describe('Mobile Validation: Ausbildungsdauer', () => {
+  
+  test.beforeEach(async ({ page }) => {
+    // iPhone 13 viewport
+    await page.setViewportSize({ width: 390, height: 844 });
+  });
+  
+  test('Mobile: Minimum 24 Monate wird erzwungen bei blur', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // Setze ungültigen Wert unter Minimum
+    await page.fill('#dauer', '10');
+    
+    // Blur triggern (auf anderes Feld klicken)
+    await clickButton(page, '#stunden');
+    
+    // Wert sollte auf 24 korrigiert sein
+    await expect(page.locator('#dauer')).toHaveValue('24');
+    
+    // Fehlermeldung sollte angezeigt werden
+    await expect(page.locator('#errorDauer')).toBeVisible();
+    await expect(page.locator('#errorDauer')).toContainText('mindestens 24 Monate');
+  });
+
+  test('Mobile: Maximum 42 Monate wird sofort erzwungen', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // Setze ungültigen Wert über Maximum
+    await page.fill('#dauer', '60');
+    
+    // Warte kurz (Validierung läuft)
+    await page.waitForTimeout(100);
+    
+    // Wert sollte auf 42 korrigiert sein
+    await expect(page.locator('#dauer')).toHaveValue('42');
+  });
+});
+
+test.describe('Mobile Validation: Wochenstunden', () => {
+  
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+  });
+  
+  test('Mobile: Minimum 10 Stunden wird erzwungen', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // Setze ungültigen Wert
+    await page.fill('#stunden', '5');
+    await clickButton(page, '#dauer');
+    await page.waitForTimeout(100);
+    
+    // Wert sollte auf 10 korrigiert sein
+    await expect(page.locator('#stunden')).toHaveValue('10');
+    
+    // Fehlermeldung sollte angezeigt werden
+    await expect(page.locator('#errorRegularStunden')).toContainText('mindestens 10 Stunden');
+  });
+
+  test('Mobile: Maximum 48 Stunden wird sofort erzwungen', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // Setze ungültigen Wert über Maximum
+    await page.fill('#stunden', '60');
+    await page.waitForTimeout(100);
+    
+    // Wert sollte auf 48 korrigiert sein
+    await expect(page.locator('#stunden')).toHaveValue('48');
+  });
+});
+
+test.describe('Mobile Validation: Teilzeit-Prozent', () => {
+  
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+  });
+  
+  test('Mobile: Minimum 50% wird erzwungen bei manueller Eingabe', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // Aktiviere Teilzeit-Feld über Preset-Button
+    await clickButton(page, '[data-value="75"][data-type="percent"]');
+    
+    // Setze ungültigen Wert
+    await page.fill('#teilzeitProzent', '30');
+    await clickButton(page, '#dauer');
+    await page.waitForTimeout(100);
+    
+    // Wert sollte auf 50 korrigiert sein
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('50');
+    
+    // Fehlermeldung sollte angezeigt werden
+    await expect(page.locator('#errorProzent')).toContainText('mindestens 50%');
+  });
+
+  test('Mobile: Maximum 100% wird erzwungen', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // Aktiviere Teilzeit-Feld
+    await clickButton(page, '[data-value="75"][data-type="percent"]');
+    
+    // Setze ungültigen Wert
+    await page.fill('#teilzeitProzent', '150');
+    await page.waitForTimeout(100);
+    
+    // Wert sollte auf 100 korrigiert sein
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('100');
+  });
+});
+
+test.describe('Mobile Validation: Fehler verschwinden nach 4 Sekunden', () => {
+  
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+  });
+  
+  test('Mobile: Fehlermeldung verschwindet automatisch', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // Trigger error by setting invalid value
+    await page.fill('#dauer', '10');
+    await clickButton(page, '#stunden');
+    
+    // Error should be visible
+    await expect(page.locator('#errorDauer')).toBeVisible();
+    
+    // Wait for error to disappear (4 seconds + buffer)
+    await page.waitForTimeout(4500);
+    
+    // Error should be hidden
+    await expect(page.locator('#errorDauer')).toBeHidden();
+  });
+});

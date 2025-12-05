@@ -347,3 +347,133 @@ test.describe('Error Scenarios: English Language Tests', () => {
     await expect(page.locator('#res-total-months')).toContainText('48');
   });
 });
+
+// ============================================================================
+// MOBILE ERROR SCENARIOS TESTS
+// ============================================================================
+
+test.describe('Mobile: Edge Cases Grenzwerte', () => {
+  
+  test.beforeEach(async ({ page }) => {
+    // iPhone 13 viewport
+    await page.setViewportSize({ width: 390, height: 844 });
+  });
+  
+  test('Mobile: Teilzeit 50% mit Verkürzung ergibt max 1.5x Regel', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // Minimale Dauer 24 Monate
+    await page.fill('#dauer', '24');
+    
+    // Explizit 50% über Button setzen
+    await clickButton(page, '[data-type="percent"][data-value="50"]');
+    
+    // Berechnen
+    await clickButton(page, '#berechnenBtn');
+    
+    // Warte auf Ergebnis
+    await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
+    
+    // Ergebnis: 24 * 2 = 48, aber max 1.5x Obergrenze = 24 * 1.5 = 36 Monate
+    await expect(page.locator('#res-total-months')).toContainText('36');
+  });
+
+  test('Mobile: Maximum Dauer 42 mit minimum Teilzeit 50%', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // Maximum Dauer
+    await page.fill('#dauer', '42');
+    
+    // Minimum Teilzeit 50% über Button setzen
+    await clickButton(page, '[data-type="percent"][data-value="50"]');
+    
+    // Berechnen
+    await clickButton(page, '#berechnenBtn');
+    
+    // Warte auf Ergebnis
+    await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
+    
+    // Ergebnis: 42 * 2 = 84, aber max 1.5x Obergrenze = 42 * 1.5 = 63 Monate
+    await expect(page.locator('#res-total-months')).toContainText('63');
+  });
+
+  test('Mobile: 51% Teilzeit (knapp über Minimum)', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // Setze manuelle Prozente
+    await clickButton(page, '[data-type="percent"][data-value="75"]');
+    await page.fill('#teilzeitProzent', '51');
+    
+    // Berechnen
+    await clickButton(page, '#berechnenBtn');
+    
+    // Warte auf Ergebnis
+    await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
+    
+    // Ergebnis: 36 / 0.51 ≈ 70.5 → 70 Monate (abgerundet)
+    // ABER: max 1.5x = 54M
+    await expect(page.locator('#res-total-months')).toContainText('54');
+  });
+
+  test('Mobile: 99% Teilzeit (knapp unter Maximum)', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // Setze manuelle Prozente
+    await clickButton(page, '[data-type="percent"][data-value="75"]');
+    await page.fill('#teilzeitProzent', '99');
+    
+    // Berechnen
+    await clickButton(page, '#berechnenBtn');
+    
+    // Warte auf Ergebnis
+    await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
+    
+    // Ergebnis: 36 / 0.99 ≈ 36.36 → 36 Monate (abgerundet)
+    await expect(page.locator('#res-total-months')).toContainText('36');
+  });
+});
+
+test.describe('Mobile: Business Rules Verkürzungen', () => {
+  
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+  });
+  
+  test('Mobile: Maximale Verkürzung 12 Monate bei Abitur', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // Vollzeit 100% (sonst ist Default 75%)
+    await page.fill('#teilzeitProzent', '100');
+    
+    // Wähle Abitur (12 Monate)
+    await page.selectOption('#vk-school-select', 'abitur');
+    
+    // Berechnen
+    await clickButton(page, '#berechnenBtn');
+    
+    // Warte auf Ergebnis
+    await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
+    
+    // Ergebnis: 36 - 12 = 24 Monate
+    await expect(page.locator('#res-total-months')).toContainText('24');
+  });
+
+  test('Mobile: Teilzeit 75% mit Abitur: (36-12) * 100/75 = 32 Monate', async ({ page }) => {
+    await gotoCalculator(page);
+    
+    // Teilzeit 75% über Preset-Button
+    await clickButton(page, '[data-type="percent"][data-value="75"]');
+    
+    // Wähle Abitur (12 Monate)
+    await page.selectOption('#vk-school-select', 'abitur');
+    
+    // Berechnen
+    await clickButton(page, '#berechnenBtn');
+    
+    // Warte auf Ergebnis
+    await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
+    
+    // Ergebnis: (36 - 12) * 100/75 = 24 * 1.33... = 32 Monate
+    await expect(page.locator('#res-total-months')).toContainText('32');
+  });
+});
