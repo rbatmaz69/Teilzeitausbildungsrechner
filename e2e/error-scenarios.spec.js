@@ -305,3 +305,45 @@ test.describe('Input Validation: Ungültige Zeichen', () => {
     expect(parseInt(value)).toBeGreaterThanOrEqual(24);
   });
 });
+
+test.describe('Error Scenarios: English Language Tests', () => {
+  
+  /**
+   * Helper für englische Tests
+   */
+  async function gotoCalculatorEnglish(page) {
+    await page.goto('/');
+    await page.evaluate(() => localStorage.setItem('lang', 'en'));
+    await page.reload();
+    
+    await page.waitForLoadState('networkidle');
+    await page.waitForSelector('#dauer', { state: 'visible', timeout: 10000 });
+    await page.locator('#dauer').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(300);
+  }
+  
+  async function clickButton(page, selector) {
+    await page.locator(selector).scrollIntoViewIfNeeded();
+    await page.click(selector);
+  }
+  
+  test('Part-time 50% with shortening in English', async ({ page }) => {
+    await gotoCalculatorEnglish(page);
+    
+    // Set part-time to 50%
+    await page.click('[data-value="50"][data-type="percent"]');
+    
+    // Add Abitur shortening
+    await page.selectOption('#vk-school-select', 'abitur');
+    
+    // Calculate
+    await clickButton(page, '#berechnenBtn');
+    
+    // Wait for result
+    await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
+    
+    // Check: (36 - 12) * 100/50 = 48 months
+    // Note: Shortening is applied BEFORE part-time multiplication
+    await expect(page.locator('#res-total-months')).toContainText('48');
+  });
+});

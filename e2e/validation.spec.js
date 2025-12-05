@@ -12,17 +12,31 @@ import { test, expect } from '@playwright/test';
 
 /**
  * Helper: Navigiert zur Seite und wartet bis Formular geladen ist
+ * Setzt Sprache IMMER auf Deutsch um Race Conditions zwischen parallel laufenden Tests zu vermeiden
  */
 async function gotoCalculator(page) {
   await page.goto('/');
+  
+  // Setze Sprache explizit auf Deutsch (wichtig wegen parallel laufender Tests!)
   await page.evaluate(() => localStorage.setItem('lang', 'de'));
   await page.reload();
   
   // Warte bis Seite komplett geladen ist
   await page.waitForLoadState('networkidle');
   
+  // Warte auf das Formular
   await page.waitForSelector('#dauer', { state: 'visible', timeout: 10000 });
   await page.locator('#dauer').scrollIntoViewIfNeeded();
+  
+  // Zusätzliche Sicherheit: Warte bis deutsche Übersetzungen geladen sind
+  // Prüfe ob die Sprache wirklich auf Deutsch ist durch Warten auf deutschen Text
+  await page.waitForFunction(() => {
+    const langValue = localStorage.getItem('lang');
+    return langValue === 'de';
+  }, { timeout: 5000 });
+  
+  // Kurze Pause um sicherzustellen dass i18n vollständig geladen ist
+  await page.waitForTimeout(300);
 }
 
 /**
@@ -164,5 +178,62 @@ test.describe('Validierung: Fehler verschwinden nach 4 Sekunden', () => {
     
     // Fehler sollte verschwunden sein
     await expect(page.locator('#errorDauer')).toBeEmpty();
+  });
+});
+
+test.describe('Validation: English Language Tests', () => {
+  
+  /**
+   * Helper für englische Tests
+   */
+  async function gotoCalculatorEnglish(page) {
+    await page.goto('/');
+    await page.evaluate(() => localStorage.setItem('lang', 'en'));
+    await page.reload();
+    
+    await page.waitForLoadState('networkidle');
+    await page.waitForSelector('#dauer', { state: 'visible', timeout: 10000 });
+    await page.locator('#dauer').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(300);
+  }
+  
+  async function clickButton(page, selector) {
+    await page.locator(selector).scrollIntoViewIfNeeded();
+    await page.click(selector);
+  }
+  
+  test('Minimum 24 months validation in English', async ({ page }) => {
+    await gotoCalculatorEnglish(page);
+    
+    // Set invalid value below minimum
+    await page.fill('#dauer', '10');
+    
+    // Trigger blur
+    await clickButton(page, '#stunden');
+    
+    // Should be corrected to 24
+    await expect(page.locator('#dauer')).toHaveValue('24');
+    
+    // Check English error message
+    await expect(page.locator('#errorDauer')).toBeVisible();
+    await expect(page.locator('#errorDauer')).toContainText('at least 24 months');
+  });
+  
+  test('Minimum 50% part-time validation in English', async ({ page }) => {
+    await gotoCalculatorEnglish(page);
+    
+    // Activate part-time
+    await clickButton(page, '[data-value="75"][data-type="percent"]');
+    
+    // Set too low percentage
+    await page.fill('#teilzeitProzent', '30');
+    await clickButton(page, '#dauer');
+    await page.waitForTimeout(100);
+    
+    // Should be corrected to 50
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('50');
+    
+    // Check English error message
+    await expect(page.locator('#errorProzent')).toContainText('at least 50%');
   });
 });

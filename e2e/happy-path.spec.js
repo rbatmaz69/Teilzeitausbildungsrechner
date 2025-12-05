@@ -222,6 +222,57 @@ test.describe('Happy Path: Sprachwechsel', () => {
   });
 });
 
+test.describe('Happy Path: English Language Tests', () => {
+  
+  /**
+   * Helper für englische Tests
+   */
+  async function gotoCalculatorEnglish(page) {
+    await page.goto('/');
+    await page.evaluate(() => localStorage.setItem('lang', 'en'));
+    await page.reload();
+    
+    await page.waitForLoadState('networkidle');
+    await page.waitForSelector('#dauer', { state: 'visible', timeout: 10000 });
+    await page.locator('#dauer').scrollIntoViewIfNeeded();
+    
+    // Warte bis englische Übersetzungen geladen sind
+    await page.waitForTimeout(300);
+  }
+  
+  test('Full-time calculation in English: 36 months', async ({ page }) => {
+    await gotoCalculatorEnglish(page);
+    
+    // Verify English is loaded
+    await expect(page.locator('.startseite-title-accent').first()).toContainText('part-time training');
+    
+    // Set 100% (full-time)
+    await page.click('#teilzeitProzent');
+    await page.fill('#teilzeitProzent', '100');
+    
+    // Calculate
+    await page.locator('#berechnenBtn').scrollIntoViewIfNeeded();
+    await page.click('#berechnenBtn');
+    
+    // Check result: 36 months
+    await expect(page.locator('#res-total-months')).toContainText('36');
+  });
+  
+  test('Part-time 75% calculation in English: 48 months', async ({ page }) => {
+    await gotoCalculatorEnglish(page);
+    
+    // Click 75% preset button
+    await page.click('[data-value="75"][data-type="percent"]');
+    
+    // Calculate
+    await page.locator('#berechnenBtn').scrollIntoViewIfNeeded();
+    await page.click('#berechnenBtn');
+    
+    // Check result: 36 * 100/75 = 48 months
+    await expect(page.locator('#res-total-months')).toContainText('48');
+  });
+});
+
 test.describe('Happy Path: Reset-Button', () => {
   
   test('Reset-Button setzt alle Felder zurück', async ({ page }) => {
