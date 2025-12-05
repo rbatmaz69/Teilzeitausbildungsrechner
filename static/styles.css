@@ -1682,6 +1682,12 @@ input.error,
   margin-bottom: var(--space-3);  
 }
 
+/* Hover-Effekt nur auf Button */
+.summary-toggle {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Summary als großer Click-Bereich */
 .inputs-collapsible > .summary-toggle {
   display: flex;
@@ -1736,12 +1742,6 @@ input.error,
 .summary-icon {
   font-size: 1.1rem;
    transition: transform 0.25s ease;
-}
-
-/* Hover-Effekt nur auf Button */
-.summary-toggle {
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
 }
 
 .summary-toggle:hover .summary-pill {
