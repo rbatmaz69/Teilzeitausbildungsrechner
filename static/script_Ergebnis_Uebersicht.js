@@ -346,7 +346,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
     // Zeile 2: "= 48 M"
     const formulaLine2 = document.createElement("span");
     formulaLine2.className = "teilzeit-formula-line2";
-    formulaLine2.textContent = `= ${berechnung.gesamtMonate} ${uebersetzung("units.months.short", "M")}`;
+    formulaLine2.textContent = ` = ${berechnung.gesamtMonate} ${uebersetzung("units.months.short", "M")}`;
     
     formulaContainer.appendChild(formulaLine1);
     formulaContainer.appendChild(formulaLine2);

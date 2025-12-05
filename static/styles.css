@@ -635,8 +635,8 @@ input.error,
 }
 
 .result-extension-label {
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 700;
   color: var(--text);
   margin-bottom: var(--space-2);
 }
@@ -709,7 +709,6 @@ input.error,
   word-break: normal; /* Wörter werden nicht getrennt, bleiben immer zusammen */
   overflow-wrap: normal; /* Umbrechen nur zwischen Wörtern, nicht innerhalb */
   min-width: 0; /* Ermöglicht Umbrechen in Grid */
-  max-width: calc(100% - 5rem); /* Standard: Begrenzt Breite, damit Text früher umbricht */
 }
 
 /* Firefox-spezifische Anpassung: wie Safari - Metriken sollen nicht umbrechen */
@@ -722,7 +721,6 @@ input.error,
   }
   
   .kv dt {
-    max-width: calc(100% - 5rem); /* Gleiche max-width wie Standard */
     word-break: normal; /* Wörter bleiben immer zusammen in Firefox */
     overflow-wrap: normal; /* Umbrechen nur zwischen Wörtern, nicht innerhalb */
   }
@@ -746,12 +744,7 @@ input.error,
   }
 }
 
-/* Safari-spezifische Anpassung: früheres Umbrechen für bessere Abstände */
-@supports (-webkit-appearance: none) {
-  .kv dt {
-    max-width: calc(100% - 5.5rem); /* Etwas aggressiver für Safari, damit "Teilzeit" früher umbricht */
-  }
-}
+
 
 .kv dd{
   margin: 0;
@@ -773,7 +766,7 @@ input.error,
 /* Teilzeit-Formel: Mobile = vertikal, Desktop = horizontal */
 .teilzeit-formula-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 0.25rem;
 }
 
@@ -783,8 +776,16 @@ input.error,
   font-variant-numeric: tabular-nums;
 }
 
-.teilzeit-formula-line2 {
-  text-align: right;
+/* Auf sehr kleinen Bildschirmen auf zwei Zeilen umbrechen */
+@media (width < 400px) {
+  .teilzeit-formula-container {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .teilzeit-formula-line2 {
+    text-align: right;
+  }
 }
 
 .kv-2col{
@@ -921,12 +922,6 @@ input.error,
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-  }
-
-  /* Teilzeit-Formel: Auf Desktop in einer Zeile */
-  .teilzeit-formula-container {
-    flex-direction: row;
-    gap: 0.5rem;
   }
 }
 

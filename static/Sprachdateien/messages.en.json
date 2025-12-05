@@ -13,17 +13,17 @@
     "unitsLegend": "h = hours, m = months",
     "dauer": {
       "label": "How long is your training in full-time?",
-      "labelShort": "Training (full-time)",
+      "labelShort": "Training in full-time",
       "tooltip": "Enter in months (e.g. 36 months)"
     },
     "stunden": {
       "label": "How many hours per week does the full-time training have?",
-      "labelShort": "Hours per week (full-time)",
+      "labelShort": "Hours per week in full-time",
       "tooltip": "Regular weekly hours of training (incl. vocational school)"
     },
     "teilzeit": {
       "label": "How much of full-time do you want to work?",
-      "labelShort": "Part-time",
+      "labelShort": "Part-time share",
       "tooltip": "For part-time training, you must work at least 50%.",
       "percent": "Percent",
       "hours": "Hours"
@@ -31,8 +31,8 @@
     "verkuerzungen": {
       "labelShort": "Reductions"
     },
-    "afterShortening": "Training duration after shortening",
-    "inPartTime": "Training duration in part\u2011time",
+    "afterShortening": "Duration after shortening",
+    "inPartTime": "Duration in part-time",
     "noShortening": "No reductions selected",
     "toggleHint": "Click to show / hide this section",
     "toggleLabel": "Show Details",
@@ -52,9 +52,9 @@
       "question": "What is your highest level of school education?",
       "label": "School degree",
       "none": "No degree",
-      "hauptschule": "Lower secondary school",
-      "realschule": "Intermediate secondary school",
-      "abitur": "Abitur / university entrance qualification"
+      "hauptschule": "Lower secondary school (Hauptschule)",
+      "realschule": "Intermediate secondary school (Realschule)",
+      "abitur": "University entrance qualification (Abitur)"
     },
     "qual": {
       "question": "What professional qualifications do you have?"
