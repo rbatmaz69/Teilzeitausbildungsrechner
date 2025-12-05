@@ -94,6 +94,13 @@
       });
     });
 
+    // Setze data-label-open für Elemente mit data-i18n-open
+    document.querySelectorAll("[data-i18n-open]").forEach((element) => {
+      const schluessel = element.dataset.i18nOpen;
+      const wert = aufloesung(woerterbuch, schluessel);
+      if (wert != null) element.setAttribute("data-label-open", String(wert));
+    });
+
     // Synchronisiere beide Sprachumschalter (Mobile und Desktop)
     const sprachAuswahl = document.getElementById("lang-switcher");
     const sprachAuswahlDesktop = document.getElementById("lang-switcher-desktop");
