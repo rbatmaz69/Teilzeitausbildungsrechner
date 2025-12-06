@@ -520,6 +520,19 @@ input:not([type="checkbox"], [type="radio"]), select {
   appearance: none;
 }
 
+input:not([type="checkbox"], [type="radio"])::placeholder,
+select::placeholder {
+  color: #999;
+  opacity: 1;
+}
+
+/* Firefox spezifisch */
+input:not([type="checkbox"], [type="radio"]):-ms-input-placeholder,
+select:-ms-input-placeholder {
+  color: #999;
+  opacity: 1;
+}
+
 .input-with-unit input {
   padding-right: 1.8rem;
 }

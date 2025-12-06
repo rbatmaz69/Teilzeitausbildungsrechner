@@ -726,10 +726,12 @@ function setzeDatenZurueck() {
   const dauerInput = document.getElementById("dauer");
   const stundenInput = document.getElementById("stunden");
   const teilzeitProzentInput = document.getElementById("teilzeitProzent");
+  const teilzeitStundenInput = document.getElementById("teilzeitStunden");
   
-  if (dauerInput) dauerInput.value = "36";
-  if (stundenInput) stundenInput.value = "40";
-  if (teilzeitProzentInput) teilzeitProzentInput.value = "75";
+  if (dauerInput) dauerInput.value = "";
+  if (stundenInput) stundenInput.value = "";
+  if (teilzeitProzentInput) teilzeitProzentInput.value = "";
+  if (teilzeitStundenInput) teilzeitStundenInput.value = "";
   
   // Checkboxes für Verkürzungsgründe zurücksetzen
   const checkboxes = document.querySelectorAll('input[type="checkbox"][data-vk-field]');
