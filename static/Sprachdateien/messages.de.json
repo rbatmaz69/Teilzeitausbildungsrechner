@@ -75,6 +75,13 @@
       "yes": "Ja",
       "no": "Nein",
       "sr": "Wenn Sie über 21 Jahre alt sind, können Vorerfahrungen angerechnet werden."
+    },
+    "infoBox": {
+      "button": "Was ist das?",
+      "buttonAria": "Informationen zu Verkürzungsgründen anzeigen",
+      "closeAria": "Modal schließen",
+      "title": "Was sind Verkürzungsgründe?",
+      "content": "<p><strong>Verkürzungsgründe</strong> sind Umstände oder Qualifikationen, die es ermöglichen, die reguläre Ausbildungsdauer zu verkürzen. Dies kann Ihnen helfen, Ihre Ausbildung schneller abzuschließen.</p><p><strong>Wie werden sie angewendet?</strong></p><p>Verkürzungsgründe werden auf die reguläre Ausbildungsdauer angerechnet. Je nach Art des Grundes können unterschiedliche Verkürzungen gewährt werden. Die Verkürzungen werden addiert, bis ein Maximum erreicht ist.</p><p><strong>Wie viele gleichzeitig möglich?</strong></p><p>Sie können <strong>mehrere Verkürzungsgründe gleichzeitig</strong> angeben. Die Gesamtverkürzung wird aus allen gewählten Gründen berechnet. Beachten Sie jedoch, dass es eine maximale Verkürzung gibt, die nicht überschritten werden kann.</p>"
     }
   },
   "res": {

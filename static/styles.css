@@ -1729,6 +1729,290 @@ input.error,
   }
 }
 
+/* ==========================================
+   "WAS IST DAS?" INFORMATIONSBOX
+   ========================================== */
+
+/* Row für Info-Button und Helper-Text */
+.vk-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.vk-info-row #vk-helper {
+  flex: 1;
+  margin: 0;
+}
+
+/* Button "Was ist das?" */
+.vk-info-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  margin: 0;
+  background: var(--card-bg);
+  border: 2px solid var(--primary);
+  border-radius: var(--radius-sm);
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgb(224 0 0 / 10%);
+  flex-shrink: 0;
+}
+
+.vk-info-btn:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgb(224 0 0 / 20%);
+}
+
+.vk-info-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgb(224 0 0 / 15%);
+}
+
+.vk-info-btn:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.vk-info-btn-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Modal Overlay */
+.vk-info-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.vk-info-modal:not([hidden]) {
+  opacity: 1;
+  visibility: visible;
+}
+
+.vk-info-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgb(0 0 0 / 50%);
+  backdrop-filter: blur(4px);
+}
+
+/* Modal Content */
+.vk-info-content {
+  position: relative;
+  z-index: 1001;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 25%);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: scale(0.95);
+  transition: transform 0.2s ease;
+  border: 2px solid var(--primary);
+}
+
+.vk-info-modal:not([hidden]) .vk-info-content {
+  transform: scale(1);
+}
+
+/* Close Button */
+.vk-info-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 1002;
+  padding: 0;
+}
+
+.vk-info-close:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  transform: rotate(90deg);
+}
+
+.vk-info-close:active {
+  transform: rotate(90deg) scale(0.95);
+}
+
+.vk-info-close:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.vk-info-close-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+/* Modal Header */
+.vk-info-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  padding-right: 3.5rem;
+  border-bottom: 2px solid var(--border);
+  background: linear-gradient(180deg, #fff, #f9fbff);
+}
+
+.vk-info-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgb(224 0 0 / 20%);
+}
+
+.vk-info-icon-text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.vk-info-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Modal Body */
+.vk-info-body {
+  padding: var(--space-5);
+}
+
+.vk-info-body p {
+  margin: 0 0 var(--space-3) 0;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.vk-info-body p:last-child {
+  margin-bottom: 0;
+}
+
+.vk-info-body strong {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.vk-info-body ul {
+  margin: var(--space-3) 0;
+  padding-left: 1.5rem;
+  list-style: disc;
+}
+
+.vk-info-body li {
+  margin-bottom: var(--space-2);
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.vk-info-body li:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive Design */
+@media (width >= 600px) {
+  .vk-info-content {
+    max-width: 700px;
+  }
+
+  .vk-info-title {
+    font-size: 1.75rem;
+  }
+}
+
+@media (width >= 900px) {
+  .vk-info-content {
+    max-width: 800px;
+  }
+
+  .vk-info-header {
+    padding: var(--space-6);
+    padding-right: 4rem;
+  }
+
+  .vk-info-body {
+    padding: var(--space-6);
+  }
+
+  .vk-info-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .vk-info-icon svg {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Prevent body scroll when modal is open */
+body.modal-open {
+  overflow: hidden;
+}
+
 /* Container für den ausklappbaren "Ihre Angaben" Bereich in der Ergebnisübersciht */
 .inputs-collapsible {
   border-radius: 1rem;

@@ -72,6 +72,13 @@
       "yes": "Yes",
       "no": "No",
       "sr": "If you are over 21, previous experience can be credited."
+    },
+    "infoBox": {
+      "button": "What is this?",
+      "buttonAria": "Show information about reduction reasons",
+      "closeAria": "Close modal",
+      "title": "What are reduction reasons?",
+      "content": "<p><strong>Reduction reasons</strong> are circumstances or qualifications that allow you to shorten the regular training duration. This can help you complete your training faster.</p><p><strong>How are they applied?</strong></p><p>Reduction reasons are credited to the regular training duration. Depending on the type of reason, different reductions may be granted. The reductions are added together until a maximum is reached.</p><p><strong>How many can be used simultaneously?</strong></p><p>You can specify <strong>multiple reduction reasons simultaneously</strong>. The total reduction is calculated from all selected reasons. However, note that there is a maximum reduction that cannot be exceeded.</p>"
     }
   },
   "res": {
