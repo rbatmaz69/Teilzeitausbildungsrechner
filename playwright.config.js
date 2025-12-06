@@ -22,8 +22,8 @@ export default defineConfig({
   // CI: Retry bei Failure (vermeidet flaky tests)
   retries: process.env.CI ? 2 : 0,
   
-  // CI: Nur 1 Worker (Resource-Limit), lokal: alle Cores
-  workers: process.env.CI ? 1 : undefined,
+  // CI: 4 Workers für parallele Ausführung, lokal: alle Cores
+  workers: process.env.CI ? 4 : undefined,
   
   // Reporter: HTML-Report für CI, List für lokal
   reporter: process.env.CI ? 'html' : 'list',
