@@ -386,10 +386,15 @@
       Gründe für eine kürzere Ausbildung
     </h1>
 
-    <div class="row">
+    <div class="row vk-info-row">
       <p id="vk-helper" data-i18n="vk.helper" class="muted-text d-none">
         Wähle alles aus, was zu dir passt.
       </p>
+      <!-- "Was ist das?" Button -->
+      <button id="vk-info-btn" class="vk-info-btn" type="button" aria-label="Informationen zu Verkürzungsgründen anzeigen" data-i18n="vk.infoBox.button" data-i18n-attr="aria-label:vk.infoBox.buttonAria">
+        <span class="vk-info-btn-icon" aria-hidden="true">ℹ</span>
+        <span data-i18n="vk.infoBox.button">Was ist das?</span>
+      </button>
     </div>
 
     <form id="vk-form" class="space-y-3">
@@ -608,6 +613,25 @@
         </button>
       </fieldset>
     </form>
+
+    <!-- Modal für "Was ist das?" Informationsbox -->
+    <div id="vk-info-modal" class="vk-info-modal" role="dialog" aria-modal="true" aria-labelledby="vk-info-title" hidden>
+      <div class="vk-info-overlay"></div>
+      <div class="vk-info-content">
+        <button class="vk-info-close" type="button" aria-label="Modal schließen" data-i18n-attr="aria-label:vk.infoBox.closeAria">
+          <span class="vk-info-close-icon" aria-hidden="true">×</span>
+        </button>
+        <div class="vk-info-header">
+          <div class="vk-info-icon" aria-hidden="true">
+            <span class="vk-info-icon-text">ℹ</span>
+          </div>
+          <h2 id="vk-info-title" class="vk-info-title" data-i18n="vk.infoBox.title">Was sind Verkürzungsgründe?</h2>
+        </div>
+        <div class="vk-info-body">
+          <div data-i18n="vk.infoBox.content" data-i18n-html="true"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Ergebnisanzeige -->

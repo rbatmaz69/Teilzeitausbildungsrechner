@@ -63,4 +63,104 @@ document.addEventListener('DOMContentLoaded', () => {
       keineFamiliärenVerpflichtungen.checked = false;
     }
   }
+
+  /* ========== "Was ist das?" Modal ========== */
+  const infoButton = document.getElementById('vk-info-btn');
+  const infoModal = document.getElementById('vk-info-modal');
+  const infoCloseButton = infoModal?.querySelector('.vk-info-close');
+  const infoOverlay = infoModal?.querySelector('.vk-info-overlay');
+  const infoContent = infoModal?.querySelector('.vk-info-content');
+  let previousActiveElement = null;
+
+  if (!infoButton || !infoModal) return;
+
+  /**
+   * Öffnet das Modal und setzt den Focus auf den ersten fokussierbaren Element.
+   */
+  function oeffneModal() {
+    previousActiveElement = document.activeElement;
+    infoModal.removeAttribute('hidden');
+    document.body.classList.add('modal-open');
+    
+    // Focus auf den Close-Button setzen
+    setTimeout(() => {
+      infoCloseButton?.focus();
+    }, 100);
+  }
+
+  /**
+   * Schließt das Modal und gibt den Focus zurück.
+   */
+  function schliesseModal() {
+    infoModal.setAttribute('hidden', '');
+    document.body.classList.remove('modal-open');
+    
+    // Focus zurück auf den Button setzen
+    if (previousActiveElement) {
+      previousActiveElement.focus();
+      previousActiveElement = null;
+    }
+  }
+
+  /**
+   * Prüft, ob ein Klick außerhalb des Modal-Contents war.
+   */
+  function istKlickAusserhalb(event) {
+    return infoContent && !infoContent.contains(event.target);
+  }
+
+  // Button-Klick: Modal öffnen
+  infoButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    oeffneModal();
+  });
+
+  // Close-Button: Modal schließen
+  infoCloseButton?.addEventListener('click', (event) => {
+    event.preventDefault();
+    schliesseModal();
+  });
+
+  // Overlay-Klick: Modal schließen
+  infoOverlay?.addEventListener('click', (event) => {
+    if (istKlickAusserhalb(event)) {
+      schliesseModal();
+    }
+  });
+
+  // Escape-Taste: Modal schließen
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !infoModal.hasAttribute('hidden')) {
+      schliesseModal();
+    }
+  });
+
+  // Focus-Trap: Verhindert, dass Focus außerhalb des Modals geht
+  function handleTabKey(event) {
+    if (infoModal.hasAttribute('hidden')) return;
+
+    const focusableElements = infoModal.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (event.key === 'Tab') {
+      if (event.shiftKey) {
+        // Shift + Tab
+        if (document.activeElement === firstElement) {
+          event.preventDefault();
+          lastElement?.focus();
+        }
+      } else {
+        // Tab
+        if (document.activeElement === lastElement) {
+          event.preventDefault();
+          firstElement?.focus();
+        }
+      }
+    }
+  }
+
+  infoModal.addEventListener('keydown', handleTabKey);
 });
