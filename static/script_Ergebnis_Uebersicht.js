@@ -211,15 +211,15 @@ function fuelleEingabenliste(eingaben, berechnung) {
   const zeilen = [
     [
       uebersetzung("inputs.dauer.labelShort", "Ausbildung (Vollzeit)"),
-      `${eingaben.basisMonate} ${uebersetzung("units.months.short", "M")}`
+      `${eingaben.basisMonate} ${uebersetzung("units.months.full", "Monate")}`
     ],
     [
       uebersetzung("inputs.stunden.labelShort", "Wochenstunden (Vollzeit)"),
-      `${eingaben.wochenstunden} ${uebersetzung("units.hours.short", "Std")}`
+      `${eingaben.wochenstunden} ${uebersetzung("units.hours.full", "Stunden")}`
     ],
     [
       uebersetzung("inputs.teilzeit.labelShort", "Teilzeit"),
-      `${eingaben.teilzeitProzent}% <-> ${teilzeitStunden} ${uebersetzung("units.hours.short", "Std")}`
+      `${eingaben.teilzeitProzent}% <-> ${teilzeitStunden} ${uebersetzung("units.hours.full", "Stunden")}`
     ]
   ];
 
@@ -293,8 +293,8 @@ function fuelleEingabenliste(eingaben, berechnung) {
         
         const valueSpan = document.createElement("span");
         valueSpan.className = "verkuerzung-value";
-        // Einheitlich kurze Form "M" für alle Geräte
-        valueSpan.textContent = `${verkuerzung.months} ${uebersetzung("units.months.short", "M")}`;
+        // Einheitlich vollständige Form "Monate" für alle Geräte
+        valueSpan.textContent = `${verkuerzung.months} ${uebersetzung("units.months.full", "Monate")}`;
         
         li.appendChild(labelSpan);
         li.appendChild(valueSpan);
@@ -323,7 +323,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const nachVerkuerzungDt = document.createElement("dt");
     nachVerkuerzungDt.textContent = nachVerkuerzungBeschriftung;
     const nachVerkuerzungDd = document.createElement("dd");
-    nachVerkuerzungDd.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.short", "M")}`;
+    nachVerkuerzungDd.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.full", "Monate")}`;
     nachVerkuerzungWrapper.append(nachVerkuerzungDt, nachVerkuerzungDd);
     liste.append(nachVerkuerzungWrapper);
     
@@ -338,15 +338,15 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const formulaContainer = document.createElement("div");
     formulaContainer.className = "teilzeit-formula-container";
     
-    // Zeile 1: "24 M / 75%"
+    // Zeile 1: "24 Monate / 75%"
     const formulaLine1 = document.createElement("span");
     formulaLine1.className = "teilzeit-formula-line1";
-    formulaLine1.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.short", "M")} / ${eingaben.teilzeitProzent}%`;
+    formulaLine1.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.full", "Monate")} / ${eingaben.teilzeitProzent}%`;
     
-    // Zeile 2: "= 48 M"
+    // Zeile 2: "= 48 Monate"
     const formulaLine2 = document.createElement("span");
     formulaLine2.className = "teilzeit-formula-line2";
-    formulaLine2.textContent = ` = ${berechnung.gesamtMonate} ${uebersetzung("units.months.short", "M")}`;
+    formulaLine2.textContent = ` = ${berechnung.gesamtMonate} ${uebersetzung("units.months.full", "Monate")}`;
     
     formulaContainer.appendChild(formulaLine1);
     formulaContainer.appendChild(formulaLine2);
@@ -465,7 +465,7 @@ function fuelleErgebnisse(eingaben, berechnung) {
         "#res-extension-verkuerzungsdauer",
         `${vorzeichen}${Math.abs(
           verkuerzungMonate
-        )} ${uebersetzung("units.months.short", "M")}`
+        )} ${uebersetzung("units.months.full", "Monate")}`
       );
 
       // z.B. "30 Monate"
@@ -519,8 +519,8 @@ function fuelleErgebnisse(eingaben, berechnung) {
       setzeText(
         "#res-extension-delta",
         `${sign}${teilzeitDelta} ${uebersetzung(
-          "units.months.short",
-          "M"
+          "units.months.full",
+          "Monate"
         )}`
       );
 

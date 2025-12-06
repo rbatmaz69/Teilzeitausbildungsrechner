@@ -736,7 +736,7 @@ document.addEventListener("DOMContentLoaded", () => {
     buttons.forEach(btn => {
       if (btn.dataset.type === "hours") {
         const wert = btn.dataset.value;
-        const einheit = uebersetzung("units.hours.short", "h");
+        const einheit = uebersetzung("units.hours.full", "Stunden");
         btn.textContent = `${wert} ${einheit}`;
       }
     });
