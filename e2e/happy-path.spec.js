@@ -214,8 +214,8 @@ test.describe('Happy Path: Sprachwechsel', () => {
     // Wechsle zu Englisch (Desktop-Ansicht in Playwright)
     await page.selectOption('#lang-switcher-desktop', 'en');
     
-    // Warte kurz auf Übersetzung
-    await page.waitForTimeout(500);
+    // Warte auf Übersetzung (i18n braucht Zeit)
+    await page.waitForTimeout(1000);
     
     // Prüfe englische Überschrift
     await expect(page.locator('.startseite-title-accent').first()).toContainText('part-time training');
@@ -541,8 +541,8 @@ test.describe('Mobile Tests: Happy Path', () => {
     // Blur Event auslösen
     await clickButtonMobile(page, '#dauer');
     
-    // Kurz warten
-    await page.waitForTimeout(100);
+    // Warte auf Validierung
+    await page.waitForTimeout(200);
     
     // Wert wird auf 50 korrigiert
     await expect(page.locator('#teilzeitProzent')).toHaveValue('50');
@@ -569,8 +569,8 @@ test.describe('Mobile Tests: Happy Path', () => {
     // Wechsle zu Englisch mit MOBILE Switcher
     await page.selectOption('#lang-switcher', 'en');
     
-    // Warte kurz auf Übersetzung
-    await page.waitForTimeout(500);
+    // Warte auf Übersetzung (i18n braucht Zeit)
+    await page.waitForTimeout(1000);
     
     // Prüfe englische Überschrift
     await expect(page.locator('.startseite-title-accent').first()).toContainText('part-time training');

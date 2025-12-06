@@ -72,8 +72,8 @@ test.describe('Validierung: Ausbildungsdauer', () => {
     // Setze ungültigen Wert über Maximum
     await page.fill('#dauer', '60');
     
-    // Warte kurz (Validierung läuft)
-    await page.waitForTimeout(100);
+    // Warte auf Validierung
+    await page.waitForTimeout(200);
     
     // Wert sollte auf 42 korrigiert sein
     await expect(page.locator('#dauer')).toHaveValue('42');
@@ -115,7 +115,7 @@ test.describe('Validierung: Wochenstunden', () => {
     
     // Setze ungültigen Wert
     await page.fill('#stunden', '60');
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(200);
     
     // Korrigiert auf 48
     await expect(page.locator('#stunden')).toHaveValue('48');
@@ -153,7 +153,7 @@ test.describe('Validierung: Teilzeit-Prozent', () => {
     
     // Setze ungültigen Wert
     await page.fill('#teilzeitProzent', '150');
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(200);
     
     // Sollte auf 100 korrigiert sein
     await expect(page.locator('#teilzeitProzent')).toHaveValue('100');
@@ -228,7 +228,7 @@ test.describe('Validation: English Language Tests', () => {
     // Set too low percentage
     await page.fill('#teilzeitProzent', '30');
     await clickButton(page, '#dauer');
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(200);
     
     // Should be corrected to 50
     await expect(page.locator('#teilzeitProzent')).toHaveValue('50');
@@ -292,7 +292,7 @@ test.describe('Mobile Validation: Wochenstunden', () => {
     // Setze ungültigen Wert
     await page.fill('#stunden', '5');
     await clickButton(page, '#dauer');
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(200);
     
     // Wert sollte auf 10 korrigiert sein
     await expect(page.locator('#stunden')).toHaveValue('10');
@@ -306,7 +306,7 @@ test.describe('Mobile Validation: Wochenstunden', () => {
     
     // Setze ungültigen Wert über Maximum
     await page.fill('#stunden', '60');
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(200);
     
     // Wert sollte auf 48 korrigiert sein
     await expect(page.locator('#stunden')).toHaveValue('48');
@@ -328,7 +328,7 @@ test.describe('Mobile Validation: Teilzeit-Prozent', () => {
     // Setze ungültigen Wert
     await page.fill('#teilzeitProzent', '30');
     await clickButton(page, '#dauer');
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(200);
     
     // Wert sollte auf 50 korrigiert sein
     await expect(page.locator('#teilzeitProzent')).toHaveValue('50');
@@ -345,7 +345,7 @@ test.describe('Mobile Validation: Teilzeit-Prozent', () => {
     
     // Setze ungültigen Wert
     await page.fill('#teilzeitProzent', '150');
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(200);
     
     // Wert sollte auf 100 korrigiert sein
     await expect(page.locator('#teilzeitProzent')).toHaveValue('100');
