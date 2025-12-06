@@ -6,7 +6,9 @@
  */
 document.addEventListener('DOMContentLoaded', () => {
   const alter = document.getElementById('alter');
-
+  const kinder = document.getElementById('kinderbetreuung');
+  const pflege = document.getElementById('pflege');
+  const keineFamiliärenVerpflichtungen = document.getElementById('keineFamiliaerenVerpflichtungen');
 
   /* ========== Tooltips (touch-optimiert) ========== */
   document.querySelectorAll('.info-btn').forEach(schaltflaeche => {
@@ -43,4 +45,22 @@ document.addEventListener('DOMContentLoaded', () => {
       alter.value = null;
     }
   });
+
+  // Ereignis-Listener für familiäre Verpflichtungen
+  kinder.addEventListener("change", familiaereVerpflichtungAusgewaehlt);
+  pflege.addEventListener("change", familiaereVerpflichtungAusgewaehlt);
+
+  keineFamiliärenVerpflichtungen.addEventListener("change", () => {
+    if (keineFamiliärenVerpflichtungen.checked) {
+      kinder.checked = false;
+      pflege.checked = false;
+    };
+  })
+
+  // Logik für familiäre Verpflichtungen
+  function familiaereVerpflichtungAusgewaehlt() {
+    if (kinder.checked || pflege.checked) {
+      keineFamiliärenVerpflichtungen.checked = false;
+    }
+  }
 });
