@@ -205,11 +205,36 @@ document.addEventListener("DOMContentLoaded", () => {
     inp.addEventListener('input', () => {
       let wert = inp.value.replace(',', '.'); // Komma zu Punkt konvertieren
       wert = wert.replace(/[^0-9.]/g, ''); // Nur Ziffern und Punkt erlauben
+      const endetMitPunkt = wert.endsWith('.');
       
       // Nur ein Dezimalpunkt erlauben
-      const teile = wert.split('.');
+      let teile = wert.split('.');
       if (teile.length > 2) {
         wert = teile[0] + '.' + teile.slice(1).join('');
+        teile = wert.split('.');
+      }
+
+      // Vorkommateil auf maximal 3 Stellen begrenzen
+      let vorkomma = teile[0] || '';
+      let nachkomma = teile.length > 1 ? teile[1] : null;
+
+      if (vorkomma.length > 3) {
+        vorkomma = vorkomma.slice(0, 3);
+      }
+
+      // Maximal eine Nachkommastelle zulassen (sofern vorhanden)
+      if (nachkomma !== null && nachkomma.length > 1) {
+        nachkomma = nachkomma.slice(0, 1);
+      }
+
+      if (nachkomma !== null) {
+        wert = `${vorkomma}.${nachkomma}`;
+        // Punkt behalten, falls Nutzer gerade einen Dezimalpunkt gesetzt hat
+        if (nachkomma === '' && endetMitPunkt) {
+          wert = `${vorkomma}.`;
+        }
+      } else {
+        wert = vorkomma;
       }
       
       inp.value = wert;
@@ -218,7 +243,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Wird ausgeführt, nachdem eine neue Ausbildungsdauer eingegeben wurde (blur für manuelle Eingabe)
   dauerEingabe.addEventListener("blur", () => {
-    const ausbildungsdauer = parseInt(dauerEingabe.value);
+    let ausbildungsdauer = parseFloat(dauerEingabe.value);
+
+    // Monate stets auf ganze Zahl runden
+    if (!isNaN(ausbildungsdauer)) {
+      ausbildungsdauer = Math.round(ausbildungsdauer);
+      dauerEingabe.value = ausbildungsdauer;
+    }
 
     // Mindest- und Maximalwerte für die reguläre Ausbildungsdauer (IHK: 24-42 Monate)
     if (isNaN(ausbildungsdauer) || ausbildungsdauer < 24) {
@@ -265,7 +296,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Wird ausgeführt, nachdem neue reguläre Wochenstunden eingegeben wurden (blur für manuelle Eingabe)
   wochenstundenEingabe.addEventListener("blur", () => {
-    const wochenstunden = parseInt(wochenstundenEingabe.value);
+    const wochenstunden = parseFloat(wochenstundenEingabe.value);
 
     // Mindest- und Maximalwerte für die regulären Wochenstunden
     if (isNaN(wochenstunden) || wochenstunden < 10) {

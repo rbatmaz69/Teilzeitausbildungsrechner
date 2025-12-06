@@ -36,7 +36,14 @@
     "noShortening": "Keine Verkürzung ausgewählt",
     "toggleHint": "Bereich zum Anzeigen / Schließen anklicken",
     "toggleLabel": "Details anzeigen",
-    "toggleLabelOpen": "Details ausblenden"
+    "toggleLabelOpen": "Details ausblenden",
+    "decimalHint": "Kommazahlen erlaubt (z. B. 32,5)",
+    "placeholders": {
+      "dauer": "z.B. 36 oder 36,5",
+      "stunden": "z.B. 40 oder 40,5",
+      "teilzeitProzent": "z.B. 75 oder 75,5",
+      "teilzeitStunden": "z.B. 30 oder 30,5"
+    }
   },
   "vk": {
     "heading": "Gründe für eine kürzere Ausbildung",
