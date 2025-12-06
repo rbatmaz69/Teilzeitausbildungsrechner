@@ -272,8 +272,8 @@ test.describe('Mobile Validation: Ausbildungsdauer', () => {
     // Setze ungültigen Wert über Maximum
     await page.fill('#dauer', '60');
     
-    // Warte kurz (Validierung läuft)
-    await page.waitForTimeout(100);
+    // Warte auf Validierung
+    await page.waitForTimeout(200);
     
     // Wert sollte auf 42 korrigiert sein
     await expect(page.locator('#dauer')).toHaveValue('42');
