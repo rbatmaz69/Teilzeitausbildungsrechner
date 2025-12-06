@@ -52,11 +52,8 @@ test.describe('Error Handling: API Fehler', () => {
     // Klicke Berechnen
     await clickButton(page, '#berechnenBtn');
     
-    // Warte auf Fehlerbehandlung
-    await page.waitForTimeout(1000);
-    
     // Button sollte wieder enabled sein nach Fehler
-    await expect(page.locator('#berechnenBtn')).toBeEnabled();
+    await expect(page.locator('#berechnenBtn')).toBeEnabled({ timeout: 3000 });
   });
 });
 
@@ -319,7 +316,9 @@ test.describe('Error Scenarios: English Language Tests', () => {
     await page.waitForLoadState('networkidle');
     await page.waitForSelector('#dauer', { state: 'visible', timeout: 10000 });
     await page.locator('#dauer').scrollIntoViewIfNeeded();
-    await page.waitForTimeout(300);
+    
+    // Warte auf englischen Text statt localStorage (robuster!)
+    await expect(page.locator('body')).toContainText('part-time training', { timeout: 10000 });
   }
   
   async function clickButton(page, selector) {

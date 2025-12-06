@@ -28,15 +28,9 @@ async function gotoCalculator(page) {
   await page.waitForSelector('#dauer', { state: 'visible', timeout: 10000 });
   await page.locator('#dauer').scrollIntoViewIfNeeded();
   
-  // Zusätzliche Sicherheit: Warte bis deutsche Übersetzungen geladen sind
-  // Prüfe ob die Sprache wirklich auf Deutsch ist durch Warten auf deutschen Text
-  await page.waitForFunction(() => {
-    const langValue = localStorage.getItem('lang');
-    return langValue === 'de';
-  }, { timeout: 5000 });
-  
-  // Kurze Pause um sicherzustellen dass i18n vollständig geladen ist
-  await page.waitForTimeout(300);
+  // Warte bis deutsche Übersetzungen wirklich geladen sind
+  // Warte auf sichtbaren deutschen Text statt auf localStorage (robuster!)
+  await expect(page.locator('body')).toContainText('Ausbildungsdauer', { timeout: 10000 });
 }
 
 /**
@@ -72,11 +66,8 @@ test.describe('Validierung: Ausbildungsdauer', () => {
     // Setze ungültigen Wert über Maximum
     await page.fill('#dauer', '60');
     
-    // Warte auf Validierung
-    await page.waitForTimeout(200);
-    
-    // Wert sollte auf 42 korrigiert sein
-    await expect(page.locator('#dauer')).toHaveValue('42');
+    // Wert sollte auf 42 korrigiert sein (mit Timeout für Auto-Korrektur)
+    await expect(page.locator('#dauer')).toHaveValue('42', { timeout: 2000 });
     
     // Fehlermeldung sollte sichtbar sein
     await expect(page.locator('#errorDauer')).toBeVisible();
@@ -115,10 +106,9 @@ test.describe('Validierung: Wochenstunden', () => {
     
     // Setze ungültigen Wert
     await page.fill('#stunden', '60');
-    await page.waitForTimeout(200);
     
     // Korrigiert auf 48
-    await expect(page.locator('#stunden')).toHaveValue('48');
+    await expect(page.locator('#stunden')).toHaveValue('48', { timeout: 2000 });
     await expect(page.locator('#errorRegularStunden')).toContainText('maximal 48 Stunden');
   });
 });
@@ -153,10 +143,9 @@ test.describe('Validierung: Teilzeit-Prozent', () => {
     
     // Setze ungültigen Wert
     await page.fill('#teilzeitProzent', '150');
-    await page.waitForTimeout(200);
     
     // Sollte auf 100 korrigiert sein
-    await expect(page.locator('#teilzeitProzent')).toHaveValue('100');
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('100', { timeout: 2000 });
     await expect(page.locator('#errorProzent')).toContainText('maximal 100%');
   });
 });
@@ -173,8 +162,8 @@ test.describe('Validierung: Fehler verschwinden nach 4 Sekunden', () => {
     // Fehler ist sichtbar
     await expect(page.locator('#errorDauer')).toBeVisible();
     
-    // Warte 5 Sekunden (4s + 0.5s fade)
-    await page.waitForTimeout(5000);
+    // Warte bis Fehler automatisch verschwindet (4s + fade)
+    await expect(page.locator('#errorDauer')).toBeHidden({ timeout: 6000 });
     
     // Fehler sollte verschwunden sein
     await expect(page.locator('#errorDauer')).toBeEmpty();
@@ -194,7 +183,9 @@ test.describe('Validation: English Language Tests', () => {
     await page.waitForLoadState('networkidle');
     await page.waitForSelector('#dauer', { state: 'visible', timeout: 10000 });
     await page.locator('#dauer').scrollIntoViewIfNeeded();
-    await page.waitForTimeout(300);
+    
+    // Warte auf englischen Text statt localStorage (robuster!)
+    await expect(page.locator('body')).toContainText('part-time training', { timeout: 10000 });
   }
   
   async function clickButton(page, selector) {
@@ -228,10 +219,9 @@ test.describe('Validation: English Language Tests', () => {
     // Set too low percentage
     await page.fill('#teilzeitProzent', '30');
     await clickButton(page, '#dauer');
-    await page.waitForTimeout(200);
     
-    // Should be corrected to 50
-    await expect(page.locator('#teilzeitProzent')).toHaveValue('50');
+    // Should be corrected to 50 (mit Timeout für blur-Validierung)
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('50', { timeout: 2000 });
     
     // Check English error message
     await expect(page.locator('#errorProzent')).toContainText('at least 50%');
@@ -272,11 +262,8 @@ test.describe('Mobile Validation: Ausbildungsdauer', () => {
     // Setze ungültigen Wert über Maximum
     await page.fill('#dauer', '60');
     
-    // Warte auf Validierung
-    await page.waitForTimeout(200);
-    
-    // Wert sollte auf 42 korrigiert sein
-    await expect(page.locator('#dauer')).toHaveValue('42');
+    // Wert sollte auf 42 korrigiert sein (mit Timeout für Auto-Korrektur)
+    await expect(page.locator('#dauer')).toHaveValue('42', { timeout: 2000 });
   });
 });
 
@@ -292,10 +279,9 @@ test.describe('Mobile Validation: Wochenstunden', () => {
     // Setze ungültigen Wert
     await page.fill('#stunden', '5');
     await clickButton(page, '#dauer');
-    await page.waitForTimeout(200);
     
-    // Wert sollte auf 10 korrigiert sein
-    await expect(page.locator('#stunden')).toHaveValue('10');
+    // Wert sollte auf 10 korrigiert sein (mit Timeout für blur-Validierung)
+    await expect(page.locator('#stunden')).toHaveValue('10', { timeout: 2000 });
     
     // Fehlermeldung sollte angezeigt werden
     await expect(page.locator('#errorRegularStunden')).toContainText('mindestens 10 Stunden');
@@ -306,10 +292,9 @@ test.describe('Mobile Validation: Wochenstunden', () => {
     
     // Setze ungültigen Wert über Maximum
     await page.fill('#stunden', '60');
-    await page.waitForTimeout(200);
     
-    // Wert sollte auf 48 korrigiert sein
-    await expect(page.locator('#stunden')).toHaveValue('48');
+    // Wert sollte auf 48 korrigiert sein (mit Timeout für Auto-Korrektur)
+    await expect(page.locator('#stunden')).toHaveValue('48', { timeout: 2000 });
   });
 });
 
@@ -328,10 +313,9 @@ test.describe('Mobile Validation: Teilzeit-Prozent', () => {
     // Setze ungültigen Wert
     await page.fill('#teilzeitProzent', '30');
     await clickButton(page, '#dauer');
-    await page.waitForTimeout(200);
     
-    // Wert sollte auf 50 korrigiert sein
-    await expect(page.locator('#teilzeitProzent')).toHaveValue('50');
+    // Wert sollte auf 50 korrigiert sein (mit Timeout für blur-Validierung)
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('50', { timeout: 2000 });
     
     // Fehlermeldung sollte angezeigt werden
     await expect(page.locator('#errorProzent')).toContainText('mindestens 50%');
@@ -345,10 +329,9 @@ test.describe('Mobile Validation: Teilzeit-Prozent', () => {
     
     // Setze ungültigen Wert
     await page.fill('#teilzeitProzent', '150');
-    await page.waitForTimeout(200);
     
-    // Wert sollte auf 100 korrigiert sein
-    await expect(page.locator('#teilzeitProzent')).toHaveValue('100');
+    // Wert sollte auf 100 korrigiert sein (mit Timeout für Auto-Korrektur)
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('100', { timeout: 2000 });
   });
 });
 
@@ -368,10 +351,7 @@ test.describe('Mobile Validation: Fehler verschwinden nach 4 Sekunden', () => {
     // Error should be visible
     await expect(page.locator('#errorDauer')).toBeVisible();
     
-    // Wait for error to disappear (4 seconds + buffer)
-    await page.waitForTimeout(4500);
-    
-    // Error should be hidden
-    await expect(page.locator('#errorDauer')).toBeHidden();
+    // Wait for error to disappear automatically (4 seconds in code + 2s buffer)
+    await expect(page.locator('#errorDauer')).toBeHidden({ timeout: 6000 });
   });
 });

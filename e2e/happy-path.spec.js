@@ -28,6 +28,9 @@ async function gotoCalculator(page) {
   
   // Scroll zum Formular
   await page.locator('#dauer').scrollIntoViewIfNeeded();
+  
+  // Warte auf deutschen Text (robuster als nur auf Formular zu warten)
+  await expect(page.locator('body')).toContainText('Ausbildungsdauer', { timeout: 10000 });
 }
 
 /**
@@ -214,11 +217,8 @@ test.describe('Happy Path: Sprachwechsel', () => {
     // Wechsle zu Englisch (Desktop-Ansicht in Playwright)
     await page.selectOption('#lang-switcher-desktop', 'en');
     
-    // Warte auf Übersetzung (i18n braucht Zeit)
-    await page.waitForTimeout(1000);
-    
-    // Prüfe englische Überschrift
-    await expect(page.locator('.startseite-title-accent').first()).toContainText('part-time training');
+    // Warte auf Übersetzung - prüfe direkt auf englischen Text
+    await expect(page.locator('.startseite-title-accent').first()).toContainText('part-time training', { timeout: 5000 });
   });
 });
 
@@ -236,8 +236,8 @@ test.describe('Happy Path: English Language Tests', () => {
     await page.waitForSelector('#dauer', { state: 'visible', timeout: 10000 });
     await page.locator('#dauer').scrollIntoViewIfNeeded();
     
-    // Warte bis englische Übersetzungen geladen sind
-    await page.waitForTimeout(300);
+    // Warte auf englischen Text statt waitForTimeout (robuster)
+    await expect(page.locator('body')).toContainText('part-time training', { timeout: 10000 });
   }
   
   test('Full-time calculation in English: 36 months', async ({ page }) => {
@@ -302,11 +302,8 @@ test.describe('Happy Path: Reset-Button', () => {
     // Reset-Button klicken
     await clickButton(page, '#btn-reset');
     
-    // Warte auf DOM-Updates nach Reset
-    await page.waitForTimeout(500);
-    
-    // Prüfe dass Felder zurückgesetzt wurden
-    await expect(page.locator('#dauer')).toHaveValue('36');
+    // Warte bis Felder zurückgesetzt wurden
+    await expect(page.locator('#dauer')).toHaveValue('36', { timeout: 2000 });
     await expect(page.locator('#stunden')).toHaveValue('40');
     await expect(page.locator('#teilzeitProzent')).toHaveValue('75');
     await expect(page.locator('#vk-school-select')).toHaveValue('none');
@@ -350,8 +347,8 @@ test.describe('Happy Path: Share-Button', () => {
     // Share-Button klicken
     await clickButton(page, '#btn-share');
     
-    // Warte auf async clipboard operation
-    await page.waitForTimeout(300);
+    // Warte bis copiedText gesetzt wurde
+    await page.waitForFunction(() => window.copiedText !== undefined, { timeout: 2000 });
     
     // Hole kopierten Link
     const copiedUrl = await page.evaluate(() => window.copiedText);
@@ -397,7 +394,7 @@ test.describe('Happy Path: Share-Button', () => {
     
     // Teile erneut
     await clickButton(page, '#btn-share');
-    await page.waitForTimeout(300);
+    await page.waitForFunction(() => window.copiedText && window.copiedText.includes('data='), { timeout: 2000 });
     
     // Hole neuen Link
     const copiedUrl2 = await page.evaluate(() => window.copiedText);
@@ -438,6 +435,9 @@ test.describe('Mobile Tests: Happy Path', () => {
     
     // Scroll zum Formular
     await page.locator('#dauer').scrollIntoViewIfNeeded();
+    
+    // Warte auf deutschen Text (robuster für Mobile)
+    await expect(page.locator('body')).toContainText('Ausbildungsdauer', { timeout: 10000 });
   }
   
   /**
@@ -541,11 +541,8 @@ test.describe('Mobile Tests: Happy Path', () => {
     // Blur Event auslösen
     await clickButtonMobile(page, '#dauer');
     
-    // Warte auf Validierung
-    await page.waitForTimeout(200);
-    
-    // Wert wird auf 50 korrigiert
-    await expect(page.locator('#teilzeitProzent')).toHaveValue('50');
+    // Wert wird auf 50 korrigiert - warte auf Validierung
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('50', { timeout: 2000 });
     
     // Fehlermeldung wird angezeigt
     await expect(page.locator('#errorProzent')).toContainText('mindestens 50%');
@@ -569,11 +566,8 @@ test.describe('Mobile Tests: Happy Path', () => {
     // Wechsle zu Englisch mit MOBILE Switcher
     await page.selectOption('#lang-switcher', 'en');
     
-    // Warte auf Übersetzung (i18n braucht Zeit)
-    await page.waitForTimeout(1000);
-    
-    // Prüfe englische Überschrift
-    await expect(page.locator('.startseite-title-accent').first()).toContainText('part-time training');
+    // Warte auf Übersetzung - prüfe direkt auf englischen Text
+    await expect(page.locator('.startseite-title-accent').first()).toContainText('part-time training', { timeout: 5000 });
   });
   
   test('Mobile: Scroll zu Ergebnis nach Berechnung', async ({ page }) => {
@@ -620,11 +614,8 @@ test.describe('Mobile Tests: Happy Path', () => {
     await page.locator('#btn-reset').scrollIntoViewIfNeeded();
     await page.click('#btn-reset');
     
-    // Warte auf DOM-Updates nach Reset
-    await page.waitForTimeout(500);
-    
-    // Prüfe dass alle Felder zurückgesetzt wurden (gleiche Defaults wie Desktop)
-    await expect(page.locator('#dauer')).toHaveValue('36');
+    // Warte bis alle Felder zurückgesetzt wurden
+    await expect(page.locator('#dauer')).toHaveValue('36', { timeout: 2000 });
     await expect(page.locator('#stunden')).toHaveValue('40');
     await expect(page.locator('#teilzeitProzent')).toHaveValue('75');  // 75 ist Default, nicht 100
     await expect(page.locator('#vk-school-select')).toHaveValue('none');
