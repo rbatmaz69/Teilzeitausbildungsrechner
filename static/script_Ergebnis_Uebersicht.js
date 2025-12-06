@@ -980,6 +980,10 @@ function stelleFormularWiederHer(zustand) {
         const checkbox = document.querySelector('input[data-vk-field="alter_ueber_21"]');
         if (checkbox) checkbox.checked = true;
       }
+      if (vk.key === "familien_kinderbetreuung") {
+        const checkbox = document.querySelector('input[data-vk-field="familien_kinderbetreuung"]');
+        if (checkbox) checkbox.checked = true;
+      }
       if (vk.key === "familien_pflegeverantwortung") {
         const checkbox = document.querySelector('input[data-vk-field="familien_pflegeverantwortung"]');
         if (checkbox) checkbox.checked = true;
@@ -1032,6 +1036,10 @@ function initialisiere() {
         }
         if (vk.key === "alter_ueber_21") {
           const checkbox = document.querySelector('input[data-vk-field="alter_ueber_21"]');
+          if (checkbox) checkbox.checked = true;
+        }
+        if (vk.key === "familien_kinderbetreuung") {
+          const checkbox = document.querySelector('input[data-vk-field="familien_kinderbetreuung"]');
           if (checkbox) checkbox.checked = true;
         }
         if (vk.key === "familien_pflegeverantwortung") {

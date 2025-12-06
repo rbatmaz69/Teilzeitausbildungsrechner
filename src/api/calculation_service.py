@@ -225,6 +225,7 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
         "abitur",
         "realschule",
         "alter_ueber_21",
+        "familien_kinderbetreuung",
         "familien_pflegeverantwortung",
     }
     for key in bool_keys:
