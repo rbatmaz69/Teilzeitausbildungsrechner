@@ -215,12 +215,24 @@ npm run test:e2e:ui
 npm run test:e2e:headed
 ```
 
-Die E2E-Tests validieren die gesamte Anwendung im Browser (26 Tests):
-- **Happy Path** (8): Vollzeit, Teilzeit, Verkürzungen, Sprachwechsel
-- **Validation** (8): Min/Max-Werte, Input-Validierung, Fehlerbehandlung
-- **Error Scenarios** (10): Edge Cases, BBiG-Regelungen (§ 7a, § 8), API-Fehler
+Die E2E-Tests validieren die gesamte Anwendung im Browser (60 Tests):
+- **Happy Path** (43): Desktop/Mobile Vollzeit, Teilzeit, Verkürzungen, Sprachwechsel, Reset, Share
+- **Validation** (13): Min/Max-Werte für Dauer/Stunden/Prozent, Input-Validierung
+- **Error Scenarios** (4): Edge Cases, BBiG-Regelungen (§ 7a, § 8), API-Fehler
 
 **Konfiguration:** `playwright.config.js` (automatischer Flask-Server-Start)
+
+#### Warum Playwright statt Selenium?
+
+Wir haben uns für **Playwright** entschieden, da es für unsere Anwendung entscheidende Vorteile bietet:
+
+- **Auto-Wait & Stabilität**: Playwright wartet automatisch auf Element-Interaktionen und verhindert so flaky Tests durch Race Conditions - besonders wichtig für unsere asynchronen i18n-Übersetzungen und API-Calls.
+
+- **Performance**: Unsere 60 Tests laufen in ~1 Minute dank direkter Browser-DevTools-Kommunikation statt langsamerer WebDriver-Protokolle.
+
+- **Natives Mobile-Testing**: Für unsere responsive Mobile-Tests (iPhone 13 Emulation mit Touch-Events) bräuchten wir bei Selenium zusätzliche Tools wie Appium.
+
+- **Zero-Setup**: Playwright bringt Browser-Binaries mit - keine externe Driver-Installation/Wartung nötig. Vereinfacht CI/CD-Pipeline und lokales Entwickler-Setup.
 
 ## 📁 Projektstruktur
 
@@ -250,9 +262,9 @@ group-04/
 │   ├── test_calculation_service.py # Unit-Tests für Service-Layer
 │   └── dummy_data.py       # Zentrale Testdaten (User Story 30)
 ├── e2e/
-│   ├── happy-path.spec.js       # E2E: Hauptnutzerflüsse (8 Tests)
-│   ├── validation.spec.js       # E2E: Input-Validierung (8 Tests)
-│   └── error-scenarios.spec.js  # E2E: Edge Cases & BBiG-Regeln (10 Tests)
+│   ├── happy-path.spec.js       # E2E: Hauptnutzerflüsse (43 Tests)
+│   ├── validation.spec.js       # E2E: Input-Validierung (13 Tests)
+│   └── error-scenarios.spec.js  # E2E: Edge Cases & BBiG-Regeln (4 Tests)
 ├── playwright.config.js    # Playwright E2E-Test-Konfiguration
 ├── .flake8                 # Flake8 Linter-Konfiguration
 ├── eslint.config.js        # ESLint 9 Config (nutzt recommended + browser globals)
@@ -344,7 +356,7 @@ Das Skript wertet die Docstrings der Kernmodule (`src/calculation_logic.py`, `sr
   - CSS: Stylelint
   - HTML: HTMLHint
 - [x] **Test** - Pytest mit Coverage-Report (90%)
-- [x] **E2E** - Playwright End-to-End Tests (26 Tests)
+- [x] **E2E** - Playwright End-to-End Tests (60 Tests)
 - [x] **Coverage Report** - Automatische Coverage-Artefakte
 - [ ] **Deployment** - Automatisches Deployment nach Tests
 - [ ] **Status Badges** - Build-Status in README
