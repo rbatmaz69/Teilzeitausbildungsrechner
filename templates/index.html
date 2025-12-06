@@ -448,6 +448,7 @@
             <label class="tile">
               <input
                 type="checkbox"
+                id="kinderbetreuung"
                 aria-describedby="desc-familie"
                 data-vk-field="familien_kinderbetreuung"
               >
@@ -468,12 +469,33 @@
             <label class="tile">
               <input
                 type="checkbox"
+                id="pflege"
                 aria-describedby="desc-familie"
                 data-vk-field="familien_pflegeverantwortung"
               >
               <div class="tile-body" style="flex:1">
                 <div class="tile-header">
                   <span data-i18n="vk.familie.label_pflege">Pflege von Angehörigen</span>
+                </div>
+              </div>
+            </label>
+
+            <span id="desc-familie" class="sr-only" data-i18n="vk.familie.sr">
+              Wenn Sie einen Angehörigen pflegen müssen, ist eine Verkürzung möglich.
+            </span>
+          </div>
+
+          <!-- trifft nicht zu -->
+          <div class="vk-category-body">
+            <label class="tile">
+              <input
+                type="checkbox"
+                id="keineFamiliaerenVerpflichtungen"
+                aria-describedby="desc-familie"
+              >
+              <div class="tile-body" style="flex:1">
+                <div class="tile-header">
+                  <span data-i18n="vk.familie.label_nichts">Keine familiären Verpflichtungen</span>
                 </div>
               </div>
             </label>

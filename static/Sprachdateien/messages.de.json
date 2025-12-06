@@ -57,6 +57,7 @@
       "question": "Haben Sie familiäre Verpflichtungen?",
       "label_kinder": "Kinderbetreuung",
       "label_pflege": "Pflege von Angehörigen",
+      "label_nichts": "Keine familiären Verpflichtungen",
       "sr": "Wenn Sie Familien- oder Pflegeverantwortung haben, ist eine Verkürzung möglich."
     },
     "school": {

@@ -57,6 +57,7 @@
       "question": "Do you have family responsibilities?",
       "label_kinder": "Child care",
       "label_pflege": "Care for relatives",
+      "label_nichts": "No family responsibilities",
       "sr": "If you have family or care responsibilities, a shortening may be possible."
     },
     "school": {
