@@ -141,6 +141,9 @@ test.describe('Happy Path: Teilzeit Berechnungen', () => {
     // Explizit 50% über Button setzen
     await clickButton(page, '[data-type="percent"][data-value="50"]');
     
+    // Warte bis Button-Handler fertig (Wert gesetzt)
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('50', { timeout: 1000 });
+    
     // Berechnen
     await clickButton(page, '#berechnenBtn');
     
@@ -156,6 +159,9 @@ test.describe('Happy Path: Stunden-Eingabe', () => {
     
     // Teilzeit-Stunden direkt eingeben: 30 Stunden
     await page.fill('#teilzeitStunden', '30');
+    
+    // Warte bis Event-Handler fertig (synchronisiereStunden())
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('75', { timeout: 1000 });
     
     // Berechnen
     await clickButton(page, '#berechnenBtn');
@@ -534,6 +540,9 @@ test.describe('Mobile Tests: Happy Path', () => {
     
     // Aktiviere Teilzeit mit 75% Button (damit Feld aktiv ist)
     await clickButtonMobile(page, '[data-value="75"][data-type="percent"]');
+    
+    // Warte bis Button-Handler fertig
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('75', { timeout: 1000 });
     
     // Ungültigen Wert eingeben (unter 50%)
     await page.fill('#teilzeitProzent', '30');

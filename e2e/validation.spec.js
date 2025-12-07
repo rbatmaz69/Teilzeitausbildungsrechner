@@ -108,7 +108,10 @@ test.describe('Validierung: Wochenstunden', () => {
     
     // Korrigiert auf 48
     await expect(page.locator('#stunden')).toHaveValue('48', { timeout: 2000 });
-    await expect(page.locator('#errorRegularStunden')).toContainText('maximal 48 Stunden');
+    
+    // Warte kurz damit Fehlermeldung erscheint (asynchrone Event-Verarbeitung)
+    await page.waitForTimeout(100);
+    await expect(page.locator('#errorRegularStunden')).toContainText('maximal 48 Stunden', { timeout: 1000 });
   });
 });
 
