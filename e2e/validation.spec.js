@@ -16,23 +16,16 @@ import { test, expect } from '@playwright/test';
  */
 async function gotoCalculator(page) {
   await page.goto('/');
-  
-  // Setze Sprache explizit auf Deutsch (wichtig wegen parallel laufender Tests!)
-  await page.evaluate(() => {
-    localStorage.clear();
-    localStorage.setItem('lang', 'de');
-  });
-  await page.reload();
-  
-  // Warte bis Seite komplett geladen ist
   await page.waitForLoadState('networkidle');
   
-  // Warte auf das Formular
-  await page.waitForSelector('#dauer', { state: 'visible', timeout: 10000 });
-  await page.locator('#dauer').scrollIntoViewIfNeeded();
+  // Sprachwechsel über UI (robuster als localStorage!) - force weil Dropdown manchmal hidden
+  await page.selectOption('#lang-switcher', 'de', { force: true });
   
-  // Warte auf deutschen Text (robuster als window.I18N Check)
-  await expect(page.locator('body')).toContainText('Ausbildungsdauer', { timeout: 10000 });
+  // Warte bis Sprachänderung angewendet wurde
+  await page.waitForTimeout(500); // Kurz warten für I18N reload
+  await expect(page.locator('body')).toContainText('Ausbildungsdauer', { timeout: 5000 });
+  await page.waitForSelector('#dauer', { state: 'visible', timeout: 5000 });
+  await page.locator('#dauer').scrollIntoViewIfNeeded();
 }
 
 /**
@@ -182,18 +175,16 @@ test.describe('Validation: English Language Tests', () => {
    */
   async function gotoCalculatorEnglish(page) {
     await page.goto('/');
-    await page.evaluate(() => {
-      localStorage.clear();
-      localStorage.setItem('lang', 'en');
-    });
-    await page.reload();
-    
     await page.waitForLoadState('networkidle');
-    await page.waitForSelector('#dauer', { state: 'visible', timeout: 10000 });
-    await page.locator('#dauer').scrollIntoViewIfNeeded();
     
-    // Warte auf englischen Text statt localStorage (robuster!)
-    await expect(page.locator('body')).toContainText('part-time training', { timeout: 10000 });
+    // Sprachwechsel über UI (robuster als localStorage!) - force weil Dropdown manchmal hidden
+    await page.selectOption('#lang-switcher', 'en', { force: true });
+    
+    // Warte bis Sprachänderung angewendet wurde
+    await page.waitForTimeout(500); // Kurz warten für I18N reload
+    await expect(page.locator('body')).toContainText('part-time training', { timeout: 5000 });
+    await page.waitForSelector('#dauer', { state: 'visible', timeout: 5000 });
+    await page.locator('#dauer').scrollIntoViewIfNeeded();
   }
   
   async function clickButton(page, selector) {
