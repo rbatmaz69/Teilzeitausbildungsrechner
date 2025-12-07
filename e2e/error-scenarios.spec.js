@@ -14,7 +14,10 @@ import { test, expect } from '@playwright/test';
  */
 async function gotoCalculator(page) {
   await page.goto('/');
-  await page.evaluate(() => localStorage.setItem('lang', 'de'));
+  await page.evaluate(() => {
+    localStorage.clear();
+    localStorage.setItem('lang', 'de');
+  });
   await page.reload();
   
   // Warte bis Seite komplett geladen ist
@@ -310,7 +313,10 @@ test.describe('Error Scenarios: English Language Tests', () => {
    */
   async function gotoCalculatorEnglish(page) {
     await page.goto('/');
-    await page.evaluate(() => localStorage.setItem('lang', 'en'));
+    await page.evaluate(() => {
+      localStorage.clear();
+      localStorage.setItem('lang', 'en');
+    });
     await page.reload();
     
     await page.waitForLoadState('networkidle');

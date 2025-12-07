@@ -17,7 +17,10 @@ import { test, expect } from '@playwright/test';
 async function gotoCalculator(page) {
   // Setze Sprache auf Deutsch via localStorage
   await page.goto('/');
-  await page.evaluate(() => localStorage.setItem('lang', 'de'));
+  await page.evaluate(() => {
+    localStorage.clear();
+    localStorage.setItem('lang', 'de');
+  });
   await page.reload();
   
   // Warte bis Seite komplett geladen ist
@@ -101,8 +104,8 @@ test.describe('Happy Path: Teilzeit Berechnungen', () => {
     // 50% Button klicken
     await clickButton(page, '[data-type="percent"][data-value="50"]');
     
-    // Prüfe dass Button den Wert gesetzt hat
-    await expect(page.locator('#teilzeitProzent')).toHaveValue('50');
+    // Warte bis Event-Handler fertig und Werte gesetzt sind
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('50', { timeout: 1000 });
     await expect(page.locator('#teilzeitStunden')).toHaveValue('20');
     
     // Ändere manuell auf 55%
@@ -118,8 +121,10 @@ test.describe('Happy Path: Teilzeit Berechnungen', () => {
   test('Teilzeit 75% mit Abitur: (36-12) * 100/75 = 32 Monate', async ({ page }) => {
     await gotoCalculator(page);
     
-    // 75% und Abitur
+    // 75% Button und Abitur
     await clickButton(page, '[data-value="75"][data-type="percent"]');
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('75', { timeout: 1000 });
+    
     await page.selectOption('#vk-school-select', 'abitur');
     
     // Berechnen
@@ -134,14 +139,15 @@ test.describe('Happy Path: Teilzeit Berechnungen', () => {
     
     // WICHTIG: page.goto um sauberen State zu garantieren
     await page.goto('http://localhost:5000');
-    await page.evaluate(() => localStorage.setItem('lang', 'de'));
+    await page.evaluate(() => {
+      localStorage.clear();
+      localStorage.setItem('lang', 'de');
+    });
     await page.reload();
     await page.waitForLoadState('networkidle');
     
-    // Explizit 50% über Button setzen
+    // 50% Button klicken und warten bis gesetzt
     await clickButton(page, '[data-type="percent"][data-value="50"]');
-    
-    // Warte bis Button-Handler fertig (Wert gesetzt)
     await expect(page.locator('#teilzeitProzent')).toHaveValue('50', { timeout: 1000 });
     
     // Berechnen
@@ -157,10 +163,8 @@ test.describe('Happy Path: Stunden-Eingabe', () => {
   test('30 von 40 Stunden = 75% (manuelle Eingabe)', async ({ page }) => {
     await gotoCalculator(page);
     
-    // Teilzeit-Stunden direkt eingeben: 30 Stunden
+    // 30 Stunden eingeben → Event-Handler berechnet 75%
     await page.fill('#teilzeitStunden', '30');
-    
-    // Warte bis Event-Handler fertig (synchronisiereStunden())
     await expect(page.locator('#teilzeitProzent')).toHaveValue('75', { timeout: 1000 });
     
     // Berechnen
@@ -214,7 +218,10 @@ test.describe('Happy Path: Sprachwechsel', () => {
   test('Sprachwechsel DE → EN funktioniert', async ({ page }) => {
     // Setze Sprache auf Deutsch
     await page.goto('/');
-    await page.evaluate(() => localStorage.setItem('lang', 'de'));
+    await page.evaluate(() => {
+      localStorage.clear();
+      localStorage.setItem('lang', 'de');
+    });
     await page.reload();
     
     // Prüfe deutsche Überschrift (auf Startseite)
@@ -235,7 +242,10 @@ test.describe('Happy Path: English Language Tests', () => {
    */
   async function gotoCalculatorEnglish(page) {
     await page.goto('/');
-    await page.evaluate(() => localStorage.setItem('lang', 'en'));
+    await page.evaluate(() => {
+      localStorage.clear();
+      localStorage.setItem('lang', 'en');
+    });
     await page.reload();
     
     await page.waitForLoadState('networkidle');
@@ -430,7 +440,10 @@ test.describe('Mobile Tests: Happy Path', () => {
     
     // Setze Sprache auf Deutsch via localStorage
     await page.goto('/');
-    await page.evaluate(() => localStorage.setItem('lang', 'de'));
+    await page.evaluate(() => {
+      localStorage.clear();
+      localStorage.setItem('lang', 'de');
+    });
     await page.reload();
     
     // Warte bis Seite komplett geladen ist
@@ -563,7 +576,10 @@ test.describe('Mobile Tests: Happy Path', () => {
     
     // Setze Sprache auf Deutsch
     await page.goto('/');
-    await page.evaluate(() => localStorage.setItem('lang', 'de'));
+    await page.evaluate(() => {
+      localStorage.clear();
+      localStorage.setItem('lang', 'de');
+    });
     await page.reload();
     
     // Warte bis Seite geladen ist
@@ -586,6 +602,9 @@ test.describe('Mobile Tests: Happy Path', () => {
     await page.fill('#dauer', '30');
     await page.fill('#stunden', '35');
     await clickButtonMobile(page, '[data-value="75"][data-type="percent"]');
+    
+    // Warte bis Event-Handler fertig ist
+    await expect(page.locator('#teilzeitProzent')).toHaveValue('75', { timeout: 1000 });
     
     // Berechnen
     await clickButtonMobile(page, '#berechnenBtn');
