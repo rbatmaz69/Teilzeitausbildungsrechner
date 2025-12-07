@@ -25,12 +25,12 @@ export default defineConfig({
   // CI: 4 Workers für parallele Ausführung, lokal: alle Cores
   workers: process.env.CI ? 4 : undefined,
   
-  // Reporter: HTML-Report + JUnit für CI (dot = minimaler Output), List für lokal
+  // Reporter: list zeigt jeden Test als eigene Zeile mit Details
   reporter: process.env.CI 
     ? [
         ['html'],
         ['junit', { outputFile: 'test-results/junit.xml' }],
-        ['dot']
+        ['list']
       ]
     : 'list',
   
@@ -59,7 +59,7 @@ export default defineConfig({
 
   // Automatischer Server-Start
   webServer: {
-    command: process.env.CI ? 'python3 -m src.app 5000' : 'python -m flask run --port 5000',
+    command: process.env.CI ? 'python3 -m src.app 5000 > /dev/null 2>&1' : 'python -m src.app 5000 > nul 2>&1',
     url: 'http://localhost:5000',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
