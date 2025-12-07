@@ -1,10 +1,10 @@
-# CI Pipeline for Linting & Code Quality
-# Runs on merge requests to develop/main and on direct pushes to develop
+# CI/CD Pipeline - Teilzeitrechner
+# Automatische Code-Qualitätsprüfung und Tests für jeden Merge Request
 
 stages:
-  - lint
-  - test
-  - e2e
+  - Code Quality
+  - Unit Tests
+  - E2E Tests
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
@@ -16,15 +16,15 @@ cache:
 
 # ====================== PYTHON LINTING ======================
 
-lint:python:
+Python Code Quality:
   image: python:3.12
   before_script:
     - python --version
     - pip install --upgrade pip
     - pip install -r requirements.txt
-  stage: lint
+  stage: Code Quality
   script:
-    - echo "🔍 Running Python code quality checks..."
+    - echo "🔍 Prüfe Python Code (flake8, isort)..."
     - flake8 src/
     - isort --check-only src/
   only:
@@ -36,13 +36,13 @@ lint:python:
 
 # ====================== FRONTEND LINTING ======================
 
-lint:frontend:
+Frontend Code Quality:
   image: node:20-alpine
   before_script:
     - npm install
-  stage: lint
+  stage: Code Quality
   script:
-    - echo "🔍 Running Frontend linting (ESLint, Stylelint, HTMLHint)..."
+    - echo "🔍 Prüfe Frontend Code (ESLint, Stylelint, HTMLHint)..."
     - npm run lint
   only:
     refs:
@@ -53,16 +53,16 @@ lint:frontend:
 
 # ====================== TESTING ======================
 
-test:
+Python Unit & Integration Tests:
   image: python:3.12
   before_script:
     - python --version
     - pip install --upgrade pip
     - pip install -r requirements.txt
-  stage: test
+  stage: Unit Tests
   script:
-    - echo "🧪 Running unit tests with pytest and coverage..."
-    - pytest --cov=src --cov-report=term --cov-report=xml --junitxml=pytest-report.xml -v
+    - echo "🧪 Führe Unit-Tests aus (pytest + coverage)..."
+    - pytest --cov=src --cov-report=term --cov-report=xml --junitxml=pytest-report.xml -q
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
@@ -83,16 +83,16 @@ test:
 
 # ====================== E2E TESTING ======================
 
-test:e2e:
+End-to-End Browser Tests:
   image: mcr.microsoft.com/playwright:v1.48.0-focal
   before_script:
     - npm install --silent
     - apt-get update -qq && apt-get install -y -qq python3-pip > /dev/null 2>&1
     - python3 -m pip install --upgrade pip -q > /dev/null 2>&1
     - python3 -m pip install -r requirements.txt -q > /dev/null 2>&1
-  stage: e2e
+  stage: E2E Tests
   script:
-    - echo "🎭 Running End-to-End tests with Playwright..."
+    - echo "🎭 Führe End-to-End Tests aus (Playwright)..."
     - npm run test:e2e 2>&1 | grep -E "(chromium|›|✓|✗|passed|failed|flaky)" || true
   artifacts:
     when: always
