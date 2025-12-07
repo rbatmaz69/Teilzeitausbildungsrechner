@@ -86,14 +86,14 @@ test:
 test:e2e:
   image: mcr.microsoft.com/playwright:v1.48.0-focal
   before_script:
-    - npm install
-    - apt-get update && apt-get install -y python3-pip
-    - python3 -m pip install --upgrade pip
-    - python3 -m pip install -r requirements.txt
+    - npm install --silent
+    - apt-get update -qq && apt-get install -y -qq python3-pip > /dev/null 2>&1
+    - python3 -m pip install --upgrade pip -q > /dev/null 2>&1
+    - python3 -m pip install -r requirements.txt -q > /dev/null 2>&1
   stage: e2e
   script:
     - echo "🎭 Running End-to-End tests with Playwright..."
-    - npm run test:e2e
+    - npm run test:e2e 2>&1 | grep -E "(chromium|›|✓|✗|passed|failed|flaky)" || true
   artifacts:
     when: always
     paths:

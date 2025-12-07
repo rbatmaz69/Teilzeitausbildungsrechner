@@ -25,12 +25,12 @@ export default defineConfig({
   // CI: 4 Workers für parallele Ausführung, lokal: alle Cores
   workers: process.env.CI ? 4 : undefined,
   
-  // Reporter: dot (minimal) in CI, list (detailliert) lokal
+  // Reporter: list überall für detaillierte Testzeilen
   reporter: process.env.CI 
     ? [
         ['html'],
         ['junit', { outputFile: 'test-results/junit.xml' }],
-        ['dot']
+        ['list']
       ]
     : 'list',
   
