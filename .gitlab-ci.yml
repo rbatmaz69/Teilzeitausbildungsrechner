@@ -20,8 +20,8 @@ lint:python:
   image: python:3.12
   before_script:
     - python --version
-    - pip install --upgrade pip
-    - pip install -r requirements.txt
+    - pip install --upgrade pip --quiet
+    - pip install -r requirements.txt --quiet
   stage: lint
   script:
     - echo "🔍 Running Python code quality checks..."
@@ -39,7 +39,7 @@ lint:python:
 lint:frontend:
   image: node:20-alpine
   before_script:
-    - npm install
+    - npm install --silent
   stage: lint
   script:
     - echo "🔍 Running Frontend linting (ESLint, Stylelint, HTMLHint)..."
@@ -57,8 +57,8 @@ test:
   image: python:3.12
   before_script:
     - python --version
-    - pip install --upgrade pip
-    - pip install -r requirements.txt
+    - pip install --upgrade pip --quiet
+    - pip install -r requirements.txt --quiet
   stage: test
   script:
     - echo "🧪 Running unit tests with pytest and coverage..."
@@ -86,10 +86,10 @@ test:
 test:e2e:
   image: mcr.microsoft.com/playwright:v1.48.0-focal
   before_script:
-    - npm install
-    - apt-get update && apt-get install -y python3-pip
-    - python3 -m pip install --upgrade pip
-    - python3 -m pip install -r requirements.txt
+    - npm install --silent
+    - apt-get update -qq && apt-get install -y -qq python3-pip
+    - python3 -m pip install --upgrade pip --quiet
+    - python3 -m pip install -r requirements.txt --quiet
   stage: e2e
   script:
     - echo "🎭 Running End-to-End tests with Playwright..."
