@@ -39,8 +39,9 @@
     "toggleLabel": "Show Details",
     "toggleLabelOpen": "Hide Details",
     "decimalHint": "Decimals allowed (e.g. 32.5)",
+    "roundingHint": "Value rounded from {original} to {rounded} months",
     "placeholders": {
-      "dauer": "e.g. 36 or 36.5",
+      "dauer": "e.g. 36",
       "stunden": "e.g. 40 or 40.5",
       "teilzeitProzent": "e.g. 75 or 75.5",
       "teilzeitStunden": "e.g. 30 or 30.5"

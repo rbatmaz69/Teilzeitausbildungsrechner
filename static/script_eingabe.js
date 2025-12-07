@@ -255,8 +255,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Monate stets auf ganze Zahl runden
     if (!isNaN(ausbildungsdauer)) {
+      const originalWert = ausbildungsdauer;
       ausbildungsdauer = Math.round(ausbildungsdauer);
       dauerEingabe.value = ausbildungsdauer;
+      
+      // Wenn gerundet wurde, Hinweis anzeigen
+      if (originalWert !== ausbildungsdauer) {
+        const roundingMessage = uebersetzung("inputs.roundingHint", "Wert wurde von {original} auf {rounded} Monate gerundet")
+          .replace("{original}", originalWert.toFixed(1))
+          .replace("{rounded}", ausbildungsdauer);
+        if (fehlerDauer) {
+          fehlerDauer.textContent = roundingMessage;
+          fehlerDauer.style.color = "#19c530";
+          fehlerDauer.style.fontWeight = "normal";
+          // Hinweis nach 4 Sekunden ausblenden
+          if (timerIdDauer && timerIdDauer.roundingTimer) clearTimeout(timerIdDauer.roundingTimer);
+          timerIdDauer.roundingTimer = setTimeout(() => {
+            if (fehlerDauer) {
+              fehlerDauer.textContent = '';
+              fehlerDauer.style.color = "";
+              fehlerDauer.style.fontWeight = "";
+            }
+          }, 4000);
+        }
+      }
     }
 
     // Mindest- und Maximalwerte für die reguläre Ausbildungsdauer (IHK: 24-42 Monate)
@@ -275,7 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       dauerEingabe.classList.remove('error');
       aktuellerFehlerDauer = null;
-      if (fehlerDauer) fehlerDauer.textContent = '';
+      // Rounding-Hinweis wird durch Timer verwaltet, nicht hier löschen
     }
   })
   

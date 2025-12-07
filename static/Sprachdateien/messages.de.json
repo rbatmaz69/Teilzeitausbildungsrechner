@@ -39,8 +39,9 @@
     "toggleLabel": "Details anzeigen",
     "toggleLabelOpen": "Details ausblenden",
     "decimalHint": "Kommazahlen erlaubt (z. B. 32,5)",
+    "roundingHint": "Wert wurde von {original} auf {rounded} Monate gerundet",
     "placeholders": {
-      "dauer": "z.B. 36 oder 36,5",
+      "dauer": "z.B. 36",
       "stunden": "z.B. 40 oder 40,5",
       "teilzeitProzent": "z.B. 75 oder 75,5",
       "teilzeitStunden": "z.B. 30 oder 30,5"
