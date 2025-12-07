@@ -93,7 +93,7 @@ test:e2e:
   stage: e2e
   script:
     - echo "🎭 Running End-to-End tests with Playwright..."
-    - npm run test:e2e > >(grep -v '\[WebServer\]') 2>&1
+    - npm run test:e2e 2>&1 | grep -v '^\[WebServer\]'
   artifacts:
     when: always
     paths:
