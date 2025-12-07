@@ -368,6 +368,32 @@ Das Skript wertet die Docstrings der Kernmodule (`src/calculation_logic.py`, `sr
 
 **Konfiguration:** `.gitlab-ci.yml`
 
+### 📦 Test-Artefakte in GitLab ansehen
+
+Nach jedem Pipeline-Durchlauf werden Test-Artefakte gespeichert:
+
+**Wo finde ich die Artefakte?**
+1. Gehe zu **CI/CD → Pipelines** in GitLab
+2. Klicke auf die gewünschte Pipeline
+3. Klicke auf den Job `test:e2e`
+4. Rechts oben: **Browse** oder **Download** Button
+
+**Was wird gespeichert?**
+- `playwright-report/` - Interaktiver HTML-Report mit allen Test-Details
+- `test-results/` - Screenshots, Videos und Traces von fehlgeschlagenen Tests
+- `test-results/junit.xml` - JUnit-Report für GitLab Test-Integration
+
+**GitLab zeigt automatisch:**
+- ✅ Test-Statistiken im Pipeline-Tab
+- ⚠️ Flaky Tests werden als "Failed but allowed" markiert (wenn retries=2)
+- 📊 Test-Trends über mehrere Pipelines
+
+**Playwright HTML-Report lokal öffnen:**
+```bash
+# Nach Download der Artefakte
+npx playwright show-report playwright-report/
+```
+
 ### Linting lokal ausführen
 
 **Alle Linter auf einmal:**
