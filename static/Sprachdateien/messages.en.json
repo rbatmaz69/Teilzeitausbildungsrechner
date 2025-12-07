@@ -22,11 +22,12 @@
       "tooltip": "Regular weekly hours of training (incl. vocational school)"
     },
     "teilzeit": {
-      "label": "How much of full-time do you want to work?",
+      "label": "How many hours per week would you like to work during your training?",
       "labelShort": "Part-time share",
       "tooltip": "For part-time training, you must work at least 50%.",
       "percent": "Percent",
-      "hours": "Hours"
+      "hours": "Hours",
+      "separator": "or"
     },
     "verkuerzungen": {
       "labelShort": "Reductions"

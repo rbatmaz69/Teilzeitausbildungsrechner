@@ -22,11 +22,12 @@
       "tooltip": "Reguläre Wochenstunden der Ausbildung (inkl. Berufsschule)"
     },
     "teilzeit": {
-      "label": "Wie viel der Vollzeit möchten Sie arbeiten?",
+      "label": "Wie viele Stunden pro Woche möchten Sie während der Ausbildung arbeiten?",
       "labelShort": "Teilzeitanteil",
       "tooltip": "Für eine Teilzeitausbildung müssen Sie mindestens 50 % arbeiten.",
       "percent": "Prozent",
-      "hours": "Stunden"
+      "hours": "Stunden",
+      "separator": "oder"
     },
     "verkuerzungen": {
       "labelShort": "Verkürzungen"
