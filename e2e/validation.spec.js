@@ -24,13 +24,12 @@ async function gotoCalculator(page) {
   // Warte bis Seite komplett geladen ist
   await page.waitForLoadState('networkidle');
   
+  // Warte bis i18n-System vollständig initialisiert ist (globale API vorhanden)
+  await page.waitForFunction(() => window.I18N && window.I18N.lang === 'de', { timeout: 15000 });
+  
   // Warte auf das Formular
   await page.waitForSelector('#dauer', { state: 'visible', timeout: 10000 });
   await page.locator('#dauer').scrollIntoViewIfNeeded();
-  
-  // Warte bis deutsche Übersetzungen wirklich geladen sind
-  // Warte auf sichtbaren deutschen Text statt auf localStorage (robuster!)
-  await expect(page.locator('body')).toContainText('Ausbildungsdauer', { timeout: 10000 });
 }
 
 /**
