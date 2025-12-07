@@ -341,13 +341,14 @@ button.preset {
   color: #333;
   border: 1px solid #ccc;
   border-radius: 6px;
-  padding: .45rem 0;
-  width: 3.9rem;
+  padding: .45rem .5rem;
+  min-width: 3.9rem;
   font-weight: 600;
   box-shadow: var(--shadow);
   transition: all 0.2s ease;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
 }
 
 button.preset:hover {

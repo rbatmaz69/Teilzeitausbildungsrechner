@@ -804,9 +804,16 @@ document.addEventListener("DOMContentLoaded", () => {
   function aktualisiereButtonTexte() {
     buttons.forEach(btn => {
       if (btn.dataset.type === "hours") {
-        const wert = btn.dataset.value;
-        const einheit = uebersetzung("units.hours.full", "Stunden");
-        btn.textContent = `${wert} ${einheit}`;
+        const i18nKey = btn.dataset.i18n;
+        if (i18nKey) {
+          // Nutze i18n-Key falls vorhanden
+          btn.textContent = uebersetzung(i18nKey, btn.textContent);
+        } else {
+          // Fallback für Buttons ohne i18n-Key
+          const wert = btn.dataset.value;
+          const einheit = uebersetzung("units.hours.full", "Stunden");
+          btn.textContent = `${wert} ${einheit}`;
+        }
       }
     });
   }

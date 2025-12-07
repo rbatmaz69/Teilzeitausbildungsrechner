@@ -27,7 +27,9 @@
       "tooltip": "For part-time training, you must work at least 50%.",
       "percent": "Percent",
       "hours": "Hours",
-      "separator": "or"
+      "separator": "or",
+      "button24h": "3-day (≈ 24 h)",
+      "button32h": "4-day (≈ 32 h)"
     },
     "verkuerzungen": {
       "labelShort": "Reductions"

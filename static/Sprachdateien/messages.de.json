@@ -27,7 +27,9 @@
       "tooltip": "Für eine Teilzeitausbildung müssen Sie mindestens 50 % arbeiten.",
       "percent": "Prozent",
       "hours": "Stunden",
-      "separator": "oder"
+      "separator": "oder",
+      "button24h": "3-Tage (≈ 24 Std)",
+      "button32h": "4-Tage (≈ 32 Std)"
     },
     "verkuerzungen": {
       "labelShort": "Verkürzungen"
