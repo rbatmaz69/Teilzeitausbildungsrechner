@@ -245,6 +245,14 @@ document.addEventListener("DOMContentLoaded", () => {
   dauerEingabe.addEventListener("blur", () => {
     let ausbildungsdauer = parseFloat(dauerEingabe.value);
 
+    // Wenn Feld leer war, leer lassen (nicht korrigieren)
+    if (dauerEingabe.value.trim() === '') {
+      dauerEingabe.classList.remove('error');
+      aktuellerFehlerDauer = null;
+      if (fehlerDauer) fehlerDauer.textContent = '';
+      return;
+    }
+
     // Monate stets auf ganze Zahl runden
     if (!isNaN(ausbildungsdauer)) {
       ausbildungsdauer = Math.round(ausbildungsdauer);
@@ -297,6 +305,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // Wird ausgeführt, nachdem neue reguläre Wochenstunden eingegeben wurden (blur für manuelle Eingabe)
   wochenstundenEingabe.addEventListener("blur", () => {
     const wochenstunden = parseFloat(wochenstundenEingabe.value);
+
+    // Wenn Feld leer war, leer lassen (nicht korrigieren)
+    if (wochenstundenEingabe.value.trim() === '') {
+      wochenstundenEingabe.classList.remove('error');
+      aktuellerFehlerRegularStunden = null;
+      if (fehlerRegularStunden) fehlerRegularStunden.textContent = '';
+      return;
+    }
 
     // Mindest- und Maximalwerte für die regulären Wochenstunden
     if (isNaN(wochenstunden) || wochenstunden < 10) {
