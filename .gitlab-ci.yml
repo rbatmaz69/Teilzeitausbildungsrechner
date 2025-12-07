@@ -53,7 +53,7 @@ Frontend Code Quality:
 
 # ====================== TESTING ======================
 
-Python Unit & Integration Tests:
+Python Unit + Integration Tests:
   image: python:3.12
   before_script:
     - python --version
