@@ -87,9 +87,55 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
         verkuerzung_gesamt += VERKUERZUNG_FAMILIEN_PFLEGE
 
     # Berufliche Vorkenntnisse: bis zu 12 Monate → fester Wert 12, sobald vorhanden
-    vorkenntnisse = verkuerzungsgruende.get("vorkenntnisse_monate", 0)
-    if vorkenntnisse and vorkenntnisse > 0:
-        verkuerzung_gesamt += VERKUERZUNG_VORKENNTNISSE
+    # Neue Logik: unterstütze detaillierte berufliche Fragen (beruf_q1..q6, beruf_q2_dauer_monate)
+    # oder ein bereits berechnetes Feld 'berufliche_verkuerzung_monate' vom Client.
+    berufliche_total = 0
+    # Detect if any new beruf fields are present
+    has_new_beruf_fields = any(k in verkuerzungsgruende for k in (
+        "beruf_q1",
+        "beruf_q2",
+        "beruf_q2_dauer_monate",
+        "beruf_q3",
+        "beruf_q4",
+        "beruf_q5",
+        "beruf_q6",
+        "berufliche_verkuerzung_monate",
+    ))
+
+    if has_new_beruf_fields:
+        # If client provided a precomputed aggregate, prefer it
+        if verkuerzungsgruende.get("berufliche_verkuerzung_monate", 0):
+            berufliche_total += int(verkuerzungsgruende.get("berufliche_verkuerzung_monate", 0))
+        else:
+            # Q1/Q3/Q4 => 12 Monate
+            if verkuerzungsgruende.get("beruf_q1", False):
+                berufliche_total += 12
+            if verkuerzungsgruende.get("beruf_q3", False):
+                berufliche_total += 12
+            if verkuerzungsgruende.get("beruf_q4", False):
+                berufliche_total += 12
+            # Q5/Q6 => 6 Monate
+            if verkuerzungsgruende.get("beruf_q5", False):
+                berufliche_total += 6
+            if verkuerzungsgruende.get("beruf_q6", False):
+                berufliche_total += 6
+            # Q2 => duration mapping
+            if verkuerzungsgruende.get("beruf_q2", False):
+                d = int(verkuerzungsgruende.get("beruf_q2_dauer_monate", 0) or 0)
+                if d >= 12:
+                    berufliche_total += 12
+                elif d >= 6:
+                    berufliche_total += 6
+                # else <6 => 0
+    else:
+        # Legacy behavior: fallback to old 'vorkenntnisse_monate' field
+        vorkenntnisse = verkuerzungsgruende.get("vorkenntnisse_monate", 0)
+        if vorkenntnisse and vorkenntnisse > 0:
+            berufliche_total += VERKUERZUNG_VORKENNTNISSE
+
+    # Add berufliche_total to Gesamtverkürzung
+    if berufliche_total:
+        verkuerzung_gesamt += berufliche_total
 
     # Gesamtverkürzung darf maximal 12 Monate betragen (Regel der zuständigen Stelle)
     verkuerzung_final = min(verkuerzung_gesamt, MAX_GESAMT_VERKUERZUNG_MONATE)

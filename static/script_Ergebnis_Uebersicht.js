@@ -42,7 +42,16 @@ function collectVerkuerzungsgruende() {
     alter_ueber_21: false,
     familien_kinderbetreuung: false,
     familien_pflegeverantwortung: false,
-    vorkenntnisse_monate: 0
+    vorkenntnisse_monate: 0,
+    // Neue berufliche Fragen
+    beruf_q1: false,
+    beruf_q2: false,
+    beruf_q2_dauer_monate: 0,
+    beruf_q3: false,
+    beruf_q4: false,
+    beruf_q5: false,
+    beruf_q6: false,
+    berufliche_verkuerzung_monate: 0
   };
 
   // 1) Alle Checkbox-Kacheln mit data-vk-field
@@ -93,6 +102,54 @@ function collectVerkuerzungsgruende() {
     if (!isNaN(alterInt) && alterInt > 21) {
       result.alter_ueber_21 = true;
     }
+  }
+
+  // 4) Neue berufliche Fragen (Ja/Nein und Dauer für Q2)
+  try {
+    const q1 = document.getElementById('vk_beruf_q1_ja');
+    const q2 = document.getElementById('vk_beruf_q2_ja');
+    const q2dur = document.getElementById('vk_beruf_q2_dauer_months');
+    const q3 = document.getElementById('vk_beruf_q3_ja');
+    const q4 = document.getElementById('vk_beruf_q4_ja');
+    const q5 = document.getElementById('vk_beruf_q5_ja');
+    const q6 = document.getElementById('vk_beruf_q6_ja');
+
+    if (q1 && q1.checked) result.beruf_q1 = true;
+    if (q2 && q2.checked) result.beruf_q2 = true;
+    if (q3 && q3.checked) result.beruf_q3 = true;
+    if (q4 && q4.checked) result.beruf_q4 = true;
+    if (q5 && q5.checked) result.beruf_q5 = true;
+    if (q6 && q6.checked) result.beruf_q6 = true;
+
+    // Q2 Dauer verarbeiten (nur wenn Q2 ausgewählt)
+    if (result.beruf_q2 && q2dur) {
+      const dur = parseInt(q2dur.value);
+      result.beruf_q2_dauer_monate = isNaN(dur) ? 0 : Math.max(0, dur);
+    }
+
+    // Berufliche Verkürzung nach Regeln: Q1/Q3/Q4 -> 12, Q5/Q6 -> 6, Q2 -> mapping
+    let berufMonate = 0;
+    if (result.beruf_q1) berufMonate += 12;
+    if (result.beruf_q3) berufMonate += 12;
+    if (result.beruf_q4) berufMonate += 12;
+    if (result.beruf_q5) berufMonate += 6;
+    if (result.beruf_q6) berufMonate += 6;
+    if (result.beruf_q2) {
+      const d = result.beruf_q2_dauer_monate || 0;
+      if (d >= 12) berufMonate += 12;
+      else if (d >= 6) berufMonate += 6;
+      // <6 => 0
+    }
+
+    // Legacy: falls vorkenntnisse_monate gesetzt (alte UI), mappe >0 -> 12
+    if (result.vorkenntnisse_monate && result.vorkenntnisse_monate > 0) {
+      berufMonate += 12;
+    }
+
+    result.berufliche_verkuerzung_monate = berufMonate;
+  } catch (e) {
+    // Falls DOM-Elemente fehlen, ignoriere silently (backwards compatible)
+    console.warn('Fehler beim Lesen beruflicher Fragen', e);
   }
 
   return result;
@@ -174,6 +231,31 @@ async function holeZusammenfassung() {
   if (verkuerzungsgruende.familien_pflegeverantwortung) {
     verkuerzungen.push({ key: "familien_pflegeverantwortung", months: 12 });
   }  
+
+  // Berufliche Fragen: zeige die einzelnen Gründe mit den zugeordneten Monaten
+  if (verkuerzungsgruende.beruf_q1) {
+    verkuerzungen.push({ key: "beruf_q1", months: 12 });
+  }
+  if (verkuerzungsgruende.beruf_q2) {
+    // Berechne Months für Q2: <6 -> 0, 6-11 -> 6, >=12 -> 12
+    const d = Number(verkuerzungsgruende.beruf_q2_dauer_monate || 0);
+    let m = 0;
+    if (d >= 12) m = 12;
+    else if (d >= 6) m = 6;
+    if (m > 0) verkuerzungen.push({ key: "beruf_q2", months: m });
+  }
+  if (verkuerzungsgruende.beruf_q3) {
+    verkuerzungen.push({ key: "beruf_q3", months: 12 });
+  }
+  if (verkuerzungsgruende.beruf_q4) {
+    verkuerzungen.push({ key: "beruf_q4", months: 12 });
+  }
+  if (verkuerzungsgruende.beruf_q5) {
+    verkuerzungen.push({ key: "beruf_q5", months: 6 });
+  }
+  if (verkuerzungsgruende.beruf_q6) {
+    verkuerzungen.push({ key: "beruf_q6", months: 6 });
+  }
 
   return {
     eingaben: {
@@ -296,6 +378,25 @@ function fuelleEingabenliste(eingaben, berechnung) {
         break;
       case "familien_kinderbetreuung":
         beschriftungsSchluessel = "vk.familie.label_kinder";
+        break;
+      // Berufliche Fragen (kurze Zusammenfassung für Ergebnisse)
+      case "beruf_q1":
+        beschriftungsSchluessel = "vk.qual.abgeschlosseneAusbildung_short";
+        break;
+      case "beruf_q2":
+        beschriftungsSchluessel = "vk.qual.nichtAbgeschlosseneAusbildung_short";
+        break;
+      case "beruf_q3":
+        beschriftungsSchluessel = "vk.qual.praktischeErfahrung_short";
+        break;
+      case "beruf_q4":
+        beschriftungsSchluessel = "vk.qual.berufsvorbereitendeSchule_short";
+        break;
+      case "beruf_q5":
+        beschriftungsSchluessel = "vk.qual.massnahmeVorbereitung_short";
+        break;
+      case "beruf_q6":
+        beschriftungsSchluessel = "vk.qual.ectsStudium_short";
         break;
       default:
         beschriftungsSchluessel = "";

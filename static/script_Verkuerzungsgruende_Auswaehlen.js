@@ -10,6 +10,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const kinderbetreuungNein = document.getElementById('kinderbetreuung-nein');
   const pflegeJa = document.getElementById('pflege-ja');
   const pflegeNein = document.getElementById('pflege-nein');
+  // Berufliche Qualifikationen (neu)
+  const berufQ1Ja = document.getElementById('vk_beruf_q1_ja');
+  const berufQ1Nein = document.getElementById('vk_beruf_q1_nein');
+  const berufQ2Ja = document.getElementById('vk_beruf_q2_ja');
+  const berufQ2Nein = document.getElementById('vk_beruf_q2_nein');
+  const berufQ2Duration = document.getElementById('vk_beruf_q2_dauer_months');
+  const berufQ2DurationContainer = document.getElementById('vk_beruf_q2_duration_container');
+  const berufQ3Ja = document.getElementById('vk_beruf_q3_ja');
+  const berufQ3Nein = document.getElementById('vk_beruf_q3_nein');
+  const berufQ4Ja = document.getElementById('vk_beruf_q4_ja');
+  const berufQ4Nein = document.getElementById('vk_beruf_q4_nein');
+  const berufQ5Ja = document.getElementById('vk_beruf_q5_ja');
+  const berufQ5Nein = document.getElementById('vk_beruf_q5_nein');
+  const berufQ6Ja = document.getElementById('vk_beruf_q6_ja');
+  const berufQ6Nein = document.getElementById('vk_beruf_q6_nein');
 
   /* ========== Tooltips (touch-optimiert) ========== */
   document.querySelectorAll('.info-btn').forEach(schaltflaeche => {
@@ -36,14 +51,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
-  // Alter-Eingabe validieren
+  // Alter-Eingabe validieren: Nur ganze Zahlen erlauben (wie Q2-Dauer)
+  const errorAlter = document.getElementById('errorAlter');
+  let alterErrorTimeout = null;
+  
+  alter.addEventListener('keydown', (ev) => {
+    const forbidden = ['e', 'E', '+', '-', '.', ','];
+    if (forbidden.includes(ev.key)) ev.preventDefault();
+  });
+  
+  alter.addEventListener('input', () => {
+    let v = alter.value.replace(/[^0-9]/g, '');
+    alter.value = v;
+    
+    // Max-Validierung sofort: Wenn > 99, auf 99 setzen und Fehler anzeigen
+    const alterInt = parseInt(v);
+    if (!isNaN(alterInt) && alterInt > 99) {
+      alter.value = 99;
+      alter.classList.add('error');
+      if (errorAlter) errorAlter.textContent = uebersetzung("errors.alterMax", "Der Wert darf maximal 99 betragen");
+      
+      // Fehler nach 4 Sekunden entfernen
+      clearTimeout(alterErrorTimeout);
+      alterErrorTimeout = setTimeout(() => {
+        alter.classList.remove('error');
+        if (errorAlter) errorAlter.textContent = '';
+      }, 4000);
+    }
+  });
+  
   alter.addEventListener('blur', () => {
     const alterInt = parseInt(alter.value);
 
     if (isNaN(alterInt) || alterInt < 0) {
       alter.value = null;
-    } else if (alterInt > 100) {
-      alter.value = null;
+    } else if (alterInt > 99) {
+      alter.value = 99;
     }
   });
 
@@ -74,6 +117,71 @@ document.addEventListener('DOMContentLoaded', () => {
     pflegeNein.addEventListener("change", () => {
       if (pflegeNein.checked) {
         pflegeJa.checked = false;
+      }
+    });
+  }
+
+  // Berufliche Fragen: Mutual exclusivity & Q2 Duration show/hide
+  function setupYesNo(jaEl, neinEl) {
+    if (!jaEl || !neinEl) return;
+    jaEl.addEventListener('change', () => {
+      if (jaEl.checked) neinEl.checked = false;
+    });
+    neinEl.addEventListener('change', () => {
+      if (neinEl.checked) jaEl.checked = false;
+    });
+  }
+
+  setupYesNo(berufQ1Ja, berufQ1Nein);
+  setupYesNo(berufQ2Ja, berufQ2Nein);
+  setupYesNo(berufQ3Ja, berufQ3Nein);
+  setupYesNo(berufQ4Ja, berufQ4Nein);
+  setupYesNo(berufQ5Ja, berufQ5Nein);
+  setupYesNo(berufQ6Ja, berufQ6Nein);
+
+  // Show/Hide duration input for Q2
+  if (berufQ2Ja && berufQ2DurationContainer && berufQ2Duration) {
+    berufQ2Ja.addEventListener('change', () => {
+      if (berufQ2Ja.checked) {
+        berufQ2DurationContainer.style.display = 'block';
+      } else {
+        berufQ2DurationContainer.style.display = 'none';
+        berufQ2Duration.value = '';
+      }
+    });
+    berufQ2Nein && berufQ2Nein.addEventListener('change', () => {
+      if (berufQ2Nein.checked) {
+        berufQ2DurationContainer.style.display = 'none';
+        berufQ2Duration.value = '';
+      }
+    });
+
+    // Numeric input: block invalid keys
+    berufQ2Duration.addEventListener('keydown', (ev) => {
+      const forbidden = ['e', 'E', '+', '-'];
+      if (forbidden.includes(ev.key)) ev.preventDefault();
+    });
+    
+    const errorBerufQ2Dauer = document.getElementById('errorBerufQ2Dauer');
+    let q2DauerErrorTimeout = null;
+    
+    berufQ2Duration.addEventListener('input', () => {
+      let v = berufQ2Duration.value.replace(/[^0-9]/g, '');
+      berufQ2Duration.value = v;
+      
+      // Max-Validierung sofort: Wenn > 50, auf 50 setzen und Fehler anzeigen
+      const dauer = parseInt(v);
+      if (!isNaN(dauer) && dauer > 50) {
+        berufQ2Duration.value = 50;
+        berufQ2Duration.classList.add('error');
+        if (errorBerufQ2Dauer) errorBerufQ2Dauer.textContent = uebersetzung("errors.berufQ2DauerMax", "Der Wert darf maximal 50 Monate betragen");
+        
+        // Fehler nach 4 Sekunden entfernen
+        clearTimeout(q2DauerErrorTimeout);
+        q2DauerErrorTimeout = setTimeout(() => {
+          berufQ2Duration.classList.remove('error');
+          if (errorBerufQ2Dauer) errorBerufQ2Dauer.textContent = '';
+        }, 4000);
       }
     });
   }
