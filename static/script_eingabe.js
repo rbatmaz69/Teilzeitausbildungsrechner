@@ -192,6 +192,14 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  // Teilzeit-Felder & Presets initial sperren, werden nach Eingabe von Wochenstunden freigeschaltet
+  [teilzeitProzentEingabe, teilzeitStundenEingabe].forEach((inp) => inp.disabled = true);
+  buttons.forEach((btn) => {
+    if (btn.dataset.type === 'percent' || btn.dataset.type === 'hours') {
+      btn.disabled = true;
+    }
+  });
+
   // ========== LOCALSTORAGE: EINGABEN SPEICHERN & WIEDERHERSTELLEN ==========
   const STORAGE_KEY = 'teilzeitrechner_eingaben';
   
@@ -226,6 +234,43 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
   
+  // Teilzeit-Eingaben nur erlauben, wenn reguläre Wochenstunden gesetzt sind
+  const aktualisiereTeilzeitAktivierbarkeit = () => {
+    const wochenStunden = parseNumber(wochenstundenEingabe.value);
+    const aktiv = !isNaN(wochenStunden) && wochenStunden > 0;
+
+    // Felder sperren/freigeben
+    [teilzeitProzentEingabe, teilzeitStundenEingabe].forEach((inp) => {
+      inp.disabled = !aktiv;
+      if (!aktiv) {
+        inp.value = '';
+        inp.classList.remove('error');
+      }
+    });
+
+    // Preset-Buttons sperren/freigeben
+    buttons.forEach((btn) => {
+      const typ = btn.dataset.type;
+      if (typ === 'percent' || typ === 'hours') {
+        btn.disabled = !aktiv;
+        if (!aktiv) {
+          btn.classList.remove('active');
+        }
+      }
+    });
+
+    if (!aktiv) {
+      // Referenzen und Fehler zurücksetzen
+      aktiverButtonTyp = null;
+      aktiverButtonWert = null;
+      aktuellerFehlerProzent = null;
+      aktuellerFehlerStunden = null;
+      if (fehlerProzent) fehlerProzent.textContent = '';
+      if (fehlerStunden) fehlerStunden.textContent = '';
+      speichereWerte();
+    }
+  };
+  
   // Lösche gespeicherte Werte
   const loescheGespeicherteWerte = () => {
     try {
@@ -237,6 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Lade Werte beim Start
   ladeGespeicherteWerte();
+  aktualisiereTeilzeitAktivierbarkeit();
   
   // Speichere bei jeder Eingabe
   [dauerEingabe, wochenstundenEingabe, teilzeitProzentEingabe, teilzeitStundenEingabe].forEach(inp => {
@@ -463,6 +509,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Validiere sichtbare Buttons basierend auf regulären Wochenstunden
     validiereSichtbareButtons();
+
+    // Teilzeit-Felder sperren/freigeben
+    aktualisiereTeilzeitAktivierbarkeit();
   })
   
   // Validiere Min+Max sofort bei Tippen/Spinner
@@ -486,6 +535,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (fehlerRegularStunden) fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Der Wert muss mindestens 10 Stunden betragen");
       entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => aktuellerFehlerRegularStunden = null, timerIdRegularStunden);
     }
+
+    // Teilzeit-Felder sperren/freigeben
+    aktualisiereTeilzeitAktivierbarkeit();
   })
   
   // Wird ausgeführt, nachdem ein neuer Prozentwert eingegeben wurde (Echtzeit bei Pfeilen)

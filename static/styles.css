@@ -66,6 +66,13 @@ button, input, select {
   font: inherit;
 }
 
+button:disabled,
+input:disabled,
+select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 h1 {
   font-size: 1.25rem;
   margin-bottom: .75rem;
