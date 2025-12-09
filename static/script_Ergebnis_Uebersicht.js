@@ -23,6 +23,9 @@ function aktuelleSprache() {
   return (window.I18N && window.I18N.lang) || "de";
 }
 
+// Locale-aware Zahl parser: ersetzt deutsches Komma durch Punkt für parseFloat
+const parseNumber = (value) => parseFloat(String(value).replace(',', '.'));
+
 
 // Zustand merken, damit wir bei Sprachwechsel neu rendern können
 let LETZTE_EINGABEN = null;
@@ -96,9 +99,9 @@ async function holeZusammenfassung() {
   const wochenstundenElement = document.getElementById("stunden");
   const prozentElement = document.getElementById("teilzeitProzent");
 
-  const basisMonate = Number(basisMonateElement?.value || 0);
-  const wochenstunden = Number(wochenstundenElement?.value || 0);
-  const teilzeitProzent = Number(prozentElement?.value || 0);
+  const basisMonate = parseNumber(basisMonateElement?.value || 0);
+  const wochenstunden = parseNumber(wochenstundenElement?.value || 0);
+  const teilzeitProzent = parseNumber(prozentElement?.value || 0);
 
   const verkuerzungsgruende = collectVerkuerzungsgruende();
 
