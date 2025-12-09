@@ -397,7 +397,9 @@
           </h2>
 
           <div class="vk-category-body">
-            <input type="number" id="alter" step="1">
+            <input type="number" id="alter" step="1" min="0" max="99">
+
+            <span class="error-message" id="errorAlter"></span>
 
             <span id="desc-alter21" class="sr-only" data-i18n="vk.alter21.sr">
               Wenn Sie über 21 Jahre alt sind, können Vorerfahrungen angerechnet werden.
@@ -491,97 +493,114 @@
         <!-- ============================================ -->
         <!-- 4. BERUFLICHE QUALIFIKATIONEN                -->
         <!-- ============================================ -->
-        <div class="vk-category">
+        <div class="vk-category vk-beruf">
           <h2 class="vk-category-title" data-i18n="vk.qual.question">
             Welche beruflichen Qualifikationen bringen Sie mit?
           </h2>
 
-          <!-- Beispielhafte Einträge für berufliche Vorkenntnisse -->
+          <!-- Neue Ja/Nein Fragen für berufliche Qualifikationen -->
           <div class="vk-category-body">
-            <label class="tile">
-              <input
-                type="checkbox"
-                aria-describedby="desc-vork"
-                data-vk-field="vorkenntnisse_monate"
-                data-vk-months="12"
-              >
-
-              <div class="tile-body">
-                <div class="tile-header">
-                    <span data-i18n="vk.vork.label1">Berufliche Vorkenntnisse</span>
-                </div>
+            <!-- Q1 -->
+            <div>
+              <p class="vk-question" data-i18n="vk.qual.abgeschlosseneAusbildung">Haben Sie bereits eine abgeschlossene Ausbildung im selben oder einem ähnlichen Beruf?</p>
+              <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
+                <label class="tile">
+                  <input type="checkbox" id="vk_beruf_q1_ja" aria-describedby="desc-beruf-q1" data-vk-field="beruf_q1">
+                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
+                </label>
+                <label class="tile">
+                  <input type="checkbox" id="vk_beruf_q1_nein" aria-describedby="desc-beruf-q1">
+                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+                </label>
               </div>
-            </label>
+              <span id="desc-beruf-q1" class="sr-only" data-i18n="vk.qual.abgeschlosseneAusbildung_sr">Abgeschlossene Ausbildung im selben/ähnlichen Beruf</span>
+            </div>
 
-            <span id="desc-vork" class="sr-only" data-i18n="vk.vork.sr">
-              Berufliche Vorkenntnisse können Ihre Ausbildungsdauer verkürzen.
-            </span>
-          </div>
-
-          <!-- Wiederholte Einträge als Platzhalter -->
-          <div class="vk-category-body">
-            <label class="tile">
-              <input
-                type="checkbox"
-                aria-describedby="desc-vork"
-                data-vk-field="vorkenntnisse_monate"
-                data-vk-months="12"
-              >
-
-              <div class="tile-body">
-                <div class="tile-header">
-                    <span data-i18n="vk.vork.label2">Berufliche Vorkenntnisse</span>
-                </div>
+            <!-- Q2 (unterfrage) -->
+            <div>
+              <p class="vk-question" data-i18n="vk.qual.nichtAbgeschlosseneAusbildung">Haben Sie eine Ausbildung im selben oder einem ähnlichen Beruf begonnen, aber nicht abgeschlossen?</p>
+              <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
+                <label class="tile">
+                  <input type="checkbox" id="vk_beruf_q2_ja" aria-describedby="desc-beruf-q2" data-vk-field="beruf_q2">
+                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
+                </label>
+                <label class="tile">
+                  <input type="checkbox" id="vk_beruf_q2_nein" aria-describedby="desc-beruf-q2">
+                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+                </label>
               </div>
-            </label>
-
-            <span id="desc-vork" class="sr-only" data-i18n="vk.vork.sr">
-              Berufliche Vorkenntnisse können Ihre Ausbildungsdauer verkürzen.
-            </span>
-          </div>
-
-          <!-- Weitere wiederholte Einträge als Platzhalter -->
-          <div class="vk-category-body">
-            <label class="tile">
-              <input
-                type="checkbox"
-                aria-describedby="desc-vork"
-                data-vk-field="vorkenntnisse_monate"
-                data-vk-months="12"
-              >
-
-              <div class="tile-body">
-                <div class="tile-header">
-                    <span data-i18n="vk.vork.label3">Berufliche Vorkenntnisse</span>
-                </div>
+              <div id="vk_beruf_q2_duration_container" style="display:none;margin-top:.5rem;">
+                <label for="vk_beruf_q2_dauer_months" style="display:block;margin-bottom:.5rem;font-weight:500;" data-i18n="vk.qual.nichtAbgeschlosseneAusbildung_dauer">Wie lange hat Ihre nicht abgeschlossene Ausbildung gedauert? (Monate)</label>
+                <input type="number" id="vk_beruf_q2_dauer_months" min="0" max="50" step="1" inputmode="numeric" data-i18n-attr="placeholder:vk.qual.months" placeholder="Monate" style="width:6rem;">
+                <span class="error-message" id="errorBerufQ2Dauer"></span>
+                <span class="sr-only">Geben Sie die Dauer in vollen Monaten an.</span>
               </div>
-            </label>
+              <span id="desc-beruf-q2" class="sr-only" data-i18n="vk.qual.nichtAbgeschlosseneAusbildung_sr">Begonnene, aber nicht abgeschlossene Ausbildung</span>
+            </div>
 
-            <span id="desc-vork" class="sr-only" data-i18n="vk.vork.sr">
-              Berufliche Vorkenntnisse können Ihre Ausbildungsdauer verkürzen.
-            </span>
-          </div>
-
-          <!-- Weitere wiederholte Einträge als Platzhalter -->
-          <div class="vk-category-body">
-            <label class="tile">
-              <input
-                type="checkbox"
-                aria-describedby="desc-vork"
-                data-vk-field="vorkenntnisse_monate"
-                data-vk-months="12"
-              >
-
-              <div class="tile-body">
-                <div class="tile-header">
-                    <span data-i18n="vk.vork.label4">Berufliche Vorkenntnisse</span>
-                </div>
+            <!-- Q3 -->
+            <div>
+              <p class="vk-question" data-i18n="vk.qual.praktischeErfahrung">Haben Sie bereits in einem ähnlichen Bereich gearbeitet oder praktische Erfahrungen gesammelt, die für die Ausbildung nützlich sind?</p>
+              <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
+                <label class="tile">
+                  <input type="checkbox" id="vk_beruf_q3_ja" aria-describedby="desc-beruf-q3" data-vk-field="beruf_q3">
+                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
+                </label>
+                <label class="tile">
+                  <input type="checkbox" id="vk_beruf_q3_nein" aria-describedby="desc-beruf-q3">
+                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+                </label>
               </div>
-            </label>
+              <span id="desc-beruf-q3" class="sr-only" data-i18n="vk.qual.praktischeErfahrung_sr">Praktische Erfahrungen im ähnlichen Bereich</span>
+            </div>
 
-            <span id="desc-vork" class="sr-only" data-i18n="vk.vork.sr">
-              Berufliche Vorkenntnisse können Ihre Ausbildungsdauer verkürzen.
-            </span>
+            <!-- Q4 -->
+            <div>
+              <p class="vk-question" data-i18n="vk.qual.berufsvorbereitendeSchule">Haben Sie vor der Ausbildung eine berufsvorbereitende Schulform besucht (z. B. Berufsgrundbildungsjahr, Berufsvorbereitungsjahr oder eine einjährige Berufsfachschule)?</p>
+              <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
+                <label class="tile">
+                  <input type="checkbox" id="vk_beruf_q4_ja" aria-describedby="desc-beruf-q4" data-vk-field="beruf_q4">
+                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
+                </label>
+                <label class="tile">
+                  <input type="checkbox" id="vk_beruf_q4_nein" aria-describedby="desc-beruf-q4">
+                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+                </label>
+              </div>
+              <span id="desc-beruf-q4" class="sr-only" data-i18n="vk.qual.berufsvorbereitendeSchule_sr">Berufsvorbereitende Schulform besucht</span>
+            </div>
+
+            <!-- Q5 -->
+            <div>
+              <p class="vk-question" data-i18n="vk.qual.massnahmeVorbereitung">Haben Sie vor der Ausbildung an einer Maßnahme zur Vorbereitung auf eine Ausbildung teilgenommen (z. B. Berufsvorbereitende Bildungsmaßnahme oder Einstiegsqualifizierung)?</p>
+              <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
+                <label class="tile">
+                  <input type="checkbox" id="vk_beruf_q5_ja" aria-describedby="desc-beruf-q5" data-vk-field="beruf_q5">
+                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
+                </label>
+                <label class="tile">
+                  <input type="checkbox" id="vk_beruf_q5_nein" aria-describedby="desc-beruf-q5">
+                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+                </label>
+              </div>
+              <span id="desc-beruf-q5" class="sr-only" data-i18n="vk.qual.massnahmeVorbereitung_sr">Maßnahme zur Vorbereitung auf eine Ausbildung</span>
+            </div>
+
+            <!-- Q6 -->
+            <div>
+              <p class="vk-question" data-i18n="vk.qual.ectsStudium">Haben Sie im Studium bereits mindestens 30 ECTS-Punkte in einem Bereich erworben, der zu Ihrem Ausbildungsberuf passt?</p>
+              <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
+                <label class="tile">
+                  <input type="checkbox" id="vk_beruf_q6_ja" aria-describedby="desc-beruf-q6" data-vk-field="beruf_q6">
+                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
+                </label>
+                <label class="tile">
+                  <input type="checkbox" id="vk_beruf_q6_nein" aria-describedby="desc-beruf-q6">
+                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+                </label>
+              </div>
+              <span id="desc-beruf-q6" class="sr-only" data-i18n="vk.qual.ectsStudium_sr">ECTS im passenden Studienbereich</span>
+            </div>
           </div>
         </div>
 

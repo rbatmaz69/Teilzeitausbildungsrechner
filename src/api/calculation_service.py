@@ -213,6 +213,14 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
         "familien_kinderbetreuung",
         "familien_pflegeverantwortung",
         "vorkenntnisse_monate",
+        "beruf_q1",
+        "beruf_q2",
+        "beruf_q2_dauer_monate",
+        "beruf_q3",
+        "beruf_q4",
+        "beruf_q5",
+        "beruf_q6",
+        "berufliche_verkuerzung_monate",
     }
     unexpected_keys = sorted(set(data.keys()) - allowed_keys)
     if unexpected_keys:
@@ -227,6 +235,13 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
         "alter_ueber_21",
         "familien_kinderbetreuung",
         "familien_pflegeverantwortung",
+        # berufliche Ja/Nein-Antworten
+        "beruf_q1",
+        "beruf_q2",
+        "beruf_q3",
+        "beruf_q4",
+        "beruf_q5",
+        "beruf_q6",
     }
     for key in bool_keys:
         value = data.get(key, False)
@@ -244,11 +259,39 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
                 details={"field": "verkuerzungsgruende.vorkenntnisse_monate"},
             )
 
+    # beruf_q2_dauer_monate ist optional, muss aber eine Zahl sein, wenn vorhanden
+    if "beruf_q2_dauer_monate" in data:
+        value = data["beruf_q2_dauer_monate"]
+        if not isinstance(value, (int, float)):
+            raise NutzlastValidierungsFehler(
+                "beruf_q2_dauer_monate muss eine Zahl sein",
+                details={"field": "verkuerzungsgruende.beruf_q2_dauer_monate"},
+            )
+
+    # berufliche_verkuerzung_monate kann vom Client als Vorkalkulation geliefert werden
+    if "berufliche_verkuerzung_monate" in data:
+        value = data["berufliche_verkuerzung_monate"]
+        if not isinstance(value, (int, float)):
+            raise NutzlastValidierungsFehler(
+                "berufliche_verkuerzung_monate muss eine Zahl sein",
+                details={"field": "verkuerzungsgruende.berufliche_verkuerzung_monate"},
+            )
+
 
 def _normalisiere_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]:
     # Berufserfahrung/Vorkenntnisse: Wenn > 0, wird auf festen 12-Monats-Wert abgebildet
     vorkenntnisse = data.get("vorkenntnisse_monate", 0)
     vorkenntnisse_monate = 12 if vorkenntnisse and vorkenntnisse > 0 else 0
+
+    # Normalisiere die neuen beruflichen Felder (bools und Zahlen)
+    beruf_q1 = bool(data.get("beruf_q1", False))
+    beruf_q2 = bool(data.get("beruf_q2", False))
+    beruf_q2_dauer = int(data.get("beruf_q2_dauer_monate", 0) or 0)
+    beruf_q3 = bool(data.get("beruf_q3", False))
+    beruf_q4 = bool(data.get("beruf_q4", False))
+    beruf_q5 = bool(data.get("beruf_q5", False))
+    beruf_q6 = bool(data.get("beruf_q6", False))
+    berufliche_verkuerzung_monate = int(data.get("berufliche_verkuerzung_monate", 0) or 0)
 
     return {
         "abitur": bool(data.get("abitur", False)),
@@ -261,4 +304,13 @@ def _normalisiere_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]
             data.get("familien_kinderbetreuung", False)
         ),
         "vorkenntnisse_monate": vorkenntnisse_monate,
+        # berufliche Fragen
+        "beruf_q1": beruf_q1,
+        "beruf_q2": beruf_q2,
+        "beruf_q2_dauer_monate": beruf_q2_dauer,
+        "beruf_q3": beruf_q3,
+        "beruf_q4": beruf_q4,
+        "beruf_q5": beruf_q5,
+        "beruf_q6": beruf_q6,
+        "berufliche_verkuerzung_monate": berufliche_verkuerzung_monate,
     }

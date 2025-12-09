@@ -392,6 +392,52 @@ def test_negative_teilzeit_input_fehler():
         berechne_gesamtdauer(**data)
 
 
+def test_beruf_q2_duration_boundaries():
+        """
+        Testet die Q2-Grenzwerte: 5,6,11,12 Monate.
+        Erwartung:
+            - 5 Monate -> keine Verkürzung durch Q2
+            - 6 Monate -> 6 Monate Verkürzung
+            - 11 Monate -> 6 Monate Verkürzung
+            - 12 Monate -> 12 Monate Verkürzung
+        """
+        base = {
+                "basis_dauer_monate": 36,
+                "vollzeit_stunden": 40,
+                "teilzeit_eingabe": 75,
+                "eingabetyp": "prozent",
+        }
+
+        # 5 Monate -> 0
+        data = base.copy()
+        data["verkuerzungsgruende"] = {"beruf_q2": True, "beruf_q2_dauer_monate": 5}
+        res = berechne_gesamtdauer(**data)
+        assert res["verkuerzung_gesamt_monate"] == 0
+        assert res["finale_dauer_monate"] == 48
+
+        # 6 Monate -> 6
+        data = base.copy()
+        data["verkuerzungsgruende"] = {"beruf_q2": True, "beruf_q2_dauer_monate": 6}
+        res = berechne_gesamtdauer(**data)
+        assert res["verkuerzung_gesamt_monate"] == 6
+        # 36 - 6 = 30 -> 30/0.75 = 40 -> Sonderregel (<=6) -> 36
+        assert res["finale_dauer_monate"] == 36
+
+        # 11 Monate -> 6
+        data = base.copy()
+        data["verkuerzungsgruende"] = {"beruf_q2": True, "beruf_q2_dauer_monate": 11}
+        res = berechne_gesamtdauer(**data)
+        assert res["verkuerzung_gesamt_monate"] == 6
+        assert res["finale_dauer_monate"] == 36
+
+        # 12 Monate -> 12
+        data = base.copy()
+        data["verkuerzungsgruende"] = {"beruf_q2": True, "beruf_q2_dauer_monate": 12}
+        res = berechne_gesamtdauer(**data)
+        assert res["verkuerzung_gesamt_monate"] == 12
+        assert res["finale_dauer_monate"] == 32
+
+
 def test_basis_dauer_als_text_wirft_fehler():
     """
     Test: String als Ausbildungsdauer ist ungültig.

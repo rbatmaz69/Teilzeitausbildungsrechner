@@ -2131,3 +2131,8 @@ body.modal-open {
   padding-top: 1rem;             
   border-top: 2px solid #f66; 
 }
+
+/* Keep berufliche Fragen vertically stacked like the family section */
+.vk-category.vk-beruf .vk-category-body {
+  flex-direction: column !important;
+}
