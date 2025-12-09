@@ -1,0 +1,25 @@
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8000:5000"   # Host:Container
+    environment:
+      - FLASK_ENV=production
+    restart: unless-stopped
+
+  frontend-lint:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    profiles: ["lint"]
+    command: ["npm", "run", "lint"]
+
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    profiles: ["test"]
+    command: ["pytest", "-q"]
