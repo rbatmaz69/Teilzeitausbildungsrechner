@@ -132,6 +132,17 @@
 
   /** Sendet ein benutzerdefiniertes Event, wenn sich die Sprache ändert. */
   const sendeSprachGeaendertEvent = () => {
+    // Konvertiere Dezimaltrenner in numerischen Eingabefeldern
+    const numericInputs = document.querySelectorAll('#stunden, #teilzeitProzent, #teilzeitStunden');
+    const decimalSep = zustand.sprache === 'de' ? ',' : '.';
+    const altSep = decimalSep === ',' ? '.' : ',';
+    
+    numericInputs.forEach(inp => {
+      if (inp.value) {
+        inp.value = inp.value.replace(new RegExp(`\\${altSep}`, 'g'), decimalSep);
+      }
+    });
+    
     window.dispatchEvent(new CustomEvent("i18n:changed", {
       detail: { lang: zustand.sprache }
     }));

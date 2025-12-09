@@ -574,6 +574,23 @@ select:-ms-input-placeholder {
   letter-spacing: 0.05em;
 }
 
+/* Sekundäres Eingabefeld (visuell untergeordnet) */
+.input-group.secondary {
+  opacity: 0.75;
+  margin-top: -1rem;
+}
+
+.input-group.secondary label {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #666;
+}
+
+.input-group.secondary input {
+  background-color: #f9f9f9;
+  border-color: #ddd;
+}
+
 .input-with-unit {
   position: relative;
   display: flex;
