@@ -616,6 +616,27 @@ input.error,
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Fehler-Indikation für Ja/Nein-Checkboxen (tile) */
+.tile input[type="checkbox"].error ~ .tile-body {
+  border: 2px solid #dc2626;
+  box-shadow: 0 0 0 3px rgb(220 38 38 / 10%);
+}
+
+.tile input[type="checkbox"].error {
+  border: 2px solid #dc2626;
+  box-shadow: 0 0 0 3px rgb(220 38 38 / 10%);
+}
+
+/* Rote Hervorhebung für Label mit error-Input */
+.tile input[type="checkbox"].error ~ .tile-body {
+  border-color: #dc2626;
+}
+
+.tile.error {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgb(220 38 38 / 10%);
+}
+
 /* ==========================================
    ERGEBNIS & INFO
    ========================================== */

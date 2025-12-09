@@ -81,6 +81,9 @@
       "massnahmeVorbereitung": "Did you participate in a measure to prepare for vocational training before the apprenticeship (e.g. pre-vocational training measure or entry qualification)?",
       "massnahmeVorbereitung_sr": "Measure to prepare for vocational training",
       "massnahmeVorbereitung_short": "Preparatory measure",
+      "qualifizierungsbausteine": "Have you completed individual qualification modules or partial qualifications that prepare you for a vocational occupation?",
+      "qualifizierungsbausteine_sr": "Completed qualification modules or partial qualifications",
+      "qualifizierungsbausteine_short": "Qualification modules",
       "ectsStudium": "Have you already earned at least 30 ECTS credits in a field that matches your apprenticeship during your studies?",
       "ectsStudium_sr": "ECTS in the matching study field",
       "ectsStudium_short": "ECTS credits"
@@ -173,6 +176,9 @@
     "invalidCut": "Note: Your selected reduction reasons add up to more than 12 months. The reduction is therefore limited to a maximum of 12 months.",
     "invalidCutShort": "Note: Reduction limited to max. 12 months",
     "regel8Abs3": "Note: Since your part-time training would only take up to 6 months longer, it ends after the normal full-time training duration (§ 8 para. 3 BBiG)."
+  },
+  "validation": {
+    "required": "This field is required"
   },
   "btn": {
     "calculate": "Show result",
