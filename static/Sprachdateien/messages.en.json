@@ -54,10 +54,13 @@
     "helper": "Choose all options that apply to you.",
     "legend": "Shortening reasons",
     "familie": {
-      "question": "Do you have family responsibilities?",
+      "title": "Family Responsibilities",
+      "question_kinder": "Do you care for your own child or are you responsible for caring for a child?",
+      "question_pflege": "Do you care for a relative or are you regularly involved in care?",
       "label_kinder": "Child care",
       "label_pflege": "Care for relatives",
-      "label_nichts": "No family responsibilities",
+      "yes": "Yes",
+      "no": "No",
       "sr": "If you have family or care responsibilities, a shortening may be possible."
     },
     "school": {

@@ -54,10 +54,13 @@
     "helper": "Wählen Sie alles aus, was auf Sie zutrifft.",
     "legend": "Gründe für Verkürzung",
     "familie": {
-      "question": "Haben Sie familiäre Verpflichtungen?",
+      "title": "Familiäre Verpflichtungen",
+      "question_kinder": "Betreuen Sie ein eigenes Kind oder sind Sie für die Betreuung eines Kindes verantwortlich?",
+      "question_pflege": "Pflegen Sie einen Angehörigen oder sind Sie regelmäßig an der Pflege beteiligt?",
       "label_kinder": "Kinderbetreuung",
       "label_pflege": "Pflege von Angehörigen",
-      "label_nichts": "Keine familiären Verpflichtungen",
+      "yes": "Ja",
+      "no": "Nein",
       "sr": "Wenn Sie Familien- oder Pflegeverantwortung haben, ist eine Verkürzung möglich."
     },
     "school": {

@@ -6,9 +6,10 @@
  */
 document.addEventListener('DOMContentLoaded', () => {
   const alter = document.getElementById('alter');
-  const kinder = document.getElementById('kinderbetreuung');
-  const pflege = document.getElementById('pflege');
-  const keineFamiliärenVerpflichtungen = document.getElementById('keineFamiliaerenVerpflichtungen');
+  const kinderbetreuungJa = document.getElementById('kinderbetreuung-ja');
+  const kinderbetreuungNein = document.getElementById('kinderbetreuung-nein');
+  const pflegeJa = document.getElementById('pflege-ja');
+  const pflegeNein = document.getElementById('pflege-nein');
 
   /* ========== Tooltips (touch-optimiert) ========== */
   document.querySelectorAll('.info-btn').forEach(schaltflaeche => {
@@ -46,22 +47,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Ereignis-Listener für familiäre Verpflichtungen
-  kinder.addEventListener("change", familiaereVerpflichtungAusgewaehlt);
-  pflege.addEventListener("change", familiaereVerpflichtungAusgewaehlt);
+  // Ereignis-Listener für familiäre Verpflichtungen - Ja/Nein-Gruppen
+  // Kinderbetreuung: Mutual exclusivity zwischen Ja und Nein
+  if (kinderbetreuungJa && kinderbetreuungNein) {
+    kinderbetreuungJa.addEventListener("change", () => {
+      if (kinderbetreuungJa.checked) {
+        kinderbetreuungNein.checked = false;
+      }
+    });
+    
+    kinderbetreuungNein.addEventListener("change", () => {
+      if (kinderbetreuungNein.checked) {
+        kinderbetreuungJa.checked = false;
+      }
+    });
+  }
 
-  keineFamiliärenVerpflichtungen.addEventListener("change", () => {
-    if (keineFamiliärenVerpflichtungen.checked) {
-      kinder.checked = false;
-      pflege.checked = false;
-    };
-  })
-
-  // Logik für familiäre Verpflichtungen
-  function familiaereVerpflichtungAusgewaehlt() {
-    if (kinder.checked || pflege.checked) {
-      keineFamiliärenVerpflichtungen.checked = false;
-    }
+  // Pflege: Mutual exclusivity zwischen Ja und Nein
+  if (pflegeJa && pflegeNein) {
+    pflegeJa.addEventListener("change", () => {
+      if (pflegeJa.checked) {
+        pflegeNein.checked = false;
+      }
+    });
+    
+    pflegeNein.addEventListener("change", () => {
+      if (pflegeNein.checked) {
+        pflegeJa.checked = false;
+      }
+    });
   }
 
   /* ========== "Was ist das?" Modal ========== */

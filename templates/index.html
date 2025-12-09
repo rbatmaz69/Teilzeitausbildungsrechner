@@ -397,9 +397,6 @@
       </button>
     </div>
 
-
-    </div>
-
     <form id="vk-form" class="space-y-3">
       <fieldset id="vk-fieldset" class="radio-group">
         <legend class="sr-only" data-i18n="vk.legend">Verkürzungsgründe</legend>
@@ -447,68 +444,80 @@
         <!-- 3. FAMILIENVORSORGE            -->
         <!-- ============================== -->
         <div class="vk-category">
-          <h2 class="vk-category-title" data-i18n="vk.familie.question">
-            Haben Sie familiäre Verpflichtungen (Kinderbetreuung oder Pflege von Angehörigen)?
+          <h2 class="vk-category-title" data-i18n="vk.familie.title">
+            Familiäre Verpflichtungen
           </h2>
 
-          <!-- Kinderbetreuung -->
-          <div class="vk-category-body">
-            <label class="tile">
-              <input
-                type="checkbox"
-                id="kinderbetreuung"
-                aria-describedby="desc-familie"
-                data-vk-field="familien_kinderbetreuung"
-              >
-              <div class="tile-body" style="flex:1">
-                <div class="tile-header">
-                  <span data-i18n="vk.familie.label_kinder">Kinderbetreuung</span>
+          <!-- Frage 1: Kinderbetreuung -->
+          <div>
+            <p class="vk-question" data-i18n="vk.familie.question_kinder">
+              Betreuen Sie ein eigenes Kind oder sind Sie für die Betreuung eines Kindes verantwortlich?
+            </p>
+            <div class="vk-yes-no-group" style="display: flex; flex-direction: row; gap: 0.5rem;">
+              <label class="tile">
+                <input
+                  type="checkbox"
+                  id="kinderbetreuung-ja"
+                  aria-describedby="desc-familie-kinder"
+                  data-vk-field="familien_kinderbetreuung"
+                >
+                <div class="tile-body" style="flex:1">
+                  <div class="tile-header">
+                    <span data-i18n="vk.familie.yes">Ja</span>
+                  </div>
                 </div>
-              </div>
-            </label>
-
-            <span id="desc-familie" class="sr-only" data-i18n="vk.familie.sr">
+              </label>
+              <label class="tile">
+                <input
+                  type="checkbox"
+                  id="kinderbetreuung-nein"
+                  aria-describedby="desc-familie-kinder"
+                >
+                <div class="tile-body" style="flex:1">
+                  <div class="tile-header">
+                    <span data-i18n="vk.familie.no">Nein</span>
+                  </div>
+                </div>
+              </label>
+            </div>
+            <span id="desc-familie-kinder" class="sr-only" data-i18n="vk.familie.sr">
               Wenn Sie ein Kind betreuen müssen, ist eine Verkürzung möglich.
             </span>
           </div>
 
-          <!-- Pflege von Angehörigen -->
-          <div class="vk-category-body">
-            <label class="tile">
-              <input
-                type="checkbox"
-                id="pflege"
-                aria-describedby="desc-familie"
-                data-vk-field="familien_pflegeverantwortung"
-              >
-              <div class="tile-body" style="flex:1">
-                <div class="tile-header">
-                  <span data-i18n="vk.familie.label_pflege">Pflege von Angehörigen</span>
+          <!-- Frage 2: Pflege von Angehörigen -->
+          <div>
+            <p class="vk-question" data-i18n="vk.familie.question_pflege">
+              Pflegen Sie einen Angehörigen oder sind Sie regelmäßig an der Pflege beteiligt?
+            </p>
+            <div class="vk-yes-no-group" style="display: flex; flex-direction: row; gap: 0.5rem;">
+              <label class="tile">
+                <input
+                  type="checkbox"
+                  id="pflege-ja"
+                  aria-describedby="desc-familie-pflege"
+                  data-vk-field="familien_pflegeverantwortung"
+                >
+                <div class="tile-body" style="flex:1">
+                  <div class="tile-header">
+                    <span data-i18n="vk.familie.yes">Ja</span>
+                  </div>
                 </div>
-              </div>
-            </label>
-
-            <span id="desc-familie" class="sr-only" data-i18n="vk.familie.sr">
-              Wenn Sie einen Angehörigen pflegen müssen, ist eine Verkürzung möglich.
-            </span>
-          </div>
-
-          <!-- trifft nicht zu -->
-          <div class="vk-category-body">
-            <label class="tile">
-              <input
-                type="checkbox"
-                id="keineFamiliaerenVerpflichtungen"
-                aria-describedby="desc-familie"
-              >
-              <div class="tile-body" style="flex:1">
-                <div class="tile-header">
-                  <span data-i18n="vk.familie.label_nichts">Keine familiären Verpflichtungen</span>
+              </label>
+              <label class="tile">
+                <input
+                  type="checkbox"
+                  id="pflege-nein"
+                  aria-describedby="desc-familie-pflege"
+                >
+                <div class="tile-body" style="flex:1">
+                  <div class="tile-header">
+                    <span data-i18n="vk.familie.no">Nein</span>
+                  </div>
                 </div>
-              </div>
-            </label>
-
-            <span id="desc-familie" class="sr-only" data-i18n="vk.familie.sr">
+              </label>
+            </div>
+            <span id="desc-familie-pflege" class="sr-only" data-i18n="vk.familie.sr">
               Wenn Sie einen Angehörigen pflegen müssen, ist eine Verkürzung möglich.
             </span>
           </div>
