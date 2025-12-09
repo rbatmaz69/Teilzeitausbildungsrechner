@@ -1063,6 +1063,31 @@ input.error,
   position: relative;
 }
 
+.language-switcher select,
+.language-switcher-desktop select {
+  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", inherit;
+}
+
+.language-switcher select option[data-flag],
+.language-switcher-desktop select option[data-flag] {
+  padding-left: 1.5em;
+  background-repeat: no-repeat;
+  background-size: 1.1em auto;
+  background-position: 0.2em 50%;
+}
+
+/* Deutschland-Flagge (SVG) */
+.language-switcher select option[data-flag="de"],
+.language-switcher-desktop select option[data-flag="de"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect width='3' height='2' fill='%23ffce00'/%3E%3Crect width='3' height='1' y='0' fill='%23000'/%3E%3Crect width='3' height='0.6667' y='0.6667' fill='%23dd0000'/%3E%3C/svg%3E");
+}
+
+/* Vereinigtes Königreich (vereinfachtes UK-Design) */
+.language-switcher select option[data-flag="en"],
+.language-switcher-desktop select option[data-flag="en"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'%3E%3Crect width='60' height='40' fill='%23012169'/%3E%3Crect x='24' width='12' height='40' fill='%23fff'/%3E%3Crect y='14' width='60' height='12' fill='%23fff'/%3E%3Crect x='26' width='8' height='40' fill='%23c8102e'/%3E%3Crect y='16' width='60' height='8' fill='%23c8102e'/%3E%3C/svg%3E");
+}
+
 #lang-switcher {
   color: var(--text, #000);
   /* stylelint-disable-next-line property-no-vendor-prefix */
