@@ -190,9 +190,29 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ========== ZEICHEN-FILTERUNG FÜR ALLE NUMERISCHEN EINGABEN ==========
-  const numericInputs = [dauerEingabe, wochenstundenEingabe, teilzeitProzentEingabe, teilzeitStundenEingabe];
+  // Nur Ganzzahlen für Monate-Eingabe
+  dauerEingabe.addEventListener('keydown', (ev) => {
+    const verboteneZeichen = ['e', 'E', '+', '-', '.', ','];
+    if (verboteneZeichen.includes(ev.key)) {
+      ev.preventDefault();
+    }
+  });
   
-  numericInputs.forEach(inp => {
+  dauerEingabe.addEventListener('input', () => {
+    let wert = dauerEingabe.value.replace(/[^0-9]/g, ''); // Nur Ziffern erlauben
+    
+    // Vorkommateil auf maximal 3 Stellen begrenzen
+    if (wert.length > 3) {
+      wert = wert.slice(0, 3);
+    }
+    
+    dauerEingabe.value = wert;
+  });
+  
+  // Dezimalzahlen für alle anderen Eingaben (Stunden und Prozent)
+  const decimalInputs = [wochenstundenEingabe, teilzeitProzentEingabe, teilzeitStundenEingabe];
+  
+  decimalInputs.forEach(inp => {
     // Blockiere unerwünschte Zeichen bei Tastatur-Eingabe
     inp.addEventListener('keydown', (ev) => {
       const verboteneZeichen = ['e', 'E', '+', '-'];
@@ -243,7 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Wird ausgeführt, nachdem eine neue Ausbildungsdauer eingegeben wurde (blur für manuelle Eingabe)
   dauerEingabe.addEventListener("blur", () => {
-    let ausbildungsdauer = parseFloat(dauerEingabe.value);
+    const ausbildungsdauer = parseInt(dauerEingabe.value, 10);
 
     // Wenn Feld leer war, leer lassen (nicht korrigieren)
     if (dauerEingabe.value.trim() === '') {
@@ -251,34 +271,6 @@ document.addEventListener("DOMContentLoaded", () => {
       aktuellerFehlerDauer = null;
       if (fehlerDauer) fehlerDauer.textContent = '';
       return;
-    }
-
-    // Monate stets auf ganze Zahl runden
-    if (!isNaN(ausbildungsdauer)) {
-      const originalWert = ausbildungsdauer;
-      ausbildungsdauer = Math.round(ausbildungsdauer);
-      dauerEingabe.value = ausbildungsdauer;
-      
-      // Wenn gerundet wurde, Hinweis anzeigen
-      if (originalWert !== ausbildungsdauer) {
-        const roundingMessage = uebersetzung("inputs.roundingHint", "Wert wurde von {original} auf {rounded} Monate gerundet")
-          .replace("{original}", originalWert.toFixed(1))
-          .replace("{rounded}", ausbildungsdauer);
-        if (fehlerDauer) {
-          fehlerDauer.textContent = roundingMessage;
-          fehlerDauer.style.color = "#19c530";
-          fehlerDauer.style.fontWeight = "normal";
-          // Hinweis nach 4 Sekunden ausblenden
-          if (timerIdDauer && timerIdDauer.roundingTimer) clearTimeout(timerIdDauer.roundingTimer);
-          timerIdDauer.roundingTimer = setTimeout(() => {
-            if (fehlerDauer) {
-              fehlerDauer.textContent = '';
-              fehlerDauer.style.color = "";
-              fehlerDauer.style.fontWeight = "";
-            }
-          }, 4000);
-        }
-      }
     }
 
     // Mindest- und Maximalwerte für die reguläre Ausbildungsdauer (IHK: 24-42 Monate)
