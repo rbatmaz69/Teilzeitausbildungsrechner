@@ -1146,7 +1146,7 @@ input.error,
 
 .startseite-description {
   color: var(--muted);
-  margin-bottom: 0.6rem; /* näher an die Info-Punkte auf Mobile */
+  margin-bottom: 1.3rem; /* näher an die Info-Punkte auf Mobile */
   line-height: 1.6;
 }
 
