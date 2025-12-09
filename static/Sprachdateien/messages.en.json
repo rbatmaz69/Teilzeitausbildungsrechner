@@ -44,9 +44,9 @@
     "roundingHint": "Value rounded from {original} to {rounded} months",
     "placeholders": {
       "dauer": "e.g. 36",
-      "stunden": "e.g. 40 or 40.5",
-      "teilzeitProzent": "e.g. 75 or 75.5",
-      "teilzeitStunden": "e.g. 30 or 30.5"
+      "stunden": "e.g. 40",
+      "teilzeitProzent": "e.g. 75",
+      "teilzeitStunden": "e.g. 30"
     }
   },
   "vk": {
