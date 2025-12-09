@@ -112,6 +112,7 @@ function collectVerkuerzungsgruende() {
     const q3 = document.getElementById('vk_beruf_q3_ja');
     const q4 = document.getElementById('vk_beruf_q4_ja');
     const q5 = document.getElementById('vk_beruf_q5_ja');
+    const q5b = document.getElementById('vk_beruf_q5b_ja');
     const q6 = document.getElementById('vk_beruf_q6_ja');
 
     if (q1 && q1.checked) result.beruf_q1 = true;
@@ -119,6 +120,7 @@ function collectVerkuerzungsgruende() {
     if (q3 && q3.checked) result.beruf_q3 = true;
     if (q4 && q4.checked) result.beruf_q4 = true;
     if (q5 && q5.checked) result.beruf_q5 = true;
+    if (q5b && q5b.checked) result.beruf_q5b = true;
     if (q6 && q6.checked) result.beruf_q6 = true;
 
     // Q2 Dauer verarbeiten (nur wenn Q2 ausgewählt)
@@ -133,6 +135,7 @@ function collectVerkuerzungsgruende() {
     if (result.beruf_q3) berufMonate += 12;
     if (result.beruf_q4) berufMonate += 12;
     if (result.beruf_q5) berufMonate += 6;
+    if (result.beruf_q5b) berufMonate += 6;
     if (result.beruf_q6) berufMonate += 6;
     if (result.beruf_q2) {
       const d = result.beruf_q2_dauer_monate || 0;
@@ -161,6 +164,155 @@ function collectVerkuerzungsgruende() {
  * Sammelt Formularwerte, sendet sie an den API-Endpunkt und normalisiert
  * das Ergebnis für die tabellarische Darstellung.
  */
+/**
+ * Validiert alle Eingabefelder und gibt Fehler aus wenn Felder leer sind.
+ * Scrollt zum ersten Fehler und hebt ihn hervor.
+ * @returns {boolean} true wenn alle Felder gültig sind, false sonst
+ */
+function validiereAlleEingaben() {
+  // Alle Fehler-Markierungen entfernen
+  document.querySelectorAll("input, .vk-yes-no-group").forEach(el => {
+    el.classList.remove("error");
+  });
+  document.querySelectorAll(".error-message, .error-message-ja-nein").forEach(el => {
+    el.textContent = "";
+  });
+
+  // Erforderliche Eingabefelder (number inputs)
+  const erforderlicheFelder = [
+    { id: "dauer", label: "Reguläre Ausbildungsdauer" },
+    { id: "stunden", label: "Reguläre Wochenstunden" },
+    { id: "alter", label: "Alter" }
+  ];
+
+  // Ja/Nein Gruppen (mind. eine Antwort pro Frage)
+  const jaNeineGruppen = [
+    { ja: "abitur-ja", nein: "abitur-nein", label: "Schulabschluss" },
+    { ja: "realschule-ja", nein: "realschule-nein", label: "Realschule" },
+    { ja: "kinderbetreuung-ja", nein: "kinderbetreuung-nein", label: "Kinderbetreuung" },
+    { ja: "pflege-ja", nein: "pflege-nein", label: "Pflege von Angehörigen" },
+    { ja: "vk_beruf_q1_ja", nein: "vk_beruf_q1_nein", label: "Abgeschlossene Ausbildung" },
+    { ja: "vk_beruf_q2_ja", nein: "vk_beruf_q2_nein", label: "Nicht abgeschlossene Ausbildung" },
+    { ja: "vk_beruf_q3_ja", nein: "vk_beruf_q3_nein", label: "Praktische Erfahrung" },
+    { ja: "vk_beruf_q4_ja", nein: "vk_beruf_q4_nein", label: "Berufsvorbereitende Schulform" },
+    { ja: "vk_beruf_q5_ja", nein: "vk_beruf_q5_nein", label: "Vorbereitungsmaßnahme" },
+    { ja: "vk_beruf_q5b_ja", nein: "vk_beruf_q5b_nein", label: "Qualifizierungsbausteine" },
+    { ja: "vk_beruf_q6_ja", nein: "vk_beruf_q6_nein", label: "ECTS-Punkte im Studium" }
+  ];
+
+  let ersterFehler = null;
+
+  // 1. Prüfe erforderliche Felder
+  for (const feld of erforderlicheFelder) {
+    const element = document.getElementById(feld.id);
+    if (!element) continue;
+
+    const wert = element.value?.trim();
+    if (!wert || wert === "" || Number(wert) === 0 || isNaN(Number(wert))) {
+      element.classList.add("error");
+      const errorId = "error" + feld.id.charAt(0).toUpperCase() + feld.id.slice(1);
+      const errorElement = document.getElementById(errorId);
+      if (errorElement) {
+        errorElement.textContent = uebersetzung("validation.required", "Dieses Feld ist erforderlich");
+      }
+      if (!ersterFehler) ersterFehler = element;
+    }
+  }
+
+  // 2. Prüfe Ja/Nein Gruppen
+  for (const gruppe of jaNeineGruppen) {
+    const jaElement = document.getElementById(gruppe.ja);
+    const neinElement = document.getElementById(gruppe.nein);
+
+    if (!jaElement || !neinElement) continue;
+
+    const jaChecked = jaElement.checked;
+    const neinChecked = neinElement.checked;
+
+    if (!jaChecked && !neinChecked) {
+      // Beide sind nicht ausgewählt → Fehler
+      // Markiere das tile-Label, nicht das checkbox
+      const jaLabel = jaElement.closest(".tile");
+      const neinLabel = neinElement.closest(".tile");
+      
+      if (jaLabel) jaLabel.classList.add("error");
+      if (neinLabel) neinLabel.classList.add("error");
+
+      // Fehlermeldung unter der Gruppe anzeigen
+      // Finde die vk-yes-no-group und füge die Fehlermeldung danach ein
+      const yesNoGroup = jaElement.closest(".vk-yes-no-group");
+      if (yesNoGroup) {
+        let errorElement = yesNoGroup.nextElementSibling;
+        // Prüfe ob bereits eine error-message vorhanden ist
+        if (!errorElement || !errorElement.classList.contains("error-message-ja-nein")) {
+          errorElement = document.createElement("span");
+          errorElement.className = "error-message error-message-ja-nein";
+          yesNoGroup.parentNode.insertBefore(errorElement, yesNoGroup.nextSibling);
+        }
+        errorElement.textContent = uebersetzung("validation.required", "Dieses Feld ist erforderlich");
+      }
+
+      if (!ersterFehler) ersterFehler = jaElement;
+    }
+  }
+
+  // 3. Wenn Q2 "Ja" ist, prüfe ob Dauer eingegeben wurde
+  const berufQ2Ja = document.getElementById("vk_beruf_q2_ja");
+  const berufQ2Duration = document.getElementById("vk_beruf_q2_dauer_months");
+  if (berufQ2Ja && berufQ2Ja.checked && berufQ2Duration) {
+    const dauer = berufQ2Duration.value?.trim();
+    if (!dauer || dauer === "" || Number(dauer) === 0 || isNaN(Number(dauer))) {
+      berufQ2Duration.classList.add("error");
+      const errorElement = document.getElementById("errorBerufQ2Dauer");
+      if (errorElement) {
+        errorElement.textContent = uebersetzung("validation.required", "Dieses Feld ist erforderlich");
+      }
+      if (!ersterFehler) ersterFehler = berufQ2Duration;
+    }
+  }
+
+  // 4. Wenn Fehler vorhanden, zum ersten Fehler scrollen (gleiche Logik wie "Zum Rechner" Button)
+  if (ersterFehler) {
+    setTimeout(() => {
+      const elementTop = ersterFehler.getBoundingClientRect().top + window.pageYOffset;
+      const offset = 70; // Offset für Tooltip + Abstand oben
+      const targetScrollY = elementTop - offset;
+      
+      // Manuelle Scroll-Animation für langsames, sichtbares Scrollen
+      const startY = window.pageYOffset;
+      const distance = targetScrollY - startY;
+      const duration = 1000; // 1 Sekunde für langsames Scrollen
+      let startTime = null;
+      
+      const easeInOutQuad = (t) => {
+        // Easing-Funktion für sanfte Animation
+        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      };
+      
+      const animateScroll = (currentTime) => {
+        if (startTime === null) startTime = currentTime;
+        const elapsedTime = currentTime - startTime;
+        const progress = Math.min(elapsedTime / duration, 1);
+        const ease = easeInOutQuad(progress);
+        const currentY = startY + distance * ease;
+        
+        window.scrollTo(0, currentY);
+        
+        if (progress < 1) {
+          requestAnimationFrame(animateScroll);
+        } else {
+          ersterFehler.focus();
+        }
+      };
+      
+      requestAnimationFrame(animateScroll);
+    }, 50);
+    return false;
+  }
+
+  return true;
+}
+
 async function holeZusammenfassung() {
   const basisMonateElement = document.getElementById("dauer");
   const wochenstundenElement = document.getElementById("stunden");
@@ -394,6 +546,9 @@ function fuelleEingabenliste(eingaben, berechnung) {
         break;
       case "beruf_q5":
         beschriftungsSchluessel = "vk.qual.massnahmeVorbereitung_short";
+        break;
+      case "beruf_q5b":
+        beschriftungsSchluessel = "vk.qual.qualifizierungsbausteine_short";
         break;
       case "beruf_q6":
         beschriftungsSchluessel = "vk.qual.ectsStudium_short";
@@ -1112,6 +1267,57 @@ function initialisiere() {
   $("#btn-share")?.addEventListener("click", teileLink);
   $("#btn-reset")?.addEventListener("click", setzeDatenZurueck);
   
+  // Clear validation errors when the user interacts with inputs or yes/no tiles
+  const clearableInputs = ["dauer", "stunden", "alter", "vk_beruf_q2_dauer_months"];
+  clearableInputs.forEach(id => {
+    const el = document.getElementById(id) || document.querySelector(`input[data-vk-field="${id}"]`);
+    if (!el) return;
+    el.addEventListener("input", () => {
+      el.classList.remove("error");
+      const errorId = id === 'vk_beruf_q2_dauer_months' ? 'errorBerufQ2Dauer' : 'error' + id.charAt(0).toUpperCase() + id.slice(1);
+      const errEl = document.getElementById(errorId);
+      if (errEl) errEl.textContent = "";
+    });
+  });
+
+  // Ja/Nein groups: clear tile error and group message on change
+  const yesNoPairs = [
+    ["abitur-ja","abitur-nein"],
+    ["realschule-ja","realschule-nein"],
+    ["kinderbetreuung-ja","kinderbetreuung-nein"],
+    ["pflege-ja","pflege-nein"],
+    ["vk_beruf_q1_ja","vk_beruf_q1_nein"],
+    ["vk_beruf_q2_ja","vk_beruf_q2_nein"],
+    ["vk_beruf_q3_ja","vk_beruf_q3_nein"],
+    ["vk_beruf_q4_ja","vk_beruf_q4_nein"],
+    ["vk_beruf_q5_ja","vk_beruf_q5_nein"],
+    ["vk_beruf_q5b_ja","vk_beruf_q5b_nein"],
+    ["vk_beruf_q6_ja","vk_beruf_q6_nein"]
+  ];
+
+  yesNoPairs.forEach(([jaId, neinId]) => {
+    [jaId, neinId].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener("change", () => {
+        // remove error class from both tiles if present
+        const jaTile = document.getElementById(jaId)?.closest?.(".tile");
+        const neinTile = document.getElementById(neinId)?.closest?.(".tile");
+        if (jaTile) jaTile.classList.remove("error");
+        if (neinTile) neinTile.classList.remove("error");
+
+        // remove group error message if present
+        const yesNoGroup = el.closest(".vk-yes-no-group");
+        if (yesNoGroup) {
+          const next = yesNoGroup.nextElementSibling;
+          if (next && next.classList.contains("error-message-ja-nein")) {
+            next.parentNode.removeChild(next);
+          }
+        }
+      });
+    });
+  });
+  
   // Prüfe zuerst URL-Parameter (hat Priorität, da es ein geteilter Link sein könnte)
   const urlDaten = ladeDatenAusUrl();
   if (urlDaten && urlDaten.eingaben && urlDaten.berechnung) {
@@ -1252,6 +1458,11 @@ window.addEventListener("resize", () => {
  * Fehler werden im UI angezeigt.
  */
 async function berechnen() {
+  // Validierung vor Berechnung
+  if (!validiereAlleEingaben()) {
+    return; // Abbruch wenn Validierung fehlgeschlagen
+  }
+
   // Ergebnis-Sektion anzeigen
   const ergebnisContainer = document.getElementById("ergebnis-container");
   if (ergebnisContainer) {
