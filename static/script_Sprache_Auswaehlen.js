@@ -102,18 +102,26 @@
     });
 
     // Synchronisiere beide Sprachumschalter (Mobile und Desktop)
-    const sprachAuswahl = document.getElementById("lang-switcher");
-    const sprachAuswahlDesktop = document.getElementById("lang-switcher-desktop");
+    // Neue: Button-basierte Umschalter statt Select
+    const langButtons = document.querySelectorAll(".lang-btn");
     
-    [sprachAuswahl, sprachAuswahlDesktop].forEach((select) => {
-      if (select) {
-        [...select.options].forEach((option) => {
-          const schluessel = option.dataset.i18n;
-          if (!schluessel) return;
-          const wert = aufloesung(woerterbuch, schluessel);
-          if (wert != null) option.textContent = String(wert);
-        });
-        select.value = zustand.sprache;
+    langButtons.forEach((btn) => {
+      const lang = btn.dataset.lang;
+      if (!lang) return;
+      
+      // Setze Texte aus i18n
+      const textSpan = btn.querySelector("span[data-i18n]");
+      if (textSpan) {
+        const schluessel = textSpan.dataset.i18n;
+        const wert = aufloesung(woerterbuch, schluessel);
+        if (wert != null) textSpan.textContent = String(wert);
+      }
+      
+      // Aktualisiere aktiven Status
+      if (lang === zustand.sprache) {
+        btn.classList.add("lang-btn-active");
+      } else {
+        btn.classList.remove("lang-btn-active");
       }
     });
   };
@@ -167,16 +175,11 @@
   };
 
   document.addEventListener("DOMContentLoaded", async () => {
-    const sprachAuswahl = document.getElementById("lang-switcher");
-    const sprachAuswahlDesktop = document.getElementById("lang-switcher-desktop");
     const anfaenglicheSprache =
       holeGespeicherteSprache() ||
       (navigator.language || navigator.userLanguage || "de").slice(0, 2);
 
     const startSprache = UNTERSTUETZT.includes(anfaenglicheSprache) ? anfaenglicheSprache : STANDARD_SPRACHE;
-
-    if (sprachAuswahl) sprachAuswahl.value = startSprache;
-    if (sprachAuswahlDesktop) sprachAuswahlDesktop.value = startSprache;
 
     await ladeUndWendeAn(startSprache);
     speichereSprache(startSprache);
@@ -213,19 +216,13 @@
     // 6) Beobachte Layout-Änderungen in der Startseite (i18n-Updates etc.)
     // Keine MutationObserver-Kopplung an Titel/Content – Position bleibt fix unabhängig vom Inhalt
 
-    if (sprachAuswahl) {
-      sprachAuswahl.addEventListener("change", async (ereignis) => {
-        const neueSprache = ereignis.target.value;
-        if (sprachAuswahlDesktop) sprachAuswahlDesktop.value = neueSprache;
-        speichereSprache(neueSprache);
-        await ladeUndWendeAn(neueSprache);
-      });
-    }
-
-    if (sprachAuswahlDesktop) {
-      sprachAuswahlDesktop.addEventListener("change", async (ereignis) => {
-        const neueSprache = ereignis.target.value;
-        if (sprachAuswahl) sprachAuswahl.value = neueSprache;
+    // Reagiere auf Language-Select-Änderungen
+    const langSwitcher = document.getElementById("lang-switcher");
+    if (langSwitcher) {
+      langSwitcher.addEventListener("change", async (event) => {
+        const neueSprache = event.target.value;
+        if (!neueSprache || !UNTERSTUETZT.includes(neueSprache)) return;
+        
         speichereSprache(neueSprache);
         await ladeUndWendeAn(neueSprache);
       });

@@ -5,8 +5,8 @@
   "lang": {
     "label": "Sprache",
     "aria": "Sprache wählen",
-    "de": "🇩🇪 Deutsch",
-    "en": "🇬🇧 English"
+    "de": "Deutsch",
+    "en": "English"
   },
   "inputs": {
     "title": "Ihre Berechnung",

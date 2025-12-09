@@ -271,15 +271,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
   
-  // Lösche gespeicherte Werte
-  const loescheGespeicherteWerte = () => {
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch (fehler) {
-      console.error('Fehler beim Löschen der gespeicherten Werte:', fehler);
-    }
-  };
-  
   // Lade Werte beim Start
   ladeGespeicherteWerte();
   aktualisiereTeilzeitAktivierbarkeit();

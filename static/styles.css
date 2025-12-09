@@ -42,6 +42,7 @@ html {
   width: 100%;
   max-width: 100vw;
   font-size: 16px;
+  /* stylelint-disable-next-line property-no-vendor-prefix */
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -50,7 +51,7 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: "Manrope", "Inter", "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: Manrope, Inter, "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 400;
   color: var(--text);
   background: var(--bg);
@@ -72,13 +73,6 @@ img, svg, video, canvas {
 
 button, input, select {
   font: inherit;
-}
-
-button:disabled,
-input:disabled,
-select:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
 }
 
 h1 {
@@ -538,21 +532,30 @@ input:not([type="checkbox"], [type="radio"]), select {
   appearance: none;
 }
 
+button:disabled,
+input:disabled,
+select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 input:not([type="checkbox"], [type="radio"])::placeholder,
 select::placeholder {
   color: #999;
   opacity: 1;
 }
 
+.input-with-unit input {
+  padding-right: 1.8rem;
+}
+
 /* Firefox spezifisch */
+/* stylelint-disable-next-line selector-no-vendor-prefix */
 input:not([type="checkbox"], [type="radio"]):-ms-input-placeholder,
+/* stylelint-disable-next-line selector-no-vendor-prefix */
 select:-ms-input-placeholder {
   color: #999;
   opacity: 1;
-}
-
-.input-with-unit input {
-  padding-right: 1.8rem;
 }
 
 .input-group { margin-bottom: .8rem; }
@@ -736,7 +739,7 @@ input.error,
 }
 
 .result-extension-arrow {
-  font-size: 2rem;
+  font-size: 3rem;
   color: var(--text);
   line-height: 1;
   display: block;
@@ -745,13 +748,14 @@ input.error,
 .result-extension-delta {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--accent-good);
+  color: #fff;
+  background: #10b981;
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--bg);
-  padding: 0 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
   line-height: 1.2;
   white-space: nowrap;
 }
@@ -1071,58 +1075,29 @@ input.error,
 /* Language Switcher - Mobile */
 .language-switcher {
   position: relative;
-}
-
-.language-switcher select,
-.language-switcher-desktop select {
-  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", inherit;
-}
-
-.language-switcher select option[data-flag],
-.language-switcher-desktop select option[data-flag] {
-  padding-left: 1.5em;
-  background-repeat: no-repeat;
-  background-size: 1.1em auto;
-  background-position: 0.2em 50%;
-}
-
-/* Deutschland-Flagge (SVG) */
-.language-switcher select option[data-flag="de"],
-.language-switcher-desktop select option[data-flag="de"] {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect width='3' height='2' fill='%23ffce00'/%3E%3Crect width='3' height='1' y='0' fill='%23000'/%3E%3Crect width='3' height='0.6667' y='0.6667' fill='%23dd0000'/%3E%3C/svg%3E");
-}
-
-/* Vereinigtes Königreich (vereinfachtes UK-Design) */
-.language-switcher select option[data-flag="en"],
-.language-switcher-desktop select option[data-flag="en"] {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'%3E%3Crect width='60' height='40' fill='%23012169'/%3E%3Crect x='24' width='12' height='40' fill='%23fff'/%3E%3Crect y='14' width='60' height='12' fill='%23fff'/%3E%3Crect x='26' width='8' height='40' fill='%23c8102e'/%3E%3Crect y='16' width='60' height='8' fill='%23c8102e'/%3E%3C/svg%3E");
+  display: inline-block;
 }
 
 #lang-switcher {
-  color: var(--text, #000);
-  /* stylelint-disable-next-line property-no-vendor-prefix */
-  -webkit-appearance: none;
-  /* stylelint-disable-next-line property-no-vendor-prefix */
-  -moz-appearance: none;
-  appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, #9ca3af 50%),
-                    linear-gradient(135deg, #9ca3af 50%, transparent 50%);
-  background-position: calc(100% - 12px) 50%,
-                       calc(100% - 7px) 50%;
-  background-size: 5px 5px, 5px 5px;
-  background-repeat: no-repeat;
-  padding: 0.3rem 1.5rem 0.4rem 0.5rem;
+  padding: 0.4rem 0.8rem;
+  padding-left: 2.2rem;
   border: 1px solid var(--border);
   border-radius: 6px;
+  background-color: #fff;
+  color: var(--text, #000);
   font-size: 0.95rem;
   font-weight: 500;
-  background-color: #fff;
   cursor: pointer;
   transition: border-color 0.2s ease, background-color 0.2s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23333' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1.2em;
+  padding-right: 2rem;
 }
 
-#lang-switcher:hover,
-#lang-switcher:focus {
+#lang-switcher:hover {
   border-color: var(--primary);
   background-color: #fafafa;
 }
@@ -1130,6 +1105,45 @@ input.error,
 #lang-switcher:focus-visible {
   outline: 3px solid #a5b4fc;
   outline-offset: 2px;
+}
+
+/* SVG Flags Overlay */
+.lang-flags-overlay {
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 0.2rem;
+  pointer-events: none;
+}
+
+.lang-flag {
+  display: none;
+  width: 16px;
+  height: 11px;
+  flex-shrink: 0;
+}
+
+.lang-flag-de {
+  display: block;
+}
+
+/* Show correct flag based on selected option */
+#lang-switcher:has(option[value="de"]:checked) ~ .lang-flags-overlay .lang-flag-de {
+  display: block;
+}
+
+#lang-switcher:has(option[value="de"]:checked) ~ .lang-flags-overlay .lang-flag-en {
+  display: none;
+}
+
+#lang-switcher:has(option[value="en"]:checked) ~ .lang-flags-overlay .lang-flag-en {
+  display: block;
+}
+
+#lang-switcher:has(option[value="en"]:checked) ~ .lang-flags-overlay .lang-flag-de {
+  display: none;
 }
 
 .startseite-title {
@@ -1228,7 +1242,7 @@ input.error,
 .info-item-title {
   font-size: 1rem;
   font-weight: 700;
-   margin: 0 0 0.25rem 0;
+  margin: 0 0 0.25rem;
   color: var(--text);
 }
 
@@ -1381,7 +1395,7 @@ input.error,
     grid-template-columns: 1fr 1fr;
     gap: clamp(1.5rem, 4vw, 6rem);
     align-items: center;
-    padding: clamp(2rem, 6vw, 6rem) clamp(2rem, 6vw, 6rem);
+    padding: clamp(2rem, 6vw, 6rem);
     width: 100%;
     max-width: 1600px;
     margin: 0 auto;
@@ -1589,6 +1603,7 @@ input.error,
     flex-direction: column;
     justify-content: center;
     overflow: visible;
+    
     /* Overlay-Positionierung des Sprachumschalters bleibt am Grid orientiert */
   }
 
