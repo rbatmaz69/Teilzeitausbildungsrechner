@@ -714,12 +714,12 @@ input.error,
   align-items: center;
   justify-content: center;
   position: relative;
-  min-width: 3rem;
-  padding: 0.5rem 0;
+  min-width: 4.5rem;
+  padding: 0.6rem 0;
 }
 
 .result-extension-arrow {
-  font-size: 1.5rem;
+  font-size: 2rem;
   color: var(--text);
   line-height: 1;
   display: block;
