@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap');
+
 /* ==========================================
-   THEME VARIABLEN
-   ========================================== */
+  THEME VARIABLEN
+  ========================================== */
 :root {
   --primary: #e00000;
   --primary-700: #3b5ddd;
@@ -39,20 +41,26 @@ html {
   overflow-x: hidden; /* Verhindert horizontales Scrollen */
   width: 100%;
   max-width: 100vw;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: "Manrope", "Inter", "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
   color: var(--text);
   background: var(--bg);
   line-height: 1.45;
-  font-size: 16px; /* Mobile Default */
+  font-size: 1rem; /* 16px via html */
   overflow: hidden auto; /* Verhindert horizontales Scrollen, erlaubt vertikales */
   width: 100%;
   max-width: 100vw;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Minimaler Reset für konsistentes Rendering */
@@ -75,6 +83,7 @@ select:disabled {
 
 h1 {
   font-size: 1.25rem;
+  font-weight: 700;
   margin-bottom: .75rem;
 }
 
@@ -106,6 +115,7 @@ header {
 header h1 {
   margin: 0;
   font-size: 1.3rem;
+  font-weight: 700;
 }
 
 .grid{
