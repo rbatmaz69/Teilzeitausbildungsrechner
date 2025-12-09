@@ -756,6 +756,7 @@ function setzeDatenZurueck() {
   // Gespeicherten Zustand löschen
   try {
     localStorage.removeItem("calculatorState");
+    localStorage.removeItem("teilzeitrechner_eingaben"); // Eingaben-Cache ebenfalls löschen
   } catch (fehler) {
     console.warn("Konnte calculatorState nicht löschen:", fehler);
   }

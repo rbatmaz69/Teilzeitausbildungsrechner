@@ -192,6 +192,57 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  // ========== LOCALSTORAGE: EINGABEN SPEICHERN & WIEDERHERSTELLEN ==========
+  const STORAGE_KEY = 'teilzeitrechner_eingaben';
+  
+  // Lade gespeicherte Werte beim Start
+  const ladeGespeicherteWerte = () => {
+    try {
+      const gespeichert = localStorage.getItem(STORAGE_KEY);
+      if (gespeichert) {
+        const werte = JSON.parse(gespeichert);
+        if (werte.dauer) dauerEingabe.value = werte.dauer;
+        if (werte.stunden) wochenstundenEingabe.value = werte.stunden;
+        if (werte.teilzeitProzent) teilzeitProzentEingabe.value = werte.teilzeitProzent;
+        if (werte.teilzeitStunden) teilzeitStundenEingabe.value = werte.teilzeitStunden;
+      }
+    } catch (fehler) {
+      console.error('Fehler beim Laden der gespeicherten Werte:', fehler);
+    }
+  };
+  
+  // Speichere Werte bei jeder Änderung
+  const speichereWerte = () => {
+    try {
+      const werte = {
+        dauer: dauerEingabe.value,
+        stunden: wochenstundenEingabe.value,
+        teilzeitProzent: teilzeitProzentEingabe.value,
+        teilzeitStunden: teilzeitStundenEingabe.value
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(werte));
+    } catch (fehler) {
+      console.error('Fehler beim Speichern der Werte:', fehler);
+    }
+  };
+  
+  // Lösche gespeicherte Werte
+  const loescheGespeicherteWerte = () => {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (fehler) {
+      console.error('Fehler beim Löschen der gespeicherten Werte:', fehler);
+    }
+  };
+  
+  // Lade Werte beim Start
+  ladeGespeicherteWerte();
+  
+  // Speichere bei jeder Eingabe
+  [dauerEingabe, wochenstundenEingabe, teilzeitProzentEingabe, teilzeitStundenEingabe].forEach(inp => {
+    inp.addEventListener('input', speichereWerte);
+  });
+
   // ========== ZEICHEN-FILTERUNG FÜR ALLE NUMERISCHEN EINGABEN ==========
   // Nur Ganzzahlen für Monate-Eingabe
   dauerEingabe.addEventListener('keydown', (ev) => {
