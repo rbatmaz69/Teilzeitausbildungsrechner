@@ -28,8 +28,8 @@
       "percent": "Percent",
       "hours": "Hours",
       "separator": "or",
-      "button24h": "3-day (≈ 24 h)",
-      "button32h": "4-day (≈ 32 h)"
+      "button24h": "24 hours (3-day)",
+      "button32h": "32 hours (4-day)"
     },
     "verkuerzungen": {
       "labelShort": "Reductions"

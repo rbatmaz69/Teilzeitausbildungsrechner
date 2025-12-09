@@ -28,8 +28,8 @@
       "percent": "Prozent",
       "hours": "Stunden",
       "separator": "oder",
-      "button24h": "3-Tage (≈ 24 Std)",
-      "button32h": "4-Tage (≈ 32 Std)"
+      "button24h": "24 Stunden (3-Tage)",
+      "button32h": "32 Stunden (4-Tage)"
     },
     "verkuerzungen": {
       "labelShort": "Verkürzungen"
