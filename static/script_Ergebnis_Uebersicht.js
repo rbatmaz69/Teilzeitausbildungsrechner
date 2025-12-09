@@ -730,11 +730,28 @@ function setzeDatenZurueck() {
   const stundenInput = document.getElementById("stunden");
   const teilzeitProzentInput = document.getElementById("teilzeitProzent");
   const teilzeitStundenInput = document.getElementById("teilzeitStunden");
+  const presetButtons = document.querySelectorAll('.preset[data-type="percent"], .preset[data-type="hours"]');
+  const fehlerProzent = document.getElementById("errorProzent");
+  const fehlerStunden = document.getElementById("errorStunden");
   
   if (dauerInput) dauerInput.value = "";
   if (stundenInput) stundenInput.value = "";
   if (teilzeitProzentInput) teilzeitProzentInput.value = "";
   if (teilzeitStundenInput) teilzeitStundenInput.value = "";
+
+  // Teilzeitfelder deaktivieren und optisch zurücksetzen
+  [teilzeitProzentInput, teilzeitStundenInput].forEach((inp) => {
+    if (!inp) return;
+    inp.disabled = true;
+    inp.classList.remove('error');
+  });
+  // Presets deaktivieren und aktiv-Zustand entfernen
+  presetButtons.forEach((btn) => {
+    btn.disabled = true;
+    btn.classList.remove('active');
+  });
+  if (fehlerProzent) fehlerProzent.textContent = "";
+  if (fehlerStunden) fehlerStunden.textContent = "";
   
   // Checkboxes für Verkürzungsgründe zurücksetzen
   const checkboxes = document.querySelectorAll('input[type="checkbox"][data-vk-field]');
