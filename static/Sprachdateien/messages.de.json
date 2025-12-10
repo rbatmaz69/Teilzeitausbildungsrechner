@@ -54,9 +54,13 @@
     "helper": "Wählen Sie alles aus, was auf Sie zutrifft.",
     "legend": "Gründe für Verkürzung",
     "familie": {
-      "question": "Haben Sie familiäre Verpflichtungen (Kinderbetreuung oder Pflege von Angehörigen)?",
-      "label": "Familien- und Pflegeverantwortung",
-      "badge": "−12 Monate",
+      "title": "Familiäre Verpflichtungen",
+      "question_kinder": "Betreuen Sie ein eigenes Kind oder sind Sie für die Betreuung eines Kindes verantwortlich?",
+      "question_pflege": "Pflegen Sie einen Angehörigen oder sind Sie regelmäßig an der Pflege beteiligt?",
+      "label_kinder": "Kinderbetreuung",
+      "label_pflege": "Pflege von Angehörigen",
+      "yes": "Ja",
+      "no": "Nein",
       "sr": "Wenn Sie Familien- oder Pflegeverantwortung haben, ist eine Verkürzung möglich."
     },
     "school": {
@@ -68,20 +72,55 @@
       "abitur": "Abitur / Hochschulreife"
     },
     "qual": {
-      "question": "Welche beruflichen Qualifikationen bringen Sie mit?"
+      "question": "Welche beruflichen Qualifikationen bringen Sie mit?",
+      "yes": "Ja",
+      "no": "Nein",
+      "months": "Monate",
+      "abgeschlosseneAusbildung": "Haben Sie bereits eine abgeschlossene Ausbildung im selben oder einem ähnlichen Beruf?",
+      "abgeschlosseneAusbildung_sr": "Abgeschlossene Ausbildung im selben oder ähnlichen Beruf",
+      "abgeschlosseneAusbildung_short": "Abgeschlossene Ausbildung",
+      "nichtAbgeschlosseneAusbildung": "Haben Sie eine Ausbildung im selben oder einem ähnlichen Beruf begonnen, aber nicht abgeschlossen?",
+      "nichtAbgeschlosseneAusbildung_sr": "Begonnene, aber nicht abgeschlossene Ausbildung",
+      "nichtAbgeschlosseneAusbildung_dauer": "Wie viele Monate hat die nicht abgeschlossene Ausbildung gedauert?",
+      "nichtAbgeschlosseneAusbildung_short": "Nicht abgeschlossene Ausbildung",
+      "praktischeErfahrung": "Haben Sie bereits in einem ähnlichen Bereich gearbeitet oder praktische Erfahrungen gesammelt, die für die Ausbildung nützlich sind?",
+      "praktischeErfahrung_sr": "Praktische Erfahrungen im ähnlichen Bereich",
+      "praktischeErfahrung_short": "Praktische Vorerfahrung",
+      "berufsvorbereitendeSchule": "Haben Sie vor der Ausbildung eine berufsvorbereitende Schulform besucht (z. B. Berufsgrundbildungsjahr, Berufsvorbereitungsjahr oder eine einjährige Berufsfachschule)?",
+      "berufsvorbereitendeSchule_sr": "Berufsvorbereitende Schulform besucht",
+      "berufsvorbereitendeSchule_short": "Berufsvorbereitende Schulform",
+      "massnahmeVorbereitung": "Haben Sie vor der Ausbildung an einer Maßnahme zur Vorbereitung auf eine Ausbildung teilgenommen (z. B. Berufsvorbereitende Bildungsmaßnahme oder Einstiegsqualifizierung)?",
+      "massnahmeVorbereitung_sr": "Maßnahme zur Vorbereitung auf eine Ausbildung",
+      "massnahmeVorbereitung_short": "Vorbereitung auf eine Ausbildung",
+      "ectsStudium": "Haben Sie im Studium bereits mindestens 30 ECTS-Punkte in einem Bereich erworben, der zu Ihrem Ausbildungsberuf passt?",
+      "ectsStudium_sr": "ECTS im passenden Studienbereich",
+      "ectsStudium_short": "Erbrachte Leistung im Studium"
+    },
+    "bildungsweg": {
+      "question": "Bildungsweg vor der Ausbildung"
     },
     "vork": {
-      "label": "Berufliche Vorkenntnisse",
-      "badge": "−12 Monate",
+      "label1": "Abgeschlossene Berufsausbildung",
+      "label2": "Nachweis einer einschlägigen beruflichen Grundausbildung",
+      "label3": "Einschlägige Berufstätigkeit",
+      "label4": "Arbeitserfahrung im Berufsfeld",
       "sr": "Berufliche Vorkenntnisse können Ihre Ausbildungsdauer verkürzen."
     },
     "other": {
-      "question": "Welche weiteren Gründe treffen auf Sie zu?"
+      "question": "Wie alt sind Sie?"
     },
     "alter21": {
-      "label": "Alter über 21 Jahre",
-      "badge": "−12 Monate",
+      "label": "Über 21 Jahre alt",
+      "yes": "Ja",
+      "no": "Nein",
       "sr": "Wenn Sie über 21 Jahre alt sind, können Vorerfahrungen angerechnet werden."
+    },
+    "infoBox": {
+      "button": "Was ist das?",
+      "buttonAria": "Informationen zu Verkürzungsgründen anzeigen",
+      "closeAria": "Modal schließen",
+      "title": "Was sind Verkürzungsgründe?",
+      "content": "<p><strong>Verkürzungsgründe</strong> sind Umstände oder Qualifikationen, die es ermöglichen, die reguläre Ausbildungsdauer zu verkürzen. Dies kann Ihnen helfen, Ihre Ausbildung schneller abzuschließen.</p><p><strong>Wie werden sie angewendet?</strong></p><p>Verkürzungsgründe werden auf die reguläre Ausbildungsdauer angerechnet. Je nach Art des Grundes können unterschiedliche Verkürzungen gewährt werden. Die Verkürzungen werden addiert, bis ein Maximum erreicht ist.</p><p><strong>Wie viele gleichzeitig möglich?</strong></p><p>Sie können <strong>mehrere Verkürzungsgründe gleichzeitig</strong> angeben. Die Gesamtverkürzung wird aus allen gewählten Gründen berechnet. Beachten Sie jedoch, dass es eine maximale Verkürzung von 12 Monaten gibt, die nicht überschritten werden kann.</p>"
     }
   },
   "res": {
@@ -142,6 +181,8 @@
     "regularHoursMax": "Der Wert darf maximal 48 Stunden betragen",
     "durationMin": "Der Wert muss mindestens 24 Monate betragen",
     "durationMax": "Der Wert darf maximal 42 Monate betragen",
+    "alterMax": "Der Wert darf maximal 99 betragen",
+    "berufQ2DauerMax": "Der Wert darf maximal 50 Monate betragen",
     "percentMin": "Der Wert muss mindestens 50% betragen",
     "percentMax": "Der Wert darf maximal 100% betragen",
     "hoursMin": "Der Wert muss mindestens 50% der regulären Stunden betragen",
@@ -149,6 +190,9 @@
     "invalidCut": "Hinweis: Ihre gewählten Verkürzungsgründe ergeben zusammen mehr als 12 Monate. Die Verkürzung wird daher auf maximal 12 Monate begrenzt.",
     "invalidCutShort": "Hinweis: Verkürzung auf max. 12 Monate begrenzt",
     "regel8Abs3": "Hinweis: Da Ihre Teilzeitausbildung nur bis zu 6 Monate länger dauern würde, endet sie bereits nach der normalen Vollzeit-Ausbildungsdauer (§ 8 Abs. 3 BBiG)."
+  },
+  "validation": {
+    "required": "Dieses Feld ist erforderlich"
   },
   "btn": {
     "calculate": "Ergebnis anzeigen",

@@ -54,34 +54,70 @@
     "helper": "Choose all options that apply to you.",
     "legend": "Shortening reasons",
     "familie": {
-      "question": "Do you have family responsibilities (child care or care for relatives)?",
-      "label": "Family and care responsibilities",
-      "badge": "−12 months",
+      "title": "Family Responsibilities",
+      "question_kinder": "Do you care for your own child or are you responsible for caring for a child?",
+      "question_pflege": "Do you care for a relative or are you regularly involved in care?",
+      "label_kinder": "Child care",
+      "label_pflege": "Care for relatives",
+      "yes": "Yes",
+      "no": "No",
       "sr": "If you have family or care responsibilities, a shortening may be possible."
     },
     "school": {
       "question": "What is your highest level of school education?",
       "label": "School degree",
       "none": "No degree",
-      "hauptschule": "Lower secondary school (Hauptschule)",
-      "realschule": "Intermediate secondary school (Realschule)",
-      "abitur": "University entrance qualification (Abitur)"
+      "hauptschule": "Lower secondary school (german: Hauptschule)",
+      "realschule": "Intermediate secondary school (german: Realschule)",
+      "abitur": "University entrance qualification (german: Abitur / Hochschulreife)"
     },
     "qual": {
-      "question": "What professional qualifications do you have?"
+      "question": "What professional qualifications do you have?",
+      "yes": "Yes",
+      "no": "No",
+      "months": "Months",
+      "abgeschlosseneAusbildung": "Have you already completed vocational training in the same or a similar occupation?",
+      "abgeschlosseneAusbildung_sr": "Completed vocational training in the same or similar occupation",
+      "abgeschlosseneAusbildung_short": "Completed vocational training",
+      "nichtAbgeschlosseneAusbildung": "Have you started vocational training in the same or a similar occupation but not completed it?",
+      "nichtAbgeschlosseneAusbildung_sr": "Started but not completed vocational training",
+      "nichtAbgeschlosseneAusbildung_dauer": "How many months did the incomplete vocational training last?",
+      "nichtAbgeschlosseneAusbildung_short": "Incomplete vocational training",
+      "praktischeErfahrung": "Have you already worked in a similar field or gained practical experience that is useful for the training?",
+      "praktischeErfahrung_sr": "Practical experience in a similar field",
+      "praktischeErfahrung_short": "Practical experience",
+      "berufsvorbereitendeSchule": "Did you attend a pre-vocational school form before the training (e.g. basic vocational year, preparatory year or a one-year vocational school)?",
+      "berufsvorbereitendeSchule_sr": "Attended pre-vocational school form",
+      "berufsvorbereitendeSchule_short": "Pre-vocational school form",
+      "massnahmeVorbereitung": "Did you participate in a measure to prepare for vocational training before the apprenticeship (e.g. pre-vocational training measure or entry qualification)?",
+      "massnahmeVorbereitung_sr": "Measure to prepare for vocational training",
+      "massnahmeVorbereitung_short": "Preparation for vocational training",
+      "ectsStudium": "Have you already earned at least 30 ECTS credits in a field that matches your apprenticeship during your studies?",
+      "ectsStudium_sr": "ECTS in the matching study field",
+      "ectsStudium_short": "Academic achievements in studies"
+    },
+    "bildungsweg": {
+      "question": "Educational background before training"
     },
     "vork": {
       "label": "Professional experience",
-      "badge": "−12 months",
       "sr": "Professional experience can shorten your training duration."
     },
     "other": {
-      "question": "Which other reasons apply to you?"
+      "question": "How old are you?"
     },
     "alter21": {
-      "label": "Age over 21",
-      "badge": "−12 months",
+      "label": "Over 21 years old",
+      "yes": "Yes",
+      "no": "No",
       "sr": "If you are over 21, previous experience can be credited."
+    },
+    "infoBox": {
+      "button": "What is this?",
+      "buttonAria": "Show information about reduction reasons",
+      "closeAria": "Close modal",
+      "title": "What are reduction reasons?",
+      "content": "<p><strong>Reduction reasons</strong> are circumstances or qualifications that allow you to shorten the regular training duration. This can help you complete your training faster.</p><p><strong>How are they applied?</strong></p><p>Reduction reasons are credited to the regular training duration. Depending on the type of reason, different reductions may be granted. The reductions are added together until a maximum is reached.</p><p><strong>How many can be used simultaneously?</strong></p><p>You can specify <strong>multiple reduction reasons simultaneously</strong>. The total reduction is calculated from all selected reasons. However, note that there is a maximum reduction of 21 months that cannot be exceeded.</p>"
     }
   },
   "res": {
@@ -142,6 +178,8 @@
     "regularHoursMax": "The value must not exceed 48 hours",
     "durationMin": "The value must be at least 24 months",
     "durationMax": "The value must not exceed 42 months",
+    "alterMax": "The value must not exceed 99",
+    "berufQ2DauerMax": "The value must not exceed 50 months",
     "percentMin": "The value must be at least 50%",
     "percentMax": "The value must not exceed 100%",
     "hoursMin": "The value must be at least 50% of regular hours",
@@ -149,6 +187,9 @@
     "invalidCut": "Note: Your selected reduction reasons add up to more than 12 months. The reduction is therefore limited to a maximum of 12 months.",
     "invalidCutShort": "Note: Reduction limited to max. 12 months",
     "regel8Abs3": "Note: Since your part-time training would only take up to 6 months longer, it ends after the normal full-time training duration (§ 8 para. 3 BBiG)."
+  },
+  "validation": {
+    "required": "This field is required"
   },
   "btn": {
     "calculate": "Show result",
