@@ -9,10 +9,3 @@ services:
     environment:
       - FLASK_ENV=production
     restart: unless-stopped
-
-  frontend-lint:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    profiles: ["lint"]
-    command: ["npm", "run", "lint"]
