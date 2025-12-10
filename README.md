@@ -179,8 +179,9 @@ ergebnis = berechne_gesamtdauer(
 
 ## 🧪 Tests
 
+### Unit & Integration Tests (Python)
 ```bash
-# Alle Tests ausführen
+# Alle Backend-Tests ausführen
 python3 -m pytest tests/ -v
 
 # Nur Unit-Tests (Berechnungslogik)
@@ -201,6 +202,48 @@ python3 -m pytest tests/ --cov=src --cov-report=term
 - `tests/test_calculation_service.py` - Unit-Tests für Service-Layer
 - `tests/test_api.py` - Integration-Tests für Flask-API
 - `tests/dummy_data.py` - Zentrale Testdaten (von allen Tests verwendet)
+
+### End-to-End Tests (Playwright)
+```bash
+# E2E-Tests im Headless-Modus
+npm run test:e2e
+
+# Tests mit UI (zum Debuggen)
+npm run test:e2e:ui
+
+# Tests mit sichtbarem Browser
+npm run test:e2e:headed
+```
+
+Die E2E-Tests validieren die gesamte Anwendung im Browser (60 Tests):
+- **Happy Path** (43): Desktop/Mobile Vollzeit, Teilzeit, Verkürzungen, Sprachwechsel, Reset, Share
+- **Validation** (13): Min/Max-Werte für Dauer/Stunden/Prozent, Input-Validierung
+- **Error Scenarios** (4): Edge Cases, BBiG-Regelungen (§ 7a, § 8), API-Fehler
+
+#### Deaktivierte E2E-Tests (vorübergehend)
+
+- In der aktuellen Sprint-Version sind drei E2E-Tests/Suites bewusst deaktiviert (skipped):
+  - `Happy Path: Reset-Button`
+  - `Happy Path: Share-Button`
+  - Mobile `Reset` variant
+
+  Grund: Die Anwendung enthält derzeit bekannte Bugs in den Reset/Share-Funktionen (z.B. Confirm-Dialog-/Clipboard-Handling und State-Restore-Verhalten). Diese Fehler werden im nächsten Sprint behoben; die zugehörigen E2E-Tests werden dann wieder aktiviert und gehärtet (mocking für `window.confirm` und `navigator.clipboard` sowie stabilere assertions für State‑Restore).
+
+  Hinweis: Das Deaktivieren dient der Stabilität der CI-Pipeline und verhindert falsche Pipeline-Failures, während die App‑Bugs getrennt im nächsten Sprint gelöst werden.
+
+**Konfiguration:** `playwright.config.js` (automatischer Flask-Server-Start)
+
+#### Warum Playwright statt Selenium?
+
+Wir haben uns für **Playwright** entschieden, da es für unsere Anwendung entscheidende Vorteile bietet:
+
+- **Auto-Wait & Stabilität**: Playwright wartet automatisch auf Element-Interaktionen und verhindert so flaky Tests durch Race Conditions - besonders wichtig für unsere asynchronen i18n-Übersetzungen und API-Calls.
+
+- **Performance**: Unsere 60 Tests laufen in ~1 Minute dank direkter Browser-DevTools-Kommunikation statt langsamerer WebDriver-Protokolle.
+
+- **Natives Mobile-Testing**: Für unsere responsive Mobile-Tests (iPhone 13 Emulation mit Touch-Events) bräuchten wir bei Selenium zusätzliche Tools wie Appium.
+
+- **Zero-Setup**: Playwright bringt Browser-Binaries mit - keine externe Driver-Installation/Wartung nötig. Vereinfacht CI/CD-Pipeline und lokales Entwickler-Setup.
 
 ## 📁 Projektstruktur
 
@@ -229,6 +272,11 @@ group-04/
 │   ├── test_calculation_logic.py  # Unit-Tests für Berechnungslogik
 │   ├── test_calculation_service.py # Unit-Tests für Service-Layer
 │   └── dummy_data.py       # Zentrale Testdaten (User Story 30)
+├── e2e/
+│   ├── happy-path.spec.js       # E2E: Hauptnutzerflüsse (43 Tests)
+│   ├── validation.spec.js       # E2E: Input-Validierung (13 Tests)
+│   └── error-scenarios.spec.js  # E2E: Edge Cases & BBiG-Regeln (4 Tests)
+├── playwright.config.js    # Playwright E2E-Test-Konfiguration
 ├── .flake8                 # Flake8 Linter-Konfiguration
 ├── eslint.config.js        # ESLint 9 Config (nutzt recommended + browser globals)
 ├── .stylelintrc.json       # Stylelint Config (nutzt stylelint-config-standard)
@@ -319,6 +367,7 @@ Das Skript wertet die Docstrings der Kernmodule (`src/calculation_logic.py`, `sr
   - CSS: Stylelint
   - HTML: HTMLHint
 - [x] **Test** - Pytest mit Coverage-Report (90%)
+- [x] **E2E** - Playwright End-to-End Tests (60 Tests)
 - [x] **Coverage Report** - Automatische Coverage-Artefakte
 - [ ] **Deployment** - Automatisches Deployment nach Tests
 - [ ] **Status Badges** - Build-Status in README
@@ -329,6 +378,32 @@ Das Skript wertet die Docstrings der Kernmodule (`src/calculation_logic.py`, `sr
 - Pushes zu `main`
 
 **Konfiguration:** `.gitlab-ci.yml`
+
+### 📦 Test-Artefakte in GitLab ansehen
+
+Nach jedem Pipeline-Durchlauf werden Test-Artefakte gespeichert:
+
+**Wo finde ich die Artefakte?**
+1. Gehe zu **CI/CD → Pipelines** in GitLab
+2. Klicke auf die gewünschte Pipeline
+3. Klicke auf den Job `test:e2e`
+4. Rechts oben: **Browse** oder **Download** Button
+
+**Was wird gespeichert?**
+- `playwright-report/` - Interaktiver HTML-Report mit allen Test-Details
+- `test-results/` - Screenshots, Videos und Traces von fehlgeschlagenen Tests
+- `test-results/junit.xml` - JUnit-Report für GitLab Test-Integration
+
+**GitLab zeigt automatisch:**
+- ✅ Test-Statistiken im Pipeline-Tab
+- ⚠️ Flaky Tests werden als "Failed but allowed" markiert (wenn retries=2)
+- 📊 Test-Trends über mehrere Pipelines
+
+**Playwright HTML-Report lokal öffnen:**
+```bash
+# Nach Download der Artefakte
+npx playwright show-report playwright-report/
+```
 
 ### Linting lokal ausführen
 

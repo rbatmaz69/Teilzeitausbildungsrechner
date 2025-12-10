@@ -213,6 +213,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (werte.stunden) wochenstundenEingabe.value = werte.stunden;
         if (werte.teilzeitProzent) teilzeitProzentEingabe.value = werte.teilzeitProzent;
         if (werte.teilzeitStunden) teilzeitStundenEingabe.value = werte.teilzeitStunden;
+        // Trigger Validierung für alle Felder nach Laden
+        dauerEingabe.dispatchEvent(new Event('blur'));
+        wochenstundenEingabe.dispatchEvent(new Event('blur'));
+        teilzeitProzentEingabe.dispatchEvent(new Event('blur'));
+        teilzeitStundenEingabe.dispatchEvent(new Event('blur'));
       }
     } catch (fehler) {
       console.error('Fehler beim Laden der gespeicherten Werte:', fehler);
@@ -267,7 +272,6 @@ document.addEventListener("DOMContentLoaded", () => {
       aktuellerFehlerStunden = null;
       if (fehlerProzent) fehlerProzent.textContent = '';
       if (fehlerStunden) fehlerStunden.textContent = '';
-      speichereWerte();
     }
   };
   
@@ -276,9 +280,8 @@ document.addEventListener("DOMContentLoaded", () => {
   aktualisiereTeilzeitAktivierbarkeit();
   
   // Speichere bei jeder Eingabe
-  [dauerEingabe, wochenstundenEingabe, teilzeitProzentEingabe, teilzeitStundenEingabe].forEach(inp => {
-    inp.addEventListener('input', speichereWerte);
-  });
+  // Entfernt: Automatisches Speichern bei jeder Eingabe
+  // Werte werden nur noch beim Klick auf 'Berechnen' gespeichert
 
   // ========== ZEICHEN-FILTERUNG FÜR ALLE NUMERISCHEN EINGABEN ==========
   // Nur Ganzzahlen für Monate-Eingabe
@@ -309,6 +312,20 @@ document.addEventListener("DOMContentLoaded", () => {
       const verboteneZeichen = ['e', 'E', '+', '-'];
       if (verboteneZeichen.includes(ev.key)) {
         ev.preventDefault();
+      }
+
+      // Spezialfall: Prozentfeld ist schon 100, weitere Ziffern werden geblockt und Fehler angezeigt
+      if (
+        inp === teilzeitProzentEingabe &&
+        /^[0-9]$/.test(ev.key) &&
+        inp.value === '100' &&
+        inp.selectionStart === inp.value.length // nur am Ende anhängen
+      ) {
+        ev.preventDefault();
+        aktuellerFehlerProzent = "errors.percentMax";
+        fehlerProzent.textContent = uebersetzung(aktuellerFehlerProzent, "Der Wert darf maximal 100% betragen");
+        teilzeitProzentEingabe.classList.add('error');
+        entferneFehlerMitFadeout(teilzeitProzentEingabe, fehlerProzent, () => aktuellerFehlerProzent = null, timerIdProzent);
       }
     });
     
@@ -356,18 +373,38 @@ document.addEventListener("DOMContentLoaded", () => {
       inp.value = wert;
     });
     
-    // Entferne alleinstehenden Trenner beim Verlassen des Feldes
+    // Entferne alleinstehenden Trenner und führende Nullen beim Verlassen des Feldes
     inp.addEventListener('blur', () => {
       const lang = window.I18N?.lang || document.documentElement.lang || 'de';
       const decimalSep = lang === 'de' ? ',' : '.';
-      if (inp.value.endsWith(decimalSep)) {
-        inp.value = inp.value.slice(0, -1);
+      let wert = inp.value;
+      // Entferne alleinstehenden Trenner
+      if (wert.endsWith(decimalSep)) {
+        wert = wert.slice(0, -1);
       }
+      // Entferne führende Nullen (nur vor Dezimaltrennzeichen)
+      if (!wert.includes(decimalSep)) {
+        wert = wert.replace(/^0+/, '');
+        if (wert === '') wert = '0';
+      } else {
+        // z.B. 00012,3 -> 12,3
+        let teile = wert.split(decimalSep);
+        teile[0] = teile[0].replace(/^0+/, '');
+        if (teile[0] === '') teile[0] = '0';
+        wert = teile.join(decimalSep);
+      }
+      inp.value = wert;
     });
   });
 
   // Wird ausgeführt, nachdem eine neue Ausbildungsdauer eingegeben wurde (blur für manuelle Eingabe)
   dauerEingabe.addEventListener("blur", () => {
+    // Entferne führende Nullen
+    let wert = dauerEingabe.value;
+    wert = wert.replace(/^0+/, '');
+    if (wert === '') wert = '0';
+    dauerEingabe.value = wert;
+
     const ausbildungsdauer = parseInt(dauerEingabe.value, 10);
 
     // Wenn Feld leer war, leer lassen (nicht korrigieren)
@@ -1255,4 +1292,16 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }, false); // useCapture = false, damit click-Event auf Icon zuerst ausgeführt wird
+  // === Berechnen-Button: Werte speichern und validieren ===
+  const berechnenBtn = document.getElementById('berechnenBtn');
+  if (berechnenBtn) {
+    berechnenBtn.addEventListener('click', () => {
+      speichereWerte();
+      // Trigger Validierung für alle Felder
+      dauerEingabe.dispatchEvent(new Event('blur'));
+      wochenstundenEingabe.dispatchEvent(new Event('blur'));
+      teilzeitProzentEingabe.dispatchEvent(new Event('blur'));
+      teilzeitStundenEingabe.dispatchEvent(new Event('blur'));
+    });
+  }
 });
