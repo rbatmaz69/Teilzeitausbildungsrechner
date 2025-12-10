@@ -132,28 +132,50 @@ header h1 {
 
 .tile {
   flex: 1;
-  border: 1px solid var(--border);
+  border: 2px solid transparent;
   border-radius: 14px;
-  background: #fff;
-  padding: 12px;
+  background: #f2f2f2;
+  padding: 12px 16px;
   display: flex;
   gap: 10px;
   align-items: center;
-  transition: box-shadow .15s ease, border-color .15s ease, transform .05s ease;
+  transition: box-shadow .15s ease, border-color .15s ease, transform .05s ease, background-color .15s ease;
+  cursor: pointer;
+  position: relative;
+  color: #333;
+  font-weight: 500;
 }
 
-.tile:hover { box-shadow: 0 4px 16px rgb(0 0 0 / 6%); }
+.tile:hover { 
+  box-shadow: 0 2px 8px rgb(0 0 0 / 8%);
+}
 .tile:active { transform: translateY(1px); }
 
+/* Checkbox verstecken aber funktional halten */
 .tile input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-  accent-color: var(--primary-600);
-  /* stylelint-disable-next-line property-no-vendor-prefix */
-  -webkit-appearance: checkbox; /* Safari: Checkbox-Darstellung sicherstellen */
-  /* stylelint-disable-next-line declaration-property-value-keyword-no-deprecated */
-  appearance: checkbox;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+
+/* Parent Tile wird bei checked aktiviert */
+.tile:has(input[type="checkbox"]:checked) {
+  background-color: var(--primary);
+  color: #fff;
+}
+
+.tile-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  transition: color .15s ease;
 }
 
 .tile-header {
@@ -162,6 +184,7 @@ header h1 {
   align-items: center;
   gap: 8px;
   font-weight: 600;
+  width: 100%;
 }
 
 .tile-group {
