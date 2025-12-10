@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Alter-Eingabe validieren
   const errorAlter = document.getElementById('errorAlter');
+  /* global uebersetzung */
   let alterErrorTimeout = null;
   
   alter.addEventListener('keydown', (ev) => {
