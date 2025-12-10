@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap');
+
 /* ==========================================
-   THEME VARIABLEN
-   ========================================== */
+  THEME VARIABLEN
+  ========================================== */
 :root {
   --primary: #e00000;
   --primary-700: #3b5ddd;
@@ -33,31 +35,49 @@
    ========================================== */
 * {
   box-sizing: border-box;
-  max-width: 100%; /* Verhindert, dass Elemente breiter als Container werden */
 }
 
 html {
   overflow-x: hidden; /* Verhindert horizontales Scrollen */
   width: 100%;
   max-width: 100vw;
+  font-size: 16px;
+  /* stylelint-disable-next-line property-no-vendor-prefix */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: Manrope, Inter, "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
   color: var(--text);
   background: var(--bg);
   line-height: 1.45;
-  font-size: 16px; /* Mobile Default */
+  font-size: 1.125rem; /* ~18px via html-Basis, noch besser lesbar */
   overflow: hidden auto; /* Verhindert horizontales Scrollen, erlaubt vertikales */
   width: 100%;
   max-width: 100vw;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Minimaler Reset für konsistentes Rendering */
+img, svg, video, canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button, input, select {
+  font: inherit;
 }
 
 h1 {
   font-size: 1.25rem;
+  font-weight: 700;
   margin-bottom: .75rem;
 }
 
@@ -88,7 +108,8 @@ header {
 
 header h1 {
   margin: 0;
-  font-size: 1.3rem;
+  font-size: 2rem;
+  font-weight: 700;
 }
 
 .grid{
@@ -331,13 +352,14 @@ button.preset {
   color: #333;
   border: 1px solid #ccc;
   border-radius: 6px;
-  padding: .45rem 0;
-  width: 3.9rem;
+  padding: .45rem .5rem;
+  min-width: 3.9rem;
   font-weight: 600;
   box-shadow: var(--shadow);
   transition: all 0.2s ease;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
 }
 
 button.preset:hover {
@@ -505,11 +527,35 @@ input:not([type="checkbox"], [type="radio"]), select {
   color: var(--text, #000); /* Explizit schwarze Schrift für Safari */
   /* stylelint-disable-next-line property-no-vendor-prefix */
   -webkit-appearance: none; /* Safari-spezifisch */
+  /* stylelint-disable-next-line property-no-vendor-prefix */
+  -moz-appearance: none; /* Firefox vereinheitlichen */
   appearance: none;
+}
+
+button:disabled,
+input:disabled,
+select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+input:not([type="checkbox"], [type="radio"])::placeholder,
+select::placeholder {
+  color: #999;
+  opacity: 1;
 }
 
 .input-with-unit input {
   padding-right: 1.8rem;
+}
+
+/* Firefox spezifisch */
+/* stylelint-disable-next-line selector-no-vendor-prefix */
+input:not([type="checkbox"], [type="radio"]):-ms-input-placeholder,
+/* stylelint-disable-next-line selector-no-vendor-prefix */
+select:-ms-input-placeholder {
+  color: #999;
+  opacity: 1;
 }
 
 .input-group { margin-bottom: .8rem; }
@@ -535,6 +581,34 @@ input:not([type="checkbox"], [type="radio"]), select {
 .input-row .half {
   flex: 1 1 0;
   min-width: 0;
+}
+
+/* Trenner zwischen Eingabefeldern */
+.input-separator {
+  text-align: center;
+  color: #999;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0.8rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Sekundäres Eingabefeld (visuell untergeordnet) */
+.input-group.secondary {
+  opacity: 0.75;
+  margin-top: -1rem;
+}
+
+.input-group.secondary label {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #666;
+}
+
+.input-group.secondary input {
+  background-color: #f9f9f9;
+  border-color: #ddd;
 }
 
 .input-with-unit {
@@ -660,12 +734,12 @@ input.error,
   align-items: center;
   justify-content: center;
   position: relative;
-  min-width: 3rem;
-  padding: 0.5rem 0;
+  min-width: 4.5rem;
+  padding: 0.6rem 0;
 }
 
 .result-extension-arrow {
-  font-size: 1.5rem;
+  font-size: 3rem;
   color: var(--text);
   line-height: 1;
   display: block;
@@ -674,13 +748,14 @@ input.error,
 .result-extension-delta {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--accent-good);
+  color: #fff;
+  background: #10b981;
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--bg);
-  padding: 0 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
   line-height: 1.2;
   white-space: nowrap;
 }
@@ -908,7 +983,7 @@ input.error,
 
 /* === Tablet (≥600px) === */
 @media (width >= 600px) {
-  header h1 { font-size: 1.6rem; }
+  header h1 { font-size: 2.3rem; }
 
   .button-row { justify-content: space-between; }
 
@@ -932,7 +1007,7 @@ input.error,
     padding: 2rem;
   }
 
-  header h1 { font-size: 1.8rem; }
+  header h1 { font-size: 2.6rem; }
 
   button.preset { width: 4.5rem; }
   h3 { font-size: 1.1rem; }
@@ -1000,31 +1075,29 @@ input.error,
 /* Language Switcher - Mobile */
 .language-switcher {
   position: relative;
+  display: inline-block;
 }
 
 #lang-switcher {
-  color: var(--text, #000);
-  /* stylelint-disable-next-line property-no-vendor-prefix */
-  -webkit-appearance: none;
-  appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, #9ca3af 50%),
-                    linear-gradient(135deg, #9ca3af 50%, transparent 50%);
-  background-position: calc(100% - 12px) 50%,
-                       calc(100% - 7px) 50%;
-  background-size: 5px 5px, 5px 5px;
-  background-repeat: no-repeat;
-  padding: 0.3rem 1.5rem 0.4rem 0.5rem;
+  padding: 0.4rem 0.8rem;
+  padding-left: 2.2rem;
   border: 1px solid var(--border);
   border-radius: 6px;
+  background-color: #fff;
+  color: var(--text, #000);
   font-size: 0.95rem;
   font-weight: 500;
-  background-color: #fff;
   cursor: pointer;
   transition: border-color 0.2s ease, background-color 0.2s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23333' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1.2em;
+  padding-right: 2rem;
 }
 
-#lang-switcher:hover,
-#lang-switcher:focus {
+#lang-switcher:hover {
   border-color: var(--primary);
   background-color: #fafafa;
 }
@@ -1032,6 +1105,45 @@ input.error,
 #lang-switcher:focus-visible {
   outline: 3px solid #a5b4fc;
   outline-offset: 2px;
+}
+
+/* SVG Flags Overlay */
+.lang-flags-overlay {
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 0.2rem;
+  pointer-events: none;
+}
+
+.lang-flag {
+  display: none;
+  width: 16px;
+  height: 11px;
+  flex-shrink: 0;
+}
+
+.lang-flag-de {
+  display: block;
+}
+
+/* Show correct flag based on selected option */
+#lang-switcher:has(option[value="de"]:checked) ~ .lang-flags-overlay .lang-flag-de {
+  display: block;
+}
+
+#lang-switcher:has(option[value="de"]:checked) ~ .lang-flags-overlay .lang-flag-en {
+  display: none;
+}
+
+#lang-switcher:has(option[value="en"]:checked) ~ .lang-flags-overlay .lang-flag-en {
+  display: block;
+}
+
+#lang-switcher:has(option[value="en"]:checked) ~ .lang-flags-overlay .lang-flag-de {
+  display: none;
 }
 
 .startseite-title {
@@ -1048,7 +1160,7 @@ input.error,
 
 .startseite-description {
   color: var(--muted);
-  margin-bottom: 0.6rem; /* näher an die Info-Punkte auf Mobile */
+  margin-bottom: 1.3rem; /* näher an die Info-Punkte auf Mobile */
   line-height: 1.6;
 }
 
@@ -1130,7 +1242,7 @@ input.error,
 .info-item-title {
   font-size: 1rem;
   font-weight: 700;
-  margin: 0 0 var(--space-1) 0;
+  margin: 0 0 0.25rem;
   color: var(--text);
 }
 
@@ -1142,7 +1254,7 @@ input.error,
 
 .btn-start-calculate {
   width: 100%;
-  margin-top: 1rem;
+  margin-top: 2rem;
   background-color: var(--primary);
   color: white;
   font-weight: bold;
@@ -1281,15 +1393,15 @@ input.error,
   .startseite-desktop {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 6rem;
+    gap: clamp(1.5rem, 4vw, 6rem);
     align-items: center;
-    padding: 4rem 6rem;
+    padding: clamp(2rem, 6vw, 6rem);
     width: 100%;
     max-width: 1600px;
     margin: 0 auto;
 
-    /* 16:9 Aspect Ratio Container - flexibel, kein max-height */
-    min-height: 90vh;
+    /* Flexible Höhe ohne erzwungenes Vollbild, verhindert Überlauf auf kleineren Displays */
+    min-height: auto;
     box-sizing: border-box;
 
     /* Verhindert Abschneiden */
@@ -1381,7 +1493,7 @@ input.error,
     background: #fff;
     border-radius: 20px;
     overflow: hidden;
-    min-height: 700px;
+    min-height: clamp(480px, 70vh, 700px);
     height: auto;
   }
 
@@ -1491,14 +1603,17 @@ input.error,
     flex-direction: column;
     justify-content: center;
     overflow: visible;
+    
+    /* Overlay-Positionierung des Sprachumschalters bleibt am Grid orientiert */
   }
 
   /* Language Switcher Desktop - unabhängig positioniert, am oberen Rand der Kalender-Umrandung */
   .language-switcher-desktop {
     position: absolute;
-    top: 17rem; /* Entspricht padding-top von startseite-desktop = oberster Punkt der Kalender-Umrandung */
-    right: 7rem; /* Entspricht padding-right von startseite-desktop */
+    top: 272px; /* Fixe Pixelwerte für konsistente Position in allen Engines */
+    right: 112px; /* Entspricht zuvor 7rem bei 16px Root */
     z-index: 10;
+    display: inline-block;
 
     /* Unabhängig von anderen Elementen - wird nicht von Textlänge beeinflusst */
   }
@@ -1507,14 +1622,10 @@ input.error,
     color: var(--text, #000);
     /* stylelint-disable-next-line property-no-vendor-prefix */
     -webkit-appearance: none;
+    /* stylelint-disable-next-line property-no-vendor-prefix */
+    -moz-appearance: none;
     appearance: none;
-    background-image: linear-gradient(45deg, transparent 50%, #9ca3af 50%),
-                      linear-gradient(135deg, #9ca3af 50%, transparent 50%);
-    background-position: calc(100% - 12px) 50%,
-                         calc(100% - 7px) 50%;
-    background-size: 5px 5px, 5px 5px;
-    background-repeat: no-repeat;
-    padding: 0.5rem 2rem 0.5rem 0.75rem;
+    padding: 0.5rem 2rem 0.5rem 2.2rem;
     border: 1px solid var(--border);
     border-radius: 6px;
     font-size: 1rem;
@@ -1522,6 +1633,11 @@ input.error,
     background-color: #fff;
     cursor: pointer;
     transition: border-color 0.2s ease, background-color 0.2s ease;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23333' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.2em;
+    padding-right: 2rem;
   }
 
   #lang-switcher-desktop:hover,
@@ -1533,6 +1649,45 @@ input.error,
   #lang-switcher-desktop:focus-visible {
     outline: 3px solid #a5b4fc;
     outline-offset: 2px;
+  }
+
+  /* SVG Flags Overlay Desktop */
+  .lang-flags-overlay-desktop {
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 0.2rem;
+    pointer-events: none;
+  }
+
+  .lang-flags-overlay-desktop .lang-flag {
+    display: none;
+    width: 16px;
+    height: 11px;
+    flex-shrink: 0;
+  }
+
+  .lang-flags-overlay-desktop .lang-flag-de {
+    display: block;
+  }
+
+  /* Show correct flag based on selected option */
+  #lang-switcher-desktop:has(option[value="de"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="de"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en {
+    display: none;
+  }
+
+  #lang-switcher-desktop:has(option[value="en"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="en"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de {
+    display: none;
   }
 
   .startseite-title-desktop {

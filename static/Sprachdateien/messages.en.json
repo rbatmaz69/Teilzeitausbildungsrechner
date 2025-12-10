@@ -5,8 +5,8 @@
   "lang": {
     "label": "Language",
     "aria": "Choose language",
-    "de": "🇩🇪 Deutsch",
-    "en": "🇬🇧 English"
+    "de": "Deutsch",
+    "en": "English"
   },
   "inputs": {
     "title": "Your Calculation",
@@ -22,11 +22,14 @@
       "tooltip": "Regular weekly hours of training (incl. vocational school)"
     },
     "teilzeit": {
-      "label": "How much of full-time do you want to work?",
+      "label": "How many hours per week would you like to work during your training?",
       "labelShort": "Part-time share",
       "tooltip": "For part-time training, you must work at least 50%.",
       "percent": "Percent",
-      "hours": "Hours"
+      "hours": "Hours",
+      "separator": "or",
+      "button24h": "24 hours (3-day)",
+      "button32h": "32 hours (4-day)"
     },
     "verkuerzungen": {
       "labelShort": "Reductions"
@@ -36,7 +39,15 @@
     "noShortening": "No reductions selected",
     "toggleHint": "Click to show / hide this section",
     "toggleLabel": "Show Details",
-    "toggleLabelOpen": "Hide Details"
+    "toggleLabelOpen": "Hide Details",
+    "decimalHint": "Decimals allowed (e.g. 32.5)",
+    "roundingHint": "Value rounded from {original} to {rounded} months",
+    "placeholders": {
+      "dauer": "e.g. 36",
+      "stunden": "e.g. 40",
+      "teilzeitProzent": "e.g. 75",
+      "teilzeitStunden": "e.g. 30"
+    }
   },
   "vk": {
     "heading": "Reasons for shorter training",
@@ -117,7 +128,7 @@
       "short": "Y.",
       "full": "years"
     },
-    "percent": "%"
+    "percent": "percent"
   },
   "errors": {
     "placeholder": "",

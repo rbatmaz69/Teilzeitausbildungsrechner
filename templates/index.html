@@ -29,9 +29,28 @@
           <label id="label-lang" class="sr-only" for="lang-switcher" data-i18n="lang.label">Sprache</label>
           <div class="language-switcher">
             <select id="lang-switcher" aria-label="Sprache wählen" aria-labelledby="label-lang" data-i18n-attr="aria-label:lang.aria">
-              <option value="de" data-i18n="lang.de"></option>
-              <option value="en" data-i18n="lang.en"></option>
+              <option value="de" data-flag="de" data-i18n="lang.de"></option>
+              <option value="en" data-flag="en" data-i18n="lang.en"></option>
             </select>
+            <!-- SVG flags displayed via CSS -->
+            <div class="lang-flags-overlay">
+              <svg class="lang-flag lang-flag-de" viewBox="0 0 3 2" width="16" height="11" aria-hidden="true">
+                <rect width="3" height="2" fill="#ffce00"/>
+                <rect width="3" height="1" y="0" fill="#000"/>
+                <rect width="3" height="0.6667" y="0.6667" fill="#dd0000"/>
+              </svg>
+              <svg class="lang-flag lang-flag-en" viewBox="0 0 60 40" width="18" height="12" aria-hidden="true">
+                <rect width="60" height="40" fill="#012169"/>
+                <rect x="0" y="16" width="60" height="8" fill="#fff"/>
+                <rect x="26" y="0" width="8" height="40" fill="#fff"/>
+                <rect x="0" y="18" width="60" height="4" fill="#c8102e"/>
+                <rect x="28" y="0" width="4" height="40" fill="#c8102e"/>
+                <polygon points="0,0 60,40" stroke="#c8102e" stroke-width="6" fill="none"/>
+                <polygon points="60,0 0,40" stroke="#c8102e" stroke-width="6" fill="none"/>
+                <polygon points="0,0 60,40" stroke="#fff" stroke-width="4" fill="none" stroke-dasharray="6,6"/>
+                <polygon points="60,0 0,40" stroke="#fff" stroke-width="4" fill="none" stroke-dasharray="6,6"/>
+              </svg>
+            </div>
           </div>
         </div>
 
@@ -185,12 +204,29 @@
           <div class="language-switcher-desktop">
             <label id="label-lang-desktop" class="sr-only" for="lang-switcher-desktop" data-i18n="lang.label">Sprache</label>
             <select id="lang-switcher-desktop" aria-label="Sprache wählen" aria-labelledby="label-lang-desktop" data-i18n-attr="aria-label:lang.aria">
-              <option value="de" data-i18n="lang.de"></option>
-              <option value="en" data-i18n="lang.en"></option>
+              <option value="de" data-flag="de" data-i18n="lang.de"></option>
+              <option value="en" data-flag="en" data-i18n="lang.en"></option>
             </select>
+            <!-- SVG flags displayed via CSS -->
+            <div class="lang-flags-overlay-desktop">
+              <svg class="lang-flag lang-flag-de" viewBox="0 0 3 2" width="16" height="11" aria-hidden="true">
+                <rect width="3" height="2" fill="#ffce00"/>
+                <rect width="3" height="1" y="0" fill="#000"/>
+                <rect width="3" height="0.6667" y="0.6667" fill="#dd0000"/>
+              </svg>
+              <svg class="lang-flag lang-flag-en" viewBox="0 0 60 40" width="18" height="12" aria-hidden="true">
+                <rect width="60" height="40" fill="#012169"/>
+                <rect x="0" y="16" width="60" height="8" fill="#fff"/>
+                <rect x="26" y="0" width="8" height="40" fill="#fff"/>
+                <rect x="0" y="18" width="60" height="4" fill="#c8102e"/>
+                <rect x="28" y="0" width="4" height="40" fill="#c8102e"/>
+                <polygon points="0,0 60,40" stroke="#c8102e" stroke-width="8" fill="none"/>
+                <polygon points="60,0 0,40" stroke="#c8102e" stroke-width="8" fill="none"/>
+              </svg>
+            </div>
           </div>
 
-          <h1 class="startseite-title-desktop">
+          <h1 class="startseite-title">
             <span data-i18n="start.title.prefix">Planen Sie Ihre </span><span class="startseite-title-accent" data-i18n="start.title.accent">Teilzeitausbildung</span><span data-i18n="start.title.suffix"> ganz einfach</span>
           </h1>
           <p class="startseite-description-desktop" data-i18n="start.description">
@@ -267,8 +303,8 @@
                 aria-hidden="true">i</span>
         </label>
         <div class="input-with-unit">
-          <input type="number" id="dauer" value="36" step="1" required aria-labelledby="label-dauer" aria-describedby="hint-dauer">
-          <span class="unit">M</span>
+          <input type="text" inputmode="numeric" autocomplete="off" id="dauer" placeholder="z.B. 36" data-i18n-attr="placeholder:inputs.placeholders.dauer" step="1" required aria-labelledby="label-dauer" aria-describedby="hint-dauer">
+          <span class="unit" data-i18n="units.months.full">Monate</span>
         </div>
         <span class="error-message" id="errorDauer"></span>
         <!-- Unsichtbarer Hilfetext spiegelt das Tooltip (für SR) -->
@@ -287,8 +323,8 @@
                 aria-hidden="true">i</span>
         </label>
         <div class="input-with-unit">
-          <input type="number" id="stunden" value="40" step="1" required aria-labelledby="label-stunden" aria-describedby="hint-stunden">
-          <span class="unit" data-i18n="units.hours.short">Std</span>
+          <input type="text" inputmode="decimal" autocomplete="off" id="stunden" placeholder="z.B. 40" data-i18n-attr="placeholder:inputs.placeholders.stunden" step="1" required aria-labelledby="label-stunden" aria-describedby="hint-stunden">
+          <span class="unit" data-i18n="units.hours.full">Stunden</span>
         </div>
         <span class="error-message" id="errorRegularStunden"></span>
         <span id="hint-stunden" class="sr-only">Ihre gesamten Wochenstunden inkl. Berufsschule.</span>
@@ -297,43 +333,42 @@
       <!-- Eingabe Teilzeitanteil -->
       <div class="input-group">
         <label id="label-teilzeit">
-          <span data-i18n="inputs.teilzeit.label">Teilzeit-Anteil</span>
+          <span data-i18n="inputs.teilzeit.label">Wie viele Stunden pro Woche möchten Sie während der Ausbildung arbeiten?</span>
           <span class="info-icon"
                 data-tooltip="Mindestens 50% für eine anerkannte Teilzeitausbildung"
                 data-i18n-attr="data-tooltip:inputs.teilzeit.tooltip"
                 aria-hidden="true">i</span>
         </label>
 
-        <!-- Prozentanteil -->
-        <div class="input-row">
-          <div class="input-group half">
-            <label id="label-teilzeit-prozent" data-i18n="inputs.teilzeit.percent">Prozent</label>
-            <div class="input-with-unit">
-              <input type="number" id="teilzeitProzent" value="75" step="5" aria-labelledby="label-teilzeit-prozent" aria-describedby="hint-teilzeit">
-              <span class="unit" data-i18n="units.percent">%</span>
-            </div>
-            <span class="error-message" id="errorProzent"></span>
-            <div class="button-container">
-              <div class="button-row">
-                <button class="preset" data-type="percent" data-value="50">50%</button>
-                <button class="preset" data-type="percent" data-value="75">75%</button>
-              </div>
+        <!-- Stundenanteil (primär) -->
+        <div class="input-group">
+          <div class="input-with-unit">
+            <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitStunden" placeholder="z.B. 30" data-i18n-attr="placeholder:inputs.placeholders.teilzeitStunden" step="1" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
+            <span class="unit" data-i18n="units.hours.full">Stunden</span>
+          </div>
+          <span class="error-message" id="errorStunden"></span>
+          <div class="button-container">
+            <div class="button-row">
+              <button class="preset" data-type="hours" data-value="24" data-i18n="inputs.teilzeit.button24h"></button>
+              <button class="preset" data-type="hours" data-value="32" data-i18n="inputs.teilzeit.button32h"></button>
             </div>
           </div>
+        </div>
 
-          <!-- Stundenanteil -->
-          <div class="input-group half">
-            <label id="label-teilzeit-stunden" data-i18n="inputs.teilzeit.hours">Stunden</label>
-            <div class="input-with-unit">
-              <input type="number" id="teilzeitStunden" value="30" step="1" aria-labelledby="label-teilzeit-stunden" aria-describedby="hint-teilzeit">
-              <span class="unit" data-i18n="units.hours.short">h</span>
-            </div>
-            <span class="error-message" id="errorStunden"></span>
-            <div class="button-container">
-              <div class="button-row">
-                <button class="preset" data-type="hours" data-value="24">24 h</button>
-                <button class="preset" data-type="hours" data-value="32">32 h</button>
-              </div>
+        <!-- Trenner -->
+        <div class="input-separator" data-i18n="inputs.teilzeit.separator">oder</div>
+
+        <!-- Prozentanteil -->
+        <div class="input-group">
+          <div class="input-with-unit">
+            <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitProzent" placeholder="z.B. 75" data-i18n-attr="placeholder:inputs.placeholders.teilzeitProzent" step="5" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
+            <span class="unit" data-i18n="units.percent">Prozent</span>
+          </div>
+          <span class="error-message" id="errorProzent"></span>
+          <div class="button-container">
+            <div class="button-row">
+              <button class="preset" data-type="percent" data-value="50">50%</button>
+              <button class="preset" data-type="percent" data-value="75">75%</button>
             </div>
           </div>
         </div>

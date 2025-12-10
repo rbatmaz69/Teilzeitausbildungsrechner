@@ -5,8 +5,8 @@
   "lang": {
     "label": "Sprache",
     "aria": "Sprache wählen",
-    "de": "🇩🇪 Deutsch",
-    "en": "🇬🇧 English"
+    "de": "Deutsch",
+    "en": "English"
   },
   "inputs": {
     "title": "Ihre Berechnung",
@@ -22,11 +22,14 @@
       "tooltip": "Reguläre Wochenstunden der Ausbildung (inkl. Berufsschule)"
     },
     "teilzeit": {
-      "label": "Wie viel der Vollzeit möchten Sie arbeiten?",
+      "label": "Wie viele Stunden pro Woche möchten Sie während der Ausbildung arbeiten?",
       "labelShort": "Teilzeitanteil",
       "tooltip": "Für eine Teilzeitausbildung müssen Sie mindestens 50 % arbeiten.",
       "percent": "Prozent",
-      "hours": "Stunden"
+      "hours": "Stunden",
+      "separator": "oder",
+      "button24h": "24 Stunden (3-Tage)",
+      "button32h": "32 Stunden (4-Tage)"
     },
     "verkuerzungen": {
       "labelShort": "Verkürzungen"
@@ -36,7 +39,15 @@
     "noShortening": "Keine Verkürzung ausgewählt",
     "toggleHint": "Bereich zum Anzeigen / Schließen anklicken",
     "toggleLabel": "Details anzeigen",
-    "toggleLabelOpen": "Details ausblenden"
+    "toggleLabelOpen": "Details ausblenden",
+    "decimalHint": "Kommazahlen erlaubt (z. B. 32,5)",
+    "roundingHint": "Wert wurde von {original} auf {rounded} Monate gerundet",
+    "placeholders": {
+      "dauer": "z.B. 36",
+      "stunden": "z.B. 40",
+      "teilzeitProzent": "z.B. 75",
+      "teilzeitStunden": "z.B. 30"
+    }
   },
   "vk": {
     "heading": "Gründe für eine kürzere Ausbildung",
@@ -117,7 +128,7 @@
       "short": "J.",
       "full": "Jahre"
     },
-    "percent": "%"
+    "percent": "Prozent"
   },
   "errors": {
     "placeholder": "",
