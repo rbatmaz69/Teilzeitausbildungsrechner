@@ -16,10 +16,3 @@ services:
       dockerfile: Dockerfile.frontend
     profiles: ["lint"]
     command: ["npm", "run", "lint"]
-
-  tests:
-    build:
-      context: .
-      dockerfile: Dockerfile.backend
-    profiles: ["test"]
-    command: ["pytest", "-q"]
