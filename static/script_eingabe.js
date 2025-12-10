@@ -213,6 +213,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (werte.stunden) wochenstundenEingabe.value = werte.stunden;
         if (werte.teilzeitProzent) teilzeitProzentEingabe.value = werte.teilzeitProzent;
         if (werte.teilzeitStunden) teilzeitStundenEingabe.value = werte.teilzeitStunden;
+        // Trigger Validierung für alle Felder nach Laden
+        dauerEingabe.dispatchEvent(new Event('blur'));
+        wochenstundenEingabe.dispatchEvent(new Event('blur'));
+        teilzeitProzentEingabe.dispatchEvent(new Event('blur'));
+        teilzeitStundenEingabe.dispatchEvent(new Event('blur'));
       }
     } catch (fehler) {
       console.error('Fehler beim Laden der gespeicherten Werte:', fehler);
@@ -267,7 +272,6 @@ document.addEventListener("DOMContentLoaded", () => {
       aktuellerFehlerStunden = null;
       if (fehlerProzent) fehlerProzent.textContent = '';
       if (fehlerStunden) fehlerStunden.textContent = '';
-      speichereWerte();
     }
   };
   
@@ -276,9 +280,8 @@ document.addEventListener("DOMContentLoaded", () => {
   aktualisiereTeilzeitAktivierbarkeit();
   
   // Speichere bei jeder Eingabe
-  [dauerEingabe, wochenstundenEingabe, teilzeitProzentEingabe, teilzeitStundenEingabe].forEach(inp => {
-    inp.addEventListener('input', speichereWerte);
-  });
+  // Entfernt: Automatisches Speichern bei jeder Eingabe
+  // Werte werden nur noch beim Klick auf 'Berechnen' gespeichert
 
   // ========== ZEICHEN-FILTERUNG FÜR ALLE NUMERISCHEN EINGABEN ==========
   // Nur Ganzzahlen für Monate-Eingabe
@@ -1270,4 +1273,16 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }, false); // useCapture = false, damit click-Event auf Icon zuerst ausgeführt wird
+  // === Berechnen-Button: Werte speichern und validieren ===
+  const berechnenBtn = document.getElementById('berechnenBtn');
+  if (berechnenBtn) {
+    berechnenBtn.addEventListener('click', () => {
+      speichereWerte();
+      // Trigger Validierung für alle Felder
+      dauerEingabe.dispatchEvent(new Event('blur'));
+      wochenstundenEingabe.dispatchEvent(new Event('blur'));
+      teilzeitProzentEingabe.dispatchEvent(new Event('blur'));
+      teilzeitStundenEingabe.dispatchEvent(new Event('blur'));
+    });
+  }
 });
