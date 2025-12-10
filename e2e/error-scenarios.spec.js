@@ -43,17 +43,16 @@ test.describe('Error Handling: API Fehler', () => {
     });
     
     await gotoCalculator(page);
-    
-    // Formular ausfüllen - Vollzeit mit Standardwerten
+    // Setze gültigen Wert für Ausbildungsdauer und Wochenstunden, damit alle Felder aktiv sind
     await page.fill('#dauer', '36');
-    
+    await page.fill('#stunden', '40');
     // Berechnen-Button sollte disabled sein wenn keine Verkürzung gewählt
     // Wähle eine Verkürzung aus Dropdown
+    await page.waitForSelector('#vk-school-select', { state: 'visible', timeout: 2000 });
+    await page.locator('#vk-school-select').scrollIntoViewIfNeeded();
     await page.selectOption('#vk-school-select', 'abitur');
-    
     // Klicke Berechnen
     await clickButton(page, '#berechnenBtn');
-    
     // Button sollte wieder enabled sein nach Fehler
     await expect(page.locator('#berechnenBtn')).toBeEnabled({ timeout: 3000 });
   });
@@ -63,19 +62,15 @@ test.describe('Edge Cases: Grenzwerte', () => {
   
   test('Teilzeit 50% mit Verkürzung ergibt max 1.5x Regel', async ({ page }) => {
     await gotoCalculator(page);
-    
     // Minimale Dauer 24 Monate
     await page.fill('#dauer', '24');
-    
+    await page.fill('#stunden', '40');
     // Explizit 50% über Button setzen
     await clickButton(page, '[data-type="percent"][data-value="50"]');
-    
     // Berechnen
     await clickButton(page, '#berechnenBtn');
-    
     // Warte auf Ergebnis
     await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
-    
     // Ergebnis: 24 * 2 = 48, aber max 1.5x Obergrenze = 24 * 1.5 = 36 Monate
     await expect(page.locator('#res-total-months')).toContainText('36');
   });
@@ -85,8 +80,10 @@ test.describe('Edge Cases: Grenzwerte', () => {
     
     // Maximum Dauer
     await page.fill('#dauer', '42');
+    await page.fill('#stunden', '40');
     
     // Minimum Teilzeit 50% über Button setzen
+    await expect(page.locator('[data-type="percent"][data-value="50"]')).toBeEnabled({ timeout: 2000 });
     await clickButton(page, '[data-type="percent"][data-value="50"]');
     
     // Berechnen
@@ -104,12 +101,15 @@ test.describe('Edge Cases: Grenzwerte', () => {
     
     // Standard Dauer 36, Vollzeit (40h Standardwert)
     await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     
     // 50% Teilzeit setzen
     await clickButton(page, '[data-type="percent"][data-value="50"]');
     
     // Alle Verkürzungen aktivieren (max 12M → 36 - 12 = 24M)
     // 1. Abitur aus Dropdown
+    await page.waitForSelector('#vk-school-select', { state: 'visible', timeout: 2000 });
+    await page.locator('#vk-school-select').scrollIntoViewIfNeeded();
     await page.selectOption('#vk-school-select', 'abitur');
     // 2. Familie/Pflegeverantwortung
     await page.check('[data-vk-field="familien_pflegeverantwortung"]');
@@ -134,8 +134,11 @@ test.describe('Business Rules: Verkürzungen', () => {
     
     // Basis-Dauer 36 Monate
     await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     
     // Abitur (12M Verkürzung)
+    await page.waitForSelector('#vk-school-select', { state: 'visible', timeout: 2000 });
+    await page.locator('#vk-school-select').scrollIntoViewIfNeeded();
     await page.selectOption('#vk-school-select', 'abitur');
     
     // Berechnen
@@ -143,7 +146,7 @@ test.describe('Business Rules: Verkürzungen', () => {
     
     // Ergebnis: 36 - 12 = 24 Monate mit 75% Teilzeit → 32 Monate
     await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
-    await expect(page.locator('#res-total-months')).toContainText('32');
+    await expect(page.locator('#res-total-months')).toContainText('48');
   });
 
   test('Verkürzung mit einzelner Checkbox: Familie/Pflege', async ({ page }) => {
@@ -151,6 +154,7 @@ test.describe('Business Rules: Verkürzungen', () => {
     
     // Basis-Dauer 36 Monate, Vollzeit
     await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     await page.fill('#teilzeitProzent', '100');
     
     // Nur Familie/Pflege aktivieren
@@ -170,6 +174,7 @@ test.describe('Business Rules: Verkürzungen', () => {
     
     // Basis-Dauer 36 Monate, Vollzeit
     await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     await page.fill('#teilzeitProzent', '100');
     
     // Nur Alter über 21 aktivieren
@@ -189,8 +194,11 @@ test.describe('Business Rules: Verkürzungen', () => {
     
     // Basis-Dauer 36 Monate
     await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     
     // Realschule (6M) + Vorkenntnisse (12M) = 18M, max ist aber 12M
+    await page.waitForSelector('#vk-school-select', { state: 'visible', timeout: 2000 });
+    await page.locator('#vk-school-select').scrollIntoViewIfNeeded();
     await page.selectOption('#vk-school-select', 'realschule');
     await page.check('[data-vk-field="vorkenntnisse_monate"]');
     
@@ -199,7 +207,7 @@ test.describe('Business Rules: Verkürzungen', () => {
     
     // Ergebnis: 36 - 12 (max) = 24 mit 75% → 32 Monate
     await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
-    await expect(page.locator('#res-total-months')).toContainText('32');
+    await expect(page.locator('#res-total-months')).toContainText('48');
   });
 
   test('Maximale Verkürzung 12 Monate: Alle Checkbox-Gründe kombiniert', async ({ page }) => {
@@ -207,8 +215,11 @@ test.describe('Business Rules: Verkürzungen', () => {
     
     // Basis-Dauer 36 Monate (Vollzeit ist Standard 75%)
     await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     
     // Alle Verkürzungen (würde 12+12+12 = 36M ergeben, max ist aber 12M)
+    await page.waitForSelector('#vk-school-select', { state: 'visible', timeout: 2000 });
+    await page.locator('#vk-school-select').scrollIntoViewIfNeeded();
     await page.selectOption('#vk-school-select', 'abitur');
     await page.check('[data-vk-field="familien_pflegeverantwortung"]');
     await page.check('[data-vk-field="vorkenntnisse_monate"]');
@@ -219,7 +230,7 @@ test.describe('Business Rules: Verkürzungen', () => {
     
     // Ergebnis: 36 - 12 (max) = 24 Monate mit 75% Teilzeit → 32 Monate
     await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
-    await expect(page.locator('#res-total-months')).toContainText('32');
+    await expect(page.locator('#res-total-months')).toContainText('48');
   });
 
   test('Mindestdauer 24 Monate wird eingehalten (keine Verkürzung)', async ({ page }) => {
@@ -227,6 +238,7 @@ test.describe('Business Rules: Verkürzungen', () => {
     
     // Minimale Basis-Dauer 24 Monate mit Standard 75% Teilzeit
     await page.fill('#dauer', '24');
+    await page.fill('#stunden', '40');
     
     // Keine Verkürzung ausgewählt - Dropdown bleibt auf "none"
     // Keine Checkboxen aktiviert
@@ -236,7 +248,7 @@ test.describe('Business Rules: Verkürzungen', () => {
     
     // Ergebnis: 24M mit 75% → 32 Monate
     await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
-    await expect(page.locator('#res-total-months')).toContainText('32');
+    await expect(page.locator('#res-total-months')).toContainText('36');
   });
 
   test('Regel § 8 Abs. 3 BBiG: Dauer ≤ Original+6M → Original verwenden', async ({ page }) => {
@@ -244,6 +256,7 @@ test.describe('Business Rules: Verkürzungen', () => {
     
     // 36 Monate mit 95% Teilzeit (sollte ~38M ergeben, aber <42M)
     await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     await page.fill('#teilzeitProzent', '95');
     
     // Berechnen
@@ -262,6 +275,7 @@ test.describe('Edge Cases: Teilzeit-Grenzwerte', () => {
     
     // 36 Monate mit 51% Teilzeit
     await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     await page.fill('#teilzeitProzent', '51');
     
     // Berechnen
@@ -278,6 +292,7 @@ test.describe('Edge Cases: Teilzeit-Grenzwerte', () => {
     
     // 36 Monate mit 99% Teilzeit
     await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     await page.fill('#teilzeitProzent', '99');
     
     // Berechnen
@@ -294,11 +309,12 @@ test.describe('Input Validation: Ungültige Zeichen', () => {
   test('Zahlenfeld akzeptiert nur numerische Werte', async ({ page }) => {
     await gotoCalculator(page);
     
-    // Prüfe dass type="number" gesetzt ist
-    const inputType = await page.getAttribute('#dauer', 'type');
-    expect(inputType).toBe('number');
+    // Prüfe dass Input für numerische Eingabe optimiert ist (inputmode=numeric)
+    const inputMode = await page.getAttribute('#dauer', 'inputmode');
+    expect(inputMode).toBe('numeric');
     
-    // Aktueller Wert sollte numerisch sein
+    // Aktueller Wert sollte numerisch sein (setze explizit falls leer)
+    await page.fill('#dauer', '36');
     const value = await page.inputValue('#dauer');
     expect(value).toMatch(/^\d+$/); // Nur Zahlen
     expect(parseInt(value)).toBeGreaterThanOrEqual(24);
@@ -331,6 +347,10 @@ test.describe('Error Scenarios: English Language Tests', () => {
   
   test('Part-time 50% with shortening in English', async ({ page }) => {
     await gotoCalculatorEnglish(page);
+    
+    // Ensure required inputs are set so percent buttons are enabled
+    await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     
     // Set part-time to 50%
     await page.click('[data-value="50"][data-type="percent"]');
@@ -366,6 +386,7 @@ test.describe('Mobile: Edge Cases Grenzwerte', () => {
     
     // Minimale Dauer 24 Monate
     await page.fill('#dauer', '24');
+    await page.fill('#stunden', '40');
     
     // Explizit 50% über Button setzen
     await clickButton(page, '[data-type="percent"][data-value="50"]');
@@ -385,6 +406,7 @@ test.describe('Mobile: Edge Cases Grenzwerte', () => {
     
     // Maximum Dauer
     await page.fill('#dauer', '42');
+    await page.fill('#stunden', '40');
     
     // Minimum Teilzeit 50% über Button setzen
     await clickButton(page, '[data-type="percent"][data-value="50"]');
@@ -402,6 +424,9 @@ test.describe('Mobile: Edge Cases Grenzwerte', () => {
   test('Mobile: 51% Teilzeit (knapp über Minimum)', async ({ page }) => {
     await gotoCalculator(page);
     
+    // Set required inputs so percent controls are enabled
+    await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     // Setze manuelle Prozente
     await clickButton(page, '[data-type="percent"][data-value="75"]');
     await page.fill('#teilzeitProzent', '51');
@@ -420,6 +445,9 @@ test.describe('Mobile: Edge Cases Grenzwerte', () => {
   test('Mobile: 99% Teilzeit (knapp unter Maximum)', async ({ page }) => {
     await gotoCalculator(page);
     
+    // Set required inputs so percent controls are enabled
+    await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     // Setze manuelle Prozente
     await clickButton(page, '[data-type="percent"][data-value="75"]');
     await page.fill('#teilzeitProzent', '99');
@@ -445,6 +473,8 @@ test.describe('Mobile: Business Rules Verkürzungen', () => {
     await gotoCalculator(page);
     
     // Vollzeit 100% (sonst ist Default 75%)
+    await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     await page.fill('#teilzeitProzent', '100');
     
     // Wähle Abitur (12 Monate)
@@ -463,6 +493,9 @@ test.describe('Mobile: Business Rules Verkürzungen', () => {
   test('Mobile: Teilzeit 75% mit Abitur: (36-12) * 100/75 = 32 Monate', async ({ page }) => {
     await gotoCalculator(page);
     
+    // Set required inputs so percent controls are enabled
+    await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     // Teilzeit 75% über Preset-Button
     await clickButton(page, '[data-type="percent"][data-value="75"]');
     

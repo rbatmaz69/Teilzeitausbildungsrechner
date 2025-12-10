@@ -72,9 +72,11 @@ test.describe('Validierung: Ausbildungsdauer', () => {
   test('Gültiger Wert (36) zeigt keinen Fehler', async ({ page }) => {
     await gotoCalculator(page);
     
-    // Standardwert ist 36 (gültig)
+    // Neues UI: Werte werden nicht immer vorausgefüllt -> setze explizit
+    await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     await expect(page.locator('#dauer')).toHaveValue('36');
-    
+
     // Keine Fehlermeldung
     await expect(page.locator('#errorDauer')).toBeEmpty();
   });
@@ -84,13 +86,12 @@ test.describe('Validierung: Wochenstunden', () => {
   
   test('Minimum 10 Stunden wird erzwungen', async ({ page }) => {
     await gotoCalculator(page);
-    
+    // Setze gültigen Wert für Ausbildungsdauer, damit Stundenfeld aktiv ist
+    await page.fill('#dauer', '36');
     // Setze ungültigen Wert
     await page.fill('#stunden', '5');
-    
     // Blur triggern
     await clickButton(page, '#dauer');
-    
     // Korrigiert auf 10
     await expect(page.locator('#stunden')).toHaveValue('10');
     await expect(page.locator('#errorRegularStunden')).toContainText('mindestens 10 Stunden');
@@ -98,13 +99,12 @@ test.describe('Validierung: Wochenstunden', () => {
 
   test('Maximum 48 Stunden wird sofort erzwungen', async ({ page }) => {
     await gotoCalculator(page);
-    
+    // Setze gültigen Wert für Ausbildungsdauer, damit Stundenfeld aktiv ist
+    await page.fill('#dauer', '36');
     // Setze ungültigen Wert
     await page.fill('#stunden', '60');
-    
     // Korrigiert auf 48
     await expect(page.locator('#stunden')).toHaveValue('48', { timeout: 2000 });
-    
     // Warte kurz damit Fehlermeldung erscheint (asynchrone Event-Verarbeitung)
     await page.waitForTimeout(100);
     await expect(page.locator('#errorRegularStunden')).toContainText('maximal 48 Stunden', { timeout: 1000 });
@@ -115,33 +115,31 @@ test.describe('Validierung: Teilzeit-Prozent', () => {
   
   test('Minimum 50% wird erzwungen bei manueller Eingabe', async ({ page }) => {
     await gotoCalculator(page);
-    
+    // Setze gültigen Wert für Ausbildungsdauer und Wochenstunden, damit Teilzeitfeld aktiv ist
+    await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     // Aktiviere Prozent-Input durch Button-Klick
     await clickButton(page, '[data-value="75"][data-type="percent"]');
-    
     // Setze ungültigen Wert direkt im Input
     await page.fill('#teilzeitProzent', '30');
-    
     // Blur triggern
     await clickButton(page, '#dauer');
-    
     // Prüfe Fehlermeldung sofort (verschwindet nach 4s!)
     // Fehlermeldung ist auf Deutsch (Browser-Standard hat localStorage-Sprache)
     await expect(page.locator('#errorProzent')).toContainText('mindestens 50%');
-    
     // Sollte auf 50 korrigiert sein
     await expect(page.locator('#teilzeitProzent')).toHaveValue('50');
   });
 
   test('Maximum 100% wird erzwungen', async ({ page }) => {
     await gotoCalculator(page);
-    
+    // Setze gültigen Wert für Ausbildungsdauer und Wochenstunden, damit Teilzeitfeld aktiv ist
+    await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     // Aktiviere Prozent-Input
     await clickButton(page, '[data-value="75"][data-type="percent"]');
-    
     // Setze ungültigen Wert
     await page.fill('#teilzeitProzent', '150');
-    
     // Sollte auf 100 korrigiert sein
     await expect(page.locator('#teilzeitProzent')).toHaveValue('100', { timeout: 2000 });
     await expect(page.locator('#errorProzent')).toContainText('maximal 100%');
@@ -152,17 +150,16 @@ test.describe('Validierung: Fehler verschwinden nach 4 Sekunden', () => {
   
   test('Fehlermeldung verschwindet automatisch', async ({ page }) => {
     await gotoCalculator(page);
-    
+    // Setze gültigen Wert für Wochenstunden, damit Feld aktiv ist
+    await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     // Trigger Fehler
     await page.fill('#dauer', '10');
     await clickButton(page, '#stunden');
-    
     // Fehler ist sichtbar
     await expect(page.locator('#errorDauer')).toBeVisible();
-    
     // Warte bis Fehler automatisch verschwindet (4s + fade)
     await expect(page.locator('#errorDauer')).toBeHidden({ timeout: 6000 });
-    
     // Fehler sollte verschwunden sein
     await expect(page.locator('#errorDauer')).toBeEmpty();
   });
@@ -212,6 +209,9 @@ test.describe('Validation: English Language Tests', () => {
   test('Minimum 50% part-time validation in English', async ({ page }) => {
     await gotoCalculatorEnglish(page);
     
+    // Ensure required inputs are set so percent buttons are enabled
+    await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     // Activate part-time
     await clickButton(page, '[data-value="75"][data-type="percent"]');
     
@@ -309,6 +309,9 @@ test.describe('Mobile Validation: Teilzeit-Prozent', () => {
   test('Mobile: Minimum 50% wird erzwungen bei manueller Eingabe', async ({ page }) => {
     await gotoCalculator(page);
     
+    // Setze zuerst Ausbildungsdauer und Wochenstunden damit Teilzeit-Feld aktiv ist
+    await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     // Aktiviere Teilzeit-Feld über Preset-Button
     await clickButton(page, '[data-value="75"][data-type="percent"]');
     
@@ -326,6 +329,9 @@ test.describe('Mobile Validation: Teilzeit-Prozent', () => {
   test('Mobile: Maximum 100% wird erzwungen', async ({ page }) => {
     await gotoCalculator(page);
     
+    // Setze zuerst Ausbildungsdauer und Wochenstunden damit Teilzeit-Feld aktiv ist
+    await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
     // Aktiviere Teilzeit-Feld
     await clickButton(page, '[data-value="75"][data-type="percent"]');
     
