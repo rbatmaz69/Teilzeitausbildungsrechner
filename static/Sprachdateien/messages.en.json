@@ -96,6 +96,9 @@
       "ectsStudium_sr": "ECTS in the matching study field",
       "ectsStudium_short": "ECTS credits"
     },
+    "bildungsweg": {
+      "question": "Educational background before training"
+    },
     "vork": {
       "label": "Professional experience",
       "sr": "Professional experience can shorten your training duration."

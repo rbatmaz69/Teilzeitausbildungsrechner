@@ -96,6 +96,9 @@
       "ectsStudium_sr": "ECTS im passenden Studienbereich",
       "ectsStudium_short": "ECTS-Punkte im Studium"
     },
+    "bildungsweg": {
+      "question": "Bildungsweg vor der Ausbildung"
+    },
     "vork": {
       "label1": "Abgeschlossene Berufsausbildung",
       "label2": "Nachweis einer einschlägigen beruflichen Grundausbildung",
