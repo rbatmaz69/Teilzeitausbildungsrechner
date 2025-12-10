@@ -1,5 +1,3 @@
-import uebersetzung from '/static/script_Ergebnis_Uebersicht.js';
-
 /**
  * Initialisiert die Verkürzungsgründe-Steuerung.
  *
