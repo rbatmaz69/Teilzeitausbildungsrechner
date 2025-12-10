@@ -216,10 +216,22 @@
     // 6) Beobachte Layout-Änderungen in der Startseite (i18n-Updates etc.)
     // Keine MutationObserver-Kopplung an Titel/Content – Position bleibt fix unabhängig vom Inhalt
 
-    // Reagiere auf Language-Select-Änderungen
+    // Reagiere auf Language-Select-Änderungen (Mobile)
     const langSwitcher = document.getElementById("lang-switcher");
     if (langSwitcher) {
       langSwitcher.addEventListener("change", async (event) => {
+        const neueSprache = event.target.value;
+        if (!neueSprache || !UNTERSTUETZT.includes(neueSprache)) return;
+        
+        speichereSprache(neueSprache);
+        await ladeUndWendeAn(neueSprache);
+      });
+    }
+
+    // Reagiere auf Language-Select-Änderungen (Desktop)
+    const langSwitcherDesktop = document.getElementById("lang-switcher-desktop");
+    if (langSwitcherDesktop) {
+      langSwitcherDesktop.addEventListener("change", async (event) => {
         const neueSprache = event.target.value;
         if (!neueSprache || !UNTERSTUETZT.includes(neueSprache)) return;
         
