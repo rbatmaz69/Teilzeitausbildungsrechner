@@ -220,6 +220,17 @@ Die E2E-Tests validieren die gesamte Anwendung im Browser (60 Tests):
 - **Validation** (13): Min/Max-Werte für Dauer/Stunden/Prozent, Input-Validierung
 - **Error Scenarios** (4): Edge Cases, BBiG-Regelungen (§ 7a, § 8), API-Fehler
 
+#### Deaktivierte E2E-Tests (vorübergehend)
+
+- In der aktuellen Sprint-Version sind drei E2E-Tests/Suites bewusst deaktiviert (skipped):
+  - `Happy Path: Reset-Button`
+  - `Happy Path: Share-Button`
+  - Mobile `Reset` variant
+
+  Grund: Die Anwendung enthält derzeit bekannte Bugs in den Reset/Share-Funktionen (z.B. Confirm-Dialog-/Clipboard-Handling und State-Restore-Verhalten). Diese Fehler werden im nächsten Sprint behoben; die zugehörigen E2E-Tests werden dann wieder aktiviert und gehärtet (mocking für `window.confirm` und `navigator.clipboard` sowie stabilere assertions für State‑Restore).
+
+  Hinweis: Das Deaktivieren dient der Stabilität der CI-Pipeline und verhindert falsche Pipeline-Failures, während die App‑Bugs getrennt im nächsten Sprint gelöst werden.
+
 **Konfiguration:** `playwright.config.js` (automatischer Flask-Server-Start)
 
 #### Warum Playwright statt Selenium?
