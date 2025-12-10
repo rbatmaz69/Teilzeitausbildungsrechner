@@ -74,6 +74,31 @@ flask run
 flask run --port=8001
 ```
 
+## 🐳 Docker
+
+Das Projekt enthält ein Docker‑Setup für das Backend (`Dockerfile.backend`) und eine `docker-compose.yaml` mit dem Service `backend`. Das Backend läuft im Container auf Port `5000` und ist auf Host‑Port `8000` gemappt.
+
+Wichtige Befehle:
+
+```powershell
+# Image bauen (via docker compose)
+docker compose build backend
+
+# Backend im Hintergrund starten
+docker compose up -d
+
+# Logs ansehen
+docker compose logs -f backend
+
+# Neu bauen und neu starten
+docker compose up -d --build
+
+# Stoppen und aufräumen
+docker compose down
+```
+
+Hinweis: Nach `docker compose up` ist die App unter `http://localhost:8000/` erreichbar.
+
 ## 💻 Verwendung
 
 ### Web-UI + API
