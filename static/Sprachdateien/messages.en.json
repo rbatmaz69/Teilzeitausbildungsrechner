@@ -91,10 +91,10 @@
       "berufsvorbereitendeSchule_short": "Pre-vocational school form",
       "massnahmeVorbereitung": "Did you participate in a measure to prepare for vocational training before the apprenticeship (e.g. pre-vocational training measure or entry qualification)?",
       "massnahmeVorbereitung_sr": "Measure to prepare for vocational training",
-      "massnahmeVorbereitung_short": "Preparatory measure",
+      "massnahmeVorbereitung_short": "Preparation for vocational training",
       "ectsStudium": "Have you already earned at least 30 ECTS credits in a field that matches your apprenticeship during your studies?",
       "ectsStudium_sr": "ECTS in the matching study field",
-      "ectsStudium_short": "ECTS credits"
+      "ectsStudium_short": "Academic achievements in studies"
     },
     "bildungsweg": {
       "question": "Educational background before training"

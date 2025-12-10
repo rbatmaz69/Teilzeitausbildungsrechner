@@ -356,31 +356,40 @@ async function holeZusammenfassung() {
   const regel8Abs3Angewendet = Boolean(ergebnis.regel_8_abs_3_angewendet || false);
 
   // Anzeige-Liste der gewählten Verkürzungsgründe aus dem Objekt bauen
+  // Reihenfolge entspricht der visuellen Reihenfolge der Fragen im Formular
   const verkuerzungen = [];
 
-  if (verkuerzungsgruende.abitur) {
-    verkuerzungen.push({ key: "abitur", months: 12 });
-  }
+  // 1) Schulabschluss (Select: Reihenfolge in Select beachten)
   if (verkuerzungsgruende.realschule) {
     verkuerzungen.push({ key: "realschule", months: 6 });
   }
+  if (verkuerzungsgruende.abitur) {
+    verkuerzungen.push({ key: "abitur", months: 12 });
+  }
+
+  // 2) Alter über 21
   if (verkuerzungsgruende.alter_ueber_21) {
     verkuerzungen.push({ key: "alter_ueber_21", months: 12 });
   }
+
+  // 3) (Legacy) Vorkenntnisse (falls gesetzt)
   if (verkuerzungsgruende.vorkenntnisse_monate && verkuerzungsgruende.vorkenntnisse_monate > 0) {
     verkuerzungen.push({
       key: "vorkenntnisse",
       months: verkuerzungsgruende.vorkenntnisse_monate
     });
   }
+
+  // 4) Familiäre Gründe: Kinderbetreuung zuerst, dann Pflege
   if (verkuerzungsgruende.familien_kinderbetreuung) {
     verkuerzungen.push({ key: "familien_kinderbetreuung", months: 12 });
   }
   if (verkuerzungsgruende.familien_pflegeverantwortung) {
     verkuerzungen.push({ key: "familien_pflegeverantwortung", months: 12 });
-  }  
+  }
 
-  // Berufliche Fragen: zeige die einzelnen Gründe mit den zugeordneten Monaten
+  // 5) Berufliche Qualifikationen (sichtbar in dieser Reihenfolge in der UI):
+  // q1, q2, q3, q5 (in der Qualifikationen-Box), danach q4 und q6 (in Bildungsweg-Box)
   if (verkuerzungsgruende.beruf_q1) {
     verkuerzungen.push({ key: "beruf_q1", months: 12 });
   }
@@ -395,11 +404,12 @@ async function holeZusammenfassung() {
   if (verkuerzungsgruende.beruf_q3) {
     verkuerzungen.push({ key: "beruf_q3", months: 12 });
   }
-  if (verkuerzungsgruende.beruf_q4) {
-    verkuerzungen.push({ key: "beruf_q4", months: 12 });
-  }
   if (verkuerzungsgruende.beruf_q5) {
     verkuerzungen.push({ key: "beruf_q5", months: 6 });
+  }
+  // Q4 and Q6 are placed in the "Bildungsweg vor der Ausbildung" box in the DOM
+  if (verkuerzungsgruende.beruf_q4) {
+    verkuerzungen.push({ key: "beruf_q4", months: 12 });
   }
   if (verkuerzungsgruende.beruf_q6) {
     verkuerzungen.push({ key: "beruf_q6", months: 6 });
