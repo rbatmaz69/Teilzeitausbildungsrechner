@@ -291,7 +291,10 @@ def _normalisiere_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]
     beruf_q4 = bool(data.get("beruf_q4", False))
     beruf_q5 = bool(data.get("beruf_q5", False))
     beruf_q6 = bool(data.get("beruf_q6", False))
-    berufliche_verkuerzung_monate = int(data.get("berufliche_verkuerzung_monate", 0) or 0)
+    berufliche_verkuerzung_monate = int(
+    data.get("berufliche_verkuerzung_monate", 0) or 0
+)
+
 
     return {
         "abitur": bool(data.get("abitur", False)),

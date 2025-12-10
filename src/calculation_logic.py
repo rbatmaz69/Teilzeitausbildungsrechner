@@ -87,7 +87,8 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
         verkuerzung_gesamt += VERKUERZUNG_FAMILIEN_PFLEGE
 
     # Berufliche Vorkenntnisse: bis zu 12 Monate → fester Wert 12, sobald vorhanden
-    # Neue Logik: unterstütze detaillierte berufliche Fragen (beruf_q1..q6, beruf_q2_dauer_monate)
+    # Neue Logik: unterstütze detaillierte berufliche Fragen (beruf_q1..q6,
+    # beruf_q2_dauer_monate)
     # oder ein bereits berechnetes Feld 'berufliche_verkuerzung_monate' vom Client.
     berufliche_total = 0
     # Detect if any new beruf fields are present
@@ -105,7 +106,10 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
     if has_new_beruf_fields:
         # If client provided a precomputed aggregate, prefer it
         if verkuerzungsgruende.get("berufliche_verkuerzung_monate", 0):
-            berufliche_total += int(verkuerzungsgruende.get("berufliche_verkuerzung_monate", 0))
+            berufliche_total += int(
+            verkuerzungsgruende.get("berufliche_verkuerzung_monate", 0)
+        )
+
         else:
             # Q1/Q3/Q4 => 12 Monate
             if verkuerzungsgruende.get("beruf_q1", False):
