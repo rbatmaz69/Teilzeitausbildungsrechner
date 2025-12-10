@@ -74,16 +74,16 @@
       "nichtAbgeschlosseneAusbildung_short": "Nicht abgeschlossene Ausbildung",
       "praktischeErfahrung": "Haben Sie bereits in einem ähnlichen Bereich gearbeitet oder praktische Erfahrungen gesammelt, die für die Ausbildung nützlich sind?",
       "praktischeErfahrung_sr": "Praktische Erfahrungen im ähnlichen Bereich",
-      "praktischeErfahrung_short": "Praktische Erfahrung",
+      "praktischeErfahrung_short": "Praktische Vorerfahrung",
       "berufsvorbereitendeSchule": "Haben Sie vor der Ausbildung eine berufsvorbereitende Schulform besucht (z. B. Berufsgrundbildungsjahr, Berufsvorbereitungsjahr oder eine einjährige Berufsfachschule)?",
       "berufsvorbereitendeSchule_sr": "Berufsvorbereitende Schulform besucht",
       "berufsvorbereitendeSchule_short": "Berufsvorbereitende Schulform",
       "massnahmeVorbereitung": "Haben Sie vor der Ausbildung an einer Maßnahme zur Vorbereitung auf eine Ausbildung teilgenommen (z. B. Berufsvorbereitende Bildungsmaßnahme oder Einstiegsqualifizierung)?",
       "massnahmeVorbereitung_sr": "Maßnahme zur Vorbereitung auf eine Ausbildung",
-      "massnahmeVorbereitung_short": "Vorbereitungsmaßnahme",
+      "massnahmeVorbereitung_short": "Vorbereitung auf eine Ausbildung",
       "ectsStudium": "Haben Sie im Studium bereits mindestens 30 ECTS-Punkte in einem Bereich erworben, der zu Ihrem Ausbildungsberuf passt?",
       "ectsStudium_sr": "ECTS im passenden Studienbereich",
-      "ectsStudium_short": "ECTS-Punkte im Studium"
+      "ectsStudium_short": "Erbrachte Leistung im Studium"
     },
     "bildungsweg": {
       "question": "Bildungsweg vor der Ausbildung"
