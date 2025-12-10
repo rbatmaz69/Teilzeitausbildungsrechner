@@ -310,6 +310,20 @@ document.addEventListener("DOMContentLoaded", () => {
       if (verboteneZeichen.includes(ev.key)) {
         ev.preventDefault();
       }
+
+      // Spezialfall: Prozentfeld ist schon 100, weitere Ziffern werden geblockt und Fehler angezeigt
+      if (
+        inp === teilzeitProzentEingabe &&
+        /^[0-9]$/.test(ev.key) &&
+        inp.value === '100' &&
+        inp.selectionStart === inp.value.length // nur am Ende anhängen
+      ) {
+        ev.preventDefault();
+        aktuellerFehlerProzent = "errors.percentMax";
+        fehlerProzent.textContent = uebersetzung(aktuellerFehlerProzent, "Der Wert darf maximal 100% betragen");
+        teilzeitProzentEingabe.classList.add('error');
+        entferneFehlerMitFadeout(teilzeitProzentEingabe, fehlerProzent, () => aktuellerFehlerProzent = null, timerIdProzent);
+      }
     });
     
     // Bereinige Copy-Paste und andere Eingaben
@@ -356,18 +370,38 @@ document.addEventListener("DOMContentLoaded", () => {
       inp.value = wert;
     });
     
-    // Entferne alleinstehenden Trenner beim Verlassen des Feldes
+    // Entferne alleinstehenden Trenner und führende Nullen beim Verlassen des Feldes
     inp.addEventListener('blur', () => {
       const lang = window.I18N?.lang || document.documentElement.lang || 'de';
       const decimalSep = lang === 'de' ? ',' : '.';
-      if (inp.value.endsWith(decimalSep)) {
-        inp.value = inp.value.slice(0, -1);
+      let wert = inp.value;
+      // Entferne alleinstehenden Trenner
+      if (wert.endsWith(decimalSep)) {
+        wert = wert.slice(0, -1);
       }
+      // Entferne führende Nullen (nur vor Dezimaltrennzeichen)
+      if (!wert.includes(decimalSep)) {
+        wert = wert.replace(/^0+/, '');
+        if (wert === '') wert = '0';
+      } else {
+        // z.B. 00012,3 -> 12,3
+        let teile = wert.split(decimalSep);
+        teile[0] = teile[0].replace(/^0+/, '');
+        if (teile[0] === '') teile[0] = '0';
+        wert = teile.join(decimalSep);
+      }
+      inp.value = wert;
     });
   });
 
   // Wird ausgeführt, nachdem eine neue Ausbildungsdauer eingegeben wurde (blur für manuelle Eingabe)
   dauerEingabe.addEventListener("blur", () => {
+    // Entferne führende Nullen
+    let wert = dauerEingabe.value;
+    wert = wert.replace(/^0+/, '');
+    if (wert === '') wert = '0';
+    dauerEingabe.value = wert;
+
     const ausbildungsdauer = parseInt(dauerEingabe.value, 10);
 
     // Wenn Feld leer war, leer lassen (nicht korrigieren)
