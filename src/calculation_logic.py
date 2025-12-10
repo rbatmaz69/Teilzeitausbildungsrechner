@@ -108,8 +108,7 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
         if verkuerzungsgruende.get("berufliche_verkuerzung_monate", 0):
             berufliche_total += int(
             verkuerzungsgruende.get("berufliche_verkuerzung_monate", 0)
-        )
-
+            )
         else:
             # Q1/Q3/Q4 => 12 Monate
             if verkuerzungsgruende.get("beruf_q1", False):
