@@ -92,9 +92,6 @@
       "massnahmeVorbereitung": "Did you participate in a measure to prepare for vocational training before the apprenticeship (e.g. pre-vocational training measure or entry qualification)?",
       "massnahmeVorbereitung_sr": "Measure to prepare for vocational training",
       "massnahmeVorbereitung_short": "Preparatory measure",
-      "qualifizierungsbausteine": "Have you completed individual qualification modules or partial qualifications that prepare you for a vocational occupation?",
-      "qualifizierungsbausteine_sr": "Completed qualification modules or partial qualifications",
-      "qualifizierungsbausteine_short": "Qualification modules",
       "ectsStudium": "Have you already earned at least 30 ECTS credits in a field that matches your apprenticeship during your studies?",
       "ectsStudium_sr": "ECTS in the matching study field",
       "ectsStudium_short": "ECTS credits"
