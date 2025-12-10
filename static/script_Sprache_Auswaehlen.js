@@ -102,18 +102,26 @@
     });
 
     // Synchronisiere beide Sprachumschalter (Mobile und Desktop)
-    const sprachAuswahl = document.getElementById("lang-switcher");
-    const sprachAuswahlDesktop = document.getElementById("lang-switcher-desktop");
+    // Neue: Button-basierte Umschalter statt Select
+    const langButtons = document.querySelectorAll(".lang-btn");
     
-    [sprachAuswahl, sprachAuswahlDesktop].forEach((select) => {
-      if (select) {
-        [...select.options].forEach((option) => {
-          const schluessel = option.dataset.i18n;
-          if (!schluessel) return;
-          const wert = aufloesung(woerterbuch, schluessel);
-          if (wert != null) option.textContent = String(wert);
-        });
-        select.value = zustand.sprache;
+    langButtons.forEach((btn) => {
+      const lang = btn.dataset.lang;
+      if (!lang) return;
+      
+      // Setze Texte aus i18n
+      const textSpan = btn.querySelector("span[data-i18n]");
+      if (textSpan) {
+        const schluessel = textSpan.dataset.i18n;
+        const wert = aufloesung(woerterbuch, schluessel);
+        if (wert != null) textSpan.textContent = String(wert);
+      }
+      
+      // Aktualisiere aktiven Status
+      if (lang === zustand.sprache) {
+        btn.classList.add("lang-btn-active");
+      } else {
+        btn.classList.remove("lang-btn-active");
       }
     });
   };
@@ -132,6 +140,17 @@
 
   /** Sendet ein benutzerdefiniertes Event, wenn sich die Sprache ändert. */
   const sendeSprachGeaendertEvent = () => {
+    // Konvertiere Dezimaltrenner in numerischen Eingabefeldern
+    const numericInputs = document.querySelectorAll('#stunden, #teilzeitProzent, #teilzeitStunden');
+    const decimalSep = zustand.sprache === 'de' ? ',' : '.';
+    const altSep = decimalSep === ',' ? '.' : ',';
+    
+    numericInputs.forEach(inp => {
+      if (inp.value) {
+        inp.value = inp.value.replace(new RegExp(`\\${altSep}`, 'g'), decimalSep);
+      }
+    });
+    
     window.dispatchEvent(new CustomEvent("i18n:changed", {
       detail: { lang: zustand.sprache }
     }));
@@ -156,33 +175,66 @@
   };
 
   document.addEventListener("DOMContentLoaded", async () => {
-    const sprachAuswahl = document.getElementById("lang-switcher");
-    const sprachAuswahlDesktop = document.getElementById("lang-switcher-desktop");
     const anfaenglicheSprache =
       holeGespeicherteSprache() ||
       (navigator.language || navigator.userLanguage || "de").slice(0, 2);
 
     const startSprache = UNTERSTUETZT.includes(anfaenglicheSprache) ? anfaenglicheSprache : STANDARD_SPRACHE;
 
-    if (sprachAuswahl) sprachAuswahl.value = startSprache;
-    if (sprachAuswahlDesktop) sprachAuswahlDesktop.value = startSprache;
-
     await ladeUndWendeAn(startSprache);
     speichereSprache(startSprache);
 
-    if (sprachAuswahl) {
-      sprachAuswahl.addEventListener("change", async (ereignis) => {
-        const neueSprache = ereignis.target.value;
-        if (sprachAuswahlDesktop) sprachAuswahlDesktop.value = neueSprache;
+    // Konsistente Position des Desktop-Sprachwechslers über Engines hinweg
+    const switcherDesktopWrapper = document.querySelector(".language-switcher-desktop");
+
+    const positioniereDesktopSwitcher = () => {
+      if (!switcherDesktopWrapper) return;
+      // Fixe Referenz-Position: hält sich unabhängig von Textlängen/Layouts stabil
+      // Werte orientieren sich am Firefox-Layout (vorherige Overlay-Position)
+      const FIX_TOP = 100; // px, weiter nach oben (~100% zusätzlicher Versatz)
+      const FIX_RIGHT = 112; // px
+      switcherDesktopWrapper.style.top = `${FIX_TOP}px`;
+      switcherDesktopWrapper.style.right = `${FIX_RIGHT}px`;
+      switcherDesktopWrapper.style.position = "absolute";
+      switcherDesktopWrapper.style.zIndex = "10";
+    };
+
+    // Initial positionieren und bei verschiedenen Ereignissen neu berechnen
+    // 1) Direkt nach DOMContentLoaded
+    positioniereDesktopSwitcher();
+    // 2) Nach vollständigem Laden (inkl. Bilder/Fonts)
+    window.addEventListener("load", positioniereDesktopSwitcher);
+    // 3) Bei History/Page Cache (Chrome/Edge: bfcache)
+    window.addEventListener("pageshow", positioniereDesktopSwitcher);
+    // 4) Nach Fonts-Loading, da Typo-Metriken die Berechnung beeinflussen können
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(positioniereDesktopSwitcher).catch(() => {});
+    }
+    // 5) Bei Resize/Orientation
+    window.addEventListener("resize", positioniereDesktopSwitcher, { passive: true });
+    window.addEventListener("orientationchange", positioniereDesktopSwitcher);
+    // 6) Beobachte Layout-Änderungen in der Startseite (i18n-Updates etc.)
+    // Keine MutationObserver-Kopplung an Titel/Content – Position bleibt fix unabhängig vom Inhalt
+
+    // Reagiere auf Language-Select-Änderungen (Mobile)
+    const langSwitcher = document.getElementById("lang-switcher");
+    if (langSwitcher) {
+      langSwitcher.addEventListener("change", async (event) => {
+        const neueSprache = event.target.value;
+        if (!neueSprache || !UNTERSTUETZT.includes(neueSprache)) return;
+        
         speichereSprache(neueSprache);
         await ladeUndWendeAn(neueSprache);
       });
     }
 
-    if (sprachAuswahlDesktop) {
-      sprachAuswahlDesktop.addEventListener("change", async (ereignis) => {
-        const neueSprache = ereignis.target.value;
-        if (sprachAuswahl) sprachAuswahl.value = neueSprache;
+    // Reagiere auf Language-Select-Änderungen (Desktop)
+    const langSwitcherDesktop = document.getElementById("lang-switcher-desktop");
+    if (langSwitcherDesktop) {
+      langSwitcherDesktop.addEventListener("change", async (event) => {
+        const neueSprache = event.target.value;
+        if (!neueSprache || !UNTERSTUETZT.includes(neueSprache)) return;
+        
         speichereSprache(neueSprache);
         await ladeUndWendeAn(neueSprache);
       });

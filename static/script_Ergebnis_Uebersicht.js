@@ -23,6 +23,9 @@ function aktuelleSprache() {
   return (window.I18N && window.I18N.lang) || "de";
 }
 
+// Locale-aware Zahl parser: ersetzt deutsches Komma durch Punkt für parseFloat
+const parseNumber = (value) => parseFloat(String(value).replace(',', '.'));
+
 
 // Zustand merken, damit wir bei Sprachwechsel neu rendern können
 let LETZTE_EINGABEN = null;
@@ -96,9 +99,9 @@ async function holeZusammenfassung() {
   const wochenstundenElement = document.getElementById("stunden");
   const prozentElement = document.getElementById("teilzeitProzent");
 
-  const basisMonate = Number(basisMonateElement?.value || 0);
-  const wochenstunden = Number(wochenstundenElement?.value || 0);
-  const teilzeitProzent = Number(prozentElement?.value || 0);
+  const basisMonate = parseNumber(basisMonateElement?.value || 0);
+  const wochenstunden = parseNumber(wochenstundenElement?.value || 0);
+  const teilzeitProzent = parseNumber(prozentElement?.value || 0);
 
   const verkuerzungsgruende = collectVerkuerzungsgruende();
 
@@ -293,7 +296,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
         
         const valueSpan = document.createElement("span");
         valueSpan.className = "verkuerzung-value";
-        // Einheitlich kurze Form "M" für alle Geräte
+        // Einheitlich vollständige Form "Monate" für alle Geräte
         valueSpan.textContent = `${verkuerzung.months} ${uebersetzung("units.months.short", "M")}`;
         
         li.appendChild(labelSpan);
@@ -338,12 +341,12 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const formulaContainer = document.createElement("div");
     formulaContainer.className = "teilzeit-formula-container";
     
-    // Zeile 1: "24 M / 75%"
+    // Zeile 1: "24 Monate / 75%"
     const formulaLine1 = document.createElement("span");
     formulaLine1.className = "teilzeit-formula-line1";
     formulaLine1.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.short", "M")} / ${eingaben.teilzeitProzent}%`;
     
-    // Zeile 2: "= 48 M"
+    // Zeile 2: "= 48 Monate"
     const formulaLine2 = document.createElement("span");
     formulaLine2.className = "teilzeit-formula-line2";
     formulaLine2.textContent = ` = ${berechnung.gesamtMonate} ${uebersetzung("units.months.short", "M")}`;
@@ -459,7 +462,7 @@ function fuelleErgebnisse(eingaben, berechnung) {
         `${vollzeitMonate} ${uebersetzung("units.months.full", "Monate")}`
       );
 
-      // z.B. "-6 Monate"
+      // z.B. "-6 M"
       const vorzeichen = verkuerzungMonate > 0 ? "-" : "";
       setzeText(
         "#res-extension-verkuerzungsdauer",
@@ -514,7 +517,7 @@ function fuelleErgebnisse(eingaben, berechnung) {
         `${basisMonate} ${uebersetzung("units.months.full", "Monate")}`
       );
 
-      // z.B. "+12 Monate"
+      // z.B. "+12 M"
       const sign = teilzeitDelta >= 0 ? "+" : "";
       setzeText(
         "#res-extension-delta",
@@ -726,10 +729,29 @@ function setzeDatenZurueck() {
   const dauerInput = document.getElementById("dauer");
   const stundenInput = document.getElementById("stunden");
   const teilzeitProzentInput = document.getElementById("teilzeitProzent");
+  const teilzeitStundenInput = document.getElementById("teilzeitStunden");
+  const presetButtons = document.querySelectorAll('.preset[data-type="percent"], .preset[data-type="hours"]');
+  const fehlerProzent = document.getElementById("errorProzent");
+  const fehlerStunden = document.getElementById("errorStunden");
   
-  if (dauerInput) dauerInput.value = "36";
-  if (stundenInput) stundenInput.value = "40";
-  if (teilzeitProzentInput) teilzeitProzentInput.value = "75";
+  if (dauerInput) dauerInput.value = "";
+  if (stundenInput) stundenInput.value = "";
+  if (teilzeitProzentInput) teilzeitProzentInput.value = "";
+  if (teilzeitStundenInput) teilzeitStundenInput.value = "";
+
+  // Teilzeitfelder deaktivieren und optisch zurücksetzen
+  [teilzeitProzentInput, teilzeitStundenInput].forEach((inp) => {
+    if (!inp) return;
+    inp.disabled = true;
+    inp.classList.remove('error');
+  });
+  // Presets deaktivieren und aktiv-Zustand entfernen
+  presetButtons.forEach((btn) => {
+    btn.disabled = true;
+    btn.classList.remove('active');
+  });
+  if (fehlerProzent) fehlerProzent.textContent = "";
+  if (fehlerStunden) fehlerStunden.textContent = "";
   
   // Checkboxes für Verkürzungsgründe zurücksetzen
   const checkboxes = document.querySelectorAll('input[type="checkbox"][data-vk-field]');
@@ -754,6 +776,7 @@ function setzeDatenZurueck() {
   // Gespeicherten Zustand löschen
   try {
     localStorage.removeItem("calculatorState");
+    localStorage.removeItem("teilzeitrechner_eingaben"); // Eingaben-Cache ebenfalls löschen
   } catch (fehler) {
     console.warn("Konnte calculatorState nicht löschen:", fehler);
   }
