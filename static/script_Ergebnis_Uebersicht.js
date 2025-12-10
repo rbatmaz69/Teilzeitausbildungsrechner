@@ -109,7 +109,6 @@ function collectVerkuerzungsgruende() {
     const q3 = document.getElementById('vk_beruf_q3_ja');
     const q4 = document.getElementById('vk_beruf_q4_ja');
     const q5 = document.getElementById('vk_beruf_q5_ja');
-    const q5b = document.getElementById('vk_beruf_q5b_ja');
     const q6 = document.getElementById('vk_beruf_q6_ja');
 
     if (q1 && q1.checked) result.beruf_q1 = true;
@@ -117,7 +116,6 @@ function collectVerkuerzungsgruende() {
     if (q3 && q3.checked) result.beruf_q3 = true;
     if (q4 && q4.checked) result.beruf_q4 = true;
     if (q5 && q5.checked) result.beruf_q5 = true;
-    if (q5b && q5b.checked) result.beruf_q5b = true;
     if (q6 && q6.checked) result.beruf_q6 = true;
 
     // Q2 Dauer verarbeiten (nur wenn Q2 ausgewählt)
@@ -132,7 +130,6 @@ function collectVerkuerzungsgruende() {
     if (result.beruf_q3) berufMonate += 12;
     if (result.beruf_q4) berufMonate += 12;
     if (result.beruf_q5) berufMonate += 6;
-    if (result.beruf_q5b) berufMonate += 6;
     if (result.beruf_q6) berufMonate += 6;
     if (result.beruf_q2) {
       const d = result.beruf_q2_dauer_monate || 0;
@@ -193,7 +190,6 @@ function validiereAlleEingaben() {
     { ja: "vk_beruf_q3_ja", nein: "vk_beruf_q3_nein", label: "Praktische Erfahrung" },
     { ja: "vk_beruf_q4_ja", nein: "vk_beruf_q4_nein", label: "Berufsvorbereitende Schulform" },
     { ja: "vk_beruf_q5_ja", nein: "vk_beruf_q5_nein", label: "Vorbereitungsmaßnahme" },
-    { ja: "vk_beruf_q5b_ja", nein: "vk_beruf_q5b_nein", label: "Qualifizierungsbausteine" },
     { ja: "vk_beruf_q6_ja", nein: "vk_beruf_q6_nein", label: "ECTS-Punkte im Studium" }
   ];
 
@@ -543,9 +539,6 @@ function fuelleEingabenliste(eingaben, berechnung) {
         break;
       case "beruf_q5":
         beschriftungsSchluessel = "vk.qual.massnahmeVorbereitung_short";
-        break;
-      case "beruf_q5b":
-        beschriftungsSchluessel = "vk.qual.qualifizierungsbausteine_short";
         break;
       case "beruf_q6":
         beschriftungsSchluessel = "vk.qual.ectsStudium_short";
@@ -1268,7 +1261,6 @@ function initialisiere() {
     ["vk_beruf_q3_ja","vk_beruf_q3_nein"],
     ["vk_beruf_q4_ja","vk_beruf_q4_nein"],
     ["vk_beruf_q5_ja","vk_beruf_q5_nein"],
-    ["vk_beruf_q5b_ja","vk_beruf_q5b_nein"],
     ["vk_beruf_q6_ja","vk_beruf_q6_nein"]
   ];
 
