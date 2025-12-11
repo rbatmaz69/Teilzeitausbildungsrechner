@@ -170,12 +170,12 @@ document.addEventListener('DOMContentLoaded', () => {
       let v = berufQ2Duration.value.replace(/[^0-9]/g, '');
       berufQ2Duration.value = v;
       
-      // Max-Validierung sofort: Wenn > 50, auf 50 setzen und Fehler anzeigen
+      // Max-Validierung sofort: Wenn > 48, auf 48 setzen und Fehler anzeigen
       const dauer = parseInt(v);
-      if (!isNaN(dauer) && dauer > 50) {
-        berufQ2Duration.value = 50;
+      if (!isNaN(dauer) && dauer > 48) {
+        berufQ2Duration.value = 48;
         berufQ2Duration.classList.add('error');
-        if (errorBerufQ2Dauer) errorBerufQ2Dauer.textContent = uebersetzung("errors.berufQ2DauerMax", "Der Wert darf maximal 50 Monate betragen");
+        if (errorBerufQ2Dauer) errorBerufQ2Dauer.textContent = uebersetzung("errors.berufQ2DauerMax", "Der Wert darf maximal 48 Monate betragen");
         
         // Fehler nach 4 Sekunden entfernen
         clearTimeout(q2DauerErrorTimeout);
