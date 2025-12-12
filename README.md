@@ -41,10 +41,10 @@ Tests im Ordner `tests/` decken jede Schicht ab (Unit-Tests für Logik und Servi
 ## 🚀 Installation
 
 ### Voraussetzungen
-- Python 3.7+
-- Node.js 18+ (für Linting-Tools)
-- Python-Pakete aus `requirements.txt`
-- Node.js-Pakete aus `package.json`
+- Python 3.12+ (empfohlen) — das Backend‑Docker‑Image basiert auf `python:3.12-slim`
+- Node.js 18+ (nur für Linter / Playwright Tooling)
+- Python‑Dependencies in `requirements.txt`
+- Node‑Dependencies in `package.json` (nur für Linting / Playwright)
 
 ### Setup
 ```bash
@@ -52,27 +52,28 @@ Tests im Ordner `tests/` decken jede Schicht ab (Unit-Tests für Logik und Servi
 git clone https://git.it.hs-heilbronn.de/it/courses/seb/lab/ws25/group-04.git
 cd group-04
 
-# Python-Abhängigkeiten installieren (erforderlich)
+# Python-Abhängigkeiten installieren
 pip install -r requirements.txt
 
 # Frontend-Linting-Tools installieren (optional, nur für lokales Linting)
 # Die Pipeline installiert diese automatisch - dieses Setup ist nur für lokale Entwicklung
 npm install
-
-# Hinweis: package-lock.json sorgt dafür, dass alle Teammitglieder und die Pipeline
-# exakt die gleichen Linter-Versionen verwenden. Nicht manuell editieren oder löschen!
-
-# App lokal starten (Entwicklung)
-python3 -m src.app
-# Läuft auf http://localhost:8000/
-# Falls Port 8000 belegt ist, wird automatisch der nächste freie Port verwendet
-
-# Alternativ mit Flask CLI
-export FLASK_APP=src.app:create_app
-flask run
-# Oder mit spezifischem Port:
-flask run --port=8001
 ```
+
+### App lokal starten
+Hinweis: Die Anwendung kann lokal auf zwei Ports laufen, je nach Startmethode:
+
+- Development server (empfohlen für Entwicklung): `PORT=8000` (Default). Beispiel (PowerShell):
+```powershell
+python -m src.app
+# oder: python -m src.app 8001  # Port als CLI-Argument
+```
+
+- Playwright (E2E Tests) startet in der Testkonfiguration einen temporären Server auf Port `5000`. Sie können Playwright‑Tests mit `npm run test:e2e` starten; der Test‑Runner startet oder verbindet sich zu `http://localhost:5000` (siehe `playwright.config.js`).
+
+- Docker: `docker-compose.yaml` mappt Host‑Port `8000` auf Container‑Port `5000` (siehe Docker‑Abschnitt). Nach `docker compose up` ist die App unter `http://localhost:8000/` erreichbar.
+
+Wenn Port `8000` belegt ist, versucht der Dev‑Server automatisch einen Fallback‑Port.
 
 ## 🐳 Docker
 
@@ -97,13 +98,9 @@ docker compose up -d --build
 docker compose down
 ```
 
-Hinweis: Nach `docker compose up` ist die App unter `http://localhost:8000/` erreichbar.
-
 ## 💻 Verwendung
 
 ### Web-UI + API
-
-Nach dem Start ist die Oberfläche unter `http://localhost:8000/` erreichbar. Die Berechnung erfolgt serverseitig über die API.
 
 API-Endpoint:
 
@@ -116,15 +113,39 @@ Content-Type: application/json
   "vollzeit_stunden": 40,
   "teilzeit_eingabe": 75,
   "eingabetyp": "prozent",           # oder "stunden"
-    "verkuerzungsgruende": {
+  "verkuerzungsgruende": {
     "abitur": true,
     "realschule": false,
     "alter_ueber_21": false,
     "familien_pflegeverantwortung": false,
-    "vorkenntnisse_monate": 0
+    "familien_kinderbetreuung": false,
+    # berufliche Fragen (neue, granularere Felder)
+    "beruf_q1": false,
+    "beruf_q2": false,
+    "beruf_q2_dauer_monate": 0,
+    "beruf_q3": false,
+    "beruf_q4": false,
+    "beruf_q5": false,
+    "beruf_q6": false,
+    # optional: bereits vorab berechneter Gesamtwert
+    "berufliche_verkuerzung_monate": 0
   }
 }
 ```
+
+Wichtig — Pflichtfelder in `verkuerzungsgruende`:
+
+- Alle Ja/Nein‑Felder (bool) müssen vom Client explizit angegeben werden; sie sind Pflichtfelder:
+  - `abitur`, `realschule`, `alter_ueber_21`,
+  - `familien_kinderbetreuung`, `familien_pflegeverantwortung`,
+  - `beruf_q1`, `beruf_q2`, `beruf_q3`, `beruf_q4`, `beruf_q5`, `beruf_q6`
+
+- Zahlenfelder (als Werte oder 0) — sollten ebenfalls explizit übergeben werden, wenn relevant:
+  - `beruf_q2_dauer_monate`, `berufliche_verkuerzung_monate`
+
+
+
+Hinweis: Die Service‑Validierung akzeptiert fehlende Felder und füllt intern fehlende bools standardmäßig mit `false`, trotzdem ist es aus Kompatibilitäts‑ und Prüfungsgründen wichtig, dass Clients die oben genannten Ja/Nein‑Felder immer explizit mitsenden (mit `true` oder `false`).
 
 Antwort (200):
 
@@ -141,7 +162,10 @@ Antwort (200):
     "finale_dauer_jahre": 2.7,
     "wochenstunden": 30.0,
     "verkuerzung_gesamt_monate": 12,
-    "verlaengerung_durch_teilzeit_monate": 8
+    "verlaengerung_durch_teilzeit_monate": 8,
+    # zusätzliche Felder, die die Logik zurückliefert
+    "verkuerzung_gesamt_ohne_begrenzung": 14,
+    "regel_8_abs_3_angewendet": false
   }
 }
 ```
@@ -152,7 +176,7 @@ Fehler (400/422/500):
 { "error": { "code": "...", "message": "...", "details": { } } }
 ```
 
-### Grundlegende Berechnung
+### Grundlegende Berechnung (Python API)
 ```python
 from src.calculation_logic import berechne_gesamtdauer
 
@@ -166,7 +190,15 @@ ergebnis = berechne_gesamtdauer(
         'realschule': False,
         'alter_ueber_21': False,
         'familien_pflegeverantwortung': False,
-        'vorkenntnisse_monate': 0
+        'vorkenntnisse_monate': 0,
+        # berufliche Fragen
+        'beruf_q1': False,
+        'beruf_q2': False,
+        'beruf_q2_dauer_monate': 0,
+        'beruf_q3': False,
+        'beruf_q4': False,
+        'beruf_q5': False,
+        'beruf_q6': False,
     },
     eingabetyp='prozent'
 )
@@ -181,26 +213,66 @@ ergebnis = berechne_gesamtdauer(
     basis_dauer_monate=36,
     vollzeit_stunden=40,
     teilzeit_eingabe=30,  # 30 Stunden
-    verkuerzungsgruende={'abitur': False, 'realschule': False, 
-                        'alter_ueber_21': False, 'familien_pflegeverantwortung': False,
-                        'vorkenntnisse_monate': 0},
+  verkuerzungsgruende={
+    'abitur': False,
+    'realschule': False,
+    'alter_ueber_21': False,
+    'familien_pflegeverantwortung': False,
+    'familien_kinderbetreuung': False,
+    'vorkenntnisse_monate': 0,
+    # explizit mitliefern (Pflichtfelder): berufliche Ja/Nein-Fragen
+    'beruf_q1': False,
+    'beruf_q2': False,
+    'beruf_q2_dauer_monate': 0,
+    'beruf_q3': False,
+    'beruf_q4': False,
+    'beruf_q5': False,
+    'beruf_q6': False,
+    'berufliche_verkuerzung_monate': 0,
+  },
     eingabetyp='stunden'
 )
 ```
 
 ## 📊 Berechnungslogik
 
-### Verkürzungsgründe (§ 8 BBiG)
-- **Abitur/Hochschulreife**: 12 Monate
-- **Realschulabschluss**: 6 Monate  
-- **Alter über 21**: 12 Monate
-- **Berufliche Vorkenntnisse**: bis zu 12 Monate
-- **Familien- und Pflegeverantwortung**: bis zu 12 Monate
+Die Berechnungslogik liegt in `src/calculation_logic.py` und folgt einem vierstufigen Verfahren:
+
+1. Verkürzung berechnen (z. B. Abitur, Realschule, berufliche Gründe)
+2. Verlängerung durch Teilzeit (Stunden/Prozent-Umrechnung)
+3. Gesetzliche Obergrenze anwenden (z. B. maximal 1,5-fache AO‑Dauer)
+4. Rundung auf ganze Monate
+
+### Verkürzungsgründe (aktuell implementiert)
+- **Abitur/Hochschulreife** (`abitur`): 12 Monate
+- **Realschulabschluss** (`realschule`): 6 Monate
+- **Alter über 21** (`alter_ueber_21`): 12 Monate
+- **Familien- und Pflegeverantwortung** (`familien_kinderbetreuung`, `familien_pflegeverantwortung`): bis zu 12 Monate
+- **Berufliche Gründe** (`beruf_q1`..`beruf_q6`, `beruf_q2_dauer_monate`, `berufliche_verkuerzung_monate`):
+  - `beruf_q1`, `beruf_q3`, `beruf_q4` → je 12 Monate (wenn true)
+  - `beruf_q5`, `beruf_q6` → je 6 Monate (wenn true)
+  - `beruf_q2` ist eine Ja/Nein-Antwort mit zusätzlichem Eingabefeld `beruf_q2_dauer_monate`.
+    Das Feld `beruf_q2_dauer_monate` wird wie folgt auf Monate gemappt:
+    - < 6 Monate → 0
+    - 6..11 Monate → 6
+    - >= 12 Monate → 12
+  - Alternativ kann der Client bereits eine Gesamtsumme in `berufliche_verkuerzung_monate` liefern, die dann verwendet wird.
+
+### Summierung & Begrenzung
+- Die Summe aller Verkürzungsgründe wird intern berechnet und anschließend auf
+  `MAX_GESAMT_VERKUERZUNG_MONATE` (derzeit 12 Monate) begrenzt. Das Ergebnis vor Begrenzung
+  wird im Rückgabeobjekt als `verkuerzung_gesamt_ohne_begrenzung` mitgeliefert.
 
 ### Teilzeit-Regelungen (§ 7a BBiG)
-- **Mindest-Teilzeit**: 50% der Vollzeit
-- **Maximale Verlängerung**: 1,5-fache der AO-Dauer
-- **Rundung**: Auf ganze Monate abrunden
+- **Mindest-Teilzeit**: 50% der Vollzeit (`MIN_TEILZEIT_PROZENT`)
+- **Maximale Verlängerung** durch Teilzeit: 1,5-fache der AO-Dauer (`MAX_VERLAENGERUNG_FAKTOR`)
+- **Rundung**: Am Ende wird auf ganze Monate abgerundet
+
+### Zusätzliche Rückgabe-Informationen
+- `verkuerzung_gesamt_ohne_begrenzung`: Summe der Verkürzung vor der 12-Monats-Begrenzung
+- `regel_8_abs_3_angewendet`: Boolean, falls die gesetzliche Sonderregel (§ 8 Abs. 3) angewendet wurde
+
+Diese Beschreibung entspricht der aktuellen Implementierung in `src/calculation_logic.py` und der Service‑Validierung in `src/api/calculation_service.py`.
 
 ## 🧪 Tests
 
@@ -240,10 +312,10 @@ npm run test:e2e:ui
 npm run test:e2e:headed
 ```
 
-Die E2E-Tests validieren die gesamte Anwendung im Browser (60 Tests):
-- **Happy Path** (43): Desktop/Mobile Vollzeit, Teilzeit, Verkürzungen, Sprachwechsel, Reset, Share
-- **Validation** (13): Min/Max-Werte für Dauer/Stunden/Prozent, Input-Validierung
-- **Error Scenarios** (4): Edge Cases, BBiG-Regelungen (§ 7a, § 8), API-Fehler
+Die E2E-Tests validieren die gesamte Anwendung im Browser (64 Tests):
+- **Happy Path** (22): Desktop & Mobile Hauptnutzerflüsse, Sprachwechsel, Preset-Buttons
+- **Validation** (17): Eingabevalidierungen (Dauer, Stunden, Prozent) Desktop & Mobile
+- **Error Scenarios** (25): Edge Cases, BBiG-Regelungen (§ 7a, § 8), API-Fehler
 
 #### Deaktivierte E2E-Tests (vorübergehend)
 
@@ -262,9 +334,10 @@ Die E2E-Tests validieren die gesamte Anwendung im Browser (60 Tests):
 
 Wir haben uns für **Playwright** entschieden, da es für unsere Anwendung entscheidende Vorteile bietet:
 
-- **Auto-Wait & Stabilität**: Playwright wartet automatisch auf Element-Interaktionen und verhindert so flaky Tests durch Race Conditions - besonders wichtig für unsere asynchronen i18n-Übersetzungen und API-Calls.
 
-- **Performance**: Unsere 60 Tests laufen in ~1 Minute dank direkter Browser-DevTools-Kommunikation statt langsamerer WebDriver-Protokolle.
+  - **Auto-Wait & Stabilität**: Playwright wartet automatisch auf Element-Interaktionen und reduziert Race Conditions — besonders wichtig für asynchrone i18n‑Nachladungen und API‑Aufrufe.
+
+  - **Performance**: Playwright kommuniziert direkt mit der Browser‑Engine (DevTools). Laufzeit der E2E‑Suite variiert je nach Umgebung und Konfiguration.
 
 - **Natives Mobile-Testing**: Für unsere responsive Mobile-Tests (iPhone 13 Emulation mit Touch-Events) bräuchten wir bei Selenium zusätzliche Tools wie Appium.
 
@@ -298,9 +371,9 @@ group-04/
 │   ├── test_calculation_service.py # Unit-Tests für Service-Layer
 │   └── dummy_data.py       # Zentrale Testdaten (User Story 30)
 ├── e2e/
-│   ├── happy-path.spec.js       # E2E: Hauptnutzerflüsse (43 Tests)
-│   ├── validation.spec.js       # E2E: Input-Validierung (13 Tests)
-│   └── error-scenarios.spec.js  # E2E: Edge Cases & BBiG-Regeln (4 Tests)
+│   ├── happy-path.spec.js       # E2E: Hauptnutzerflüsse (22 Tests)
+│   ├── validation.spec.js       # E2E: Input-Validierung (17 Tests)
+|   └── error-scenarios.spec.js  # E2E: Edge Cases & BBiG-Regeln (25 Tests)
 ├── playwright.config.js    # Playwright E2E-Test-Konfiguration
 ├── .flake8                 # Flake8 Linter-Konfiguration
 ├── eslint.config.js        # ESLint 9 Config (nutzt recommended + browser globals)
@@ -391,8 +464,8 @@ Das Skript wertet die Docstrings der Kernmodule (`src/calculation_logic.py`, `sr
   - JavaScript: ESLint
   - CSS: Stylelint
   - HTML: HTMLHint
-- [x] **Test** - Pytest mit Coverage-Report (90%)
-- [x] **E2E** - Playwright End-to-End Tests (60 Tests)
+- [x] **Test** - Pytest mit Coverage-Report (siehe `coverage.xml` oder `pytest --cov`)
+- [x] **E2E** - Playwright End-to-End Tests (Tests unter `e2e/`, 64 Tests)
 - [x] **Coverage Report** - Automatische Coverage-Artefakte
 - [ ] **Deployment** - Automatisches Deployment nach Tests
 - [ ] **Status Badges** - Build-Status in README
@@ -459,20 +532,21 @@ isort src/            # Python Imports sortieren
 
 ## 🎯 Status
 
-- [x] **Vollständig implementiert** - Alle Kernfunktionen verfügbar
-- [x] **Getestet** - 57 Tests mit 90% Code Coverage
-- [x] **Dokumentiert** - Ausführliche Kommentare und Beispiele
-- [x] **Produktionsreif** - Bereit für den produktiven Einsatz
+- [x] **Kernfunktionen implementiert** - Hauptberechnung und API vorhanden
+- [x] **Getestet** - Unit/Integration und E2E‑Tests vorhanden; CI erzeugt Test‑Artefakte
+- [x] **Dokumentiert** - Docstrings und eine generierbare API‑Referenz vorhanden
+- [ ] **Produktionsreif** - Noch offene UX/Reset/Share‑Bugs; Deployment‑Checks empfohlen
 
 ### Test-Coverage
-- **Gesamt**: 90% (133 Statements)
-- **calculation_logic.py**: 100% (93 Statements)
-- **app.py**: 68% (40 Statements - nur CLI-Code ungetestet)
+Coverage‑Reports werden in der CI erzeugt und liegen als Artefakt (`coverage.xml`) vor. Lokal erzeugen:
+
+```bash
+python3 -m pytest tests/ --cov=src --cov-report=term
+```
 
 ### Code-Qualität
-- **Flake8**: Vollständig konform
-- **Dokumentation**: Alle Funktionen dokumentiert
-- **Tests**: Unit + Integration Tests
+- Linter konfiguriert: `flake8`, `isort`, `eslint`, `stylelint`, `htmlhint`.
+- Vor dem Merge empfiehlt sich ein lokaler Linter‑/Testlauf (siehe Linting & Tests Abschnitte).
 
 ---
 
