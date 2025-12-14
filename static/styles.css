@@ -2332,3 +2332,21 @@ body.modal-open {
 .vk-category.vk-beruf .vk-category-body {
   flex-direction: column !important;
 }
+
+/* ==========================================
+   FOKUS-STYLE STEUERUNG (Keyboard vs. Maus/Touch)
+   ========================================== */
+/* Entfernt den Standard-Fokusrahmen bei Maus/Touch (normales :focus) */
+*:focus {
+  outline: none !important;
+}
+
+/* Zeige Fokus nur bei Tastatur-Navigation (focus-visible) */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
