@@ -375,6 +375,11 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Entferne alleinstehenden Trenner und führende Nullen beim Verlassen des Feldes
     inp.addEventListener('blur', () => {
+      // Wenn leer, nichts anpassen
+      if (inp.value.trim() === '') {
+        return;
+      }
+
       const lang = window.I18N?.lang || document.documentElement.lang || 'de';
       const decimalSep = lang === 'de' ? ',' : '.';
       let wert = inp.value;
@@ -399,6 +404,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Wird ausgeführt, nachdem eine neue Ausbildungsdauer eingegeben wurde (blur für manuelle Eingabe)
   dauerEingabe.addEventListener("blur", () => {
+    // Wenn leer, als gültig behandeln und nichts setzen
+    if (dauerEingabe.value.trim() === '') {
+      dauerEingabe.classList.remove('error');
+      aktuellerFehlerDauer = null;
+      if (fehlerDauer) fehlerDauer.textContent = '';
+      return;
+    }
+
     // Entferne führende Nullen
     let wert = dauerEingabe.value;
     wert = wert.replace(/^0+/, '');
@@ -406,14 +419,6 @@ document.addEventListener("DOMContentLoaded", () => {
     dauerEingabe.value = wert;
 
     const ausbildungsdauer = parseInt(dauerEingabe.value, 10);
-
-    // Wenn Feld leer war, leer lassen (nicht korrigieren)
-    if (dauerEingabe.value.trim() === '') {
-      dauerEingabe.classList.remove('error');
-      aktuellerFehlerDauer = null;
-      if (fehlerDauer) fehlerDauer.textContent = '';
-      return;
-    }
 
     // Mindest- und Maximalwerte für die reguläre Ausbildungsdauer (IHK: 24-42 Monate)
     if (isNaN(ausbildungsdauer) || ausbildungsdauer < 24) {
@@ -462,7 +467,7 @@ document.addEventListener("DOMContentLoaded", () => {
   wochenstundenEingabe.addEventListener("blur", () => {
     const wochenstunden = parseNumber(wochenstundenEingabe.value);
 
-    // Wenn Feld leer war, leer lassen (nicht korrigieren)
+    // Wenn leer, als gültig behandeln und nichts setzen
     if (wochenstundenEingabe.value.trim() === '') {
       wochenstundenEingabe.classList.remove('error');
       aktuellerFehlerRegularStunden = null;
@@ -706,6 +711,9 @@ document.addEventListener("DOMContentLoaded", () => {
    * Validierung: Stunden dürfen nicht über reguläre Wochenstunden liegen.
    */
   function synchronisiereStunden() {
+    if (wochenstundenEingabe.value.trim() === '' || teilzeitProzentEingabe.value.trim() === '') {
+      return;
+    }
     const gesamt = parseNumber(wochenstundenEingabe.value);
     const prozent = parseNumber(teilzeitProzentEingabe.value);
     if (!isNaN(gesamt) && !isNaN(prozent)) {
@@ -758,6 +766,9 @@ document.addEventListener("DOMContentLoaded", () => {
    * Validierung: Prozent darf nicht über 100% liegen.
    */
   function synchronisiereProzent() {
+    if (wochenstundenEingabe.value.trim() === '' || teilzeitStundenEingabe.value.trim() === '') {
+      return;
+    }
     const gesamt = parseNumber(wochenstundenEingabe.value);
     const stunden = parseNumber(teilzeitStundenEingabe.value);
     if (!isNaN(gesamt) && !isNaN(stunden) && gesamt > 0) {
@@ -800,6 +811,14 @@ document.addEventListener("DOMContentLoaded", () => {
    * Rückmeldungen werden in der UI angezeigt.
    */
   function pruefeMindestUndMaximalProzent() {
+    // Leeres Feld: gültig, nichts setzen
+    if (teilzeitProzentEingabe.value.trim() === '') {
+      teilzeitProzentEingabe.classList.remove('error');
+      aktuellerFehlerProzent = null;
+      fehlerProzent.textContent = '';
+      return;
+    }
+
     const teilzeitProzent = parseNumber(teilzeitProzentEingabe.value);
     
     // Überprüfung, ob die Eingabe eine gültige Zahl ist
@@ -841,6 +860,14 @@ document.addEventListener("DOMContentLoaded", () => {
    * zwischen der Hälfte und der vollen Wochenarbeitszeit.
    */
   function pruefeMindestUndMaximalStunden() {
+    // Leeres Feld: gültig, nichts setzen
+    if (teilzeitStundenEingabe.value.trim() === '') {
+      teilzeitStundenEingabe.classList.remove('error');
+      aktuellerFehlerStunden = null;
+      fehlerStunden.textContent = '';
+      return;
+    }
+
     const wochenstunden = parseNumber(wochenstundenEingabe.value);
     const teilzeitStunden = parseNumber(teilzeitStundenEingabe.value);
 
