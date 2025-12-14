@@ -1977,9 +1977,10 @@ input.error,
   box-shadow: 0 4px 12px rgb(224 0 0 / 20%);
 }
 
-.vk-info-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgb(224 0 0 / 15%);
+.vk-info-btn { -webkit-tap-highlight-color: transparent; }
+.vk-info-btn:active { /* Kein Flash/Bounce auf Tap */
+  transform: none;
+  box-shadow: 0 4px 12px rgb(224 0 0 / 20%);
 }
 
 .vk-info-btn:focus-visible {
@@ -2072,8 +2073,9 @@ input.error,
   transform: rotate(90deg);
 }
 
-.vk-info-close:active {
-  transform: rotate(90deg) scale(0.95);
+.vk-info-close { -webkit-tap-highlight-color: transparent; }
+.vk-info-close:active { /* Kein Flash/Bounce auf Tap */
+  transform: rotate(90deg);
 }
 
 .vk-info-close:focus-visible {
