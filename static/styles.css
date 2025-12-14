@@ -144,6 +144,7 @@ header h1 {
   position: relative;
   color: #333;
   font-weight: 500;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .tile:hover { 
