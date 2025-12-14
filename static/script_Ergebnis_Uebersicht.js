@@ -1034,6 +1034,14 @@ function setzeDatenZurueck() {
     checkbox.checked = false;
   });
   
+  // Fehler-Indikatoren und -Texte in den Verkürzungsgründen entfernen
+  document.querySelectorAll('#vk-fieldset .tile.error, #vk-fieldset .vk-yes-no-group.error').forEach(el => {
+    el.classList.remove('error');
+  });
+  document.querySelectorAll('#vk-fieldset .error-message, #vk-fieldset .error-message-ja-nein').forEach(el => {
+    el.textContent = '';
+  });
+  
   // Alle Ja/Nein-Checkboxen für Verkürzungsgründe zurücksetzen (inkl. Nein-Buttons)
   const allVkCheckboxes = document.querySelectorAll('#vk-fieldset input[type="checkbox"]');
   allVkCheckboxes.forEach(checkbox => {
@@ -1042,11 +1050,20 @@ function setzeDatenZurueck() {
   
   // Alter-Feld zurücksetzen
   const alterInput = document.getElementById('alter');
-  if (alterInput) alterInput.value = "";
+  if (alterInput) {
+    alterInput.value = "";
+    alterInput.classList.remove('error');
+  }
   
   // Fehler-Nachrichten für Alter zurücksetzen
   const errorAlter = document.getElementById('errorAlter');
   if (errorAlter) errorAlter.textContent = "";
+  
+  // Fehler-Nachrichten für Dauer und Stunden zurücksetzen
+  const errorDauer = document.getElementById('errorDauer');
+  if (errorDauer) errorDauer.textContent = "";
+  const errorRegularStunden = document.getElementById('errorRegularStunden');
+  if (errorRegularStunden) errorRegularStunden.textContent = "";
   
   // Dauer-Inputs für berufliche Fragen zurücksetzen
   const berufQ2Dauer = document.getElementById('vk_beruf_q2_dauer_months');
