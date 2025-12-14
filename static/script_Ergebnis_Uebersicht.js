@@ -252,7 +252,38 @@ function validiereAlleEingaben() {
     }
   }
 
-  // 3. Wenn Q2 "Ja" ist, prüfe ob Dauer eingegeben wurde
+  // 3. Wenn Wochenstunden gesetzt sind, aber Teilzeitfelder leer, zeige Fehler
+  const wochenstundenElement = document.getElementById("stunden");
+  const teilzeitStundenElement = document.getElementById("teilzeitStunden");
+  const teilzeitProzentElement = document.getElementById("teilzeitProzent");
+  
+  if (wochenstundenElement && teilzeitStundenElement && teilzeitProzentElement) {
+    const wochenstunden = wochenstundenElement.value?.trim();
+    const teilzeitStunden = teilzeitStundenElement.value?.trim();
+    const teilzeitProzent = teilzeitProzentElement.value?.trim();
+    
+    // Wenn Wochenstunden gesetzt sind UND beide Teilzeitfelder leer sind
+    if (wochenstunden && wochenstunden !== "" && Number(wochenstunden) > 0 && 
+        (!teilzeitStunden || teilzeitStunden === "") && (!teilzeitProzent || teilzeitProzent === "")) {
+      
+      // Fehler für Teilzeit-Stunden
+      teilzeitStundenElement.classList.add("error");
+      const errorTeilStunden = document.getElementById("errorTeilStunden");
+      if (errorTeilStunden) {
+        errorTeilStunden.textContent = uebersetzung("validation.required", "Dieses Feld ist erforderlich");
+      }
+      if (!ersterFehler) ersterFehler = teilzeitStundenElement;
+      
+      // Fehler für Teilzeit-Prozent
+      teilzeitProzentElement.classList.add("error");
+      const errorProzent = document.getElementById("errorProzent");
+      if (errorProzent) {
+        errorProzent.textContent = uebersetzung("validation.required", "Dieses Feld ist erforderlich");
+      }
+    }
+  }
+
+  // 4. Wenn Q2 "Ja" ist, prüfe ob Dauer eingegeben wurde
   const berufQ2Ja = document.getElementById("vk_beruf_q2_ja");
   const berufQ2Duration = document.getElementById("vk_beruf_q2_dauer_months");
   if (berufQ2Ja && berufQ2Ja.checked && berufQ2Duration) {
@@ -267,7 +298,7 @@ function validiereAlleEingaben() {
     }
   }
 
-  // 4. Wenn Fehler vorhanden, zum ersten Fehler scrollen (gleiche Logik wie "Zum Rechner" Button)
+  // 5. Wenn Fehler vorhanden, zum ersten Fehler scrollen (gleiche Logik wie "Zum Rechner" Button)
   if (ersterFehler) {
     setTimeout(() => {
       const elementTop = ersterFehler.getBoundingClientRect().top + window.pageYOffset;
@@ -1007,7 +1038,7 @@ function setzeDatenZurueck() {
   const teilzeitStundenInput = document.getElementById("teilzeitStunden");
   const presetButtons = document.querySelectorAll('.preset[data-type="percent"], .preset[data-type="hours"]');
   const fehlerProzent = document.getElementById("errorProzent");
-  const fehlerStunden = document.getElementById("errorStunden");
+  const fehlerStunden = document.getElementById("errorTeilStunden");
   
   if (dauerInput) dauerInput.value = "";
   if (stundenInput) stundenInput.value = "";
@@ -1034,14 +1065,6 @@ function setzeDatenZurueck() {
     checkbox.checked = false;
   });
   
-  // Fehler-Indikatoren und -Texte in den Verkürzungsgründen entfernen
-  document.querySelectorAll('#vk-fieldset .tile.error, #vk-fieldset .vk-yes-no-group.error').forEach(el => {
-    el.classList.remove('error');
-  });
-  document.querySelectorAll('#vk-fieldset .error-message, #vk-fieldset .error-message-ja-nein').forEach(el => {
-    el.textContent = '';
-  });
-  
   // Alle Ja/Nein-Checkboxen für Verkürzungsgründe zurücksetzen (inkl. Nein-Buttons)
   const allVkCheckboxes = document.querySelectorAll('#vk-fieldset input[type="checkbox"]');
   allVkCheckboxes.forEach(checkbox => {
@@ -1050,20 +1073,11 @@ function setzeDatenZurueck() {
   
   // Alter-Feld zurücksetzen
   const alterInput = document.getElementById('alter');
-  if (alterInput) {
-    alterInput.value = "";
-    alterInput.classList.remove('error');
-  }
+  if (alterInput) alterInput.value = "";
   
   // Fehler-Nachrichten für Alter zurücksetzen
   const errorAlter = document.getElementById('errorAlter');
   if (errorAlter) errorAlter.textContent = "";
-  
-  // Fehler-Nachrichten für Dauer und Stunden zurücksetzen
-  const errorDauer = document.getElementById('errorDauer');
-  if (errorDauer) errorDauer.textContent = "";
-  const errorRegularStunden = document.getElementById('errorRegularStunden');
-  if (errorRegularStunden) errorRegularStunden.textContent = "";
   
   // Dauer-Inputs für berufliche Fragen zurücksetzen
   const berufQ2Dauer = document.getElementById('vk_beruf_q2_dauer_months');

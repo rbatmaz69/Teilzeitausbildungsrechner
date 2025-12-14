@@ -22,9 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const teilzeitStundenEingabe = document.getElementById("teilzeitStunden");
   const buttons = document.querySelectorAll(".preset");
   const fehlerProzent = document.getElementById('errorProzent');
-  const fehlerStunden = document.getElementById('errorStunden');
+  const fehlerStunden = document.getElementById('errorTeilStunden');
   const fehlerDauer = document.getElementById('errorDauer');
-  const fehlerRegularStunden = document.getElementById('errorRegularStunden');
+  const fehlerRegularStunden = document.getElementById('errorStunden');
 
   // Locale-aware Zahl parser: ersetzt deutsches Komma durch Punkt für parseFloat
   const parseNumber = (value) => parseFloat(String(value).replace(',', '.'));
@@ -582,6 +582,16 @@ document.addEventListener("DOMContentLoaded", () => {
     aktiverButtonTyp = null;
     aktiverButtonWert = null;
     
+    // Wenn Wert eingegeben wird, lösche beide Teilzeit-Fehler
+    if (teilzeitProzentEingabe.value.trim() !== '') {
+      teilzeitProzentEingabe.classList.remove('error');
+      teilzeitStundenEingabe.classList.remove('error');
+      aktuellerFehlerProzent = null;
+      aktuellerFehlerStunden = null;
+      if (fehlerProzent) fehlerProzent.textContent = '';
+      if (fehlerStunden) fehlerStunden.textContent = '';
+    }
+    
     // Min-Validierung bei Spinner
     if (istSpinner && !isNaN(prozent) && prozent < teilzeitProzentMinimum && prozent > 0) {
       teilzeitProzentEingabe.value = teilzeitProzentMinimum;
@@ -601,6 +611,16 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Wird ausgeführt, nachdem ein neuer Prozentwert verlassen wurde (Validierung)
   teilzeitProzentEingabe.addEventListener("blur", () => {
+    // Wenn Wert vorhanden, lösche beide Teilzeit-Fehler
+    if (teilzeitProzentEingabe.value.trim() !== '') {
+      teilzeitProzentEingabe.classList.remove('error');
+      teilzeitStundenEingabe.classList.remove('error');
+      aktuellerFehlerProzent = null;
+      aktuellerFehlerStunden = null;
+      if (fehlerProzent) fehlerProzent.textContent = '';
+      if (fehlerStunden) fehlerStunden.textContent = '';
+    }
+    
     pruefeMindestUndMaximalProzent();
     synchronisiereStunden();
     synchronisiereButtonMarkierung();
@@ -615,6 +635,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // Manuelle Eingabe → Referenz löschen
     aktiverButtonTyp = null;
     aktiverButtonWert = null;
+    
+    // Wenn Wert eingegeben wird, lösche beide Teilzeit-Fehler
+    if (teilzeitStundenEingabe.value.trim() !== '') {
+      teilzeitStundenEingabe.classList.remove('error');
+      teilzeitProzentEingabe.classList.remove('error');
+      aktuellerFehlerStunden = null;
+      aktuellerFehlerProzent = null;
+      if (fehlerStunden) fehlerStunden.textContent = '';
+      if (fehlerProzent) fehlerProzent.textContent = '';
+    }
     
     // Min-Validierung NUR bei Spinner
     if (istSpinner && !isNaN(stunden) && !isNaN(gesamt) && gesamt > 0) {
@@ -639,6 +669,16 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Wird ausgeführt, nachdem ein neuer Teilzeit-wochenstundenwert verlassen wurde (Validierung)
   teilzeitStundenEingabe.addEventListener("blur", () => {
+    // Wenn Wert vorhanden, lösche beide Teilzeit-Fehler
+    if (teilzeitStundenEingabe.value.trim() !== '') {
+      teilzeitStundenEingabe.classList.remove('error');
+      teilzeitProzentEingabe.classList.remove('error');
+      aktuellerFehlerStunden = null;
+      aktuellerFehlerProzent = null;
+      if (fehlerStunden) fehlerStunden.textContent = '';
+      if (fehlerProzent) fehlerProzent.textContent = '';
+    }
+    
     pruefeMindestUndMaximalStunden();
     synchronisiereProzent();
     synchronisiereButtonMarkierung();
