@@ -286,7 +286,7 @@ test.describe('Happy Path: English Language Tests', () => {
   });
 });
 
-test.describe.skip('Happy Path: Reset-Button', () => {
+test.describe('Happy Path: Reset-Button', () => {
   
   test('Reset-Button setzt alle Felder zurück', async ({ page }) => {
     await gotoCalculator(page);
@@ -656,7 +656,7 @@ test.describe('Mobile Tests: Happy Path', () => {
     expect(monthsText).toMatch(/39|40/);
   });
   
-  test.skip('Mobile: Reset-Button funktioniert', async ({ page }) => {
+  test('Mobile: Reset-Button funktioniert', async ({ page }) => {
     await gotoCalculatorMobile(page);
     
     // Mock confirm Dialog
