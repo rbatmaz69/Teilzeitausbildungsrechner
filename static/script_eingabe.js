@@ -581,6 +581,20 @@ document.addEventListener("DOMContentLoaded", () => {
     // Manuelle Eingabe → Referenz löschen
     aktiverButtonTyp = null;
     aktiverButtonWert = null;
+
+    // Wenn Feld geleert wird, anderes Feld und Fehler ebenfalls leeren
+    if (teilzeitProzentEingabe.value.trim() === '') {
+      teilzeitStundenEingabe.value = '';
+      loescheAktiveSchaltflaechen();
+      teilzeitProzentEingabe.classList.remove('error');
+      teilzeitStundenEingabe.classList.remove('error');
+      aktuellerFehlerProzent = null;
+      aktuellerFehlerStunden = null;
+      if (fehlerProzent) fehlerProzent.textContent = '';
+      if (fehlerStunden) fehlerStunden.textContent = '';
+      synchronisiereButtonMarkierung();
+      return;
+    }
     
     // Wenn Wert eingegeben wird, lösche beide Teilzeit-Fehler
     if (teilzeitProzentEingabe.value.trim() !== '') {
@@ -635,6 +649,20 @@ document.addEventListener("DOMContentLoaded", () => {
     // Manuelle Eingabe → Referenz löschen
     aktiverButtonTyp = null;
     aktiverButtonWert = null;
+
+    // Wenn Feld geleert wird, anderes Feld und Fehler ebenfalls leeren
+    if (teilzeitStundenEingabe.value.trim() === '') {
+      teilzeitProzentEingabe.value = '';
+      loescheAktiveSchaltflaechen();
+      teilzeitStundenEingabe.classList.remove('error');
+      teilzeitProzentEingabe.classList.remove('error');
+      aktuellerFehlerStunden = null;
+      aktuellerFehlerProzent = null;
+      if (fehlerStunden) fehlerStunden.textContent = '';
+      if (fehlerProzent) fehlerProzent.textContent = '';
+      synchronisiereButtonMarkierung();
+      return;
+    }
     
     // Wenn Wert eingegeben wird, lösche beide Teilzeit-Fehler
     if (teilzeitStundenEingabe.value.trim() !== '') {
