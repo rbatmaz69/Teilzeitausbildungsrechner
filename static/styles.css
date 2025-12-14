@@ -163,8 +163,8 @@ header h1 {
   cursor: pointer;
 }
 
-/* Fokus-Style für Ja/Nein-Tiles */
-.tile:has(input[type="checkbox"]:focus) {
+/* Fokus-Style für Ja/Nein-Tiles – nur bei Tastatur (focus-visible) */
+.tile:has(input[type="checkbox"]:focus-visible) {
   outline: 2px solid #0078d4;
   outline-offset: 2px;
   box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
