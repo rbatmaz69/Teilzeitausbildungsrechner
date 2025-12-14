@@ -1034,6 +1034,32 @@ function setzeDatenZurueck() {
     checkbox.checked = false;
   });
   
+  // Alle Ja/Nein-Checkboxen für Verkürzungsgründe zurücksetzen (inkl. Nein-Buttons)
+  const allVkCheckboxes = document.querySelectorAll('#vk-fieldset input[type="checkbox"]');
+  allVkCheckboxes.forEach(checkbox => {
+    checkbox.checked = false;
+  });
+  
+  // Alter-Feld zurücksetzen
+  const alterInput = document.getElementById('alter');
+  if (alterInput) alterInput.value = "";
+  
+  // Fehler-Nachrichten für Alter zurücksetzen
+  const errorAlter = document.getElementById('errorAlter');
+  if (errorAlter) errorAlter.textContent = "";
+  
+  // Dauer-Inputs für berufliche Fragen zurücksetzen
+  const berufQ2Dauer = document.getElementById('vk_beruf_q2_dauer_months');
+  if (berufQ2Dauer) berufQ2Dauer.value = "";
+  
+  // Fehler-Nachrichten für Q2 Dauer zurücksetzen
+  const errorBerufQ2Dauer = document.getElementById('errorBerufQ2Dauer');
+  if (errorBerufQ2Dauer) errorBerufQ2Dauer.textContent = "";
+  
+  // Q2 Dauer-Container verstecken (falls sichtbar)
+  const berufQ2DurationContainer = document.getElementById('vk_beruf_q2_duration_container');
+  if (berufQ2DurationContainer) berufQ2DurationContainer.style.display = 'none';
+  
   // Schulabschluss zurücksetzen
   const abiturCheckbox = document.getElementById("g-abitur");
   const realschuleCheckbox = document.getElementById("g-realschule");
@@ -1442,7 +1468,7 @@ window.addEventListener("resize", () => {
     if (!LETZTE_EINGABEN || !LETZTE_BERECHNUNG) return;
     fuelleEingabenliste(LETZTE_EINGABEN, LETZTE_BERECHNUNG);
   }, 250);
-});
+}); 
 
 /**
  * Führt eine erneute Berechnung aus und aktualisiert die Ergebnisansicht.
