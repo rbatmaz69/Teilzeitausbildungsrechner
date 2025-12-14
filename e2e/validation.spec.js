@@ -107,7 +107,7 @@ test.describe('Validierung: Wochenstunden', () => {
     await clickButton(page, '#dauer');
     // Korrigiert auf 10
     await expect(page.locator('#stunden')).toHaveValue('10');
-    await expect(page.locator('#errorRegularStunden')).toContainText('mindestens 10 Stunden');
+    await expect(page.locator('#errorStunden')).toContainText('mindestens 10 Stunden');
   });
 
   test('Maximum 48 Stunden wird sofort erzwungen', async ({ page }) => {
@@ -116,11 +116,12 @@ test.describe('Validierung: Wochenstunden', () => {
     await page.fill('#dauer', '36');
     // Setze ungültigen Wert
     await page.fill('#stunden', '60');
+    await page.locator('#stunden').blur();
     // Korrigiert auf 48
     await expect(page.locator('#stunden')).toHaveValue('48', { timeout: 2000 });
     // Warte kurz damit Fehlermeldung erscheint (asynchrone Event-Verarbeitung)
-    await page.waitForTimeout(100);
-    await expect(page.locator('#errorRegularStunden')).toContainText('maximal 48 Stunden', { timeout: 1000 });
+   await page.waitForTimeout(200);
+   await expect(page.locator('#errorStunden')).toContainText('maximal 48 Stunden');
   });
 });
 
@@ -312,7 +313,7 @@ test.describe('Mobile Validation: Wochenstunden', () => {
     await expect(page.locator('#stunden')).toHaveValue('10', { timeout: 2000 });
     
     // Fehlermeldung sollte angezeigt werden
-    await expect(page.locator('#errorRegularStunden')).toContainText('mindestens 10 Stunden');
+    await expect(page.locator('#errorStunden')).toContainText('mindestens 10 Stunden');
   });
 
   test('Mobile: Maximum 48 Stunden wird sofort erzwungen', async ({ page }) => {

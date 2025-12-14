@@ -168,7 +168,7 @@ header h1 {
 .tile:has(input[type="checkbox"]:focus-visible) {
   outline: 2px solid #0078d4;
   outline-offset: 2px;
-  box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
+  box-shadow: 0 0 0 3px rgb(0 120 212 / 10%);
 }
 
 /* Parent Tile wird bei checked aktiviert */
@@ -623,6 +623,26 @@ input:disabled,
 select:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+
+/* ==========================================
+   FOKUS-STYLE STEUERUNG (Keyboard vs. Maus/Touch)
+   ========================================== */
+
+/* Entfernt den Standard-Fokusrahmen bei Maus/Touch (normales :focus) */
+*:focus {
+  outline: none !important;
+}
+
+/* Zeige Fokus nur bei Tastatur-Navigation (focus-visible) */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 
 input:not([type="checkbox"], [type="radio"])::placeholder,
@@ -1968,6 +1988,7 @@ input.error,
   transition: all 0.2s ease;
   box-shadow: 0 2px 8px rgb(224 0 0 / 10%);
   flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .vk-info-btn:hover {
@@ -1977,7 +1998,6 @@ input.error,
   box-shadow: 0 4px 12px rgb(224 0 0 / 20%);
 }
 
-.vk-info-btn { -webkit-tap-highlight-color: transparent; }
 .vk-info-btn:active { /* Kein Flash/Bounce auf Tap */
   transform: none;
   box-shadow: 0 4px 12px rgb(224 0 0 / 20%);
@@ -2064,6 +2084,7 @@ input.error,
   transition: all 0.2s ease;
   z-index: 1002;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .vk-info-close:hover {
@@ -2073,7 +2094,6 @@ input.error,
   transform: rotate(90deg);
 }
 
-.vk-info-close { -webkit-tap-highlight-color: transparent; }
 .vk-info-close:active { /* Kein Flash/Bounce auf Tap */
   transform: rotate(90deg);
 }
@@ -2336,20 +2356,3 @@ body.modal-open {
   flex-direction: column !important;
 }
 
-/* ==========================================
-   FOKUS-STYLE STEUERUNG (Keyboard vs. Maus/Touch)
-   ========================================== */
-/* Entfernt den Standard-Fokusrahmen bei Maus/Touch (normales :focus) */
-*:focus {
-  outline: none !important;
-}
-
-/* Zeige Fokus nur bei Tastatur-Navigation (focus-visible) */
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible,
-button:focus-visible,
-a:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-}

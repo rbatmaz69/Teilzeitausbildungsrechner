@@ -164,6 +164,7 @@ test.describe('Business Rules: Verkürzungen', () => {
     // Basis-Dauer 36 Monate
     await page.fill('#dauer', '36');
     await page.fill('#stunden', '40');
+    await page.fill('#teilzeitProzent', '50');
     
     // Abitur (12M Verkürzung)
     await page.waitForSelector('#vk-school-select', { state: 'visible', timeout: 2000 });
@@ -230,6 +231,7 @@ test.describe('Business Rules: Verkürzungen', () => {
     // Basis-Dauer 36 Monate
     await page.fill('#dauer', '36');
     await page.fill('#stunden', '40');
+    await page.fill('#teilzeitProzent', '50');
     
     // Realschule (6M) + Vorkenntnisse (12M) = 18M, max ist aber 12M
     await page.waitForSelector('#vk-school-select', { state: 'visible', timeout: 2000 });
@@ -255,6 +257,7 @@ test.describe('Business Rules: Verkürzungen', () => {
     // Basis-Dauer 36 Monate (Vollzeit ist Standard 75%)
     await page.fill('#dauer', '36');
     await page.fill('#stunden', '40');
+    await page.fill('#teilzeitProzent', '50');
     
     // Alle Verkürzungen (würde 12+12+12 = 36M ergeben, max ist aber 12M)
     await page.waitForSelector('#vk-school-select', { state: 'visible', timeout: 2000 });
@@ -286,6 +289,7 @@ test.describe('Business Rules: Verkürzungen', () => {
     // Minimale Basis-Dauer 24 Monate mit Standard 75% Teilzeit
     await page.fill('#dauer', '24');
     await page.fill('#stunden', '40');
+    await page.fill('#teilzeitProzent', '50');
     
     // Keine Verkürzung ausgewählt - Dropdown bleibt auf "none"
     // Keine Checkboxen aktiviert

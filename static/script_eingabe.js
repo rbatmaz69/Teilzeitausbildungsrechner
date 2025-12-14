@@ -404,7 +404,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Wird ausgeführt, nachdem eine neue Ausbildungsdauer eingegeben wurde (blur für manuelle Eingabe)
   dauerEingabe.addEventListener("blur", () => {
-      // Wenn leer, Fehler nicht automatisch ausblenden
+    // Wenn leer, Fehler nicht automatisch ausblenden
     if (dauerEingabe.value.trim() === '') {
       return;
     }
@@ -416,6 +416,15 @@ document.addEventListener("DOMContentLoaded", () => {
     dauerEingabe.value = wert;
 
     const ausbildungsdauer = parseInt(dauerEingabe.value, 10);
+
+    // Wenn der Max-Fehler bereits im Input-Handler gesetzt wurde (Korrektur während der Eingabe), stelle sicher, dass die Fehlermeldung steht und breche ab
+    if (aktuellerFehlerDauer === "errors.durationMax") {
+      if (fehlerDauer) {
+        fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Der Wert darf maximal 42 Monate betragen");
+      }
+      dauerEingabe.classList.add('error');
+      return;
+    }
 
     // Mindest- und Maximalwerte für die reguläre Ausbildungsdauer (IHK: 24-42 Monate)
     if (isNaN(ausbildungsdauer) || ausbildungsdauer < 24) {
@@ -449,6 +458,7 @@ document.addEventListener("DOMContentLoaded", () => {
       aktuellerFehlerDauer = "errors.durationMax";
       if (fehlerDauer) fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Der Wert darf maximal 42 Monate betragen");
       entferneFehlerMitFadeout(dauerEingabe, fehlerDauer, () => aktuellerFehlerDauer = null, timerIdDauer);
+      return;
     }
     // Min-Validierung: NUR bei Spinner sofort korrigieren
     else if (istSpinner && !isNaN(ausbildungsdauer) && ausbildungsdauer < 24 && ausbildungsdauer > 0) {
@@ -457,6 +467,7 @@ document.addEventListener("DOMContentLoaded", () => {
       aktuellerFehlerDauer = "errors.durationMin";
       if (fehlerDauer) fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Der Wert muss mindestens 24 Monate betragen");
       entferneFehlerMitFadeout(dauerEingabe, fehlerDauer, () => aktuellerFehlerDauer = null, timerIdDauer);
+      return;
     }
   })
   
@@ -469,20 +480,39 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    // Wenn der Max-Fehler bereits im Input-Handler gesetzt wurde (Korrektur während der Eingabe), stelle sicher, dass die Fehlermeldung steht und breche ab
+    if (aktuellerFehlerRegularStunden === "errors.regularHoursMax") {
+      if (fehlerRegularStunden) {
+        fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Der Wert darf maximal 48 Stunden betragen");
+      }
+      wochenstundenEingabe.classList.add('error');
+      return;
+    }
+
     // Mindest- und Maximalwerte für die regulären Wochenstunden
     if (isNaN(wochenstunden) || wochenstunden < 10) {
       wochenstundenEingabe.value = 10;
       wochenstundenEingabe.classList.add('error');
       aktuellerFehlerRegularStunden = "errors.regularHoursMin";
       if (fehlerRegularStunden) fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Der Wert muss mindestens 10 Stunden betragen");
-      entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => aktuellerFehlerRegularStunden = null, timerIdRegularStunden);
+      entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => { aktuellerFehlerRegularStunden = null; }, timerIdRegularStunden);
     } else if (wochenstunden > 48) {
       wochenstundenEingabe.value = 48;
       wochenstundenEingabe.classList.add('error');
       aktuellerFehlerRegularStunden = "errors.regularHoursMax";
       if (fehlerRegularStunden) fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Der Wert darf maximal 48 Stunden betragen");
-      entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => aktuellerFehlerRegularStunden = null, timerIdRegularStunden);
+      entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => { aktuellerFehlerRegularStunden = null; }, timerIdRegularStunden);
     } else {
+      if (aktuellerFehlerRegularStunden) {
+        if (fehlerRegularStunden && fehlerRegularStunden.textContent.trim() === '') {
+          const fallbackMap = {
+            "errors.regularHoursMin": "Der Wert muss mindestens 10 Stunden betragen",
+            "errors.regularHoursMax": "Der Wert darf maximal 48 Stunden betragen"
+          };
+          fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, fallbackMap[aktuellerFehlerRegularStunden] || '');
+        }
+        return;
+      }
       wochenstundenEingabe.classList.remove('error');
       aktuellerFehlerRegularStunden = null;
       if (fehlerRegularStunden) fehlerRegularStunden.textContent = '';
@@ -552,7 +582,8 @@ document.addEventListener("DOMContentLoaded", () => {
       wochenstundenEingabe.classList.add('error');
       aktuellerFehlerRegularStunden = "errors.regularHoursMax";
       if (fehlerRegularStunden) fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Der Wert darf maximal 48 Stunden betragen");
-      entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => aktuellerFehlerRegularStunden = null, timerIdRegularStunden);
+      entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => { aktuellerFehlerRegularStunden = null; }, timerIdRegularStunden);
+      return;
     }
     // Min-Validierung: NUR bei Spinner sofort korrigieren
     else if (istSpinner && !isNaN(wochenstunden) && wochenstunden < 10 && wochenstunden > 0) {
@@ -560,7 +591,8 @@ document.addEventListener("DOMContentLoaded", () => {
       wochenstundenEingabe.classList.add('error');
       aktuellerFehlerRegularStunden = "errors.regularHoursMin";
       if (fehlerRegularStunden) fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Der Wert muss mindestens 10 Stunden betragen");
-      entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => aktuellerFehlerRegularStunden = null, timerIdRegularStunden);
+      entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => { aktuellerFehlerRegularStunden = null; }, timerIdRegularStunden);
+      return;
     }
 
     // Teilzeit-Felder sperren/freigeben
