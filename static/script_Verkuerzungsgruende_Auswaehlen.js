@@ -49,7 +49,17 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.tooltip').forEach(tooltip => tooltip.classList.remove('show'));
       document.querySelectorAll('.info-btn[aria-expanded="true"]').forEach(schaltflaeche => schaltflaeche.setAttribute('aria-expanded','false'));
     }
-  })
+  });
+
+  // Ermöglicht das Aktivieren von Checkboxen mit Enter-Taste
+  document.querySelectorAll('.tile input[type="checkbox"]').forEach(checkbox => {
+    checkbox.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        checkbox.click();
+      }
+    });
+  });
 
   // Alter-Eingabe validieren
   const errorAlter = document.getElementById('errorAlter');
