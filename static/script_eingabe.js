@@ -22,9 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const teilzeitStundenEingabe = document.getElementById("teilzeitStunden");
   const buttons = document.querySelectorAll(".preset");
   const fehlerProzent = document.getElementById('errorProzent');
-  const fehlerStunden = document.getElementById('errorStunden');
+  const fehlerStunden = document.getElementById('errorTeilStunden');
   const fehlerDauer = document.getElementById('errorDauer');
-  const fehlerRegularStunden = document.getElementById('errorRegularStunden');
+  const fehlerRegularStunden = document.getElementById('errorStunden');
 
   // Locale-aware Zahl parser: ersetzt deutsches Komma durch Punkt für parseFloat
   const parseNumber = (value) => parseFloat(String(value).replace(',', '.'));
@@ -375,6 +375,11 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Entferne alleinstehenden Trenner und führende Nullen beim Verlassen des Feldes
     inp.addEventListener('blur', () => {
+      // Wenn leer, nichts anpassen
+      if (inp.value.trim() === '') {
+        return;
+      }
+
       const lang = window.I18N?.lang || document.documentElement.lang || 'de';
       const decimalSep = lang === 'de' ? ',' : '.';
       let wert = inp.value;
@@ -399,6 +404,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Wird ausgeführt, nachdem eine neue Ausbildungsdauer eingegeben wurde (blur für manuelle Eingabe)
   dauerEingabe.addEventListener("blur", () => {
+    // Wenn leer, Fehler nicht automatisch ausblenden
+    if (dauerEingabe.value.trim() === '') {
+      return;
+    }
+
     // Entferne führende Nullen
     let wert = dauerEingabe.value;
     wert = wert.replace(/^0+/, '');
@@ -407,11 +417,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const ausbildungsdauer = parseInt(dauerEingabe.value, 10);
 
-    // Wenn Feld leer war, leer lassen (nicht korrigieren)
-    if (dauerEingabe.value.trim() === '') {
-      dauerEingabe.classList.remove('error');
-      aktuellerFehlerDauer = null;
-      if (fehlerDauer) fehlerDauer.textContent = '';
+    // Wenn der Max-Fehler bereits im Input-Handler gesetzt wurde (Korrektur während der Eingabe), stelle sicher, dass die Fehlermeldung steht und breche ab
+    if (aktuellerFehlerDauer === "errors.durationMax") {
+      if (fehlerDauer) {
+        fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Der Wert darf maximal 42 Monate betragen");
+      }
+      dauerEingabe.classList.add('error');
       return;
     }
 
@@ -447,6 +458,7 @@ document.addEventListener("DOMContentLoaded", () => {
       aktuellerFehlerDauer = "errors.durationMax";
       if (fehlerDauer) fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Der Wert darf maximal 42 Monate betragen");
       entferneFehlerMitFadeout(dauerEingabe, fehlerDauer, () => aktuellerFehlerDauer = null, timerIdDauer);
+      return;
     }
     // Min-Validierung: NUR bei Spinner sofort korrigieren
     else if (istSpinner && !isNaN(ausbildungsdauer) && ausbildungsdauer < 24 && ausbildungsdauer > 0) {
@@ -455,6 +467,7 @@ document.addEventListener("DOMContentLoaded", () => {
       aktuellerFehlerDauer = "errors.durationMin";
       if (fehlerDauer) fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Der Wert muss mindestens 24 Monate betragen");
       entferneFehlerMitFadeout(dauerEingabe, fehlerDauer, () => aktuellerFehlerDauer = null, timerIdDauer);
+      return;
     }
   })
   
@@ -462,11 +475,17 @@ document.addEventListener("DOMContentLoaded", () => {
   wochenstundenEingabe.addEventListener("blur", () => {
     const wochenstunden = parseNumber(wochenstundenEingabe.value);
 
-    // Wenn Feld leer war, leer lassen (nicht korrigieren)
+    // Wenn leer, Fehler nicht automatisch ausblenden
     if (wochenstundenEingabe.value.trim() === '') {
-      wochenstundenEingabe.classList.remove('error');
-      aktuellerFehlerRegularStunden = null;
-      if (fehlerRegularStunden) fehlerRegularStunden.textContent = '';
+      return;
+    }
+
+    // Wenn der Max-Fehler bereits im Input-Handler gesetzt wurde (Korrektur während der Eingabe), stelle sicher, dass die Fehlermeldung steht und breche ab
+    if (aktuellerFehlerRegularStunden === "errors.regularHoursMax") {
+      if (fehlerRegularStunden) {
+        fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Der Wert darf maximal 48 Stunden betragen");
+      }
+      wochenstundenEingabe.classList.add('error');
       return;
     }
 
@@ -476,14 +495,24 @@ document.addEventListener("DOMContentLoaded", () => {
       wochenstundenEingabe.classList.add('error');
       aktuellerFehlerRegularStunden = "errors.regularHoursMin";
       if (fehlerRegularStunden) fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Der Wert muss mindestens 10 Stunden betragen");
-      entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => aktuellerFehlerRegularStunden = null, timerIdRegularStunden);
+      entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => { aktuellerFehlerRegularStunden = null; }, timerIdRegularStunden);
     } else if (wochenstunden > 48) {
       wochenstundenEingabe.value = 48;
       wochenstundenEingabe.classList.add('error');
       aktuellerFehlerRegularStunden = "errors.regularHoursMax";
       if (fehlerRegularStunden) fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Der Wert darf maximal 48 Stunden betragen");
-      entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => aktuellerFehlerRegularStunden = null, timerIdRegularStunden);
+      entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => { aktuellerFehlerRegularStunden = null; }, timerIdRegularStunden);
     } else {
+      if (aktuellerFehlerRegularStunden) {
+        if (fehlerRegularStunden && fehlerRegularStunden.textContent.trim() === '') {
+          const fallbackMap = {
+            "errors.regularHoursMin": "Der Wert muss mindestens 10 Stunden betragen",
+            "errors.regularHoursMax": "Der Wert darf maximal 48 Stunden betragen"
+          };
+          fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, fallbackMap[aktuellerFehlerRegularStunden] || '');
+        }
+        return;
+      }
       wochenstundenEingabe.classList.remove('error');
       aktuellerFehlerRegularStunden = null;
       if (fehlerRegularStunden) fehlerRegularStunden.textContent = '';
@@ -553,7 +582,8 @@ document.addEventListener("DOMContentLoaded", () => {
       wochenstundenEingabe.classList.add('error');
       aktuellerFehlerRegularStunden = "errors.regularHoursMax";
       if (fehlerRegularStunden) fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Der Wert darf maximal 48 Stunden betragen");
-      entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => aktuellerFehlerRegularStunden = null, timerIdRegularStunden);
+      entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => { aktuellerFehlerRegularStunden = null; }, timerIdRegularStunden);
+      return;
     }
     // Min-Validierung: NUR bei Spinner sofort korrigieren
     else if (istSpinner && !isNaN(wochenstunden) && wochenstunden < 10 && wochenstunden > 0) {
@@ -561,7 +591,8 @@ document.addEventListener("DOMContentLoaded", () => {
       wochenstundenEingabe.classList.add('error');
       aktuellerFehlerRegularStunden = "errors.regularHoursMin";
       if (fehlerRegularStunden) fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Der Wert muss mindestens 10 Stunden betragen");
-      entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => aktuellerFehlerRegularStunden = null, timerIdRegularStunden);
+      entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => { aktuellerFehlerRegularStunden = null; }, timerIdRegularStunden);
+      return;
     }
 
     // Teilzeit-Felder sperren/freigeben
@@ -576,6 +607,24 @@ document.addEventListener("DOMContentLoaded", () => {
     // Manuelle Eingabe → Referenz löschen
     aktiverButtonTyp = null;
     aktiverButtonWert = null;
+
+    // Wenn Feld geleert wird, anderes Feld und aktive Buttons leeren, Fehler aber stehen lassen
+    if (teilzeitProzentEingabe.value.trim() === '') {
+      teilzeitStundenEingabe.value = '';
+      loescheAktiveSchaltflaechen();
+      synchronisiereButtonMarkierung();
+      return;
+    }
+    
+    // Wenn Wert eingegeben wird, lösche beide Teilzeit-Fehler
+    if (teilzeitProzentEingabe.value.trim() !== '') {
+      teilzeitProzentEingabe.classList.remove('error');
+      teilzeitStundenEingabe.classList.remove('error');
+      aktuellerFehlerProzent = null;
+      aktuellerFehlerStunden = null;
+      if (fehlerProzent) fehlerProzent.textContent = '';
+      if (fehlerStunden) fehlerStunden.textContent = '';
+    }
     
     // Min-Validierung bei Spinner
     if (istSpinner && !isNaN(prozent) && prozent < teilzeitProzentMinimum && prozent > 0) {
@@ -596,6 +645,16 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Wird ausgeführt, nachdem ein neuer Prozentwert verlassen wurde (Validierung)
   teilzeitProzentEingabe.addEventListener("blur", () => {
+    // Wenn Wert vorhanden, lösche beide Teilzeit-Fehler
+    if (teilzeitProzentEingabe.value.trim() !== '') {
+      teilzeitProzentEingabe.classList.remove('error');
+      teilzeitStundenEingabe.classList.remove('error');
+      aktuellerFehlerProzent = null;
+      aktuellerFehlerStunden = null;
+      if (fehlerProzent) fehlerProzent.textContent = '';
+      if (fehlerStunden) fehlerStunden.textContent = '';
+    }
+    
     pruefeMindestUndMaximalProzent();
     synchronisiereStunden();
     synchronisiereButtonMarkierung();
@@ -610,6 +669,24 @@ document.addEventListener("DOMContentLoaded", () => {
     // Manuelle Eingabe → Referenz löschen
     aktiverButtonTyp = null;
     aktiverButtonWert = null;
+
+    // Wenn Feld geleert wird, anderes Feld und aktive Buttons leeren, Fehler aber stehen lassen
+    if (teilzeitStundenEingabe.value.trim() === '') {
+      teilzeitProzentEingabe.value = '';
+      loescheAktiveSchaltflaechen();
+      synchronisiereButtonMarkierung();
+      return;
+    }
+    
+    // Wenn Wert eingegeben wird, lösche beide Teilzeit-Fehler
+    if (teilzeitStundenEingabe.value.trim() !== '') {
+      teilzeitStundenEingabe.classList.remove('error');
+      teilzeitProzentEingabe.classList.remove('error');
+      aktuellerFehlerStunden = null;
+      aktuellerFehlerProzent = null;
+      if (fehlerStunden) fehlerStunden.textContent = '';
+      if (fehlerProzent) fehlerProzent.textContent = '';
+    }
     
     // Min-Validierung NUR bei Spinner
     if (istSpinner && !isNaN(stunden) && !isNaN(gesamt) && gesamt > 0) {
@@ -634,6 +711,16 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Wird ausgeführt, nachdem ein neuer Teilzeit-wochenstundenwert verlassen wurde (Validierung)
   teilzeitStundenEingabe.addEventListener("blur", () => {
+    // Wenn Wert vorhanden, lösche beide Teilzeit-Fehler
+    if (teilzeitStundenEingabe.value.trim() !== '') {
+      teilzeitStundenEingabe.classList.remove('error');
+      teilzeitProzentEingabe.classList.remove('error');
+      aktuellerFehlerStunden = null;
+      aktuellerFehlerProzent = null;
+      if (fehlerStunden) fehlerStunden.textContent = '';
+      if (fehlerProzent) fehlerProzent.textContent = '';
+    }
+    
     pruefeMindestUndMaximalStunden();
     synchronisiereProzent();
     synchronisiereButtonMarkierung();
@@ -706,6 +793,9 @@ document.addEventListener("DOMContentLoaded", () => {
    * Validierung: Stunden dürfen nicht über reguläre Wochenstunden liegen.
    */
   function synchronisiereStunden() {
+    if (wochenstundenEingabe.value.trim() === '' || teilzeitProzentEingabe.value.trim() === '') {
+      return;
+    }
     const gesamt = parseNumber(wochenstundenEingabe.value);
     const prozent = parseNumber(teilzeitProzentEingabe.value);
     if (!isNaN(gesamt) && !isNaN(prozent)) {
@@ -758,6 +848,9 @@ document.addEventListener("DOMContentLoaded", () => {
    * Validierung: Prozent darf nicht über 100% liegen.
    */
   function synchronisiereProzent() {
+    if (wochenstundenEingabe.value.trim() === '' || teilzeitStundenEingabe.value.trim() === '') {
+      return;
+    }
     const gesamt = parseNumber(wochenstundenEingabe.value);
     const stunden = parseNumber(teilzeitStundenEingabe.value);
     if (!isNaN(gesamt) && !isNaN(stunden) && gesamt > 0) {
@@ -800,6 +893,11 @@ document.addEventListener("DOMContentLoaded", () => {
    * Rückmeldungen werden in der UI angezeigt.
    */
   function pruefeMindestUndMaximalProzent() {
+    // Leeres Feld: gültig, nichts setzen
+    if (teilzeitProzentEingabe.value.trim() === '') {
+      return;
+    }
+
     const teilzeitProzent = parseNumber(teilzeitProzentEingabe.value);
     
     // Überprüfung, ob die Eingabe eine gültige Zahl ist
@@ -841,6 +939,11 @@ document.addEventListener("DOMContentLoaded", () => {
    * zwischen der Hälfte und der vollen Wochenarbeitszeit.
    */
   function pruefeMindestUndMaximalStunden() {
+    // Leeres Feld: gültig, nichts setzen
+    if (teilzeitStundenEingabe.value.trim() === '') {
+      return;
+    }
+
     const wochenstunden = parseNumber(wochenstundenEingabe.value);
     const teilzeitStunden = parseNumber(teilzeitStundenEingabe.value);
 

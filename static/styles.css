@@ -144,6 +144,7 @@ header h1 {
   position: relative;
   color: #333;
   font-weight: 500;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .tile:hover { 
@@ -161,6 +162,13 @@ header h1 {
   padding: 0;
   border: none;
   cursor: pointer;
+}
+
+/* Fokus-Style für Ja/Nein-Tiles – nur bei Tastatur (focus-visible) */
+.tile:has(input[type="checkbox"]:focus-visible) {
+  outline: 2px solid #0078d4;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgb(0 120 212 / 10%);
 }
 
 /* Parent Tile wird bei checked aktiviert */
@@ -615,6 +623,26 @@ input:disabled,
 select:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+
+/* ==========================================
+   FOKUS-STYLE STEUERUNG (Keyboard vs. Maus/Touch)
+   ========================================== */
+
+/* Entfernt den Standard-Fokusrahmen bei Maus/Touch (normales :focus) */
+*:focus {
+  outline: none !important;
+}
+
+/* Zeige Fokus nur bei Tastatur-Navigation (focus-visible) */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 
 input:not([type="checkbox"], [type="radio"])::placeholder,
@@ -1960,6 +1988,7 @@ input.error,
   transition: all 0.2s ease;
   box-shadow: 0 2px 8px rgb(224 0 0 / 10%);
   flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .vk-info-btn:hover {
@@ -1969,9 +1998,9 @@ input.error,
   box-shadow: 0 4px 12px rgb(224 0 0 / 20%);
 }
 
-.vk-info-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgb(224 0 0 / 15%);
+.vk-info-btn:active { /* Kein Flash/Bounce auf Tap */
+  transform: none;
+  box-shadow: 0 4px 12px rgb(224 0 0 / 20%);
 }
 
 .vk-info-btn:focus-visible {
@@ -2055,6 +2084,7 @@ input.error,
   transition: all 0.2s ease;
   z-index: 1002;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .vk-info-close:hover {
@@ -2064,8 +2094,8 @@ input.error,
   transform: rotate(90deg);
 }
 
-.vk-info-close:active {
-  transform: rotate(90deg) scale(0.95);
+.vk-info-close:active { /* Kein Flash/Bounce auf Tap */
+  transform: rotate(90deg);
 }
 
 .vk-info-close:focus-visible {
@@ -2325,3 +2355,4 @@ body.modal-open {
 .vk-category.vk-beruf .vk-category-body {
   flex-direction: column !important;
 }
+
