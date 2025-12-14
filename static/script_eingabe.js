@@ -404,11 +404,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Wird ausgeführt, nachdem eine neue Ausbildungsdauer eingegeben wurde (blur für manuelle Eingabe)
   dauerEingabe.addEventListener("blur", () => {
-    // Wenn leer, als gültig behandeln und nichts setzen
+      // Wenn leer, Fehler nicht automatisch ausblenden
     if (dauerEingabe.value.trim() === '') {
-      dauerEingabe.classList.remove('error');
-      aktuellerFehlerDauer = null;
-      if (fehlerDauer) fehlerDauer.textContent = '';
       return;
     }
 
@@ -467,11 +464,8 @@ document.addEventListener("DOMContentLoaded", () => {
   wochenstundenEingabe.addEventListener("blur", () => {
     const wochenstunden = parseNumber(wochenstundenEingabe.value);
 
-    // Wenn leer, als gültig behandeln und nichts setzen
+    // Wenn leer, Fehler nicht automatisch ausblenden
     if (wochenstundenEingabe.value.trim() === '') {
-      wochenstundenEingabe.classList.remove('error');
-      aktuellerFehlerRegularStunden = null;
-      if (fehlerRegularStunden) fehlerRegularStunden.textContent = '';
       return;
     }
 
@@ -582,16 +576,10 @@ document.addEventListener("DOMContentLoaded", () => {
     aktiverButtonTyp = null;
     aktiverButtonWert = null;
 
-    // Wenn Feld geleert wird, anderes Feld und Fehler ebenfalls leeren
+    // Wenn Feld geleert wird, anderes Feld und aktive Buttons leeren, Fehler aber stehen lassen
     if (teilzeitProzentEingabe.value.trim() === '') {
       teilzeitStundenEingabe.value = '';
       loescheAktiveSchaltflaechen();
-      teilzeitProzentEingabe.classList.remove('error');
-      teilzeitStundenEingabe.classList.remove('error');
-      aktuellerFehlerProzent = null;
-      aktuellerFehlerStunden = null;
-      if (fehlerProzent) fehlerProzent.textContent = '';
-      if (fehlerStunden) fehlerStunden.textContent = '';
       synchronisiereButtonMarkierung();
       return;
     }
@@ -650,16 +638,10 @@ document.addEventListener("DOMContentLoaded", () => {
     aktiverButtonTyp = null;
     aktiverButtonWert = null;
 
-    // Wenn Feld geleert wird, anderes Feld und Fehler ebenfalls leeren
+    // Wenn Feld geleert wird, anderes Feld und aktive Buttons leeren, Fehler aber stehen lassen
     if (teilzeitStundenEingabe.value.trim() === '') {
       teilzeitProzentEingabe.value = '';
       loescheAktiveSchaltflaechen();
-      teilzeitStundenEingabe.classList.remove('error');
-      teilzeitProzentEingabe.classList.remove('error');
-      aktuellerFehlerStunden = null;
-      aktuellerFehlerProzent = null;
-      if (fehlerStunden) fehlerStunden.textContent = '';
-      if (fehlerProzent) fehlerProzent.textContent = '';
       synchronisiereButtonMarkierung();
       return;
     }
@@ -881,9 +863,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function pruefeMindestUndMaximalProzent() {
     // Leeres Feld: gültig, nichts setzen
     if (teilzeitProzentEingabe.value.trim() === '') {
-      teilzeitProzentEingabe.classList.remove('error');
-      aktuellerFehlerProzent = null;
-      fehlerProzent.textContent = '';
       return;
     }
 
@@ -930,9 +909,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function pruefeMindestUndMaximalStunden() {
     // Leeres Feld: gültig, nichts setzen
     if (teilzeitStundenEingabe.value.trim() === '') {
-      teilzeitStundenEingabe.classList.remove('error');
-      aktuellerFehlerStunden = null;
-      fehlerStunden.textContent = '';
       return;
     }
 

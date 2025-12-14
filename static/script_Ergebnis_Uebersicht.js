@@ -178,8 +178,7 @@ function validiereAlleEingaben() {
   // Erforderliche Eingabefelder (number inputs)
   const erforderlicheFelder = [
     { id: "dauer", label: "Reguläre Ausbildungsdauer" },
-    { id: "stunden", label: "Reguläre Wochenstunden" },
-    { id: "alter", label: "Alter" }
+    { id: "stunden", label: "Reguläre Wochenstunden" }
   ];
 
   // Ja/Nein Gruppen (mind. eine Antwort pro Frage)
@@ -215,7 +214,52 @@ function validiereAlleEingaben() {
     }
   }
 
-  // 2. Prüfe Ja/Nein Gruppen
+  // 2. Wenn Wochenstunden gesetzt sind, aber Teilzeitfelder leer, zeige Fehler
+  const wochenstundenElement = document.getElementById("stunden");
+  const teilzeitStundenElement = document.getElementById("teilzeitStunden");
+  const teilzeitProzentElement = document.getElementById("teilzeitProzent");
+  
+  if (wochenstundenElement && teilzeitStundenElement && teilzeitProzentElement) {
+    const wochenstunden = wochenstundenElement.value?.trim();
+    const teilzeitStunden = teilzeitStundenElement.value?.trim();
+    const teilzeitProzent = teilzeitProzentElement.value?.trim();
+    
+    // Wenn Wochenstunden gesetzt sind UND beide Teilzeitfelder leer sind
+    if (wochenstunden && wochenstunden !== "" && Number(wochenstunden) > 0 && 
+        (!teilzeitStunden || teilzeitStunden === "") && (!teilzeitProzent || teilzeitProzent === "")) {
+      
+      // Fehler für Teilzeit-Stunden
+      teilzeitStundenElement.classList.add("error");
+      const errorTeilStunden = document.getElementById("errorTeilStunden");
+      if (errorTeilStunden) {
+        errorTeilStunden.textContent = uebersetzung("validation.required", "Dieses Feld ist erforderlich");
+      }
+      if (!ersterFehler) ersterFehler = teilzeitStundenElement;
+      
+      // Fehler für Teilzeit-Prozent
+      teilzeitProzentElement.classList.add("error");
+      const errorProzent = document.getElementById("errorProzent");
+      if (errorProzent) {
+        errorProzent.textContent = uebersetzung("validation.required", "Dieses Feld ist erforderlich");
+      }
+    }
+  }
+
+  // 3. Alter separat nach Teilzeit prüfen
+  const alterElement = document.getElementById("alter");
+  if (alterElement) {
+    const alterWert = alterElement.value?.trim();
+    if (!alterWert || alterWert === "" || Number(alterWert) === 0 || isNaN(Number(alterWert))) {
+      alterElement.classList.add("error");
+      const errorAlter = document.getElementById("errorAlter");
+      if (errorAlter) {
+        errorAlter.textContent = uebersetzung("validation.required", "Dieses Feld ist erforderlich");
+      }
+      if (!ersterFehler) ersterFehler = alterElement;
+    }
+  }
+
+  // 4. Prüfe Ja/Nein Gruppen
   for (const gruppe of jaNeineGruppen) {
     const jaElement = document.getElementById(gruppe.ja);
     const neinElement = document.getElementById(gruppe.nein);
@@ -252,38 +296,7 @@ function validiereAlleEingaben() {
     }
   }
 
-  // 3. Wenn Wochenstunden gesetzt sind, aber Teilzeitfelder leer, zeige Fehler
-  const wochenstundenElement = document.getElementById("stunden");
-  const teilzeitStundenElement = document.getElementById("teilzeitStunden");
-  const teilzeitProzentElement = document.getElementById("teilzeitProzent");
-  
-  if (wochenstundenElement && teilzeitStundenElement && teilzeitProzentElement) {
-    const wochenstunden = wochenstundenElement.value?.trim();
-    const teilzeitStunden = teilzeitStundenElement.value?.trim();
-    const teilzeitProzent = teilzeitProzentElement.value?.trim();
-    
-    // Wenn Wochenstunden gesetzt sind UND beide Teilzeitfelder leer sind
-    if (wochenstunden && wochenstunden !== "" && Number(wochenstunden) > 0 && 
-        (!teilzeitStunden || teilzeitStunden === "") && (!teilzeitProzent || teilzeitProzent === "")) {
-      
-      // Fehler für Teilzeit-Stunden
-      teilzeitStundenElement.classList.add("error");
-      const errorTeilStunden = document.getElementById("errorTeilStunden");
-      if (errorTeilStunden) {
-        errorTeilStunden.textContent = uebersetzung("validation.required", "Dieses Feld ist erforderlich");
-      }
-      if (!ersterFehler) ersterFehler = teilzeitStundenElement;
-      
-      // Fehler für Teilzeit-Prozent
-      teilzeitProzentElement.classList.add("error");
-      const errorProzent = document.getElementById("errorProzent");
-      if (errorProzent) {
-        errorProzent.textContent = uebersetzung("validation.required", "Dieses Feld ist erforderlich");
-      }
-    }
-  }
-
-  // 4. Wenn Q2 "Ja" ist, prüfe ob Dauer eingegeben wurde
+  // 5. Wenn Q2 "Ja" ist, prüfe ob Dauer eingegeben wurde
   const berufQ2Ja = document.getElementById("vk_beruf_q2_ja");
   const berufQ2Duration = document.getElementById("vk_beruf_q2_dauer_months");
   if (berufQ2Ja && berufQ2Ja.checked && berufQ2Duration) {
@@ -298,7 +311,7 @@ function validiereAlleEingaben() {
     }
   }
 
-  // 5. Wenn Fehler vorhanden, zum ersten Fehler scrollen (gleiche Logik wie "Zum Rechner" Button)
+  // 6. Wenn Fehler vorhanden, zum ersten Fehler scrollen (gleiche Logik wie "Zum Rechner" Button)
   if (ersterFehler) {
     setTimeout(() => {
       const elementTop = ersterFehler.getBoundingClientRect().top + window.pageYOffset;
