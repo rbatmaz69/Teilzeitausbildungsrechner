@@ -51,11 +51,8 @@ Tests im Ordner `tests/` decken jede Schicht ab (Unit-Tests für Logik und Servi
 # Repository klonen
 git clone https://git.it.hs-heilbronn.de/it/courses/seb/lab/ws25/group-04.git
 cd group-04
-
 # Python-Abhängigkeiten installieren
 pip install -r requirements.txt
-
-# Frontend-Linting-Tools installieren (optional, nur für lokales Linting)
 # Die Pipeline installiert diese automatisch - dieses Setup ist nur für lokale Entwicklung
 npm install
 ```
@@ -69,7 +66,7 @@ python -m src.app
 # oder: python -m src.app 8001  # Port als CLI-Argument
 ```
 
-- Playwright (E2E Tests) startet in der Testkonfiguration einen temporären Server auf Port `5000`. Sie können Playwright‑Tests mit `npm run test:e2e` starten; der Test‑Runner startet oder verbindet sich zu `http://localhost:5000` (siehe `playwright.config.js`).
+- Playwright (E2E Tests) startet in der Testkonfiguration einen temporären Server auf Port `8000`. Sie können Playwright‑Tests mit `npm run test:e2e` starten; der Test‑Runner startet oder verbindet sich zu `http://localhost:8000` (siehe `playwright.config.js`).
 
 - Docker: `docker-compose.yaml` mappt Host‑Port `8000` auf Container‑Port `5000` (siehe Docker‑Abschnitt). Nach `docker compose up` ist die App unter `http://localhost:8000/` erreichbar.
 
@@ -292,6 +289,35 @@ python3 -m pytest tests/test_api.py -v
 
 # Mit Coverage-Report
 python3 -m pytest tests/ --cov=src --cov-report=term
+```
+
+## 🔎 Logging anzeigen
+
+Logs werden auf STDOUT ausgegeben und sind im Terminal bzw. in Container-Logs sichtbar. Das Log-Level wird über die Umgebungsvariable `LOG_LEVEL` gesteuert.
+
+### Lokal (Entwicklung)
+```bash
+# Standard (INFO)
+python -m src.app
+
+# Level steuern
+LOG_LEVEL=WARNING python -m src.app
+LOG_LEVEL=ERROR python -m src.app
+```
+
+### Pytest (Logs sichtbar machen)
+```bash
+python3 -m pytest tests/ -v -s
+python3 -m pytest tests/ -v --log-cli-level=INFO
+```
+
+### Docker (Container-Logs)
+```bash
+docker compose up -d --build
+docker compose logs -f backend
+
+# Level steuern
+LOG_LEVEL=INFO docker compose up -d
 ```
 
 **Test-Struktur:**
