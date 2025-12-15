@@ -34,7 +34,7 @@ if venv_path.exists():
     # Setze VIRTUAL_ENV für Kompatibilität
     os.environ["VIRTUAL_ENV"] = str(venv_path)
 
-from flask import Flask, jsonify, render_template, request, g  # noqa: E402
+from flask import Flask, g, jsonify, render_template, request  # noqa: E402
 
 # Import der zentralen Berechnungslogik
 # Diese enthält die komplette Implementierung gemäß BBiG § 7a und § 8
