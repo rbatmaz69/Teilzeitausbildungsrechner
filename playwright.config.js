@@ -37,7 +37,7 @@ export default defineConfig({
   // Gemeinsame Einstellungen für alle Tests
   use: {
     // Basis-URL für alle Tests
-    baseURL: 'http://localhost:5000',
+    baseURL: 'http://localhost:8000',
     
     // Tracing nur bei Retry (spart Speicher)
     trace: 'on-first-retry',
@@ -59,8 +59,8 @@ export default defineConfig({
 
   // Automatischer Server-Start
   webServer: {
-    command: process.env.CI ? 'python3 -m src.app 5000 > /dev/null 2>&1' : 'python -m src.app 5000 > nul 2>&1',
-    url: 'http://localhost:5000',
+    command: process.env.CI ? 'python3 -m src.app 8000 > /dev/null 2>&1' : 'python -m src.app 8000 > nul 2>&1',
+    url: 'http://localhost:8000',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
     env: {
