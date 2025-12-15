@@ -88,7 +88,12 @@ def create_app() -> Flask:
             logger = _logging.getLogger("src.app")
             # Nur Methode, Pfad, Status und Dauer loggen (keine PII)
             if duration_ms is None:
-                logger.info("%s %s -> %s", request.method, request.path, response.status_code)
+                logger.info(
+                    "%s %s -> %s",
+                    request.method,
+                    request.path,
+                    response.status_code,
+                )
             else:
                 logger.info(
                     "%s %s -> %s (%dms)",

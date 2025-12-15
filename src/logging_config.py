@@ -56,7 +56,8 @@ def configure_logging(default_level: str = "INFO") -> None:
     handler: Optional[logging.Handler] = None
     for h in pkg_logger.handlers:
         if isinstance(h, logging.StreamHandler):
-            # Wir akzeptieren genau einen StreamHandler; aktualisieren nur Level/Formatter
+            # Wir akzeptieren genau einen StreamHandler;
+            # aktualisieren nur Level/Formatter
             handler = h
             break
 
