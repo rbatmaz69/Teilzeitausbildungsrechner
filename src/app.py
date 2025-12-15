@@ -13,6 +13,7 @@ Die Flask-App stellt folgende Funktionen bereit:
 
 import os
 import sys
+import time
 from pathlib import Path
 
 # Automatische venv-Aktivierung: Füge venv site-packages zum Python-Pfad hinzu
@@ -33,11 +34,12 @@ if venv_path.exists():
     # Setze VIRTUAL_ENV für Kompatibilität
     os.environ["VIRTUAL_ENV"] = str(venv_path)
 
-from flask import Flask, jsonify, render_template, request  # noqa: E402
+from flask import Flask, jsonify, render_template, request, g  # noqa: E402
 
 # Import der zentralen Berechnungslogik
 # Diese enthält die komplette Implementierung gemäß BBiG § 7a und § 8
 from .api import verarbeite_berechnungsanfrage  # noqa: E402
+from .logging_config import configure_logging  # noqa: E402
 
 
 def create_app() -> Flask:
@@ -58,11 +60,47 @@ def create_app() -> Flask:
     # Dies funktioniert unabhängig vom aktuellen Arbeitsverzeichnis
     # Ermittelt das Projekt-Root-Verzeichnis (ein Level über src/)
     base_dir = Path(__file__).parent.parent
+    # Zentrales Logging initialisieren (idempotent)
+    configure_logging()
+
     app = Flask(
         __name__,
         static_folder=str(base_dir / "static"),      # JavaScript, CSS-Dateien
         template_folder=str(base_dir / "templates"),  # HTML-Templates
     )
+
+    # Request-Lifecycle-Logging (PII-sicher)
+    @app.before_request
+    def _log_request_start():  # pragma: no cover - trivial
+        # Nur Startzeit speichern, keine Request-Daten loggen
+        g._start_time = time.perf_counter()
+
+    @app.after_request
+    def _log_request_end(response):  # pragma: no cover - trivial
+        try:
+            start = getattr(g, "_start_time", None)
+            duration_ms = None
+            if start is not None:
+                duration_ms = int((time.perf_counter() - start) * 1000)
+
+            import logging as _logging
+
+            logger = _logging.getLogger("src.app")
+            # Nur Methode, Pfad, Status und Dauer loggen (keine PII)
+            if duration_ms is None:
+                logger.info("%s %s -> %s", request.method, request.path, response.status_code)
+            else:
+                logger.info(
+                    "%s %s -> %s (%dms)",
+                    request.method,
+                    request.path,
+                    response.status_code,
+                    duration_ms,
+                )
+        except Exception:
+            # Logging darf nie den Responsefluss stören
+            pass
+        return response
 
     @app.get("/")
     def index():
