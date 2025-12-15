@@ -138,9 +138,12 @@ def verarbeite_berechnungsanfrage(
         BerechnungsDienstAntwort: Normalisierte Antwort mit Statuscode.
     """
 
+    logger.info("Berechnungsanfrage eingegangen")
+
     try:
         request_model = BerechnungsAnfrage.from_dict(payload)
     except FehlendeFelderFehler as exc:
+        logger.warning("missing_fields")
         error = DienstFehler(
             code="missing_fields",
             message=str(exc),
@@ -151,6 +154,7 @@ def verarbeite_berechnungsanfrage(
             body={"error": error.to_dict()},
         )
     except NutzlastValidierungsFehler as exc:
+        logger.warning("validation_error:%s", exc.code or "validation_error")
         error = DienstFehler(
             code=exc.code,
             message=str(exc),
@@ -170,6 +174,7 @@ def verarbeite_berechnungsanfrage(
             eingabetyp=request_model.eingabetyp,
         )
     except (TypeError, ValueError) as exc:
+        logger.warning("validation_error")
         error = DienstFehler(code="validation_error", message=str(exc))
         return BerechnungsDienstAntwort(
             status_code=422,
@@ -187,7 +192,7 @@ def verarbeite_berechnungsanfrage(
             status_code=500,
             body={"error": error.to_dict()},
         )
-
+    logger.info("Berechnung erfolgreich")
     return BerechnungsDienstAntwort(status_code=200, body={"result": result})
 
 
