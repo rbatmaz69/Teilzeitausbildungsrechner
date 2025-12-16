@@ -5,8 +5,9 @@
   "lang": {
     "label": "Dil",
     "aria": "Dil seçin",
-    "de": "Deutsch",
-    "en": "English",
+    "de": "Almanca",
+    "en": "İngilizce",
+    "uk": "Ukraynaca",
     "tr": "Türkçe"
   },
   "inputs": {
@@ -68,9 +69,9 @@
       "question": "En yüksek okul diplomanız nedir?",
       "label": "Okul derecesi",
       "none": "Diplomasız",
-      "hauptschule": "Hauptschule",
-      "realschule": "Realschule",
-      "abitur": "Abitur / Üniversite giriş diploması"
+      "hauptschule": "Temel ortaöğretim",
+      "realschule": "Ortaöğretim",
+      "abitur": "Üniversite giriş diploması"
     },
     "qual": {
       "question": "Hangi mesleki niteliklere sahipsiniz?",
