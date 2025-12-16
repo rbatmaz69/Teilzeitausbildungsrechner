@@ -69,9 +69,9 @@
       "question": "En yüksek okul diplomanız nedir?",
       "label": "Okul derecesi",
       "none": "Diplomasız",
-      "hauptschule": "Temel ortaöğretim",
-      "realschule": "Ortaöğretim",
-      "abitur": "Üniversite giriş diploması"
+      "hauptschule": "Temel ortaöğretim (Almanca: Hauptschule)",
+      "realschule": "Ortaöğretim (Almanca: Realschule)",
+      "abitur": "Üniversite giriş diploması (Almanca: Abitur / Hochschulreife)"
     },
     "qual": {
       "question": "Hangi mesleki niteliklere sahipsiniz?",
