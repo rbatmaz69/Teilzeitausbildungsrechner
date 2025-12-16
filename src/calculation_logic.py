@@ -439,7 +439,7 @@ def berechne_gesamtdauer(
     verlaengerung_durch_teilzeit = finale_dauer - verkuerzte_dauer
 
     # Ergebnis zusammenstellen
-    return {
+    result = {
         "original_dauer_monate": basis_dauer_monate,
         "verkuerzte_dauer_monate": verkuerzte_dauer,
         "teilzeit_prozent": teilzeit_prozent,
@@ -454,6 +454,22 @@ def berechne_gesamtdauer(
         "verkuerzung_gesamt_ohne_begrenzung": verkuerzung_gesamt_ohne_begrenzung,
         "regel_8_abs_3_angewendet": regel_8_abs_3_angewendet,
     }
+
+    # PII-sicheres Ergebnis-Logging (nur Flags/Verlauf, keine Rohinputs)
+    try:  # pragma: no cover - Logging darf Tests nicht beeinflussen
+        import logging as _logging
+
+        logger = _logging.getLogger("src.calculation_logic")
+        cap_applied = nach_schritt2 < nach_schritt1
+        logger.info(
+            "Berechnung abgeschlossen | cap_applied=%s regel_8_abs_3=%s",
+            str(bool(cap_applied)),
+            str(bool(regel_8_abs_3_angewendet)),
+        )
+    except Exception:
+        pass
+
+    return result
 
 
 # Hilfsfunktionen
