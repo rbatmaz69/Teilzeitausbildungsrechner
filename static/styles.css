@@ -1271,6 +1271,25 @@ input.error,
   display: none;
 }
 
+/* Ukrainian and Turkish flags */
+#lang-switcher:has(option[value="uk"]:checked) ~ .lang-flags-overlay .lang-flag-uk {
+  display: block;
+}
+#lang-switcher:has(option[value="uk"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="uk"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="uk"]:checked) ~ .lang-flags-overlay .lang-flag-tr {
+  display: none;
+}
+
+#lang-switcher:has(option[value="tr"]:checked) ~ .lang-flags-overlay .lang-flag-tr {
+  display: block;
+}
+#lang-switcher:has(option[value="tr"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="tr"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="tr"]:checked) ~ .lang-flags-overlay .lang-flag-uk {
+  display: none;
+}
+
 .startseite-title {
   font-size: 1.5rem;
   font-weight: 700;
@@ -1812,6 +1831,25 @@ input.error,
   }
 
   #lang-switcher-desktop:has(option[value="en"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de {
+    display: none;
+  }
+
+  /* Ukrainian and Turkish flags (desktop) */
+  #lang-switcher-desktop:has(option[value="uk"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk {
+    display: block;
+  }
+  #lang-switcher-desktop:has(option[value="uk"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="uk"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="uk"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr {
+    display: none;
+  }
+
+  #lang-switcher-desktop:has(option[value="tr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr {
+    display: block;
+  }
+  #lang-switcher-desktop:has(option[value="tr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="tr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="tr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk {
     display: none;
   }
 
