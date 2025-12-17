@@ -68,13 +68,13 @@ python -m src.app
 
 - Playwright (E2E Tests) startet in der Testkonfiguration einen temporären Server auf Port `8000`. Sie können Playwright‑Tests mit `npm run test:e2e` starten; der Test‑Runner startet oder verbindet sich zu `http://localhost:8000` (siehe `playwright.config.js`).
 
-- Docker: `docker-compose.yaml` mappt Host‑Port `8000` auf Container‑Port `5000` (siehe Docker‑Abschnitt). Nach `docker compose up` ist die App unter `http://localhost:8000/` erreichbar.
+- Docker: `docker-compose.yaml` mappt Host‑Port `8000` auf Container‑Port `8000` (siehe Docker‑Abschnitt). Nach `docker compose up` ist die App unter `http://localhost:8000/` erreichbar.
 
 Wenn Port `8000` belegt ist, versucht der Dev‑Server automatisch einen Fallback‑Port.
 
 ## 🐳 Docker
 
-Das Projekt enthält ein Docker‑Setup für das Backend (`Dockerfile.backend`) und eine `docker-compose.yaml` mit dem Service `backend`. Das Backend läuft im Container auf Port `5000` und ist auf Host‑Port `8000` gemappt.
+Das Projekt enthält ein Docker‑Setup für das Backend (`Dockerfile.backend`) und eine `docker-compose.yaml` mit dem Service `backend`. Das Backend läuft im Container auf Port `8000` und ist auf Host‑Port `8000` gemappt.
 
 Wichtige Befehle:
 

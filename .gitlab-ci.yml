@@ -93,7 +93,7 @@ End-to-End Browser Tests:
   stage: E2E Tests
   script:
     - echo "🎭 Führe End-to-End Tests aus (Playwright)..."
-    - npm run test:e2e 2>&1 | grep -E "(chromium|›|✓|✗|passed|failed|flaky)" || true
+    - npm run test:e2e 2>&1 | grep -E "(chromium|›|✓|✗|passed|failed|flaky|skipped|skip)" || true
   artifacts:
     when: always
     paths:

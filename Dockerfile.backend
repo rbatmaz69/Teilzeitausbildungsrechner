@@ -22,4 +22,5 @@ COPY . .
 
 # Standard-Startkommando für das Backend
 # WSGI-Entry-Point ist wsgi.py -> Variable "app"
-CMD ["gunicorn", "wsgi:app", "--bind", "0.0.0.0:5000", "--workers", "2"]
+EXPOSE 8000
+CMD ["gunicorn", "wsgi:app", "--bind", "0.0.0.0:8000", "--workers", "2"]
