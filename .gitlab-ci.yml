@@ -112,12 +112,14 @@ End-to-End Browser Tests:
 
 # ====================== DOCKER BUILD & PUSH (Kaniko) ======================
 Docker Build und Push:
-  image: alpine:3.18
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   stage: Publish
   variables:
     DOCKER_CONFIG: /kaniko/.docker/
   before_script:
-    - echo "Starting Kaniko build and push (downloading executor)"
+    - echo "Starting Kaniko build and push (using image executor:debug)"
   script: |
     set -euo pipefail
     if [ -z "$DOCKERHUB_USERNAME" ] || [ -z "$DOCKERHUB_TOKEN" ]; then
@@ -131,15 +133,7 @@ Docker Build und Push:
       TAG="$CI_COMMIT_TAG"
     fi
 
-    apk add --no-cache ca-certificates curl
-    mkdir -p /kaniko
     mkdir -p /kaniko/.docker
-
-    echo "Downloading kaniko executor..."
-    curl -fsSL -o /kaniko/executor "https://github.com/GoogleContainerTools/kaniko/releases/latest/download/executor"
-    chmod +x /kaniko/executor
-
-    # create Docker auth config for Kaniko
     AUTH=$(echo -n "$DOCKERHUB_USERNAME:$DOCKERHUB_TOKEN" | base64 | tr -d '\n')
     printf '{"auths":{"https://index.docker.io/v1/":{"auth":"%s"}}}' "$AUTH" > /kaniko/.docker/config.json
 
