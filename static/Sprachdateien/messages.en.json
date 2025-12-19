@@ -6,7 +6,9 @@
     "label": "Language",
     "aria": "Choose language",
     "de": "Deutsch",
-    "en": "English"
+    "en": "English",
+    "uk": "Українська",
+    "tr": "Türkçe"
   },
   "inputs": {
     "title": "Your Calculation",
@@ -208,6 +210,9 @@
   },
   "nav": {
     "actions": "Actions"
+  },
+  "meta": {
+    "stampLabel": "As of"
   },
   "start": {
     "title": {

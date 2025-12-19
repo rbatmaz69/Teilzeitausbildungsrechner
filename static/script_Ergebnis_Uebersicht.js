@@ -867,11 +867,13 @@ function setzeDatumstempel() {
   const element = $("#stamp-date");
   if (!element) return;
   const sprache = aktuelleSprache();
-  const format = new Intl.DateTimeFormat(
-    sprache === "en" ? "en-US" : "de-DE",
-    { dateStyle: "long" }
-  );
-  const beschriftung = sprache === "en" ? "As of" : "Stand";
+  const localeMap = { en: "en-US", de: "de-DE", uk: "uk-UA", tr: "tr-TR" };
+  const locale = localeMap[sprache] || "de-DE";
+  const format = new Intl.DateTimeFormat(locale, { dateStyle: "long" });
+  const defaultLabel = sprache === "en" ? "As of" : "Stand";
+  const beschriftung = window.I18N && typeof window.I18N.t === "function"
+    ? window.I18N.t("meta.stampLabel", defaultLabel)
+    : defaultLabel;
   element.textContent = `${beschriftung}: ${format.format(new Date())}`;
 }
 

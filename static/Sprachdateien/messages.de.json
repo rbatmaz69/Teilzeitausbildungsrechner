@@ -6,7 +6,9 @@
     "label": "Sprache",
     "aria": "Sprache wählen",
     "de": "Deutsch",
-    "en": "English"
+    "en": "English",
+    "uk": "Українська",
+    "tr": "Türkçe"
   },
   "inputs": {
     "title": "Ihre Berechnung",
@@ -211,6 +213,9 @@
   },
   "nav": {
     "actions": "Aktionen"
+  },
+  "meta": {
+    "stampLabel": "Stand"
   },
   "start": {
     "title": {
