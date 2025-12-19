@@ -139,8 +139,6 @@ Docker Build und Push:
 
     /kaniko/executor --context ${CI_PROJECT_DIR} --dockerfile ${CI_PROJECT_DIR}/Dockerfile.backend --destination ${IMAGE}:${TAG} --skip-tls-verify
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop"'
-      when: on_success
     - if: '$CI_COMMIT_BRANCH == "main"'
       when: on_success
     - when: never
