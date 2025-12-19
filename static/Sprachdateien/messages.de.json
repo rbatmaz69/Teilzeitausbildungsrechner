@@ -6,9 +6,9 @@
     "label": "Sprache",
     "aria": "Sprache wählen",
     "de": "Deutsch",
-    "en": "Englisch",
-    "uk": "Ukrainisch",
-    "tr": "Türkisch"
+    "en": "English",
+    "uk": "Українська",
+    "tr": "Türkçe"
   },
   "inputs": {
     "title": "Ihre Berechnung",

@@ -5,10 +5,10 @@
   "lang": {
     "label": "Language",
     "aria": "Choose language",
-    "de": "German",
-    "en": "English"
-    ,"uk": "Ukrainian",
-    "tr": "Turkish"
+    "de": "Deutsch",
+    "en": "English",
+    "uk": "Українська",
+    "tr": "Türkçe"
   },
   "inputs": {
     "title": "Your Calculation",

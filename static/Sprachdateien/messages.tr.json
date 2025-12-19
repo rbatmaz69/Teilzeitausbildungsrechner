@@ -5,9 +5,9 @@
   "lang": {
     "label": "Dil",
     "aria": "Dil seçin",
-    "de": "Almanca",
-    "en": "İngilizce",
-    "uk": "Ukraynaca",
+    "de": "Deutsch",
+    "en": "English",
+    "uk": "Українська",
     "tr": "Türkçe"
   },
   "inputs": {
