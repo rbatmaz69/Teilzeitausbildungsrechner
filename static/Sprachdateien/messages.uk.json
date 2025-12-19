@@ -214,6 +214,9 @@
   "nav": {
     "actions": "Дії"
   },
+  "meta": {
+    "stampLabel": "Станом на"
+  },
   "start": {
     "title": {
       "prefix": "Плануйте вашу ",

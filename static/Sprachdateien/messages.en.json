@@ -211,6 +211,9 @@
   "nav": {
     "actions": "Actions"
   },
+  "meta": {
+    "stampLabel": "As of"
+  },
   "start": {
     "title": {
       "prefix": "Plan your ",

@@ -214,6 +214,9 @@
   "nav": {
     "actions": "Eylemler"
   },
+  "meta": {
+    "stampLabel": "Tarih itibarıyla"
+  },
   "start": {
     "title": {
       "prefix": "Planlayın ",

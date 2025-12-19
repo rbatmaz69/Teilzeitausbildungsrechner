@@ -791,6 +791,26 @@ input.error,
   padding: 0 var(--space-1);
 }
 
+/* Timestamp inside the expanded "Ihre Berechnung" box */
+#inputs-section {
+  position: relative;
+}
+
+#inputs-section .inputs-stamp {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-style: italic;
+  text-align: left;
+}
+
+/* Only show stamp when the details are open */
+#inputs-section:not([open]) .inputs-stamp {
+  display: none;
+}
+
 /* ==========================================
    HIGHLIGHT & KEY-VALUE SECTION
    ========================================== */
