@@ -127,7 +127,7 @@ Docker Build und Push:
 
     IMAGE="$DOCKERHUB_USERNAME/group04-tzr"
     TAG="latest"
-    if [ -n "$CI_COMMIT_TAG" ]; then
+    if [ -n "${CI_COMMIT_TAG:-}" ]; then
       TAG="$CI_COMMIT_TAG"
     fi
 
