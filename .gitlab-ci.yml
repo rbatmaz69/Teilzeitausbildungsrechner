@@ -112,7 +112,9 @@ End-to-End Browser Tests:
 
 # ====================== DOCKER BUILD & PUSH (Kaniko) ======================
 Docker Build und Push:
-  image: gcr.io/kaniko-project/executor:latest
+  image:
+    name: gcr.io/kaniko-project/executor:latest
+    entrypoint: [""]
   stage: Publish
   variables:
     DOCKER_CONFIG: /kaniko/.docker/
