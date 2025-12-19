@@ -126,6 +126,22 @@ Docker Build und Push:
       exit 1
     fi
 
+    # Ensure Docker client talks to the DinD service provided by GitLab (service host 'docker')
+    export DOCKER_HOST="tcp://docker:2375"
+
+    # Wait for the DinD daemon to become available (timeout ~10s)
+    for i in $(seq 1 10); do
+      if docker info >/dev/null 2>&1; then
+        break
+      fi
+      echo "Waiting for docker daemon... ($i/10)"
+      sleep 1
+    done
+    if ! docker info >/dev/null 2>&1; then
+      echo "ERROR: docker daemon not available (service failed to start)"
+      exit 1
+    fi
+
     printf '%s' "$DOCKERHUB_TOKEN" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
 
     IMAGE="$DOCKERHUB_USERNAME/group04-tzr"
