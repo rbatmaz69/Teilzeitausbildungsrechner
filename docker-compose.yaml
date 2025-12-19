@@ -1,6 +1,7 @@
 
 services:
   backend:
+    image: jkeller5/group04-tzr:latest
     build:
       context: .
       dockerfile: Dockerfile.backend
