@@ -134,4 +134,3 @@ Docker Build und Push:
       when: on_success
     - when: never
   when: on_success
-  privileged: true
