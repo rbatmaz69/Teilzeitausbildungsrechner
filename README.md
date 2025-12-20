@@ -95,6 +95,34 @@ docker compose up -d --build
 docker compose down
 ```
 
+## 🐙 Docker Hub Image
+
+Das Projekt wird automatisch als Docker‑Image auf Docker Hub unter `jkeller5/group04-tzr` veröffentlicht (CI pusht das `latest` Tag bei erfolgreichen Builds auf `main`).
+
+Einfachste Nutzung (empfohlen):
+```bash
+# Startet das Image (Docker zieht automatisch `latest`, wenn lokal nicht vorhanden)
+docker run -d --name tzr -p 8000:8000 jkeller5/group04-tzr
+
+# Backend stoppen und Container entfernen
+docker stop tzr
+docker rm tzr
+```
+
+Nur das Image von Docker Hub ziehen:
+```bash
+docker pull jkeller5/group04-tzr
+```
+
+Ein bereits gezogenes Image mit Docker Desktop starten:
+
+- In der Docker Desktop App, wähle das gezogene Image `jkeller5/group04-tzr` und starte einen neuen Container.
+- In den optionalen Start‑Einstellungen das Port‑Mapping auf `8000:8000` setzen, damit die App unter `http://localhost:8000/` erreichbar ist.
+
+Weitere Hinweise:
+- Das Image enthält das komplette Backend (Flask, Abhängigkeiten) und die statischen Assets — es ist startbereit.
+- Gezogene Images werden im lokalen Docker‑Daemon gespeichert.
+
 ## 💻 Verwendung
 
 ### Web-UI + API
