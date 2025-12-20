@@ -791,6 +791,26 @@ input.error,
   padding: 0 var(--space-1);
 }
 
+/* Timestamp inside the expanded "Ihre Berechnung" box */
+#inputs-section {
+  position: relative;
+}
+
+#inputs-section .inputs-stamp {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-style: italic;
+  text-align: left;
+}
+
+/* Only show stamp when the details are open */
+#inputs-section:not([open]) .inputs-stamp {
+  display: none;
+}
+
 /* ==========================================
    HIGHLIGHT & KEY-VALUE SECTION
    ========================================== */
@@ -1268,6 +1288,27 @@ input.error,
 }
 
 #lang-switcher:has(option[value="en"]:checked) ~ .lang-flags-overlay .lang-flag-de {
+  display: none;
+}
+
+/* Ukrainian and Turkish flags */
+#lang-switcher:has(option[value="uk"]:checked) ~ .lang-flags-overlay .lang-flag-uk {
+  display: block;
+}
+
+#lang-switcher:has(option[value="uk"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="uk"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="uk"]:checked) ~ .lang-flags-overlay .lang-flag-tr {
+  display: none;
+}
+
+#lang-switcher:has(option[value="tr"]:checked) ~ .lang-flags-overlay .lang-flag-tr {
+  display: block;
+}
+
+#lang-switcher:has(option[value="tr"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="tr"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="tr"]:checked) ~ .lang-flags-overlay .lang-flag-uk {
   display: none;
 }
 
@@ -1812,6 +1853,27 @@ input.error,
   }
 
   #lang-switcher-desktop:has(option[value="en"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de {
+    display: none;
+  }
+
+  /* Ukrainian and Turkish flags (desktop) */
+  #lang-switcher-desktop:has(option[value="uk"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="uk"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="uk"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="uk"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr {
+    display: none;
+  }
+
+  #lang-switcher-desktop:has(option[value="tr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr {
+    display: block;
+  }
+  
+  #lang-switcher-desktop:has(option[value="tr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="tr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="tr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk {
     display: none;
   }
 
