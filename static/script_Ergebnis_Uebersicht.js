@@ -1185,7 +1185,7 @@ function setzeDatenZurueck() {
   // Ergebnis-Sektion verstecken
   const ergebnisContainer = document.getElementById("ergebnis-container");
   if (ergebnisContainer) {
-    ergebnisContainer.hidden = true;
+    ergebnisContainer.hidden = false;
   }
   
   // Rote Border von Ergebnis-Box entfernen
@@ -1475,7 +1475,7 @@ function initialisiere() {
       // Ergebnis-Sektion initial verstecken
       const ergebnisContainer = document.getElementById("ergebnis-container");
       if (ergebnisContainer) {
-        ergebnisContainer.hidden = true;
+        ergebnisContainer.hidden = false;
       }
     }
   }

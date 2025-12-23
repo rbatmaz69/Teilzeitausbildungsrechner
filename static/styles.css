@@ -118,6 +118,30 @@ header h1 {
   grid-template-columns: 1fr; /* Handy: eine Spalte */
 }
 
+/* Rechner Layout */
+.rechner-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1rem, 2vw, 1.75rem);
+  align-items: start;
+}
+
+.rechner-card {
+  height: 100%;
+}
+
+.rechner-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  height: 100%;
+}
+
+.rechner-grid .card,
+.rechner-grid .card-collapsible {
+  margin-bottom: 0;
+}
+
 /* ==========================================
    KARTEN / PANELS
    ========================================== */
@@ -128,6 +152,24 @@ header h1 {
   padding: 1rem;
   box-shadow: var(--shadow);
   margin-bottom: var(--space-3);
+}
+
+.rechner-grid .card,
+.rechner-grid .card-collapsible {
+  padding: 1.25rem;
+}
+
+@media (width >= 1200px) {
+  .rechner-grid .card,
+  .rechner-grid .card-collapsible {
+    padding: 1.5rem;
+  }
+}
+
+.notes-column .card {
+  background: #f3f8ff;
+  border-color: #d9e6ff;
+  box-shadow: 0 10px 24px rgb(22 60 155 / 10%);
 }
 
 .tile {
@@ -1004,6 +1046,10 @@ input.error,
   .teilzeit-formula-line2 {
     text-align: right;
   }
+
+  .rechner-bereich.container {
+    max-width: 1680px;
+  }
 }
 
 .kv-2col{
@@ -1135,6 +1181,10 @@ input.error,
     gap: 1rem;
   }
 
+  .rechner-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   /* Verkürzungen: Auf Desktop normale Darstellung (beide in einer Zeile) */
   .verkuerzungen-list li {
     display: flex;
@@ -1148,6 +1198,15 @@ input.error,
   .container {
     max-width: 720px;
     padding: 2rem;
+  }
+
+  .rechner-bereich.container {
+    width: 100%;
+    max-width: calc(100vw - 2rem);
+  }
+
+  .rechner-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   header h1 { font-size: 2.6rem; }
@@ -1166,7 +1225,8 @@ input.error,
     padding: 0;
     background: transparent;
     margin: var(--space-3) auto;
-    max-width: 980px;
+    width: 100%;
+    max-width: calc(100vw - 2rem);
   }
   .actionbar .btn{ padding: .9rem 1.2rem; }
 
@@ -1178,6 +1238,10 @@ input.error,
   .container {
     max-width: 960px;
   }
+
+   .rechner-grid {
+     grid-template-columns: repeat(4, minmax(0, 1fr));
+   }
 
   .big-number { font-size: 2.6rem; }
 }
@@ -2022,6 +2086,22 @@ input.error,
   .btn-start-calculate-desktop svg {
     width: 22px;
     height: 22px;
+  }
+}
+
+/* Rechner-Bereich Desktop Layout Overrides */
+@media (width >= 1024px) {
+  .rechner-bereich.container {
+    width: 100%;
+    max-width: calc(100vw - 1.5rem);
+    padding: clamp(1.25rem, 2vw, 2.5rem);
+  }
+
+  .vk-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
   }
 }
 

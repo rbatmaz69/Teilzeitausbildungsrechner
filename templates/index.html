@@ -314,118 +314,118 @@
   </div>
 
   <div class="container rechner-bereich" id="rechner-bereich">
-    <!-- ================================ EINGABEN DES RECHNERS ================================ -->
+    <div class="rechner-grid">
+      <!-- ================================ EINGABEN DES RECHNERS ================================ -->
+      <section class="card rechner-card" aria-labelledby="input-heading">
+        <h1 id="input-heading" class="sr-only" data-i18n="inputs.heading">Eingaben</h1>
 
-    <!-- Eingabe reguläre Ausbildungsdauer -->
-    <section class="card" aria-labelledby="input-heading">
-      <h1 id="input-heading" class="sr-only" data-i18n="inputs.heading">Eingaben</h1>
-
-      <div class="input-group">
-        <label id="label-dauer">
-          <span data-i18n="inputs.dauer.label">Reguläre Ausbildungsdauer (Monate)</span>
-          <span class="info-icon"
-                data-tooltip="Die normale Dauer Ihrer Ausbildung bei Vollzeit"
-                data-i18n-attr="data-tooltip:inputs.dauer.tooltip"
-                aria-hidden="true">i</span>
-        </label>
-        <div class="input-with-unit">
-          <input type="text" inputmode="numeric" autocomplete="off" id="dauer" placeholder="z.B. 36" data-i18n-attr="placeholder:inputs.placeholders.dauer" step="1" required aria-labelledby="label-dauer" aria-describedby="hint-dauer">
-          <span class="unit" data-i18n="units.months.full">Monate</span>
-        </div>
-        <span class="error-message" id="errorDauer"></span>
-        <!-- Unsichtbarer Hilfetext spiegelt das Tooltip (für SR) -->
-        <span id="hint-dauer" class="sr-only">
-          Die normale Dauer Ihrer Ausbildung bei Vollzeit.
-        </span>
-      </div>
-
-      <!-- Eingabe reguläre Wochenstunden -->
-      <div class="input-group">
-        <label id="label-stunden">
-          <span data-i18n="inputs.stunden.label">Reguläre Wochenstunden (gesamt)</span>
-          <span class="info-icon"
-                data-tooltip="Ihre gesamten Wochenstunden inkl. Berufsschule"
-                data-i18n-attr="data-tooltip:inputs.stunden.tooltip"
-                aria-hidden="true">i</span>
-        </label>
-        <div class="input-with-unit">
-          <input type="text" inputmode="decimal" autocomplete="off" id="stunden" placeholder="z.B. 40" data-i18n-attr="placeholder:inputs.placeholders.stunden" step="1" required aria-labelledby="label-stunden" aria-describedby="hint-stunden">
-          <span class="unit" data-i18n="units.hours.full">Stunden</span>
-        </div>
-        <span class="error-message" id="errorStunden"></span>
-        <span id="hint-stunden" class="sr-only">Ihre gesamten Wochenstunden inkl. Berufssschule.</span>
-      </div>
-
-      <!-- Eingabe Teilzeitanteil -->
-      <div class="input-group">
-        <label id="label-teilzeit">
-          <span data-i18n="inputs.teilzeit.label">Wie viele Stunden pro Woche möchten Sie während der Ausbildung arbeiten?</span>
-          <span class="info-icon"
-                data-tooltip="Mindestens 50% für eine anerkannte Teilzeitausbildung"
-                data-i18n-attr="data-tooltip:inputs.teilzeit.tooltip"
-                aria-hidden="true">i</span>
-        </label>
-
-        <!-- Stundenanteil (primär) -->
         <div class="input-group">
+          <label id="label-dauer">
+            <span data-i18n="inputs.dauer.label">Reguläre Ausbildungsdauer (Monate)</span>
+            <span class="info-icon"
+                  data-tooltip="Die normale Dauer Ihrer Ausbildung bei Vollzeit"
+                  data-i18n-attr="data-tooltip:inputs.dauer.tooltip"
+                  aria-hidden="true">i</span>
+          </label>
           <div class="input-with-unit">
-            <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitStunden" placeholder="z.B. 30" data-i18n-attr="placeholder:inputs.placeholders.teilzeitStunden" step="1" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
+            <input type="text" inputmode="numeric" autocomplete="off" id="dauer" placeholder="z.B. 36" data-i18n-attr="placeholder:inputs.placeholders.dauer" step="1" required aria-labelledby="label-dauer" aria-describedby="hint-dauer">
+            <span class="unit" data-i18n="units.months.full">Monate</span>
+          </div>
+          <span class="error-message" id="errorDauer"></span>
+          <!-- Unsichtbarer Hilfetext spiegelt das Tooltip (für SR) -->
+          <span id="hint-dauer" class="sr-only">
+            Die normale Dauer Ihrer Ausbildung bei Vollzeit.
+          </span>
+        </div>
+
+        <!-- Eingabe reguläre Wochenstunden -->
+        <div class="input-group">
+          <label id="label-stunden">
+            <span data-i18n="inputs.stunden.label">Reguläre Wochenstunden (gesamt)</span>
+            <span class="info-icon"
+                  data-tooltip="Ihre gesamten Wochenstunden inkl. Berufsschule"
+                  data-i18n-attr="data-tooltip:inputs.stunden.tooltip"
+                  aria-hidden="true">i</span>
+          </label>
+          <div class="input-with-unit">
+            <input type="text" inputmode="decimal" autocomplete="off" id="stunden" placeholder="z.B. 40" data-i18n-attr="placeholder:inputs.placeholders.stunden" step="1" required aria-labelledby="label-stunden" aria-describedby="hint-stunden">
             <span class="unit" data-i18n="units.hours.full">Stunden</span>
           </div>
-          <span class="error-message" id="errorTeilStunden"></span>
-          <div class="button-container">
-            <div class="button-row">
-              <button class="preset" data-type="hours" data-value="24" data-i18n="inputs.teilzeit.button24h"></button>
-              <button class="preset" data-type="hours" data-value="32" data-i18n="inputs.teilzeit.button32h"></button>
-            </div>
-          </div>
+          <span class="error-message" id="errorStunden"></span>
+          <span id="hint-stunden" class="sr-only">Ihre gesamten Wochenstunden inkl. Berufssschule.</span>
         </div>
 
-        <!-- Trenner -->
-        <div class="input-separator" data-i18n="inputs.teilzeit.separator">oder</div>
-
-        <!-- Prozentanteil -->
+        <!-- Eingabe Teilzeitanteil -->
         <div class="input-group">
-          <div class="input-with-unit">
-            <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitProzent" placeholder="z.B. 75" data-i18n-attr="placeholder:inputs.placeholders.teilzeitProzent" step="5" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
-            <span class="unit" data-i18n="units.percent">Prozent</span>
-          </div>
-          <span class="error-message" id="errorProzent"></span>
-          <div class="button-container">
-            <div class="button-row">
-              <button class="preset" data-type="percent" data-value="50">50%</button>
-              <button class="preset" data-type="percent" data-value="75">75%</button>
+          <label id="label-teilzeit">
+            <span data-i18n="inputs.teilzeit.label">Wie viele Stunden pro Woche möchten Sie während der Ausbildung arbeiten?</span>
+            <span class="info-icon"
+                  data-tooltip="Mindestens 50% für eine anerkannte Teilzeitausbildung"
+                  data-i18n-attr="data-tooltip:inputs.teilzeit.tooltip"
+                  aria-hidden="true">i</span>
+          </label>
+
+          <!-- Stundenanteil (primär) -->
+          <div class="input-group">
+            <div class="input-with-unit">
+              <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitStunden" placeholder="z.B. 30" data-i18n-attr="placeholder:inputs.placeholders.teilzeitStunden" step="1" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
+              <span class="unit" data-i18n="units.hours.full">Stunden</span>
+            </div>
+            <span class="error-message" id="errorTeilStunden"></span>
+            <div class="button-container">
+              <div class="button-row">
+                <button class="preset" data-type="hours" data-value="24" data-i18n="inputs.teilzeit.button24h"></button>
+                <button class="preset" data-type="hours" data-value="32" data-i18n="inputs.teilzeit.button32h"></button>
+              </div>
             </div>
           </div>
+
+          <!-- Trenner -->
+          <div class="input-separator" data-i18n="inputs.teilzeit.separator">oder</div>
+
+          <!-- Prozentanteil -->
+          <div class="input-group">
+            <div class="input-with-unit">
+              <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitProzent" placeholder="z.B. 75" data-i18n-attr="placeholder:inputs.placeholders.teilzeitProzent" step="5" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
+              <span class="unit" data-i18n="units.percent">Prozent</span>
+            </div>
+            <span class="error-message" id="errorProzent"></span>
+            <div class="button-container">
+              <div class="button-row">
+                <button class="preset" data-type="percent" data-value="50">50%</button>
+                <button class="preset" data-type="percent" data-value="75">75%</button>
+              </div>
+            </div>
+          </div>
+          <!-- SR-Hinweis für beide Felder aus dem Info-Icon oben -->
+          <span id="hint-teilzeit" class="sr-only">
+            Mindestens 50&nbsp;% für eine anerkannte Teilzeitausbildung.
+          </span>
         </div>
-        <!-- SR-Hinweis für beide Felder aus dem Info-Icon oben -->
-        <span id="hint-teilzeit" class="sr-only">
-          Mindestens 50&nbsp;% für eine anerkannte Teilzeitausbildung.
-        </span>
-      </div>
-    </section>
-  </div>
-  
-  <!-- ================================ VERKÜRZUNGSGRÜNDE AUSWÄHLEN ================================ -->
-  <div class="container rechner-bereich">
-    <h1 id="vk-heading" class="text-2xl font-bold mb-3" data-i18n="vk.heading">
-      Gründe für eine kürzere Ausbildung
-    </h1>
+      </section>
 
-    <div class="row vk-info-row">
-      <p id="vk-helper" data-i18n="vk.helper" class="muted-text d-none">
-        Wähle alles aus, was zu dir passt.
-      </p>
-      <!-- "Was ist das?" Button -->
-      <button id="vk-info-btn" class="vk-info-btn" type="button" aria-label="Informationen zu Verkürzungsgründen anzeigen" data-i18n="vk.infoBox.button" data-i18n-attr="aria-label:vk.infoBox.buttonAria">
-        <span class="vk-info-btn-icon" aria-hidden="true">ℹ</span>
-        <span data-i18n="vk.infoBox.button">Was ist das?</span>
-      </button>
-    </div>
+      <!-- ================================ VERKÜRZUNGSGRÜNDE AUSWÄHLEN ================================ -->
+      <section class="card rechner-card" aria-labelledby="vk-heading">
+        <div class="vk-card-header">
+          <h1 id="vk-heading" class="text-2xl font-bold mb-3" data-i18n="vk.heading">
+            Gründe für eine kürzere Ausbildung
+          </h1>
 
-    <form id="vk-form" class="space-y-3">
-      <fieldset id="vk-fieldset" class="radio-group">
-        <legend class="sr-only" data-i18n="vk.legend">Verkürzungsgründe</legend>
+          <div class="row vk-info-row">
+            <p id="vk-helper" data-i18n="vk.helper" class="muted-text d-none">
+              Wähle alles aus, was zu dir passt.
+            </p>
+            <!-- "Was ist das?" Button -->
+            <button id="vk-info-btn" class="vk-info-btn" type="button" aria-label="Informationen zu Verkürzungsgründen anzeigen" data-i18n="vk.infoBox.button" data-i18n-attr="aria-label:vk.infoBox.buttonAria">
+              <span class="vk-info-btn-icon" aria-hidden="true">ℹ</span>
+              <span data-i18n="vk.infoBox.button">Was ist das?</span>
+            </button>
+          </div>
+        </div>
+
+        <form id="vk-form" class="space-y-3">
+          <fieldset id="vk-fieldset" class="radio-group">
+            <legend class="sr-only" data-i18n="vk.legend">Verkürzungsgründe</legend>
 
         <!-- ============================== -->
         <!-- 1. SCHULABSCHLUSS              -->
@@ -684,6 +684,86 @@
       </fieldset>
     </form>
 
+      </section>
+
+      <div class="rechner-column ergebnis-column" id="ergebnis-container">
+        <!-- Hauptkarte, optisch hervorgehoben -->
+        <div class="card highlight" aria-labelledby="res-headline">
+          <h1 id="res-headline" data-i18n="res.headline">Ihre Teilzeitausbildung</h1>
+          <p class="helper" data-i18n="res.helper">
+            Hier sehen Sie Ihre Eingaben und das berechnete Ergebnis auf einen Blick.
+          </p>
+
+          <!-- Grid-Layout für Haupt- und Meta-Ergebnisse -->
+          <div class="grid">
+            <div class="highlight-main">
+              <p class="big-number" id="res-total-months" aria-live="polite" data-i18n="res.placeholders.months">–</p>
+              <p class="result-years" id="res-total-years">–</p>
+              <span class="error-message" id="errorTotalMonths" data-i18n="errors.placeholder"></span>
+              
+              <!-- Verlängerungsanzeige: Ausbildung(Vollzeit) → Pfeil mit Verkürzungsdauer → Basis -->
+              <div class="result-extension-wrapper" id="res-shortening-wrapper" hidden>
+                <p class="result-extension-label" data-i18n="res.extension.label1">1. Verkürzung durch Verkürzungründe</p>
+                <div class="result-extension-values">
+                  <span class="result-extension-basis" id="res-extension-vollzeit">–</span>
+                  <div class="result-extension-arrow-wrapper">
+                    <span class="result-extension-arrow">→</span>
+                    <span class="result-extension-delta" id="res-extension-verkuerzungsdauer">+–</span>
+                  </div>
+                  <span class="result-extension-total" id="res-shortening-total">–</span>
+                </div>
+              </div>
+
+              <!-- Verlängerungsanzeige: Basis → Pfeil mit Delta → Ziel -->
+              <div class="result-extension-wrapper" id="res-extension-wrapper" hidden>
+                <p class="result-extension-label" data-i18n="res.extension.label2">2. Verlängerung durch Teilzeit:</p>
+                <div class="result-extension-values">
+                  <span class="result-extension-basis" id="res-extension-basis">–</span>
+                  <div class="result-extension-arrow-wrapper">
+                    <span class="result-extension-arrow">→</span>
+                    <span class="result-extension-delta" id="res-extension-delta">+–</span>
+                  </div>
+                  <span class="result-extension-total" id="res-extension-total">–</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Karte: Alle Eingaben -->
+        <details class="card-collapsible inputs-collapsible" id="inputs-section">
+          <summary class="summary-toggle">
+            <span class="summary-title" id="inputs-title" data-i18n="inputs.title">
+              Ihre Berechnung
+            </span>
+            <span class="summary-pill">
+              <span class="summary-pill-label" data-i18n="inputs.toggleLabel" data-i18n-open="inputs.toggleLabelOpen">
+                Details anzeigen
+              </span>
+              <span class="summary-icon">▸</span>
+            </span>
+          </summary>
+
+          <dl class="kv" id="inputs-list">
+            <!-- Inhalte per JS -->
+          </dl>
+          <span id="stamp-date" class="inputs-stamp"></span>
+        </details>
+      </div>
+
+      <div class="rechner-column notes-column">
+        <div class="card" aria-labelledby="notes-title">
+          <h2 id="notes-title" data-i18n="res.notesTitle">Wichtige Hinweise</h2>
+          <ul class="notes" data-i18n="res.notes" data-i18n-html="true">
+            <li>Die Berechnung ist eine reine <strong>Orientierungshilfe</strong>.</li>
+            <li>Es besteht kein gesetzlicher Anspruch auf die dargestellte Auswertung</li>
+            <li>Die finale Vereinbarung erfolgt mit ihrem Ausbildungsbetrieb.</li>
+            <li>Für eine anerkannte Teilzeitausbildung muss die Ausbildungszeit mindestens 50 % der regulären Ausbildungszeit betragen</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal für "Was ist das?" Informationsbox -->
     <div id="vk-info-modal" class="vk-info-modal" role="dialog" aria-modal="true" aria-labelledby="vk-info-title" hidden>
       <div class="vk-info-overlay"></div>
@@ -702,87 +782,6 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Ergebnisanzeige -->
-  <div class="container rechner-bereich" id="ergebnis-container" hidden>
-    <!-- Hauptkarte, optisch hervorgehoben -->
-    <div class="card highlight" aria-labelledby="res-headline">
-      <h1 id="res-headline" data-i18n="res.headline">Ihre Teilzeitausbildung</h1>
-      <p class="helper" data-i18n="res.helper">
-        Hier sehen Sie Ihre Eingaben und das berechnete Ergebnis auf einen Blick.
-      </p>
-
-      <!-- Grid-Layout für Haupt- und Meta-Ergebnisse -->
-      <div class="grid">
-        <div class="highlight-main">
-          <p class="big-number" id="res-total-months" aria-live="polite" data-i18n="res.placeholders.months">–</p>
-          <p class="result-years" id="res-total-years">–</p>
-          <span class="error-message" id="errorTotalMonths" data-i18n="errors.placeholder"></span>
-          
-          <!-- Verlängerungsanzeige: Ausbildung(Vollzeit) → Pfeil mit Verkürzungsdauer → Basis -->
-          <div class="result-extension-wrapper" id="res-shortening-wrapper" hidden>
-            <p class="result-extension-label" data-i18n="res.extension.label1">1. Verkürzung durch Verkürzungründe</p>
-            <div class="result-extension-values">
-              <span class="result-extension-basis" id="res-extension-vollzeit">–</span>
-              <div class="result-extension-arrow-wrapper">
-                <span class="result-extension-arrow">→</span>
-                <span class="result-extension-delta" id="res-extension-verkuerzungsdauer">+–</span>
-              </div>
-              <span class="result-extension-total" id="res-shortening-total">–</span>
-            </div>
-          </div>
-
-          <!-- Verlängerungsanzeige: Basis → Pfeil mit Delta → Ziel -->
-          <div class="result-extension-wrapper" id="res-extension-wrapper" hidden>
-            <p class="result-extension-label" data-i18n="res.extension.label2">2. Verlängerung durch Teilzeit:</p>
-            <div class="result-extension-values">
-              <span class="result-extension-basis" id="res-extension-basis">–</span>
-              <div class="result-extension-arrow-wrapper">
-                <span class="result-extension-arrow">→</span>
-                <span class="result-extension-delta" id="res-extension-delta">+–</span>
-              </div>
-              <span class="result-extension-total" id="res-extension-total">–</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Karte: Alle Eingaben -->
-    <details class="card-collapsible inputs-collapsible" id="inputs-section">
-      <summary class="summary-toggle">
-        <span class="summary-title" id="inputs-title" data-i18n="inputs.title">
-          Ihre Berechnung
-        </span>
-        <span class="summary-pill">
-          <span class="summary-pill-label" data-i18n="inputs.toggleLabel" data-i18n-open="inputs.toggleLabelOpen">
-            Details anzeigen
-          </span>
-          <span class="summary-icon">▸</span>
-        </span>
-      </summary>
-
-      <dl class="kv" id="inputs-list">
-        <!-- Inhalte per JS -->
-      </dl>
-      <span id="stamp-date" class="inputs-stamp"></span>
-    </details>
- 
-
-
-    <!-- Karte: Hinweise -->
-    <div class="card" aria-labelledby="notes-title">
-      <h2 id="notes-title" data-i18n="res.notesTitle">Wichtige Hinweise</h2>
-      <ul class="notes" data-i18n="res.notes" data-i18n-html="true">
-        <li>Die Berechnung ist eine reine <strong>Orientierungshilfe</strong>.</li>
-        <li>Es besteht kein gesetzlicher Anspruch auf die dargestellte Auswertung</li>
-        <li>Die finale Vereinbarung erfolgt mit ihrem Ausbildungsbetrieb.</li>
-        <li>Für eine anerkannte Teilzeitausbildung muss die Ausbildungszeit mindestens 50 % der regulären Ausbildungszeit betragen</li>
-      </ul>
-    </div>
-
-    <!-- Zeitstempel entfernt (jetzt in der ausgeklappten "Ihre Berechnung"-Box) -->
   </div>
 
   <!-- Navigationsleiste (mobil sticky) -->
