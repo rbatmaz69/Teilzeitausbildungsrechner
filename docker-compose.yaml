@@ -1,11 +1,12 @@
 
 services:
   backend:
+    image: jkeller5/group04-tzr:latest
     build:
       context: .
       dockerfile: Dockerfile.backend
     ports:
-      - "8000:5000"   # Host:Container
+      - "8000:8000"   # Host:Container
     environment:
       - FLASK_ENV=production
     restart: unless-stopped

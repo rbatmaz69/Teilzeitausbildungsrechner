@@ -66,7 +66,7 @@ export default defineConfig({
     env: {
       FLASK_APP: 'src/app.py',
       FLASK_ENV: 'development',
-      PORT: '5000',
+      PORT: '8000',
     },
   },
 });
