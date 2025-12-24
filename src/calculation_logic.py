@@ -424,11 +424,11 @@ def berechne_gesamtdauer(
     finale_dauer = rundung_anwenden_schritt3(nach_schritt2)
 
     # Sonderregel § 8 Abs. 3 BBiG:
-    # Wenn die berechnete Ausbildungsdauer die Regelausbildungszeit
-    # um höchstens 6 Monate überschreitet, ist die Regelausbildungszeit
-    # als Ergebnis zu setzen (kein Nachteil für Auszubildende).
+    # Nur anwenden, wenn KEINE Verkürzungsgründe die Regeldauer bereits verkürzt haben.
+    # Wenn die berechnete Ausbildungsdauer die Regelausbildungszeit um höchstens
+    # 6 Monate überschreitet, ist die Regelausbildungszeit als Ergebnis zu setzen.
     regel_8_abs_3_angewendet = False
-    if finale_dauer > basis_dauer_monate:
+    if verkuerzte_dauer == basis_dauer_monate and finale_dauer > basis_dauer_monate:
         differenz = finale_dauer - basis_dauer_monate
         if differenz <= 6:
             finale_dauer = basis_dauer_monate
