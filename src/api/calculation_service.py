@@ -60,10 +60,14 @@ class BerechnungsAnfrage:
                 code="ungültiger_eingabetyp",
             )
 
+        basis_dauer_monate = _coerce_int(payload["basis_dauer_monate"], "basis_dauer_monate")
+        vollzeit_stunden = _coerce_float(payload["vollzeit_stunden"], "vollzeit_stunden")
+        teilzeit_eingabe = _coerce_float(payload["teilzeit_eingabe"], "teilzeit_eingabe")
+
         return BerechnungsAnfrage(
-            basis_dauer_monate=payload["basis_dauer_monate"],
-            vollzeit_stunden=payload["vollzeit_stunden"],
-            teilzeit_eingabe=payload["teilzeit_eingabe"],
+            basis_dauer_monate=basis_dauer_monate,
+            vollzeit_stunden=vollzeit_stunden,
+            teilzeit_eingabe=teilzeit_eingabe,
             eingabetyp=eingabetyp,
             verkuerzungsgruende=verkuerzungsgruende,
         )
@@ -257,47 +261,47 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
             )
 
     if "vorkenntnisse_monate" in data:
-        value = data["vorkenntnisse_monate"]
-        if not isinstance(value, (int, float)):
-            raise NutzlastValidierungsFehler(
-                "vorkenntnisse_monate muss eine Zahl sein",
-                details={"field": "verkuerzungsgruende.vorkenntnisse_monate"},
-            )
+        _coerce_float(
+            data["vorkenntnisse_monate"],
+            "verkuerzungsgruende.vorkenntnisse_monate",
+        )
 
     # beruf_q2_dauer_monate ist optional, muss aber eine Zahl sein, wenn vorhanden
     if "beruf_q2_dauer_monate" in data:
-        value = data["beruf_q2_dauer_monate"]
-        if not isinstance(value, (int, float)):
-            raise NutzlastValidierungsFehler(
-                "beruf_q2_dauer_monate muss eine Zahl sein",
-                details={"field": "verkuerzungsgruende.beruf_q2_dauer_monate"},
-            )
+        _coerce_float(
+            data["beruf_q2_dauer_monate"],
+            "verkuerzungsgruende.beruf_q2_dauer_monate",
+        )
 
     # berufliche_verkuerzung_monate kann vom Client als Vorkalkulation geliefert werden
     if "berufliche_verkuerzung_monate" in data:
-        value = data["berufliche_verkuerzung_monate"]
-        if not isinstance(value, (int, float)):
-            raise NutzlastValidierungsFehler(
-                "berufliche_verkuerzung_monate muss eine Zahl sein",
-                details={"field": "verkuerzungsgruende.berufliche_verkuerzung_monate"},
-            )
+        _coerce_float(
+            data["berufliche_verkuerzung_monate"],
+            "verkuerzungsgruende.berufliche_verkuerzung_monate",
+        )
 
 
 def _normalisiere_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]:
     # Berufserfahrung/Vorkenntnisse: Wenn > 0, wird auf festen 12-Monats-Wert abgebildet
-    vorkenntnisse = data.get("vorkenntnisse_monate", 0)
+    vorkenntnisse = _coerce_float(data.get("vorkenntnisse_monate", 0), "verkuerzungsgruende.vorkenntnisse_monate")
     vorkenntnisse_monate = 12 if vorkenntnisse and vorkenntnisse > 0 else 0
 
     # Normalisiere die neuen beruflichen Felder (bools und Zahlen)
     beruf_q1 = bool(data.get("beruf_q1", False))
     beruf_q2 = bool(data.get("beruf_q2", False))
-    beruf_q2_dauer = int(data.get("beruf_q2_dauer_monate", 0) or 0)
+    beruf_q2_dauer = _coerce_int(
+        data.get("beruf_q2_dauer_monate", 0) or 0,
+        "verkuerzungsgruende.beruf_q2_dauer_monate",
+    )
     beruf_q3 = bool(data.get("beruf_q3", False))
     beruf_q4 = bool(data.get("beruf_q4", False))
     beruf_q5 = bool(data.get("beruf_q5", False))
     beruf_q6 = bool(data.get("beruf_q6", False))
     wert = data.get("berufliche_verkuerzung_monate", 0) or 0
-    berufliche_verkuerzung_monate = int(wert)
+    berufliche_verkuerzung_monate = _coerce_int(
+        wert,
+        "verkuerzungsgruende.berufliche_verkuerzung_monate",
+    )
 
     return {
         "abitur": bool(data.get("abitur", False)),
@@ -320,3 +324,78 @@ def _normalisiere_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]
         "beruf_q6": beruf_q6,
         "berufliche_verkuerzung_monate": berufliche_verkuerzung_monate,
     }
+
+
+def _normalize_numeric_string(raw: str) -> str:
+    """Normalisiert Zahlenstrings für float/int.
+
+    - entfernt Spaces (inkl. NBSP)
+    - bei Komma: interpretiert Punkte als Tausendertrennzeichen ("1.234,5" -> "1234.5")
+    """
+
+    value = raw.strip().replace("\u00A0", "").replace(" ", "")
+    if "," in value:
+        value = value.replace(".", "")
+        value = value.replace(",", ".")
+    return value
+
+
+def _coerce_float(value: Any, field_name: str) -> float:
+    if isinstance(value, bool):
+        raise NutzlastValidierungsFehler(
+            f"{field_name} muss eine Zahl sein",
+            details={"field": field_name},
+        )
+    if isinstance(value, (int, float)):
+        return float(value)
+    if isinstance(value, str):
+        normalized = _normalize_numeric_string(value)
+        try:
+            return float(normalized)
+        except ValueError as exc:
+            raise NutzlastValidierungsFehler(
+                f"{field_name} muss eine Zahl sein",
+                details={"field": field_name},
+            ) from exc
+
+    raise NutzlastValidierungsFehler(
+        f"{field_name} muss eine Zahl sein",
+        details={"field": field_name},
+    )
+
+
+def _coerce_int(value: Any, field_name: str) -> int:
+    if isinstance(value, bool):
+        raise NutzlastValidierungsFehler(
+            f"{field_name} muss eine ganze Zahl sein",
+            details={"field": field_name},
+        )
+    if isinstance(value, int):
+        return value
+    if isinstance(value, float):
+        if value.is_integer():
+            return int(value)
+        raise NutzlastValidierungsFehler(
+            f"{field_name} muss eine ganze Zahl sein",
+            details={"field": field_name},
+        )
+    if isinstance(value, str):
+        normalized = _normalize_numeric_string(value)
+        try:
+            parsed = float(normalized)
+        except ValueError as exc:
+            raise NutzlastValidierungsFehler(
+                f"{field_name} muss eine ganze Zahl sein",
+                details={"field": field_name},
+            ) from exc
+        if parsed.is_integer():
+            return int(parsed)
+        raise NutzlastValidierungsFehler(
+            f"{field_name} muss eine ganze Zahl sein",
+            details={"field": field_name},
+        )
+
+    raise NutzlastValidierungsFehler(
+        f"{field_name} muss eine ganze Zahl sein",
+        details={"field": field_name},
+    )

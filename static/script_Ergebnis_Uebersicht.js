@@ -23,8 +23,25 @@ function aktuelleSprache() {
   return (window.I18N && window.I18N.lang) || "de";
 }
 
-// Locale-aware Zahl parser: ersetzt deutsches Komma durch Punkt für parseFloat
-const parseNumber = (value) => parseFloat(String(value).replace(',', '.'));
+// Locale-aware Zahl parser: akzeptiert deutsches Komma und (optional) Tausenderpunkte.
+// Beispiele:
+// - "1,5" -> 1.5
+// - "1.234,5" -> 1234.5
+const parseNumber = (value) => {
+  const raw = String(value ?? "").trim();
+  if (!raw) return NaN;
+
+  // Spaces entfernen (inkl. NBSP)
+  let normalized = raw.replace(/[\s\u00A0]/g, "");
+
+  // Wenn ein Komma vorkommt, behandeln wir Punkte als Tausendertrennzeichen
+  if (normalized.includes(",")) {
+    normalized = normalized.replace(/\./g, "");
+    normalized = normalized.replace(/,/g, ".");
+  }
+
+  return parseFloat(normalized);
+};
 
 
 // Zustand merken, damit wir bei Sprachwechsel neu rendern können
@@ -340,7 +357,8 @@ function validiereAlleEingaben() {
     if (!element) continue;
 
     const wert = element.value?.trim();
-    if (!wert || wert === "" || Number(wert) === 0 || isNaN(Number(wert))) {
+    const zahl = parseNumber(wert);
+    if (!wert || wert === "" || zahl === 0 || isNaN(zahl)) {
       element.classList.add("error");
       const errorId = "error" + feld.id.charAt(0).toUpperCase() + feld.id.slice(1);
       const errorElement = document.getElementById(errorId);
@@ -362,7 +380,8 @@ function validiereAlleEingaben() {
     const teilzeitProzent = teilzeitProzentElement.value?.trim();
     
     // Wenn Wochenstunden gesetzt sind UND beide Teilzeitfelder leer sind
-    if (wochenstunden && wochenstunden !== "" && Number(wochenstunden) > 0 && 
+    const wochenstundenZahl = parseNumber(wochenstunden);
+    if (wochenstunden && wochenstunden !== "" && wochenstundenZahl > 0 && 
         (!teilzeitStunden || teilzeitStunden === "") && (!teilzeitProzent || teilzeitProzent === "")) {
       
       // Fehler für Teilzeit-Stunden
@@ -386,7 +405,8 @@ function validiereAlleEingaben() {
   const alterElement = document.getElementById("alter");
   if (alterElement) {
     const alterWert = alterElement.value?.trim();
-    if (!alterWert || alterWert === "" || Number(alterWert) === 0 || isNaN(Number(alterWert))) {
+    const alterZahl = parseNumber(alterWert);
+    if (!alterWert || alterWert === "" || alterZahl === 0 || isNaN(alterZahl)) {
       alterElement.classList.add("error");
       const errorAlter = document.getElementById("errorAlter");
       if (errorAlter) {
@@ -438,7 +458,8 @@ function validiereAlleEingaben() {
   const berufQ2Duration = document.getElementById("vk_beruf_q2_dauer_months");
   if (berufQ2Ja && berufQ2Ja.checked && berufQ2Duration) {
     const dauer = berufQ2Duration.value?.trim();
-    if (!dauer || dauer === "" || Number(dauer) === 0 || isNaN(Number(dauer))) {
+    const dauerZahl = parseNumber(dauer);
+    if (!dauer || dauer === "" || dauerZahl === 0 || isNaN(dauerZahl)) {
       berufQ2Duration.classList.add("error");
       const errorElement = document.getElementById("errorBerufQ2Dauer");
       if (errorElement) {
