@@ -316,6 +316,7 @@
   <div class="container rechner-bereich" id="rechner-bereich">
     <div class="rechner-grid">
       <!-- ================================ EINGABEN DES RECHNERS ================================ -->
+      <div class="rechner-column eingaben-column" aria-labelledby="input-heading">
       <section class="card rechner-card" aria-labelledby="input-heading">
         <h1 id="input-heading" class="sr-only" data-i18n="inputs.heading">Eingaben</h1>
 
@@ -403,7 +404,10 @@
           </span>
         </div>
 
+      </section>
+
       <!-- ================================ VERKÜRZUNGSGRÜNDE AUSWÄHLEN ================================ -->
+      <section class="card rechner-card" aria-labelledby="vk-heading">
         <div class="vk-card-header">
           <h1 id="vk-heading" class="text-2xl font-bold mb-3" data-i18n="vk.heading">
             Gründe für eine kürzere Ausbildung
@@ -554,6 +558,8 @@
       </fieldset>
     </form>
   </section>
+
+  </div>
 
   <!-- Column 2: berufliche Qualifikationen + Bildungsweg -->
   <div class="rechner-column vk-column">
