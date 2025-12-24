@@ -1494,6 +1494,13 @@ function initialisiere() {
   $("#btn-share")?.addEventListener("click", teileLink);
   $("#btn-reset")?.addEventListener("click", setzeDatenZurueck);
 
+  // Ergebnisbereich standardmäßig ausblenden.
+  // Er wird erst nach Klick auf "Ergebnis anzeigen" sichtbar.
+  const ergebnisContainer = document.getElementById("ergebnis-container");
+  if (ergebnisContainer) {
+    ergebnisContainer.hidden = true;
+  }
+
   // Desktop-only Button-Layout (Reset neben Berechnen, Share unter Hinweise)
   initialisiereDesktopButtonLayout();
   
@@ -1611,32 +1618,16 @@ function initialisiere() {
     if (gespeicherterZustand && gespeicherterZustand.eingaben && gespeicherterZustand.berechnung) {
       // Formular wiederherstellen
       stelleFormularWiederHer(gespeicherterZustand);
-      
-      // Ergebnisse wiederherstellen
-      LETZTE_EINGABEN = gespeicherterZustand.eingaben;
-      LETZTE_BERECHNUNG = gespeicherterZustand.berechnung;
-      
-      // Ergebnis-Sektion anzeigen
-      const ergebnisContainer = document.getElementById("ergebnis-container");
-      if (ergebnisContainer) {
-        ergebnisContainer.hidden = false;
-      }
-      
-      // Rote Border zur Ergebnis-Box hinzufügen
-      const highlightBox = document.querySelector(".card.highlight");
-      if (highlightBox) {
-        highlightBox.classList.add("active");
-      }
-      
-      // Ergebnisse anzeigen
-      fuelleEingabenliste(gespeicherterZustand.eingaben, gespeicherterZustand.berechnung);
-      fuelleErgebnisse(gespeicherterZustand.eingaben, gespeicherterZustand.berechnung);
-      setzeDatumstempel();
+
+      // Ergebnisbereich NICHT automatisch anzeigen.
+      // Der Nutzer muss aktiv auf "Ergebnis anzeigen" klicken.
+      LETZTE_EINGABEN = null;
+      LETZTE_BERECHNUNG = null;
     } else {
       // Ergebnis-Sektion initial verstecken
       const ergebnisContainer = document.getElementById("ergebnis-container");
       if (ergebnisContainer) {
-        ergebnisContainer.hidden = false;
+        ergebnisContainer.hidden = true;
       }
     }
   }
