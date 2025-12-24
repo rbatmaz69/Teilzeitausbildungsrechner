@@ -31,6 +31,143 @@ const parseNumber = (value) => parseFloat(String(value).replace(',', '.'));
 let LETZTE_EINGABEN = null;
 let LETZTE_BERECHNUNG = null;
 
+// Desktop-only Button-Layout (ohne Mobile zu verändern)
+let DESKTOP_BUTTON_LAYOUT = null;
+
+function initialisiereDesktopButtonLayout() {
+  // Nutzt bestehenden Desktop-Breakpoint aus CSS (@media (width >= 900px))
+  const mq = window.matchMedia("(min-width: 900px)");
+
+  const actionbar = document.querySelector("nav.actionbar.rechner-bereich");
+  const btnReset = document.getElementById("btn-reset");
+  const btnShare = document.getElementById("btn-share");
+  const btnBerechnen = document.getElementById("berechnenBtn");
+  const vkActions = document.querySelector(".vk-actions");
+  const notesColumn = document.querySelector(".rechner-column.notes-column");
+
+  if (!actionbar || !btnReset || !btnShare || !btnBerechnen || !vkActions || !notesColumn) {
+    return;
+  }
+
+  // Initiale State/Platzhalter nur einmal anlegen
+  if (!DESKTOP_BUTTON_LAYOUT) {
+    const resetPlaceholder = document.createComment("placeholder:btn-reset");
+    const sharePlaceholder = document.createComment("placeholder:btn-share");
+    const berechnenPlaceholder = document.createComment("placeholder:berechnenBtn");
+
+    // Platzhalter an den Originalpositionen setzen
+    actionbar.insertBefore(resetPlaceholder, btnReset);
+    actionbar.insertBefore(sharePlaceholder, btnShare);
+    vkActions.insertBefore(berechnenPlaceholder, btnBerechnen);
+
+    DESKTOP_BUTTON_LAYOUT = {
+      mq,
+      actionbar,
+      vkActions,
+      notesColumn,
+      btnReset,
+      btnShare,
+      btnBerechnen,
+      resetPlaceholder,
+      sharePlaceholder,
+      berechnenPlaceholder,
+      actionsGroup: null,
+      shareMount: null,
+      listenerAttached: false
+    };
+  }
+
+  const applyLayout = (isDesktop) => {
+    const layout = DESKTOP_BUTTON_LAYOUT;
+    if (!layout) return;
+
+    if (isDesktop) {
+      // 1) Reset links neben Ergebnis anzeigen in derselben Spalte
+      if (!layout.actionsGroup) {
+        const group = document.createElement("div");
+        group.className = "button-group desktop-calc-actions";
+        layout.actionsGroup = group;
+      }
+
+      if (layout.actionsGroup.parentNode !== layout.vkActions) {
+        layout.vkActions.appendChild(layout.actionsGroup);
+      }
+
+      // Reihenfolge: Reset links, Berechnen rechts
+      if (layout.btnBerechnen.parentNode !== layout.actionsGroup) {
+        layout.actionsGroup.appendChild(layout.btnBerechnen);
+      }
+      if (layout.btnReset.parentNode !== layout.actionsGroup) {
+        layout.actionsGroup.insertBefore(layout.btnReset, layout.btnBerechnen);
+      } else {
+        layout.actionsGroup.insertBefore(layout.btnReset, layout.btnBerechnen);
+      }
+
+      // 2) Share in die Hinweise-Spalte, aber unterhalb der Hinweise-Card
+      const notesCard = layout.notesColumn.querySelector(":scope > .card");
+      if (notesCard) {
+        if (!layout.shareMount) {
+          const mount = document.createElement("div");
+          mount.className = "desktop-share-action";
+          layout.shareMount = mount;
+        }
+
+        // Direkt nach der Card einfügen
+        if (layout.shareMount.parentNode !== layout.notesColumn) {
+          layout.notesColumn.insertBefore(layout.shareMount, notesCard.nextSibling);
+        } else if (notesCard.nextSibling !== layout.shareMount) {
+          layout.notesColumn.insertBefore(layout.shareMount, notesCard.nextSibling);
+        }
+
+        if (layout.btnShare.parentNode !== layout.shareMount) {
+          layout.shareMount.appendChild(layout.btnShare);
+        }
+      }
+
+      // Actionbar auf Desktop ausblenden, damit sie nicht leer bleibt
+      layout.actionbar.dataset.desktopMoved = "true";
+    } else {
+      // Mobile: alles exakt zurück in den Originalzustand
+
+      // Berechnen wieder direkt in .vk-actions (ohne Desktop-Wrapper)
+      if (layout.berechnenPlaceholder.parentNode === layout.vkActions) {
+        layout.vkActions.insertBefore(layout.btnBerechnen, layout.berechnenPlaceholder.nextSibling);
+      }
+
+      if (layout.actionsGroup && layout.actionsGroup.parentNode) {
+        layout.actionsGroup.parentNode.removeChild(layout.actionsGroup);
+      }
+      layout.actionsGroup = null;
+
+      // Reset/Share zurück in die Actionbar
+      if (layout.resetPlaceholder.parentNode === layout.actionbar) {
+        layout.actionbar.insertBefore(layout.btnReset, layout.resetPlaceholder.nextSibling);
+      }
+      if (layout.sharePlaceholder.parentNode === layout.actionbar) {
+        layout.actionbar.insertBefore(layout.btnShare, layout.sharePlaceholder.nextSibling);
+      }
+
+      if (layout.shareMount && layout.shareMount.parentNode) {
+        layout.shareMount.parentNode.removeChild(layout.shareMount);
+      }
+      layout.shareMount = null;
+
+      delete layout.actionbar.dataset.desktopMoved;
+    }
+  };
+
+  // Initial anwenden
+  applyLayout(mq.matches);
+
+  // Listener nur einmal registrieren
+  if (!DESKTOP_BUTTON_LAYOUT.listenerAttached) {
+    DESKTOP_BUTTON_LAYOUT.listenerAttached = true;
+    mq.addEventListener("change", (event) => {
+      applyLayout(event.matches);
+    });
+  }
+}
+
 /**
  * Sammelt alle Verkürzungsgründe und gibt sie als Objekt zurück,
  * das direkt an das Backend geschickt werden kann.
@@ -1185,7 +1322,7 @@ function setzeDatenZurueck() {
   // Ergebnis-Sektion verstecken
   const ergebnisContainer = document.getElementById("ergebnis-container");
   if (ergebnisContainer) {
-    ergebnisContainer.hidden = false;
+    ergebnisContainer.hidden = true;
   }
   
   // Rote Border von Ergebnis-Box entfernen
@@ -1335,6 +1472,9 @@ function stelleFormularWiederHer(zustand) {
 function initialisiere() {
   $("#btn-share")?.addEventListener("click", teileLink);
   $("#btn-reset")?.addEventListener("click", setzeDatenZurueck);
+
+  // Desktop-only Button-Layout (Reset neben Berechnen, Share unter Hinweise)
+  initialisiereDesktopButtonLayout();
   
   // Clear validation errors when the user interacts with inputs or yes/no tiles
   const clearableInputs = ["dauer", "stunden", "alter", "vk_beruf_q2_dauer_months"];

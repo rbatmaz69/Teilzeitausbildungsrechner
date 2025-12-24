@@ -71,6 +71,11 @@ img, svg, video, canvas {
   height: auto;
 }
 
+/* Ensure the HTML 'hidden' attribute reliably hides elements */
+[hidden] {
+  display: none !important;
+}
+
 button, input, select {
   font: inherit;
 }
@@ -337,6 +342,18 @@ header h1 {
   touch-action: manipulation; /* Verbessert Touch-Responsiveness auf Mobile */
 }
 .actionbar .spacer{ flex: 1 1 auto; }
+
+@media (width >= 900px) {
+  /* Buttons werden im Desktop per JS ins Grid umgehängt */
+  .actionbar.rechner-bereich[data-desktop-moved="true"] {
+    display: none;
+  }
+
+  /* Ergebnis teilen: unterhalb der Hinweise-Card (außerhalb des Containers) */
+  .desktop-share-action {
+    margin-top: var(--space-3);
+  }
+}
 
 /* ==========================================
    INTERAKTIVE ELEMENTE
