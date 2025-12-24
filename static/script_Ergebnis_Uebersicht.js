@@ -11,6 +11,14 @@ function verberge(element) {
   if (element) element.hidden = true;
 }
 
+function setzeErgebnisBegleitUIVisible(visible) {
+  const notesContainer = document.getElementById("notes-container") || document.querySelector(".rechner-column.notes-column");
+  if (notesContainer) notesContainer.hidden = !visible;
+
+  const btnShare = document.getElementById("btn-share");
+  if (btnShare) btnShare.hidden = !visible;
+}
+
 // i18n Helfer (nutzt die globale API aus script_Sprache_Auswaehlen.js)
 function uebersetzung(schluessel, fallback) {
   if (window.I18N && typeof window.I18N.t === "function") {
@@ -1345,6 +1353,9 @@ function setzeDatenZurueck() {
   if (ergebnisContainer) {
     ergebnisContainer.hidden = true;
   }
+
+  // Hinweise/Share wieder ausblenden
+  setzeErgebnisBegleitUIVisible(false);
   
   // Rote Border von Ergebnis-Box entfernen
   const highlightBox = document.querySelector(".card.highlight");
@@ -1501,6 +1512,9 @@ function initialisiere() {
     ergebnisContainer.hidden = true;
   }
 
+  // Hinweise/Share standardmäßig ausblenden (erst sichtbar, wenn Ergebnis sichtbar ist)
+  setzeErgebnisBegleitUIVisible(false);
+
   // Desktop-only Button-Layout (Reset neben Berechnen, Share unter Hinweise)
   initialisiereDesktopButtonLayout();
   
@@ -1601,6 +1615,8 @@ function initialisiere() {
     if (ergebnisContainer) {
       ergebnisContainer.hidden = false;
     }
+
+    setzeErgebnisBegleitUIVisible(true);
     
     // Ergebnisse anzeigen
     fuelleEingabenliste(urlDaten.eingaben, urlDaten.berechnung);
@@ -1629,6 +1645,8 @@ function initialisiere() {
       if (ergebnisContainer) {
         ergebnisContainer.hidden = true;
       }
+
+      setzeErgebnisBegleitUIVisible(false);
     }
   }
 }
@@ -1683,6 +1701,7 @@ async function berechnen() {
   const ergebnisContainer = document.getElementById("ergebnis-container");
   if (ergebnisContainer) {
     ergebnisContainer.hidden = false;
+    setzeErgebnisBegleitUIVisible(true);
     // Sanftes Scrollen zur Ergebnis-Sektion
     ergebnisContainer.scrollIntoView({ behavior: "smooth", block: "start" });
   }
