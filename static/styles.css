@@ -1222,8 +1222,32 @@ input.error,
     max-width: calc(100vw - 2rem);
   }
 
+  /* Desktop: von Anfang an 2 Spalten.
+     Links stehen Eingaben + VK untereinander, rechts ist Platz für Ergebnis/Hinweise.
+     Ergebnis/Hinweise bleiben bis zum Klick per `hidden` unsichtbar. */
   .rechner-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .rechner-grid .eingaben-column {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .rechner-grid .vk-column {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .rechner-grid #ergebnis-container {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .rechner-grid #notes-container {
+    grid-column: 2;
+    grid-row: 2;
   }
 
   header h1 { font-size: 2.6rem; }
@@ -1255,10 +1279,6 @@ input.error,
   .container {
     max-width: 960px;
   }
-
-   .rechner-grid {
-     grid-template-columns: repeat(4, minmax(0, 1fr));
-   }
 
   .big-number { font-size: 2.6rem; }
 }
