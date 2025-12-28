@@ -407,157 +407,158 @@
       </section>
 
       <!-- ================================ VERKÜRZUNGSGRÜNDE AUSWÄHLEN ================================ -->
-      <section class="card rechner-card" aria-labelledby="vk-heading">
-        <div class="vk-card-header">
-          <h1 id="vk-heading" class="text-2xl font-bold mb-3" data-i18n="vk.heading">
-            Gründe für eine kürzere Ausbildung
-          </h1>
+      <form id="vk-form" class="space-y-3">
+        <fieldset id="vk-fieldset" class="radio-group">
+          <legend class="sr-only" data-i18n="vk.legend">Verkürzungsgründe</legend>
 
-          <div class="row vk-info-row">
-            <p id="vk-helper" data-i18n="vk.helper" class="muted-text d-none">
-              Wähle alles aus, was zu dir passt.
-            </p>
-            <!-- "Was ist das?" Button -->
-            <button id="vk-info-btn" class="vk-info-btn" type="button" aria-label="Informationen zu Verkürzungsgründen anzeigen" data-i18n="vk.infoBox.button" data-i18n-attr="aria-label:vk.infoBox.buttonAria">
-              <span class="vk-info-btn-icon" aria-hidden="true">ℹ</span>
-              <span data-i18n="vk.infoBox.button">Was ist das?</span>
-            </button>
-          </div>
-        </div>
+          <!-- ============================== -->
+          <!-- Überschrift + Info (ohne extra Card) -->
+          <!-- ============================== -->
+          <div class="vk-card-header" aria-labelledby="vk-heading">
+            <h1 id="vk-heading" class="text-2xl font-bold mb-3" data-i18n="vk.heading">
+              Gründe für eine kürzere Ausbildung
+            </h1>
 
-        <form id="vk-form" class="space-y-3">
-          <fieldset id="vk-fieldset" class="radio-group">
-            <legend class="sr-only" data-i18n="vk.legend">Verkürzungsgründe</legend>
-
-        <!-- ============================== -->
-        <!-- 1. SCHULABSCHLUSS              -->
-        <!-- ============================== -->
-        <div class="vk-category">
-          <h2 class="vk-category-title" data-i18n="vk.school.question">
-            Welchen höchsten Schulabschluss haben Sie erreicht?
-          </h2>
-
-          <div class="vk-category-body">
-            <label for="vk-school-select" class="sr-only" data-i18n="vk.school.label">
-              Schulabschluss
-            </label>
-
-            <select id="vk-school-select" name="vk-school-select" data-vk-type="school-select">
-              <option value="none" data-i18n="vk.school.none">Kein Abschluss</option>
-              <option value="hauptschule" data-i18n="vk.school.hauptschule">Hauptschule</option>
-              <option value="realschule" data-vk-set-fields="realschule" data-i18n="vk.school.realschule">Realschule</option>
-              <option value="abitur" data-vk-set-fields="abitur" data-i18n="vk.school.abitur">Abitur / Hochschulreife</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- ============================== -->
-        <!-- 2. Alter über 21 Jahre         -->
-        <!-- ============================== -->
-        <div class="vk-category">
-          <h2 class="vk-category-title" data-i18n="vk.other.question">
-            Wie alt sind Sie?
-          </h2>
-
-          <div class="vk-category-body">
-            <input type="number" id="alter" step="1" min="0" max="99">
-
-            <span class="error-message" id="errorAlter"></span>
-
-            <span id="desc-alter21" class="sr-only" data-i18n="vk.alter21.sr">
-              Wenn Sie über 21 Jahre alt sind, können Vorerfahrungen angerechnet werden.
-            </span>
-          </div>
-        </div>
-
-        <!-- ============================== -->
-        <!-- 3. FAMILIENVORSORGE            -->
-        <!-- ============================== -->
-        <div class="vk-category">
-          <h2 class="vk-category-title" data-i18n="vk.familie.title">
-            Familiäre Verpflichtungen
-          </h2>
-
-          <!-- Frage 1: Kinderbetreuung -->
-          <div>
-            <p class="vk-question" data-i18n="vk.familie.question_kinder">
-              Betreuen Sie ein eigenes Kind oder sind Sie für die Betreuung eines Kindes verantwortlich?
-            </p>
-            <div class="vk-yes-no-group" style="display: flex; flex-direction: row; gap: 0.5rem;">
-              <label class="tile">
-                <input
-                  type="checkbox"
-                  id="kinderbetreuung-ja"
-                  aria-describedby="desc-familie-kinder"
-                  data-vk-field="familien_kinderbetreuung"
-                >
-                <div class="tile-body" style="flex:1">
-                  <div class="tile-header">
-                    <span data-i18n="vk.familie.yes">Ja</span>
-                  </div>
-                </div>
-              </label>
-              <label class="tile">
-                <input
-                  type="checkbox"
-                  id="kinderbetreuung-nein"
-                  aria-describedby="desc-familie-kinder"
-                >
-                <div class="tile-body" style="flex:1">
-                  <div class="tile-header">
-                    <span data-i18n="vk.familie.no">Nein</span>
-                  </div>
-                </div>
-              </label>
+            <div class="row vk-info-row">
+              <p id="vk-helper" data-i18n="vk.helper" class="muted-text d-none">
+                Wähle alles aus, was zu dir passt.
+              </p>
+              <button id="vk-info-btn" class="vk-info-btn" type="button" aria-label="Informationen zu Verkürzungsgründen anzeigen" data-i18n="vk.infoBox.button" data-i18n-attr="aria-label:vk.infoBox.buttonAria">
+                <span class="vk-info-btn-icon" aria-hidden="true">ℹ</span>
+                <span data-i18n="vk.infoBox.button">Was ist das?</span>
+              </button>
             </div>
-            <span id="desc-familie-kinder" class="sr-only" data-i18n="vk.familie.sr">
-              Wenn Sie ein Kind betreuen müssen, ist eine Verkürzung möglich.
-            </span>
           </div>
 
-          <!-- Frage 2: Pflege von Angehörigen -->
-          <div>
-            <p class="vk-question" data-i18n="vk.familie.question_pflege">
-              Pflegen Sie einen Angehörigen oder sind Sie regelmäßig an der Pflege beteiligt?
-            </p>
-            <div class="vk-yes-no-group" style="display: flex; flex-direction: row; gap: 0.5rem;">
-              <label class="tile">
-                <input
-                  type="checkbox"
-                  id="pflege-ja"
-                  aria-describedby="desc-familie-pflege"
-                  data-vk-field="familien_pflegeverantwortung"
-                >
-                <div class="tile-body" style="flex:1">
-                  <div class="tile-header">
-                    <span data-i18n="vk.familie.yes">Ja</span>
-                  </div>
-                </div>
+          <!-- ============================== -->
+          <!-- 1. SCHULABSCHLUSS              -->
+          <!-- ============================== -->
+          <section class="card rechner-card" aria-labelledby="vk-school-heading">
+            <h2 id="vk-school-heading" class="vk-category-title" data-i18n="vk.school.question">
+              Welchen höchsten Schulabschluss haben Sie erreicht?
+            </h2>
+
+            <div class="vk-category-body vk-stack">
+              <label for="vk-school-select" class="sr-only" data-i18n="vk.school.label">
+                Schulabschluss
               </label>
-              <label class="tile">
-                <input
-                  type="checkbox"
-                  id="pflege-nein"
-                  aria-describedby="desc-familie-pflege"
-                >
-                <div class="tile-body" style="flex:1">
-                  <div class="tile-header">
-                    <span data-i18n="vk.familie.no">Nein</span>
-                  </div>
-                </div>
-              </label>
+
+              <select id="vk-school-select" name="vk-school-select" data-vk-type="school-select">
+                <option value="none" data-i18n="vk.school.none">Kein Abschluss</option>
+                <option value="hauptschule" data-i18n="vk.school.hauptschule">Hauptschule</option>
+                <option value="realschule" data-vk-set-fields="realschule" data-i18n="vk.school.realschule">Realschule</option>
+                <option value="abitur" data-vk-set-fields="abitur" data-i18n="vk.school.abitur">Abitur / Hochschulreife</option>
+              </select>
             </div>
-            <span id="desc-familie-pflege" class="sr-only" data-i18n="vk.familie.sr">
-              Wenn Sie einen Angehörigen pflegen müssen, ist eine Verkürzung möglich.
-            </span>
-          </div>
-        </div>
-        
-        <!-- calculate button moved to second column -->
+          </section>
 
-      </fieldset>
-    </form>
-  </section>
+          <!-- ============================== -->
+          <!-- 2. Alter über 21 Jahre         -->
+          <!-- ============================== -->
+          <section class="card rechner-card" aria-labelledby="vk-alter-heading">
+            <h2 id="vk-alter-heading" class="vk-category-title" data-i18n="vk.other.question">
+              Wie alt sind Sie?
+            </h2>
+
+            <div class="vk-category-body vk-stack">
+              <input type="number" id="alter" step="1" min="0" max="99">
+
+              <span class="error-message" id="errorAlter"></span>
+
+              <span id="desc-alter21" class="sr-only" data-i18n="vk.alter21.sr">
+                Wenn Sie über 21 Jahre alt sind, können Vorerfahrungen angerechnet werden.
+              </span>
+            </div>
+          </section>
+
+          <!-- ============================== -->
+          <!-- 3. FAMILIENVORSORGE            -->
+          <!-- ============================== -->
+          <section class="card rechner-card" aria-labelledby="vk-familie-heading">
+            <h2 id="vk-familie-heading" class="vk-category-title" data-i18n="vk.familie.title">
+              Familiäre Verpflichtungen
+            </h2>
+
+            <div class="vk-category-body vk-stack">
+              <!-- Frage 1: Kinderbetreuung -->
+              <div>
+                <p class="vk-question" data-i18n="vk.familie.question_kinder">
+                  Betreuen Sie ein eigenes Kind oder sind Sie für die Betreuung eines Kindes verantwortlich?
+                </p>
+                <div class="vk-yes-no-group" style="display: flex; flex-direction: row; gap: 0.5rem;">
+                  <label class="tile">
+                    <input
+                      type="checkbox"
+                      id="kinderbetreuung-ja"
+                      aria-describedby="desc-familie-kinder"
+                      data-vk-field="familien_kinderbetreuung"
+                    >
+                    <div class="tile-body" style="flex:1">
+                      <div class="tile-header">
+                        <span data-i18n="vk.familie.yes">Ja</span>
+                      </div>
+                    </div>
+                  </label>
+                  <label class="tile">
+                    <input
+                      type="checkbox"
+                      id="kinderbetreuung-nein"
+                      aria-describedby="desc-familie-kinder"
+                    >
+                    <div class="tile-body" style="flex:1">
+                      <div class="tile-header">
+                        <span data-i18n="vk.familie.no">Nein</span>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+                <span id="desc-familie-kinder" class="sr-only" data-i18n="vk.familie.sr">
+                  Wenn Sie ein Kind betreuen müssen, ist eine Verkürzung möglich.
+                </span>
+              </div>
+
+              <!-- Frage 2: Pflege von Angehörigen -->
+              <div>
+                <p class="vk-question" data-i18n="vk.familie.question_pflege">
+                  Pflegen Sie einen Angehörigen oder sind Sie regelmäßig an der Pflege beteiligt?
+                </p>
+                <div class="vk-yes-no-group" style="display: flex; flex-direction: row; gap: 0.5rem;">
+                  <label class="tile">
+                    <input
+                      type="checkbox"
+                      id="pflege-ja"
+                      aria-describedby="desc-familie-pflege"
+                      data-vk-field="familien_pflegeverantwortung"
+                    >
+                    <div class="tile-body" style="flex:1">
+                      <div class="tile-header">
+                        <span data-i18n="vk.familie.yes">Ja</span>
+                      </div>
+                    </div>
+                  </label>
+                  <label class="tile">
+                    <input
+                      type="checkbox"
+                      id="pflege-nein"
+                      aria-describedby="desc-familie-pflege"
+                    >
+                    <div class="tile-body" style="flex:1">
+                      <div class="tile-header">
+                        <span data-i18n="vk.familie.no">Nein</span>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+                <span id="desc-familie-pflege" class="sr-only" data-i18n="vk.familie.sr">
+                  Wenn Sie einen Angehörigen pflegen müssen, ist eine Verkürzung möglich.
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- calculate button moved to second column -->
+        </fieldset>
+      </form>
 
   </div>
 

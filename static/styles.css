@@ -272,6 +272,12 @@ header h1 {
   box-shadow: var(--shadow);
 }
 
+/* In der rechten VK-Spalte wird der Abstand über das Column-Gap gesteuert.
+   Dadurch sind „Berufliche Qualifikationen“ und „Bildungsweg“ gleich weit auseinander wie die anderen Boxen. */
+.vk-column .vk-category {
+  margin-bottom: 0;
+}
+
 .vk-category-title {
   font-size: 1rem;
   font-weight: 700;
@@ -289,6 +295,13 @@ header h1 {
   border: none;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+#vk-form {
+  margin: 0;
 }
 
 #vk-school-select {
@@ -314,6 +327,11 @@ header h1 {
 @media (width >= 600px) {
   .vk-category-body {
     flex-direction: row;
+  }
+
+  /* Für Bereiche, die auch auf Desktop untereinander bleiben sollen (z.B. Alter, Familie, Schulabschluss). */
+  .vk-category-body.vk-stack {
+    flex-direction: column;
   }
 
   .vk-category .tile {
@@ -1228,6 +1246,10 @@ input.error,
   .rechner-grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: start;
+    /* Vertikale Abstände zwischen den beiden Zeilen (z.B. Familie → Beruf) wie bei den Cards.
+       Horizontal darf es gerne etwas luftiger bleiben. */
+    row-gap: var(--space-3);
+    column-gap: clamp(1rem, 2vw, 1.75rem);
   }
 
   .rechner-grid .eingaben-column {
