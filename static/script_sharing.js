@@ -112,7 +112,9 @@ async function generierePDF() {
 
   // Button deaktivieren und Ladezustand anzeigen
   button.disabled = true;
-  button.innerHTML = `<svg class="sharing-btn-icon spinner" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg> <span>${uebersetzung("sharing.generating", "Erstelle PDF...")}</span>`;
+  button.setAttribute("aria-busy", "true");
+  button.setAttribute("aria-disabled", "true");
+  button.innerHTML = `<svg class="sharing-btn-icon spinner" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg> <span>${uebersetzung("sharing.generating", "Erstelle PDF...")}</span>`;
 
   try {
     // Sammle alle relevanten Ergebnis-Elemente
@@ -364,17 +366,21 @@ async function generierePDF() {
     pdf.save(fileName);
 
     // Erfolgs-Feedback
-    button.innerHTML = `<svg class="sharing-btn-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>${uebersetzung("sharing.downloaded", "PDF heruntergeladen")}</span>`;
+    button.innerHTML = `<svg class="sharing-btn-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>${uebersetzung("sharing.downloaded", "PDF heruntergeladen")}</span>`;
 
     setTimeout(() => {
       button.innerHTML = originalText;
       button.disabled = originalDisabled;
+      button.removeAttribute("aria-busy");
+      button.removeAttribute("aria-disabled");
     }, 2000);
   } catch (error) {
     console.error("PDF-Generierung fehlgeschlagen:", error);
     alert(uebersetzung("sharing.error.generation", "Fehler beim Erstellen der PDF-Datei"));
     button.innerHTML = originalText;
     button.disabled = originalDisabled;
+    button.removeAttribute("aria-busy");
+    button.removeAttribute("aria-disabled");
   }
 }
 
@@ -478,6 +484,7 @@ async function kopiereLinkZwischenablage() {
   const originalText = button.innerHTML;
 
   try {
+    button.setAttribute("aria-busy", "true");
     const shareLink = generiereShareLink();
 
     // Nutze Clipboard API
@@ -497,15 +504,17 @@ async function kopiereLinkZwischenablage() {
   } catch (error) {
     console.error("Fehler beim Kopieren:", error);
     alert(uebersetzung("sharing.error.copy", "Link konnte nicht kopiert werden"));
+    button.removeAttribute("aria-busy");
   }
 
   function zeigeFeedback() {
     feedback.hidden = false;
-    button.innerHTML = `<svg class="sharing-btn-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>${uebersetzung("sharing.copied", "Kopiert!")}</span>`;
+    button.innerHTML = `<svg class="sharing-btn-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>${uebersetzung("sharing.copied", "Kopiert!")}</span>`;
 
     setTimeout(() => {
       button.innerHTML = originalText;
       feedback.hidden = true;
+      button.removeAttribute("aria-busy");
     }, 2000);
   }
 }
