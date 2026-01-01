@@ -706,9 +706,9 @@ select:disabled {
    FOKUS-STYLE STEUERUNG (Keyboard vs. Maus/Touch)
    ========================================== */
 
-/* Entfernt den Standard-Fokusrahmen bei Maus/Touch (normales :focus) */
-*:focus {
-  outline: none !important;
+/* Entfernt Standard-Fokus nur bei Maus/Touch, behält ihn für Tastatur bei focus-visible */
+*:focus:not(:focus-visible) {
+  outline: none;
 }
 
 /* Zeige Fokus nur bei Tastatur-Navigation (focus-visible) */
