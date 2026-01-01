@@ -1702,8 +1702,10 @@ async function berechnen() {
   if (ergebnisContainer) {
     ergebnisContainer.hidden = false;
     setzeErgebnisBegleitUIVisible(true);
-    // Sanftes Scrollen zur Ergebnis-Sektion
-    ergebnisContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Sanftes Scrollen zur Ergebnis-Sektion (außer bei geteilten Links)
+    if (!window.__skipScrollToResults) {
+      ergebnisContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   }
   
   // Rote Border zur Ergebnis-Box hinzufügen
