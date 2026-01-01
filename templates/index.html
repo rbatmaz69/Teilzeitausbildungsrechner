@@ -14,6 +14,7 @@
   <script src="../static/script_Verkuerzungsgruende_Auswaehlen.js" defer></script>
   <script src="../static/script_Ergebnis_Uebersicht.js" defer></script>
   <script src="../static/script_Sprache_Auswaehlen.js" defer></script>
+  <script src="../static/script_sharing.js" defer></script>
 </head>
 <body>
 
@@ -756,23 +757,59 @@
             </span>
           </summary>
 
-          <dl class="kv" id="inputs-list">
-            <!-- Inhalte per JS -->
-          </dl>
-          <span id="stamp-date" class="inputs-stamp"></span>
-        </details>
+      <dl class="kv" id="inputs-list">
+        <!-- Inhalte per JS -->
+      </dl>
+      <span id="stamp-date" class="inputs-stamp"></span>
+    </details>
+ 
 
-        <div class="rechner-column notes-column" id="notes-container" hidden>
-          <div class="card" aria-labelledby="notes-title">
-            <h2 id="notes-title" data-i18n="res.notesTitle">Wichtige Hinweise</h2>
-            <ul class="notes" data-i18n="res.notes" data-i18n-html="true">
-              <li>Die Berechnung ist eine reine <strong>Orientierungshilfe</strong>.</li>
-              <li>Es besteht kein gesetzlicher Anspruch auf die dargestellte Auswertung</li>
-              <li>Die finale Vereinbarung erfolgt mit ihrem Ausbildungsbetrieb.</li>
-              <li>Für eine anerkannte Teilzeitausbildung muss die Ausbildungszeit mindestens 50 % der regulären Ausbildungszeit betragen</li>
-            </ul>
-          </div>
-        </div>
+
+    <!-- Sharing-Menü für PDF und Link-Sharing -->
+    <div class="card sharing-menu" id="sharing-menu" aria-labelledby="sharing-menu-title">
+      <h2 id="sharing-menu-title" class="sharing-menu-title" data-i18n="sharing.title">Ergebnis teilen</h2>
+      <p class="sharing-menu-description" data-i18n="sharing.description">Wählen Sie, wie Sie Ihre Berechnung weiterleiten möchten:</p>
+      
+      <div class="sharing-buttons">
+        <!-- PDF-Download Button -->
+        <button id="btn-download-pdf" class="btn primary sharing-btn" type="button" aria-describedby="pdf-desc">
+          <svg class="sharing-btn-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="12" y1="11" x2="12" y2="17"></line>
+            <polyline points="9 14 12 11 15 14"></polyline>
+          </svg>
+          <span data-i18n="sharing.downloadPdf">Als PDF herunterladen</span>
+        </button>
+        <span id="pdf-desc" class="sr-only" data-i18n="sharing.downloadPdfDesc">Erstellt ein PDF mit allen Eingaben und Ergebnissen</span>
+        
+        <!-- Link-Sharing Button -->
+        <button id="btn-copy-link" class="btn outline sharing-btn" type="button" aria-describedby="link-desc">
+          <svg class="sharing-btn-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+          </svg>
+          <span data-i18n="sharing.copyLink">Link kopieren</span>
+        </button>
+        <span id="link-desc" class="sr-only" data-i18n="sharing.copyLinkDesc">Kopiert einen Link mit allen Eingaben in die Zwischenablage</span>
+      </div>
+
+      <!-- Bestätigungsmeldung für Link-Kopieren -->
+      <div id="copy-feedback" class="sharing-feedback" role="status" aria-live="polite" hidden>
+        <span data-i18n="sharing.copiedSuccess">Link wurde kopiert!</span>
+      </div>
+    </div>
+
+    <!-- Karte: Hinweise -->
+    <div class="rechner-column notes-column" id="notes-container" hidden>
+      <div class="card" aria-labelledby="notes-title">
+        <h2 id="notes-title" data-i18n="res.notesTitle">Wichtige Hinweise</h2>
+        <ul class="notes" data-i18n="res.notes" data-i18n-html="true">
+          <li>Die Berechnung ist eine reine <strong>Orientierungshilfe</strong>.</li>
+          <li>Es besteht kein gesetzlicher Anspruch auf die dargestellte Auswertung</li>
+          <li>Die finale Vereinbarung erfolgt mit ihrem Ausbildungsbetrieb.</li>
+          <li>Für eine anerkannte Teilzeitausbildung muss die Ausbildungszeit mindestens 50 % der regulären Ausbildungszeit betragen</li>
+        </ul>
       </div>
     </div>
 
@@ -803,9 +840,6 @@
             data-i18n="btn.reset"
             data-i18n-attr="aria-label:btn.reset">
       Zurücksetzen
-    </button>
-    <button class="btn outline" id="btn-share" type="button" data-i18n="btn.share" hidden>
-      Link teilen
     </button>
   </nav>
 
