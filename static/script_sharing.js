@@ -191,14 +191,21 @@ async function generierePDF() {
       el.style.marginBottom = el.style.marginBottom || "0.25rem";
     });
 
-    // Grüne Badges in der PDF zentrieren (nur PDF, nicht im Rechner)
+    // Badge-Text minimal nach oben verschieben (nur PDF, beeinflusst das Original-DOM nicht)
     ergebnisCopy.querySelectorAll(".result-extension-delta").forEach(badge => {
-      badge.style.display = "inline-flex";
-      badge.style.alignItems = "center";
-      badge.style.justifyContent = "center";
-      badge.style.top = "50%";
-      badge.style.transform = "translate(-50%, -50%)";
-      badge.style.lineHeight = "1";
+      badge.style.setProperty("transform", "translate(-50%, 6px)", "important");
+      let textSpan = badge.querySelector("span.__pdf-badge-text") || badge.querySelector("span");
+      if (!textSpan) {
+        const span = document.createElement("span");
+        span.textContent = badge.textContent;
+        badge.textContent = "";
+        badge.appendChild(span);
+        textSpan = span;
+      }
+      textSpan.classList.add("__pdf-badge-text");
+      textSpan.style.setProperty("display", "inline-block", "important");
+      textSpan.style.setProperty("transform", "translateY(-6px)", "important");
+      textSpan.style.setProperty("lineHeight", "1", "important");
     });
 
     // Pfeil und Rahmen in der PDF auf gleiche Höhe wie im Rechner
@@ -210,6 +217,7 @@ async function generierePDF() {
     ergebnisCopy.querySelectorAll(".result-extension-arrow").forEach(arrow => {
       arrow.style.setProperty("font-size", "2.5rem", "important"); // etwas kleiner für PDF-Fit
       arrow.style.setProperty("line-height", "1", "important");
+      arrow.style.setProperty("transform", "translateY(-6px)", "important");
     });
 
     // Leere Absätze/Listelemente entfernen

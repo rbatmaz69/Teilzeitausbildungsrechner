@@ -969,13 +969,16 @@ input.error,
   font-weight: 600;
   color: #fff;
   background: #10b981;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translateX(-50%);
-  padding: 0.25rem 0.5rem;
+  transform: translate(-50%, 1px); /* leicht nach unten, wie im Rechner */
+  padding: 0.22rem 0.55rem 0.26rem 0.55rem; /* etwas mehr unten als oben */
   border-radius: 4px;
-  line-height: 1.2;
+  line-height: 1;
   white-space: nowrap;
 }
 
