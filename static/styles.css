@@ -28,6 +28,7 @@
   --space-4: 1.25rem;
   --space-5: 1.75rem;
   --space-6: 2rem;
+  --gutter: 1rem;
 }
 
 /* ==========================================
@@ -98,6 +99,8 @@ p.helper {
   width: 100%;
   margin: 0 auto;
   padding: 1rem;
+  padding-left: max(var(--gutter), env(safe-area-inset-left));
+  padding-right: max(var(--gutter), env(safe-area-inset-right));
   max-width: 480px;
   box-sizing: border-box; /* Padding wird in Breite eingerechnet */
   overflow-x: hidden; /* Verhindert horizontales Scrollen innerhalb des Containers */
