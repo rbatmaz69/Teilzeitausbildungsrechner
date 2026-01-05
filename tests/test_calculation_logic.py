@@ -117,17 +117,17 @@ def test_verkuerzung_realschule():
     
     Erwartung: 6 Monate Verkürzung gemäß § 8 BBiG.
     36 - 6 = 30 Monate, dann 30 / 0.75 = 40 Monate.
-    Sonderregel § 8 Abs. 3 BBiG greift: 40 - 36 = 4 Monate ≤ 6 Monate,
-    daher wird die Dauer auf 36 Monate (Basis) gesetzt.
+    Sonderregel § 8 Abs. 3 BBiG greift NICHT, weil bereits Verkürzungsgründe
+    angewendet wurden.
     """
     result = berechne_gesamtdauer(**MIT_REALSCHULE)
     
-    # Sonderregel § 8 Abs. 3 greift: 40 - 36 = 4 Monate ≤ 6 Monate
-    assert result["finale_dauer_monate"] == 36
+    assert result["finale_dauer_monate"] == 40
     assert result["verkuerzung_gesamt_monate"] == 6
     assert result["verkuerzte_dauer_monate"] == 30
-    # Nach Schritt 1: 30 / 0.75 = 40, aber Sonderregel setzt auf 36
+    # Nach Schritt 1: 30 / 0.75 = 40
     assert result["nach_schritt1_monate"] == 40.0
+    assert result["regel_8_abs_3_angewendet"] is False
 
 
 def test_verkuerzung_alter_21():
@@ -424,15 +424,17 @@ def test_beruf_q2_duration_boundaries():
         data["verkuerzungsgruende"] = {"beruf_q2": True, "beruf_q2_dauer_monate": 6}
         res = berechne_gesamtdauer(**data)
         assert res["verkuerzung_gesamt_monate"] == 6
-        # 36 - 6 = 30 -> 30/0.75 = 40 -> Sonderregel (<=6) -> 36
-        assert res["finale_dauer_monate"] == 36
+        # 36 - 6 = 30 -> 30/0.75 = 40; Sonderregel §8 Abs.3 greift NICHT bei Verkürzung
+        assert res["finale_dauer_monate"] == 40
+        assert res["regel_8_abs_3_angewendet"] is False
 
         # 11 Monate -> 6
         data = base.copy()
         data["verkuerzungsgruende"] = {"beruf_q2": True, "beruf_q2_dauer_monate": 11}
         res = berechne_gesamtdauer(**data)
         assert res["verkuerzung_gesamt_monate"] == 6
-        assert res["finale_dauer_monate"] == 36
+        assert res["finale_dauer_monate"] == 40
+        assert res["regel_8_abs_3_angewendet"] is False
 
         # 12 Monate -> 12
         data = base.copy()

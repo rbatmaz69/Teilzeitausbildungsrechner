@@ -20,7 +20,7 @@
   <!-- Sprachleiste wird in die Startseite verlagert -->
 
   <!-- ================================ STARTSEITE ================================ -->
-  <div class="container">
+  <div class="container startseite-container">
     <section id="startseite" class="startseite">
       <!-- Mobile Version (default) -->
       <div class="startseite-mobile">
@@ -314,375 +314,467 @@
   </div>
 
   <div class="container rechner-bereich" id="rechner-bereich">
-    <!-- ================================ EINGABEN DES RECHNERS ================================ -->
+    <div class="rechner-grid">
+      <!-- ================================ EINGABEN DES RECHNERS ================================ -->
+      <div class="rechner-column eingaben-column" aria-labelledby="input-heading">
+      <section class="card rechner-card" aria-labelledby="input-heading">
+        <h1 id="input-heading" class="sr-only" data-i18n="inputs.heading">Eingaben</h1>
 
-    <!-- Eingabe reguläre Ausbildungsdauer -->
-    <section class="card" aria-labelledby="input-heading">
-      <h1 id="input-heading" class="sr-only" data-i18n="inputs.heading">Eingaben</h1>
-
-      <div class="input-group">
-        <label id="label-dauer">
-          <span data-i18n="inputs.dauer.label">Reguläre Ausbildungsdauer (Monate)</span>
-          <span class="info-icon"
-                data-tooltip="Die normale Dauer Ihrer Ausbildung bei Vollzeit"
-                data-i18n-attr="data-tooltip:inputs.dauer.tooltip"
-                aria-hidden="true">i</span>
-        </label>
-        <div class="input-with-unit">
-          <input type="text" inputmode="numeric" autocomplete="off" id="dauer" placeholder="z.B. 36" data-i18n-attr="placeholder:inputs.placeholders.dauer" step="1" required aria-labelledby="label-dauer" aria-describedby="hint-dauer">
-          <span class="unit" data-i18n="units.months.full">Monate</span>
-        </div>
-        <span class="error-message" id="errorDauer"></span>
-        <!-- Unsichtbarer Hilfetext spiegelt das Tooltip (für SR) -->
-        <span id="hint-dauer" class="sr-only">
-          Die normale Dauer Ihrer Ausbildung bei Vollzeit.
-        </span>
-      </div>
-
-      <!-- Eingabe reguläre Wochenstunden -->
-      <div class="input-group">
-        <label id="label-stunden">
-          <span data-i18n="inputs.stunden.label">Reguläre Wochenstunden (gesamt)</span>
-          <span class="info-icon"
-                data-tooltip="Ihre gesamten Wochenstunden inkl. Berufsschule"
-                data-i18n-attr="data-tooltip:inputs.stunden.tooltip"
-                aria-hidden="true">i</span>
-        </label>
-        <div class="input-with-unit">
-          <input type="text" inputmode="decimal" autocomplete="off" id="stunden" placeholder="z.B. 40" data-i18n-attr="placeholder:inputs.placeholders.stunden" step="1" required aria-labelledby="label-stunden" aria-describedby="hint-stunden">
-          <span class="unit" data-i18n="units.hours.full">Stunden</span>
-        </div>
-        <span class="error-message" id="errorStunden"></span>
-        <span id="hint-stunden" class="sr-only">Ihre gesamten Wochenstunden inkl. Berufssschule.</span>
-      </div>
-
-      <!-- Eingabe Teilzeitanteil -->
-      <div class="input-group">
-        <label id="label-teilzeit">
-          <span data-i18n="inputs.teilzeit.label">Wie viele Stunden pro Woche möchten Sie während der Ausbildung arbeiten?</span>
-          <span class="info-icon"
-                data-tooltip="Mindestens 50% für eine anerkannte Teilzeitausbildung"
-                data-i18n-attr="data-tooltip:inputs.teilzeit.tooltip"
-                aria-hidden="true">i</span>
-        </label>
-
-        <!-- Stundenanteil (primär) -->
         <div class="input-group">
+          <label id="label-dauer">
+            <span data-i18n="inputs.dauer.label">Reguläre Ausbildungsdauer (Monate)</span>
+            <span class="info-icon"
+                  data-tooltip="Die normale Dauer Ihrer Ausbildung bei Vollzeit"
+                  data-i18n-attr="data-tooltip:inputs.dauer.tooltip"
+                  aria-hidden="true">i</span>
+          </label>
           <div class="input-with-unit">
-            <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitStunden" placeholder="z.B. 30" data-i18n-attr="placeholder:inputs.placeholders.teilzeitStunden" step="1" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
+            <input type="text" inputmode="numeric" autocomplete="off" id="dauer" placeholder="z.B. 36" data-i18n-attr="placeholder:inputs.placeholders.dauer" step="1" required aria-labelledby="label-dauer" aria-describedby="hint-dauer">
+            <span class="unit" data-i18n="units.months.full">Monate</span>
+          </div>
+          <span class="error-message" id="errorDauer"></span>
+          <!-- Unsichtbarer Hilfetext spiegelt das Tooltip (für SR) -->
+          <span id="hint-dauer" class="sr-only">
+            Die normale Dauer Ihrer Ausbildung bei Vollzeit.
+          </span>
+        </div>
+
+        <!-- Eingabe reguläre Wochenstunden -->
+        <div class="input-group">
+          <label id="label-stunden">
+            <span data-i18n="inputs.stunden.label">Reguläre Wochenstunden (gesamt)</span>
+            <span class="info-icon"
+                  data-tooltip="Ihre gesamten Wochenstunden inkl. Berufsschule"
+                  data-i18n-attr="data-tooltip:inputs.stunden.tooltip"
+                  aria-hidden="true">i</span>
+          </label>
+          <div class="input-with-unit">
+            <input type="text" inputmode="decimal" autocomplete="off" id="stunden" placeholder="z.B. 40" data-i18n-attr="placeholder:inputs.placeholders.stunden" step="1" required aria-labelledby="label-stunden" aria-describedby="hint-stunden">
             <span class="unit" data-i18n="units.hours.full">Stunden</span>
           </div>
-          <span class="error-message" id="errorTeilStunden"></span>
-          <div class="button-container">
-            <div class="button-row">
-              <button class="preset" data-type="hours" data-value="24" data-i18n="inputs.teilzeit.button24h"></button>
-              <button class="preset" data-type="hours" data-value="32" data-i18n="inputs.teilzeit.button32h"></button>
-            </div>
-          </div>
+          <span class="error-message" id="errorStunden"></span>
+          <span id="hint-stunden" class="sr-only">Ihre gesamten Wochenstunden inkl. Berufssschule.</span>
         </div>
 
-        <!-- Trenner -->
-        <div class="input-separator" data-i18n="inputs.teilzeit.separator">oder</div>
-
-        <!-- Prozentanteil -->
+        <!-- Eingabe Teilzeitanteil -->
         <div class="input-group">
-          <div class="input-with-unit">
-            <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitProzent" placeholder="z.B. 75" data-i18n-attr="placeholder:inputs.placeholders.teilzeitProzent" step="5" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
-            <span class="unit" data-i18n="units.percent">Prozent</span>
-          </div>
-          <span class="error-message" id="errorProzent"></span>
-          <div class="button-container">
-            <div class="button-row">
-              <button class="preset" data-type="percent" data-value="50">50%</button>
-              <button class="preset" data-type="percent" data-value="75">75%</button>
+          <label id="label-teilzeit">
+            <span data-i18n="inputs.teilzeit.label">Wie viele Stunden pro Woche möchten Sie während der Ausbildung arbeiten?</span>
+            <span class="info-icon"
+                  data-tooltip="Mindestens 50% für eine anerkannte Teilzeitausbildung"
+                  data-i18n-attr="data-tooltip:inputs.teilzeit.tooltip"
+                  aria-hidden="true">i</span>
+          </label>
+
+          <!-- Stundenanteil (primär) -->
+          <div class="input-group">
+            <div class="input-with-unit">
+              <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitStunden" placeholder="z.B. 30" data-i18n-attr="placeholder:inputs.placeholders.teilzeitStunden" step="1" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
+              <span class="unit" data-i18n="units.hours.full">Stunden</span>
+            </div>
+            <span class="error-message" id="errorTeilStunden"></span>
+            <div class="button-container">
+              <div class="button-row">
+                <button class="preset" data-type="hours" data-value="24" data-i18n="inputs.teilzeit.button24h"></button>
+                <button class="preset" data-type="hours" data-value="32" data-i18n="inputs.teilzeit.button32h"></button>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- SR-Hinweis für beide Felder aus dem Info-Icon oben -->
-        <span id="hint-teilzeit" class="sr-only">
-          Mindestens 50&nbsp;% für eine anerkannte Teilzeitausbildung.
-        </span>
-      </div>
-    </section>
-  </div>
-  
-  <!-- ================================ VERKÜRZUNGSGRÜNDE AUSWÄHLEN ================================ -->
-  <div class="container rechner-bereich">
-    <h1 id="vk-heading" class="text-2xl font-bold mb-3" data-i18n="vk.heading">
-      Gründe für eine kürzere Ausbildung
-    </h1>
 
-    <div class="row vk-info-row">
-      <p id="vk-helper" data-i18n="vk.helper" class="muted-text d-none">
-        Wähle alles aus, was zu dir passt.
-      </p>
-      <!-- "Was ist das?" Button -->
-      <button id="vk-info-btn" class="vk-info-btn" type="button" aria-label="Informationen zu Verkürzungsgründen anzeigen" data-i18n="vk.infoBox.button" data-i18n-attr="aria-label:vk.infoBox.buttonAria">
-        <span class="vk-info-btn-icon" aria-hidden="true">ℹ</span>
-        <span data-i18n="vk.infoBox.button">Was ist das?</span>
-      </button>
+          <!-- Trenner -->
+          <div class="input-separator" data-i18n="inputs.teilzeit.separator">oder</div>
+
+          <!-- Prozentanteil -->
+          <div class="input-group">
+            <div class="input-with-unit">
+              <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitProzent" placeholder="z.B. 75" data-i18n-attr="placeholder:inputs.placeholders.teilzeitProzent" step="5" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
+              <span class="unit" data-i18n="units.percent">Prozent</span>
+            </div>
+            <span class="error-message" id="errorProzent"></span>
+            <div class="button-container">
+              <div class="button-row">
+                <button class="preset" data-type="percent" data-value="50">50%</button>
+                <button class="preset" data-type="percent" data-value="75">75%</button>
+              </div>
+            </div>
+          </div>
+          <!-- SR-Hinweis für beide Felder aus dem Info-Icon oben -->
+          <span id="hint-teilzeit" class="sr-only">
+            Mindestens 50&nbsp;% für eine anerkannte Teilzeitausbildung.
+          </span>
+        </div>
+
+      </section>
+
+      <!-- ================================ VERKÜRZUNGSGRÜNDE AUSWÄHLEN ================================ -->
+      <form id="vk-form" class="space-y-3">
+        <fieldset id="vk-fieldset" class="radio-group">
+          <legend class="sr-only" data-i18n="vk.legend">Verkürzungsgründe</legend>
+
+          <!-- ============================== -->
+          <!-- Überschrift + Info (ohne extra Card) -->
+          <!-- ============================== -->
+          <div class="vk-card-header" aria-labelledby="vk-heading">
+            <h1 id="vk-heading" class="text-2xl font-bold mb-3" data-i18n="vk.heading">
+              Gründe für eine kürzere Ausbildung
+            </h1>
+
+            <div class="row vk-info-row">
+              <p id="vk-helper" data-i18n="vk.helper" class="muted-text d-none">
+                Wähle alles aus, was zu dir passt.
+              </p>
+              <button id="vk-info-btn" class="vk-info-btn" type="button" aria-label="Informationen zu Verkürzungsgründen anzeigen" data-i18n="vk.infoBox.button" data-i18n-attr="aria-label:vk.infoBox.buttonAria">
+                <span class="vk-info-btn-icon" aria-hidden="true">ℹ</span>
+                <span data-i18n="vk.infoBox.button">Was ist das?</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- ============================== -->
+          <!-- 1. SCHULABSCHLUSS              -->
+          <!-- ============================== -->
+          <section class="card rechner-card" aria-labelledby="vk-school-heading">
+            <h2 id="vk-school-heading" class="vk-category-title" data-i18n="vk.school.question">
+              Welchen höchsten Schulabschluss haben Sie erreicht?
+            </h2>
+
+            <div class="vk-category-body vk-stack">
+              <label for="vk-school-select" class="sr-only" data-i18n="vk.school.label">
+                Schulabschluss
+              </label>
+
+              <select id="vk-school-select" name="vk-school-select" data-vk-type="school-select">
+                <option value="none" data-i18n="vk.school.none">Kein Abschluss</option>
+                <option value="hauptschule" data-i18n="vk.school.hauptschule">Hauptschule</option>
+                <option value="realschule" data-vk-set-fields="realschule" data-i18n="vk.school.realschule">Realschule</option>
+                <option value="abitur" data-vk-set-fields="abitur" data-i18n="vk.school.abitur">Abitur / Hochschulreife</option>
+              </select>
+            </div>
+          </section>
+
+          <!-- ============================== -->
+          <!-- 2. Alter über 21 Jahre         -->
+          <!-- ============================== -->
+          <section class="card rechner-card" aria-labelledby="vk-alter-heading">
+            <h2 id="vk-alter-heading" class="vk-category-title" data-i18n="vk.other.question">
+              Wie alt sind Sie?
+            </h2>
+
+            <div class="vk-category-body vk-stack">
+              <input type="number" id="alter" step="1" min="0" max="99">
+
+              <span class="error-message" id="errorAlter"></span>
+
+              <span id="desc-alter21" class="sr-only" data-i18n="vk.alter21.sr">
+                Wenn Sie über 21 Jahre alt sind, können Vorerfahrungen angerechnet werden.
+              </span>
+            </div>
+          </section>
+
+          <!-- ============================== -->
+          <!-- 3. FAMILIENVORSORGE            -->
+          <!-- ============================== -->
+          <section class="card rechner-card" aria-labelledby="vk-familie-heading">
+            <h2 id="vk-familie-heading" class="vk-category-title" data-i18n="vk.familie.title">
+              Familiäre Verpflichtungen
+            </h2>
+
+            <div class="vk-category-body vk-stack">
+              <!-- Frage 1: Kinderbetreuung -->
+              <div>
+                <p class="vk-question" data-i18n="vk.familie.question_kinder">
+                  Betreuen Sie ein eigenes Kind oder sind Sie für die Betreuung eines Kindes verantwortlich?
+                </p>
+                <div class="vk-yes-no-group" style="display: flex; flex-direction: row; gap: 0.5rem;">
+                  <label class="tile">
+                    <input
+                      type="checkbox"
+                      id="kinderbetreuung-ja"
+                      aria-describedby="desc-familie-kinder"
+                      data-vk-field="familien_kinderbetreuung"
+                    >
+                    <div class="tile-body" style="flex:1">
+                      <div class="tile-header">
+                        <span data-i18n="vk.familie.yes">Ja</span>
+                      </div>
+                    </div>
+                  </label>
+                  <label class="tile">
+                    <input
+                      type="checkbox"
+                      id="kinderbetreuung-nein"
+                      aria-describedby="desc-familie-kinder"
+                    >
+                    <div class="tile-body" style="flex:1">
+                      <div class="tile-header">
+                        <span data-i18n="vk.familie.no">Nein</span>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+                <span id="desc-familie-kinder" class="sr-only" data-i18n="vk.familie.sr">
+                  Wenn Sie ein Kind betreuen müssen, ist eine Verkürzung möglich.
+                </span>
+              </div>
+
+              <!-- Frage 2: Pflege von Angehörigen -->
+              <div>
+                <p class="vk-question" data-i18n="vk.familie.question_pflege">
+                  Pflegen Sie einen Angehörigen oder sind Sie regelmäßig an der Pflege beteiligt?
+                </p>
+                <div class="vk-yes-no-group" style="display: flex; flex-direction: row; gap: 0.5rem;">
+                  <label class="tile">
+                    <input
+                      type="checkbox"
+                      id="pflege-ja"
+                      aria-describedby="desc-familie-pflege"
+                      data-vk-field="familien_pflegeverantwortung"
+                    >
+                    <div class="tile-body" style="flex:1">
+                      <div class="tile-header">
+                        <span data-i18n="vk.familie.yes">Ja</span>
+                      </div>
+                    </div>
+                  </label>
+                  <label class="tile">
+                    <input
+                      type="checkbox"
+                      id="pflege-nein"
+                      aria-describedby="desc-familie-pflege"
+                    >
+                    <div class="tile-body" style="flex:1">
+                      <div class="tile-header">
+                        <span data-i18n="vk.familie.no">Nein</span>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+                <span id="desc-familie-pflege" class="sr-only" data-i18n="vk.familie.sr">
+                  Wenn Sie einen Angehörigen pflegen müssen, ist eine Verkürzung möglich.
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- calculate button moved to second column -->
+        </fieldset>
+      </form>
+
+  </div>
+
+  <!-- Column 2: berufliche Qualifikationen + Bildungsweg -->
+  <div class="rechner-column vk-column">
+    <!-- ============================================ -->
+    <!-- 4. BERUFLICHE QUALIFIKATIONEN                -->
+    <!-- ============================================ -->
+    <div class="vk-category vk-beruf">
+      <h2 class="vk-category-title" data-i18n="vk.qual.question">
+        Welche beruflichen Qualifikationen bringen Sie mit?
+      </h2>
+
+      <!-- Neue Ja/Nein Fragen für berufliche Qualifikationen -->
+      <div class="vk-category-body">
+        <!-- Q1 -->
+        <div>
+          <p class="vk-question" data-i18n="vk.qual.abgeschlosseneAusbildung">Haben Sie bereits eine abgeschlossene Ausbildung im selben oder einem ähnlichen Beruf?</p>
+          <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q1_ja" aria-describedby="desc-beruf-q1" data-vk-field="beruf_q1">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
+            </label>
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q1_nein" aria-describedby="desc-beruf-q1">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+            </label>
+          </div>
+          <span id="desc-beruf-q1" class="sr-only" data-i18n="vk.qual.abgeschlosseneAusbildung_sr">Abgeschlossene Ausbildung im selben/ähnlichen Beruf</span>
+        </div>
+
+        <!-- Q2 (unterfrage) -->
+        <div>
+          <p class="vk-question" data-i18n="vk.qual.nichtAbgeschlosseneAusbildung">Haben Sie eine Ausbildung im selben oder einem ähnlichen Beruf begonnen, aber nicht abgeschlossen?</p>
+          <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q2_ja" aria-describedby="desc-beruf-q2" data-vk-field="beruf_q2">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
+            </label>
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q2_nein" aria-describedby="desc-beruf-q2">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+            </label>
+          </div>
+          <div id="vk_beruf_q2_duration_container" style="display:none;margin-top:.5rem;">
+            <label for="vk_beruf_q2_dauer_months" style="display:block;margin-bottom:.5rem;font-weight:500;" data-i18n="vk.qual.nichtAbgeschlosseneAusbildung_dauer">Wie lange hat Ihre nicht abgeschlossene Ausbildung gedauert? (Monate)</label>
+            <input type="number" id="vk_beruf_q2_dauer_months" min="0" max="50" step="1" inputmode="numeric" data-i18n-attr="placeholder:vk.qual.months" placeholder="Monate" style="width:6rem;">
+            <span class="error-message" id="errorBerufQ2Dauer"></span>
+            <span class="sr-only">Geben Sie die Dauer in vollen Monaten an.</span>
+          </div>
+          <span id="desc-beruf-q2" class="sr-only" data-i18n="vk.qual.nichtAbgeschlosseneAusbildung_sr">Begonnene, aber nicht abgeschlossene Ausbildung</span>
+        </div>
+
+        <!-- Q3 -->
+        <div>
+          <p class="vk-question" data-i18n="vk.qual.praktischeErfahrung">Haben Sie bereits in einem ähnlichen Bereich gearbeitet oder praktische Erfahrungen gesammelt, die für die Ausbildung nützlich sind?</p>
+          <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q3_ja" aria-describedby="desc-beruf-q3" data-vk-field="beruf_q3">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
+            </label>
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q3_nein" aria-describedby="desc-beruf-q3">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+            </label>
+          </div>
+          <span id="desc-beruf-q3" class="sr-only" data-i18n="vk.qual.praktischeErfahrung_sr">Praktische Erfahrungen im ähnlichen Bereich</span>
+        </div>
+
+        <!-- Q4 -->
+        <div>
+          <p class="vk-question" data-i18n="vk.qual.massnahmeVorbereitung">Haben Sie vor der Ausbildung an einer Maßnahme zur Vorbereitung auf eine Ausbildung teilgenommen (z. B. Berufsvorbereitende Bildungsmaßnahme oder Einstiegsqualifizierung)?</p>
+          <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q5_ja" aria-describedby="desc-beruf-q5" data-vk-field="beruf_q5">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
+            </label>
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q5_nein" aria-describedby="desc-beruf-q5">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+            </label>
+          </div>
+          <span id="desc-beruf-q5" class="sr-only" data-i18n="vk.qual.massnahmeVorbereitung_sr">Maßnahme zur Vorbereitung auf eine Ausbildung</span>
+        </div>
+
+      </div>
     </div>
 
-    <form id="vk-form" class="space-y-3">
-      <fieldset id="vk-fieldset" class="radio-group">
-        <legend class="sr-only" data-i18n="vk.legend">Verkürzungsgründe</legend>
+    <!-- ============================================ -->
+    <!-- 5. BILDUNGSWEG VOR DER AUSBILDUNG            -->
+    <!-- ============================================ -->
+    <div class="vk-category vk-beruf">
+      <h2 class="vk-category-title" data-i18n="vk.bildungsweg.question">
+        Bildungsweg vor der Ausbildung
+      </h2>
 
-        <!-- ============================== -->
-        <!-- 1. SCHULABSCHLUSS              -->
-        <!-- ============================== -->
-        <div class="vk-category">
-          <h2 class="vk-category-title" data-i18n="vk.school.question">
-            Welchen höchsten Schulabschluss haben Sie erreicht?
-          </h2>
-
-          <div class="vk-category-body">
-            <label for="vk-school-select" class="sr-only" data-i18n="vk.school.label">
-              Schulabschluss
+      <!-- Ja/Nein Fragen für Bildungsweg -->
+      <div class="vk-category-body">
+        <!-- Q4: Berufsvorbereitende Schulform -->
+        <div>
+          <p class="vk-question" data-i18n="vk.qual.berufsvorbereitendeSchule">Haben Sie vor der Ausbildung eine berufsvorbereitende Schulform besucht (z. B. Berufsgrundbildungsjahr, Berufsvorbereitungsjahr oder eine einjährige Berufsfachschule)?</p>
+          <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q4_ja" aria-describedby="desc-beruf-q4" data-vk-field="beruf_q4">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
             </label>
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q4_nein" aria-describedby="desc-beruf-q4">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+            </label>
+          </div>
+          <span id="desc-beruf-q4" class="sr-only" data-i18n="vk.qual.berufsvorbereitendeSchule_sr">Berufsvorbereitende Schulform besucht</span>
+        </div>
 
-            <select id="vk-school-select" name="vk-school-select" data-vk-type="school-select">
-              <option value="none" data-i18n="vk.school.none">Kein Abschluss</option>
-              <option value="hauptschule" data-i18n="vk.school.hauptschule">Hauptschule</option>
-              <option value="realschule" data-vk-set-fields="realschule" data-i18n="vk.school.realschule">Realschule</option>
-              <option value="abitur" data-vk-set-fields="abitur" data-i18n="vk.school.abitur">Abitur / Hochschulreife</option>
-            </select>
+        <!-- Q6: ECTS-Punkte im Studium -->
+        <div>
+          <p class="vk-question" data-i18n="vk.qual.ectsStudium">Haben Sie im Studium bereits mindestens 30 ECTS-Punkte in einem Bereich erworben, der zu Ihrem Ausbildungsberuf passt?</p>
+          <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q6_ja" aria-describedby="desc-beruf-q6" data-vk-field="beruf_q6">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
+            </label>
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q6_nein" aria-describedby="desc-beruf-q6">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+            </label>
+          </div>
+          <span id="desc-beruf-q6" class="sr-only" data-i18n="vk.qual.ectsStudium_sr">ECTS im passenden Studienbereich</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="vk-actions">
+      <button class="berechnen" id="berechnenBtn" type="button" data-i18n="btn.calculate">Ergebnis anzeigen</button>
+    </div>
+  </div>
+
+      <div class="rechner-column ergebnis-column" id="ergebnis-container" hidden>
+        <!-- Hauptkarte, optisch hervorgehoben -->
+        <div class="card highlight" aria-labelledby="res-headline">
+          <h1 id="res-headline" data-i18n="res.headline">Ihre Teilzeitausbildung</h1>
+          <p class="helper" data-i18n="res.helper">
+            Hier sehen Sie Ihre Eingaben und das berechnete Ergebnis auf einen Blick.
+          </p>
+
+          <!-- calculate button moved to Verkürzungsgründe column -->
+
+          <!-- Grid-Layout für Haupt- und Meta-Ergebnisse -->
+          <div class="grid">
+            <div class="highlight-main">
+              <p class="big-number" id="res-total-months" aria-live="polite" data-i18n="res.placeholders.months">–</p>
+              <p class="result-years" id="res-total-years">–</p>
+              <span class="error-message" id="errorTotalMonths" data-i18n="errors.placeholder"></span>
+              
+              <!-- Verlängerungsanzeige: Ausbildung(Vollzeit) → Pfeil mit Verkürzungsdauer → Basis -->
+              <div class="result-extension-wrapper" id="res-shortening-wrapper" hidden>
+                <p class="result-extension-label" data-i18n="res.extension.label1">1. Verkürzung durch Verkürzungründe</p>
+                <div class="result-extension-values">
+                  <span class="result-extension-basis" id="res-extension-vollzeit">–</span>
+                  <div class="result-extension-arrow-wrapper">
+                    <span class="result-extension-arrow">→</span>
+                    <span class="result-extension-delta" id="res-extension-verkuerzungsdauer">+–</span>
+                  </div>
+                  <span class="result-extension-total" id="res-shortening-total">–</span>
+                </div>
+              </div>
+
+              <!-- Verlängerungsanzeige: Basis → Pfeil mit Delta → Ziel -->
+              <div class="result-extension-wrapper" id="res-extension-wrapper" hidden>
+                <p class="result-extension-label" data-i18n="res.extension.label2">2. Verlängerung durch Teilzeit:</p>
+                <div class="result-extension-values">
+                  <span class="result-extension-basis" id="res-extension-basis">–</span>
+                  <div class="result-extension-arrow-wrapper">
+                    <span class="result-extension-arrow">→</span>
+                    <span class="result-extension-delta" id="res-extension-delta">+–</span>
+                  </div>
+                  <span class="result-extension-total" id="res-extension-total">–</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- ============================== -->
-        <!-- 2. Alter über 21 Jahre         -->
-        <!-- ============================== -->
-        <div class="vk-category">
-          <h2 class="vk-category-title" data-i18n="vk.other.question">
-            Wie alt sind Sie?
-          </h2>
-
-          <div class="vk-category-body">
-            <input type="number" id="alter" step="1" min="0" max="99">
-
-            <span class="error-message" id="errorAlter"></span>
-
-            <span id="desc-alter21" class="sr-only" data-i18n="vk.alter21.sr">
-              Wenn Sie über 21 Jahre alt sind, können Vorerfahrungen angerechnet werden.
+        <!-- Karte: Alle Eingaben -->
+        <details class="card-collapsible inputs-collapsible" id="inputs-section">
+          <summary class="summary-toggle">
+            <span class="summary-title" id="inputs-title" data-i18n="inputs.title">
+              Ihre Berechnung
             </span>
-          </div>
-        </div>
-
-        <!-- ============================== -->
-        <!-- 3. FAMILIENVORSORGE            -->
-        <!-- ============================== -->
-        <div class="vk-category">
-          <h2 class="vk-category-title" data-i18n="vk.familie.title">
-            Familiäre Verpflichtungen
-          </h2>
-
-          <!-- Frage 1: Kinderbetreuung -->
-          <div>
-            <p class="vk-question" data-i18n="vk.familie.question_kinder">
-              Betreuen Sie ein eigenes Kind oder sind Sie für die Betreuung eines Kindes verantwortlich?
-            </p>
-            <div class="vk-yes-no-group" style="display: flex; flex-direction: row; gap: 0.5rem;">
-              <label class="tile">
-                <input
-                  type="checkbox"
-                  id="kinderbetreuung-ja"
-                  aria-describedby="desc-familie-kinder"
-                  data-vk-field="familien_kinderbetreuung"
-                >
-                <div class="tile-body" style="flex:1">
-                  <div class="tile-header">
-                    <span data-i18n="vk.familie.yes">Ja</span>
-                  </div>
-                </div>
-              </label>
-              <label class="tile">
-                <input
-                  type="checkbox"
-                  id="kinderbetreuung-nein"
-                  aria-describedby="desc-familie-kinder"
-                >
-                <div class="tile-body" style="flex:1">
-                  <div class="tile-header">
-                    <span data-i18n="vk.familie.no">Nein</span>
-                  </div>
-                </div>
-              </label>
-            </div>
-            <span id="desc-familie-kinder" class="sr-only" data-i18n="vk.familie.sr">
-              Wenn Sie ein Kind betreuen müssen, ist eine Verkürzung möglich.
+            <span class="summary-pill">
+              <span class="summary-pill-label" data-i18n="inputs.toggleLabel" data-i18n-open="inputs.toggleLabelOpen">
+                Details anzeigen
+              </span>
+              <span class="summary-icon">▸</span>
             </span>
-          </div>
+          </summary>
 
-          <!-- Frage 2: Pflege von Angehörigen -->
-          <div>
-            <p class="vk-question" data-i18n="vk.familie.question_pflege">
-              Pflegen Sie einen Angehörigen oder sind Sie regelmäßig an der Pflege beteiligt?
-            </p>
-            <div class="vk-yes-no-group" style="display: flex; flex-direction: row; gap: 0.5rem;">
-              <label class="tile">
-                <input
-                  type="checkbox"
-                  id="pflege-ja"
-                  aria-describedby="desc-familie-pflege"
-                  data-vk-field="familien_pflegeverantwortung"
-                >
-                <div class="tile-body" style="flex:1">
-                  <div class="tile-header">
-                    <span data-i18n="vk.familie.yes">Ja</span>
-                  </div>
-                </div>
-              </label>
-              <label class="tile">
-                <input
-                  type="checkbox"
-                  id="pflege-nein"
-                  aria-describedby="desc-familie-pflege"
-                >
-                <div class="tile-body" style="flex:1">
-                  <div class="tile-header">
-                    <span data-i18n="vk.familie.no">Nein</span>
-                  </div>
-                </div>
-              </label>
-            </div>
-            <span id="desc-familie-pflege" class="sr-only" data-i18n="vk.familie.sr">
-              Wenn Sie einen Angehörigen pflegen müssen, ist eine Verkürzung möglich.
-            </span>
+          <dl class="kv" id="inputs-list">
+            <!-- Inhalte per JS -->
+          </dl>
+          <span id="stamp-date" class="inputs-stamp"></span>
+        </details>
+
+        <div class="rechner-column notes-column" id="notes-container" hidden>
+          <div class="card" aria-labelledby="notes-title">
+            <h2 id="notes-title" data-i18n="res.notesTitle">Wichtige Hinweise</h2>
+            <ul class="notes" data-i18n="res.notes" data-i18n-html="true">
+              <li>Die Berechnung ist eine reine <strong>Orientierungshilfe</strong>.</li>
+              <li>Es besteht kein gesetzlicher Anspruch auf die dargestellte Auswertung</li>
+              <li>Die finale Vereinbarung erfolgt mit ihrem Ausbildungsbetrieb.</li>
+              <li>Für eine anerkannte Teilzeitausbildung muss die Ausbildungszeit mindestens 50 % der regulären Ausbildungszeit betragen</li>
+            </ul>
           </div>
         </div>
-
-        <!-- ============================================ -->
-        <!-- 4. BERUFLICHE QUALIFIKATIONEN                -->
-        <!-- ============================================ -->
-        <div class="vk-category vk-beruf">
-          <h2 class="vk-category-title" data-i18n="vk.qual.question">
-            Welche beruflichen Qualifikationen bringen Sie mit?
-          </h2>
-
-          <!-- Neue Ja/Nein Fragen für berufliche Qualifikationen -->
-          <div class="vk-category-body">
-            <!-- Q1 -->
-            <div>
-              <p class="vk-question" data-i18n="vk.qual.abgeschlosseneAusbildung">Haben Sie bereits eine abgeschlossene Ausbildung im selben oder einem ähnlichen Beruf?</p>
-              <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
-                <label class="tile">
-                  <input type="checkbox" id="vk_beruf_q1_ja" aria-describedby="desc-beruf-q1" data-vk-field="beruf_q1">
-                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
-                </label>
-                <label class="tile">
-                  <input type="checkbox" id="vk_beruf_q1_nein" aria-describedby="desc-beruf-q1">
-                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
-                </label>
-              </div>
-              <span id="desc-beruf-q1" class="sr-only" data-i18n="vk.qual.abgeschlosseneAusbildung_sr">Abgeschlossene Ausbildung im selben/ähnlichen Beruf</span>
-            </div>
-
-            <!-- Q2 (unterfrage) -->
-            <div>
-              <p class="vk-question" data-i18n="vk.qual.nichtAbgeschlosseneAusbildung">Haben Sie eine Ausbildung im selben oder einem ähnlichen Beruf begonnen, aber nicht abgeschlossen?</p>
-              <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
-                <label class="tile">
-                  <input type="checkbox" id="vk_beruf_q2_ja" aria-describedby="desc-beruf-q2" data-vk-field="beruf_q2">
-                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
-                </label>
-                <label class="tile">
-                  <input type="checkbox" id="vk_beruf_q2_nein" aria-describedby="desc-beruf-q2">
-                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
-                </label>
-              </div>
-              <div id="vk_beruf_q2_duration_container" style="display:none;margin-top:.5rem;">
-                <label for="vk_beruf_q2_dauer_months" style="display:block;margin-bottom:.5rem;font-weight:500;" data-i18n="vk.qual.nichtAbgeschlosseneAusbildung_dauer">Wie lange hat Ihre nicht abgeschlossene Ausbildung gedauert? (Monate)</label>
-                <input type="number" id="vk_beruf_q2_dauer_months" min="0" max="50" step="1" inputmode="numeric" data-i18n-attr="placeholder:vk.qual.months" placeholder="Monate" style="width:6rem;">
-                <span class="error-message" id="errorBerufQ2Dauer"></span>
-                <span class="sr-only">Geben Sie die Dauer in vollen Monaten an.</span>
-              </div>
-              <span id="desc-beruf-q2" class="sr-only" data-i18n="vk.qual.nichtAbgeschlosseneAusbildung_sr">Begonnene, aber nicht abgeschlossene Ausbildung</span>
-            </div>
-
-            <!-- Q3 -->
-            <div>
-              <p class="vk-question" data-i18n="vk.qual.praktischeErfahrung">Haben Sie bereits in einem ähnlichen Bereich gearbeitet oder praktische Erfahrungen gesammelt, die für die Ausbildung nützlich sind?</p>
-              <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
-                <label class="tile">
-                  <input type="checkbox" id="vk_beruf_q3_ja" aria-describedby="desc-beruf-q3" data-vk-field="beruf_q3">
-                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
-                </label>
-                <label class="tile">
-                  <input type="checkbox" id="vk_beruf_q3_nein" aria-describedby="desc-beruf-q3">
-                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
-                </label>
-              </div>
-              <span id="desc-beruf-q3" class="sr-only" data-i18n="vk.qual.praktischeErfahrung_sr">Praktische Erfahrungen im ähnlichen Bereich</span>
-            </div>
-
-            <!-- Q4 -->
-            <div>
-              <p class="vk-question" data-i18n="vk.qual.massnahmeVorbereitung">Haben Sie vor der Ausbildung an einer Maßnahme zur Vorbereitung auf eine Ausbildung teilgenommen (z. B. Berufsvorbereitende Bildungsmaßnahme oder Einstiegsqualifizierung)?</p>
-              <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
-                <label class="tile">
-                  <input type="checkbox" id="vk_beruf_q5_ja" aria-describedby="desc-beruf-q5" data-vk-field="beruf_q5">
-                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
-                </label>
-                <label class="tile">
-                  <input type="checkbox" id="vk_beruf_q5_nein" aria-describedby="desc-beruf-q5">
-                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
-                </label>
-              </div>
-              <span id="desc-beruf-q5" class="sr-only" data-i18n="vk.qual.massnahmeVorbereitung_sr">Maßnahme zur Vorbereitung auf eine Ausbildung</span>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- ============================================ -->
-        <!-- 5. BILDUNGSWEG VOR DER AUSBILDUNG            -->
-        <!-- ============================================ -->
-        <div class="vk-category vk-beruf">
-          <h2 class="vk-category-title" data-i18n="vk.bildungsweg.question">
-            Bildungsweg vor der Ausbildung
-          </h2>
-
-          <!-- Ja/Nein Fragen für Bildungsweg -->
-          <div class="vk-category-body">
-            <!-- Q4: Berufsvorbereitende Schulform -->
-            <div>
-              <p class="vk-question" data-i18n="vk.qual.berufsvorbereitendeSchule">Haben Sie vor der Ausbildung eine berufsvorbereitende Schulform besucht (z. B. Berufsgrundbildungsjahr, Berufsvorbereitungsjahr oder eine einjährige Berufsfachschule)?</p>
-              <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
-                <label class="tile">
-                  <input type="checkbox" id="vk_beruf_q4_ja" aria-describedby="desc-beruf-q4" data-vk-field="beruf_q4">
-                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
-                </label>
-                <label class="tile">
-                  <input type="checkbox" id="vk_beruf_q4_nein" aria-describedby="desc-beruf-q4">
-                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
-                </label>
-              </div>
-              <span id="desc-beruf-q4" class="sr-only" data-i18n="vk.qual.berufsvorbereitendeSchule_sr">Berufsvorbereitende Schulform besucht</span>
-            </div>
-
-            <!-- Q6: ECTS-Punkte im Studium -->
-            <div>
-              <p class="vk-question" data-i18n="vk.qual.ectsStudium">Haben Sie im Studium bereits mindestens 30 ECTS-Punkte in einem Bereich erworben, der zu Ihrem Ausbildungsberuf passt?</p>
-              <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
-                <label class="tile">
-                  <input type="checkbox" id="vk_beruf_q6_ja" aria-describedby="desc-beruf-q6" data-vk-field="beruf_q6">
-                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
-                </label>
-                <label class="tile">
-                  <input type="checkbox" id="vk_beruf_q6_nein" aria-describedby="desc-beruf-q6">
-                  <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
-                </label>
-              </div>
-              <span id="desc-beruf-q6" class="sr-only" data-i18n="vk.qual.ectsStudium_sr">ECTS im passenden Studienbereich</span>
-            </div>
-          </div>
-        </div>
-
-        <button class="berechnen" id="berechnenBtn" type="button" data-i18n="btn.calculate">
-          Berechnen
-        </button>
-      </fieldset>
-    </form>
+      </div>
+    </div>
 
     <!-- Modal für "Was ist das?" Informationsbox -->
     <div id="vk-info-modal" class="vk-info-modal" role="dialog" aria-modal="true" aria-labelledby="vk-info-title" hidden>
@@ -704,87 +796,6 @@
     </div>
   </div>
 
-  <!-- Ergebnisanzeige -->
-  <div class="container rechner-bereich" id="ergebnis-container" hidden>
-    <!-- Hauptkarte, optisch hervorgehoben -->
-    <div class="card highlight" aria-labelledby="res-headline">
-      <h1 id="res-headline" data-i18n="res.headline">Ihre Teilzeitausbildung</h1>
-      <p class="helper" data-i18n="res.helper">
-        Hier sehen Sie Ihre Eingaben und das berechnete Ergebnis auf einen Blick.
-      </p>
-
-      <!-- Grid-Layout für Haupt- und Meta-Ergebnisse -->
-      <div class="grid">
-        <div class="highlight-main">
-          <p class="big-number" id="res-total-months" aria-live="polite" data-i18n="res.placeholders.months">–</p>
-          <p class="result-years" id="res-total-years">–</p>
-          <span class="error-message" id="errorTotalMonths" data-i18n="errors.placeholder"></span>
-          
-          <!-- Verlängerungsanzeige: Ausbildung(Vollzeit) → Pfeil mit Verkürzungsdauer → Basis -->
-          <div class="result-extension-wrapper" id="res-shortening-wrapper" hidden>
-            <p class="result-extension-label" data-i18n="res.extension.label1">1. Verkürzung durch Verkürzungründe</p>
-            <div class="result-extension-values">
-              <span class="result-extension-basis" id="res-extension-vollzeit">–</span>
-              <div class="result-extension-arrow-wrapper">
-                <span class="result-extension-arrow">→</span>
-                <span class="result-extension-delta" id="res-extension-verkuerzungsdauer">+–</span>
-              </div>
-              <span class="result-extension-total" id="res-shortening-total">–</span>
-            </div>
-          </div>
-
-          <!-- Verlängerungsanzeige: Basis → Pfeil mit Delta → Ziel -->
-          <div class="result-extension-wrapper" id="res-extension-wrapper" hidden>
-            <p class="result-extension-label" data-i18n="res.extension.label2">2. Verlängerung durch Teilzeit:</p>
-            <div class="result-extension-values">
-              <span class="result-extension-basis" id="res-extension-basis">–</span>
-              <div class="result-extension-arrow-wrapper">
-                <span class="result-extension-arrow">→</span>
-                <span class="result-extension-delta" id="res-extension-delta">+–</span>
-              </div>
-              <span class="result-extension-total" id="res-extension-total">–</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Karte: Alle Eingaben -->
-    <details class="card-collapsible inputs-collapsible" id="inputs-section">
-      <summary class="summary-toggle">
-        <span class="summary-title" id="inputs-title" data-i18n="inputs.title">
-          Ihre Berechnung
-        </span>
-        <span class="summary-pill">
-          <span class="summary-pill-label" data-i18n="inputs.toggleLabel" data-i18n-open="inputs.toggleLabelOpen">
-            Details anzeigen
-          </span>
-          <span class="summary-icon">▸</span>
-        </span>
-      </summary>
-
-      <dl class="kv" id="inputs-list">
-        <!-- Inhalte per JS -->
-      </dl>
-      <span id="stamp-date" class="inputs-stamp"></span>
-    </details>
- 
-
-
-    <!-- Karte: Hinweise -->
-    <div class="card" aria-labelledby="notes-title">
-      <h2 id="notes-title" data-i18n="res.notesTitle">Wichtige Hinweise</h2>
-      <ul class="notes" data-i18n="res.notes" data-i18n-html="true">
-        <li>Die Berechnung ist eine reine <strong>Orientierungshilfe</strong>.</li>
-        <li>Es besteht kein gesetzlicher Anspruch auf die dargestellte Auswertung</li>
-        <li>Die finale Vereinbarung erfolgt mit ihrem Ausbildungsbetrieb.</li>
-        <li>Für eine anerkannte Teilzeitausbildung muss die Ausbildungszeit mindestens 50 % der regulären Ausbildungszeit betragen</li>
-      </ul>
-    </div>
-
-    <!-- Zeitstempel entfernt (jetzt in der ausgeklappten "Ihre Berechnung"-Box) -->
-  </div>
-
   <!-- Navigationsleiste (mobil sticky) -->
   <nav class="actionbar rechner-bereich" aria-label="Aktionen" data-i18n-attr="aria-label:nav.actions">
     <button class="btn ghost" id="btn-reset" type="button"
@@ -793,7 +804,7 @@
             data-i18n-attr="aria-label:btn.reset">
       Zurücksetzen
     </button>
-    <button class="btn outline" id="btn-share" type="button" data-i18n="btn.share">
+    <button class="btn outline" id="btn-share" type="button" data-i18n="btn.share" hidden>
       Link teilen
     </button>
   </nav>

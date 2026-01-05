@@ -11,6 +11,14 @@ function verberge(element) {
   if (element) element.hidden = true;
 }
 
+function setzeErgebnisBegleitUIVisible(visible) {
+  const notesContainer = document.getElementById("notes-container") || document.querySelector(".rechner-column.notes-column");
+  if (notesContainer) notesContainer.hidden = !visible;
+
+  const btnShare = document.getElementById("btn-share");
+  if (btnShare) btnShare.hidden = !visible;
+}
+
 // i18n Helfer (nutzt die globale API aus script_Sprache_Auswaehlen.js)
 function uebersetzung(schluessel, fallback) {
   if (window.I18N && typeof window.I18N.t === "function") {
@@ -23,13 +31,167 @@ function aktuelleSprache() {
   return (window.I18N && window.I18N.lang) || "de";
 }
 
-// Locale-aware Zahl parser: ersetzt deutsches Komma durch Punkt für parseFloat
-const parseNumber = (value) => parseFloat(String(value).replace(',', '.'));
+// Locale-aware Zahl parser: akzeptiert deutsches Komma und (optional) Tausenderpunkte.
+// Beispiele:
+// - "1,5" -> 1.5
+// - "1.234,5" -> 1234.5
+const parseNumber = (value) => {
+  const raw = String(value ?? "").trim();
+  if (!raw) return NaN;
+
+  // Spaces entfernen (inkl. NBSP)
+  let normalized = raw.replace(/[\s\u00A0]/g, "");
+
+  // Wenn ein Komma vorkommt, behandeln wir Punkte als Tausendertrennzeichen
+  if (normalized.includes(",")) {
+    normalized = normalized.replace(/\./g, "");
+    normalized = normalized.replace(/,/g, ".");
+  }
+
+  return parseFloat(normalized);
+};
 
 
 // Zustand merken, damit wir bei Sprachwechsel neu rendern können
 let LETZTE_EINGABEN = null;
 let LETZTE_BERECHNUNG = null;
+
+// Desktop-only Button-Layout (ohne Mobile zu verändern)
+let DESKTOP_BUTTON_LAYOUT = null;
+
+function initialisiereDesktopButtonLayout() {
+  // Nutzt bestehenden Desktop-Breakpoint aus CSS (@media (width >= 900px))
+  const mq = window.matchMedia("(min-width: 900px)");
+
+  const actionbar = document.querySelector("nav.actionbar.rechner-bereich");
+  const btnReset = document.getElementById("btn-reset");
+  const btnShare = document.getElementById("btn-share");
+  const btnBerechnen = document.getElementById("berechnenBtn");
+  const vkActions = document.querySelector(".vk-actions");
+  const notesColumn = document.querySelector(".rechner-column.notes-column");
+
+  if (!actionbar || !btnReset || !btnShare || !btnBerechnen || !vkActions || !notesColumn) {
+    return;
+  }
+
+  // Initiale State/Platzhalter nur einmal anlegen
+  if (!DESKTOP_BUTTON_LAYOUT) {
+    const resetPlaceholder = document.createComment("placeholder:btn-reset");
+    const sharePlaceholder = document.createComment("placeholder:btn-share");
+    const berechnenPlaceholder = document.createComment("placeholder:berechnenBtn");
+
+    // Platzhalter an den Originalpositionen setzen
+    actionbar.insertBefore(resetPlaceholder, btnReset);
+    actionbar.insertBefore(sharePlaceholder, btnShare);
+    vkActions.insertBefore(berechnenPlaceholder, btnBerechnen);
+
+    DESKTOP_BUTTON_LAYOUT = {
+      mq,
+      actionbar,
+      vkActions,
+      notesColumn,
+      btnReset,
+      btnShare,
+      btnBerechnen,
+      resetPlaceholder,
+      sharePlaceholder,
+      berechnenPlaceholder,
+      actionsGroup: null,
+      shareMount: null,
+      listenerAttached: false
+    };
+  }
+
+  const applyLayout = (isDesktop) => {
+    const layout = DESKTOP_BUTTON_LAYOUT;
+    if (!layout) return;
+
+    if (isDesktop) {
+      // 1) Reset links neben Ergebnis anzeigen in derselben Spalte
+      if (!layout.actionsGroup) {
+        const group = document.createElement("div");
+        group.className = "button-group desktop-calc-actions";
+        layout.actionsGroup = group;
+      }
+
+      if (layout.actionsGroup.parentNode !== layout.vkActions) {
+        layout.vkActions.appendChild(layout.actionsGroup);
+      }
+
+      // Reihenfolge: Reset links, Berechnen rechts
+      if (layout.btnBerechnen.parentNode !== layout.actionsGroup) {
+        layout.actionsGroup.appendChild(layout.btnBerechnen);
+      }
+      if (layout.btnReset.parentNode !== layout.actionsGroup) {
+        layout.actionsGroup.insertBefore(layout.btnReset, layout.btnBerechnen);
+      } else {
+        layout.actionsGroup.insertBefore(layout.btnReset, layout.btnBerechnen);
+      }
+
+      // 2) Share in die Hinweise-Spalte, aber unterhalb der Hinweise-Card
+      const notesCard = layout.notesColumn.querySelector(":scope > .card");
+      if (notesCard) {
+        if (!layout.shareMount) {
+          const mount = document.createElement("div");
+          mount.className = "desktop-share-action";
+          layout.shareMount = mount;
+        }
+
+        // Direkt nach der Card einfügen
+        if (layout.shareMount.parentNode !== layout.notesColumn) {
+          layout.notesColumn.insertBefore(layout.shareMount, notesCard.nextSibling);
+        } else if (notesCard.nextSibling !== layout.shareMount) {
+          layout.notesColumn.insertBefore(layout.shareMount, notesCard.nextSibling);
+        }
+
+        if (layout.btnShare.parentNode !== layout.shareMount) {
+          layout.shareMount.appendChild(layout.btnShare);
+        }
+      }
+
+      // Actionbar auf Desktop ausblenden, damit sie nicht leer bleibt
+      layout.actionbar.dataset.desktopMoved = "true";
+    } else {
+      // Mobile: alles exakt zurück in den Originalzustand
+
+      // Berechnen wieder direkt in .vk-actions (ohne Desktop-Wrapper)
+      if (layout.berechnenPlaceholder.parentNode === layout.vkActions) {
+        layout.vkActions.insertBefore(layout.btnBerechnen, layout.berechnenPlaceholder.nextSibling);
+      }
+
+      if (layout.actionsGroup && layout.actionsGroup.parentNode) {
+        layout.actionsGroup.parentNode.removeChild(layout.actionsGroup);
+      }
+      layout.actionsGroup = null;
+
+      // Reset/Share zurück in die Actionbar
+      if (layout.resetPlaceholder.parentNode === layout.actionbar) {
+        layout.actionbar.insertBefore(layout.btnReset, layout.resetPlaceholder.nextSibling);
+      }
+      if (layout.sharePlaceholder.parentNode === layout.actionbar) {
+        layout.actionbar.insertBefore(layout.btnShare, layout.sharePlaceholder.nextSibling);
+      }
+
+      if (layout.shareMount && layout.shareMount.parentNode) {
+        layout.shareMount.parentNode.removeChild(layout.shareMount);
+      }
+      layout.shareMount = null;
+
+      delete layout.actionbar.dataset.desktopMoved;
+    }
+  };
+
+  // Initial anwenden
+  applyLayout(mq.matches);
+
+  // Listener nur einmal registrieren
+  if (!DESKTOP_BUTTON_LAYOUT.listenerAttached) {
+    DESKTOP_BUTTON_LAYOUT.listenerAttached = true;
+    mq.addEventListener("change", (event) => {
+      applyLayout(event.matches);
+    });
+  }
+}
 
 /**
  * Sammelt alle Verkürzungsgründe und gibt sie als Objekt zurück,
@@ -203,7 +365,8 @@ function validiereAlleEingaben() {
     if (!element) continue;
 
     const wert = element.value?.trim();
-    if (!wert || wert === "" || Number(wert) === 0 || isNaN(Number(wert))) {
+    const zahl = parseNumber(wert);
+    if (!wert || wert === "" || zahl === 0 || isNaN(zahl)) {
       element.classList.add("error");
       const errorId = "error" + feld.id.charAt(0).toUpperCase() + feld.id.slice(1);
       const errorElement = document.getElementById(errorId);
@@ -225,7 +388,8 @@ function validiereAlleEingaben() {
     const teilzeitProzent = teilzeitProzentElement.value?.trim();
     
     // Wenn Wochenstunden gesetzt sind UND beide Teilzeitfelder leer sind
-    if (wochenstunden && wochenstunden !== "" && Number(wochenstunden) > 0 && 
+    const wochenstundenZahl = parseNumber(wochenstunden);
+    if (wochenstunden && wochenstunden !== "" && wochenstundenZahl > 0 && 
         (!teilzeitStunden || teilzeitStunden === "") && (!teilzeitProzent || teilzeitProzent === "")) {
       
       // Fehler für Teilzeit-Stunden
@@ -249,7 +413,8 @@ function validiereAlleEingaben() {
   const alterElement = document.getElementById("alter");
   if (alterElement) {
     const alterWert = alterElement.value?.trim();
-    if (!alterWert || alterWert === "" || Number(alterWert) === 0 || isNaN(Number(alterWert))) {
+    const alterZahl = parseNumber(alterWert);
+    if (!alterWert || alterWert === "" || alterZahl === 0 || isNaN(alterZahl)) {
       alterElement.classList.add("error");
       const errorAlter = document.getElementById("errorAlter");
       if (errorAlter) {
@@ -301,7 +466,8 @@ function validiereAlleEingaben() {
   const berufQ2Duration = document.getElementById("vk_beruf_q2_dauer_months");
   if (berufQ2Ja && berufQ2Ja.checked && berufQ2Duration) {
     const dauer = berufQ2Duration.value?.trim();
-    if (!dauer || dauer === "" || Number(dauer) === 0 || isNaN(Number(dauer))) {
+    const dauerZahl = parseNumber(dauer);
+    if (!dauer || dauer === "" || dauerZahl === 0 || isNaN(dauerZahl)) {
       berufQ2Duration.classList.add("error");
       const errorElement = document.getElementById("errorBerufQ2Dauer");
       if (errorElement) {
@@ -1187,6 +1353,9 @@ function setzeDatenZurueck() {
   if (ergebnisContainer) {
     ergebnisContainer.hidden = true;
   }
+
+  // Hinweise/Share wieder ausblenden
+  setzeErgebnisBegleitUIVisible(false);
   
   // Rote Border von Ergebnis-Box entfernen
   const highlightBox = document.querySelector(".card.highlight");
@@ -1335,6 +1504,19 @@ function stelleFormularWiederHer(zustand) {
 function initialisiere() {
   $("#btn-share")?.addEventListener("click", teileLink);
   $("#btn-reset")?.addEventListener("click", setzeDatenZurueck);
+
+  // Ergebnisbereich standardmäßig ausblenden.
+  // Er wird erst nach Klick auf "Ergebnis anzeigen" sichtbar.
+  const ergebnisContainer = document.getElementById("ergebnis-container");
+  if (ergebnisContainer) {
+    ergebnisContainer.hidden = true;
+  }
+
+  // Hinweise/Share standardmäßig ausblenden (erst sichtbar, wenn Ergebnis sichtbar ist)
+  setzeErgebnisBegleitUIVisible(false);
+
+  // Desktop-only Button-Layout (Reset neben Berechnen, Share unter Hinweise)
+  initialisiereDesktopButtonLayout();
   
   // Clear validation errors when the user interacts with inputs or yes/no tiles
   const clearableInputs = ["dauer", "stunden", "alter", "vk_beruf_q2_dauer_months"];
@@ -1433,6 +1615,8 @@ function initialisiere() {
     if (ergebnisContainer) {
       ergebnisContainer.hidden = false;
     }
+
+    setzeErgebnisBegleitUIVisible(true);
     
     // Ergebnisse anzeigen
     fuelleEingabenliste(urlDaten.eingaben, urlDaten.berechnung);
@@ -1450,33 +1634,19 @@ function initialisiere() {
     if (gespeicherterZustand && gespeicherterZustand.eingaben && gespeicherterZustand.berechnung) {
       // Formular wiederherstellen
       stelleFormularWiederHer(gespeicherterZustand);
-      
-      // Ergebnisse wiederherstellen
-      LETZTE_EINGABEN = gespeicherterZustand.eingaben;
-      LETZTE_BERECHNUNG = gespeicherterZustand.berechnung;
-      
-      // Ergebnis-Sektion anzeigen
-      const ergebnisContainer = document.getElementById("ergebnis-container");
-      if (ergebnisContainer) {
-        ergebnisContainer.hidden = false;
-      }
-      
-      // Rote Border zur Ergebnis-Box hinzufügen
-      const highlightBox = document.querySelector(".card.highlight");
-      if (highlightBox) {
-        highlightBox.classList.add("active");
-      }
-      
-      // Ergebnisse anzeigen
-      fuelleEingabenliste(gespeicherterZustand.eingaben, gespeicherterZustand.berechnung);
-      fuelleErgebnisse(gespeicherterZustand.eingaben, gespeicherterZustand.berechnung);
-      setzeDatumstempel();
+
+      // Ergebnisbereich NICHT automatisch anzeigen.
+      // Der Nutzer muss aktiv auf "Ergebnis anzeigen" klicken.
+      LETZTE_EINGABEN = null;
+      LETZTE_BERECHNUNG = null;
     } else {
       // Ergebnis-Sektion initial verstecken
       const ergebnisContainer = document.getElementById("ergebnis-container");
       if (ergebnisContainer) {
         ergebnisContainer.hidden = true;
       }
+
+      setzeErgebnisBegleitUIVisible(false);
     }
   }
 }
@@ -1531,6 +1701,7 @@ async function berechnen() {
   const ergebnisContainer = document.getElementById("ergebnis-container");
   if (ergebnisContainer) {
     ergebnisContainer.hidden = false;
+    setzeErgebnisBegleitUIVisible(true);
     // Sanftes Scrollen zur Ergebnis-Sektion
     ergebnisContainer.scrollIntoView({ behavior: "smooth", block: "start" });
   }
