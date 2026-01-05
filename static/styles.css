@@ -145,11 +145,6 @@ header h1 {
   height: 100%;
 }
 
-.rechner-grid .card,
-.rechner-grid .card-collapsible {
-  margin-bottom: 0;
-}
-
 /* ==========================================
    KARTEN / PANELS
    ========================================== */
@@ -164,6 +159,7 @@ header h1 {
 
 .rechner-grid .card,
 .rechner-grid .card-collapsible {
+  margin-bottom: 0;
   padding: 1.25rem;
 }
 
@@ -1249,10 +1245,10 @@ input.error,
   .rechner-grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: start;
+
     /* Vertikale Abstände zwischen den beiden Zeilen (z.B. Familie → Beruf) wie bei den Cards.
        Horizontal darf es gerne etwas luftiger bleiben. */
-    row-gap: var(--space-3);
-    column-gap: clamp(1rem, 2vw, 1.75rem);
+    gap: var(--space-3) clamp(1rem, 2vw, 1.75rem);
   }
 
   .rechner-grid .eingaben-column {
@@ -1457,7 +1453,7 @@ input.error,
   line-height: 1.3;
   margin-bottom: 0;
   color: var(--text);
-  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .startseite-title-accent {
@@ -1468,7 +1464,7 @@ input.error,
   color: var(--muted);
   margin-bottom: 0;
   line-height: 1.6;
-  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 /* Zusammenhängendes Informationsfeld: direkt in Startseite integriert (kein separater Kasten) */
@@ -1661,14 +1657,6 @@ input.error,
     margin-bottom: 1.5rem;
   }
 
-  .startseite-description-desktop {
-    margin-bottom: 2rem;
-  }
-
-  .info-cards-desktop {
-    margin-bottom: 2rem;
-  }
-
   /* Container der Startseite auf Desktop: scoped, ohne :has() (Firefox-kompatibel). */
   .startseite-container {
     max-width: 100% !important;
@@ -1760,6 +1748,7 @@ input.error,
   .calendar-visualization {
     position: relative;
     width: 100%;
+
     /* Scale with viewport width so the calendar visibly shrinks when resizing. */
     max-width: clamp(360px, 42vw, 600px);
     display: flex;
@@ -2008,16 +1997,16 @@ input.error,
 
   .startseite-description-desktop {
     color: var(--muted);
-    margin-bottom: 0;
+    margin-bottom: 2rem;
     line-height: 1.6;
-    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   /* Desktop Feature Cards - Als zusammenhängende Box */
   .info-cards-desktop {
     display: flex;
     gap: 0;
-    margin-bottom: 0;  /* Gap des Parents kümmert sich um Abstand */
+    margin-bottom: 2rem;
 
     /* Integriert in Startseite: kein separates Panel */
     background: transparent !important;
@@ -2182,7 +2171,7 @@ input.error,
   }
 
   /* Short-height desktop: reduce vertical footprint to avoid scroll at ~720px height. */
-  @media (max-height: 760px) {
+  @media (height <= 760px) {
     .startseite-container .startseite {
       align-items: flex-start;
     }

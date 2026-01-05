@@ -60,9 +60,18 @@ class BerechnungsAnfrage:
                 code="ungültiger_eingabetyp",
             )
 
-        basis_dauer_monate = _coerce_int(payload["basis_dauer_monate"], "basis_dauer_monate")
-        vollzeit_stunden = _coerce_float(payload["vollzeit_stunden"], "vollzeit_stunden")
-        teilzeit_eingabe = _coerce_float(payload["teilzeit_eingabe"], "teilzeit_eingabe")
+        basis_dauer_monate = _coerce_int(
+            payload["basis_dauer_monate"],
+            "basis_dauer_monate",
+        )
+        vollzeit_stunden = _coerce_float(
+            payload["vollzeit_stunden"],
+            "vollzeit_stunden",
+        )
+        teilzeit_eingabe = _coerce_float(
+            payload["teilzeit_eingabe"],
+            "teilzeit_eingabe",
+        )
 
         return BerechnungsAnfrage(
             basis_dauer_monate=basis_dauer_monate,
@@ -283,7 +292,10 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
 
 def _normalisiere_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]:
     # Berufserfahrung/Vorkenntnisse: Wenn > 0, wird auf festen 12-Monats-Wert abgebildet
-    vorkenntnisse = _coerce_float(data.get("vorkenntnisse_monate", 0), "verkuerzungsgruende.vorkenntnisse_monate")
+    vorkenntnisse = _coerce_float(
+        data.get("vorkenntnisse_monate", 0),
+        "verkuerzungsgruende.vorkenntnisse_monate",
+    )
     vorkenntnisse_monate = 12 if vorkenntnisse and vorkenntnisse > 0 else 0
 
     # Normalisiere die neuen beruflichen Felder (bools und Zahlen)
