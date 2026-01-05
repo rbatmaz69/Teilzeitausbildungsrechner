@@ -1215,10 +1215,6 @@ input.error,
     gap: 1rem;
   }
 
-  .rechner-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   /* Verkürzungen: Auf Desktop normale Darstellung (beide in einer Zeile) */
   .verkuerzungen-list li {
     display: flex;
@@ -1237,33 +1233,6 @@ input.error,
   .rechner-bereich.container {
     width: 100%;
     max-width: calc(100vw - 2rem);
-  }
-
-  /* Desktop: von Anfang an 2 Spalten.
-     Links stehen Eingaben + VK untereinander, rechts ist Platz für Ergebnis/Hinweise.
-     Ergebnis/Hinweise bleiben bis zum Klick per `hidden` unsichtbar. */
-  .rechner-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: start;
-
-    /* Vertikale Abstände zwischen den beiden Zeilen (z.B. Familie → Beruf) wie bei den Cards.
-       Horizontal darf es gerne etwas luftiger bleiben. */
-    gap: var(--space-3) clamp(1rem, 2vw, 1.75rem);
-  }
-
-  .rechner-grid .eingaben-column {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .rechner-grid .vk-column {
-    grid-column: 1;
-    grid-row: 2;
-  }
-
-  .rechner-grid #ergebnis-container {
-    grid-column: 2;
-    grid-row: 1 / 3;
   }
 
   header h1 { font-size: 2.6rem; }
@@ -1288,6 +1257,34 @@ input.error,
   .actionbar .btn{ padding: .9rem 1.2rem; }
 
 
+}
+
+/* === Desktop (≥1024px): Rechner als 2-Spalten-Layout (nur Desktop, keine Zwischenbreite) === */
+@media (width >= 1024px) {
+  /* Links stehen Eingaben + VK untereinander, rechts ist Platz für Ergebnis/Hinweise.
+     Ergebnis/Hinweise bleiben bis zum Klick per `hidden` unsichtbar. */
+  .rechner-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+
+    /* Vertikal wie bei den Cards; horizontal etwas luftiger. */
+    gap: var(--space-3) clamp(1rem, 2vw, 1.75rem);
+  }
+
+  .rechner-grid .eingaben-column {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .rechner-grid .vk-column {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .rechner-grid #ergebnis-container {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
 }
 
 /* === Large Desktop (≥1200px) === */
