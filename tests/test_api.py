@@ -457,6 +457,42 @@ def test_validierungsfehler_ungueltige_datentypen_gibt_422_zurueck(client):
     assert data["error"]["code"] == "validation_error"
 
 
+def test_api_akzeptiert_dezimalkomma_in_numeric_strings(client):
+    """Backend akzeptiert Zahlen-Strings mit deutschem Dezimalkomma.
+
+    Beispiel: vollzeit_stunden = "37,5" wird als 37.5 geparst.
+    """
+
+    payload = {
+        "basis_dauer_monate": "36",
+        "vollzeit_stunden": "37,5",
+        "teilzeit_eingabe": "75",
+        "eingabetyp": "prozent",
+        "verkuerzungsgruende": {
+            "abitur": False,
+            "realschule": False,
+            "alter_ueber_21": False,
+            "familien_pflegeverantwortung": False,
+            "familien_kinderbetreuung": False,
+            "vorkenntnisse_monate": "0",
+            "beruf_q1": False,
+            "beruf_q2": False,
+            "beruf_q2_dauer_monate": "0",
+            "beruf_q3": False,
+            "beruf_q4": False,
+            "beruf_q5": False,
+            "beruf_q6": False,
+            "berufliche_verkuerzung_monate": "0",
+        },
+    }
+
+    resp = client.post("/api/calculate", json=payload)
+    assert resp.status_code == 200
+    data = resp.get_json()
+    assert data["result"]["original_dauer_monate"] == 36
+    assert data["result"]["teilzeit_prozent"] == 75
+
+
 def test_validierungsfehler_negative_werte_gibt_422_zurueck(client):
     """
     Test: Negative Werte sind ungültig.

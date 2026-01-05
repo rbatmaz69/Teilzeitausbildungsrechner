@@ -28,6 +28,7 @@
   --space-4: 1.25rem;
   --space-5: 1.75rem;
   --space-6: 2rem;
+  --gutter: 1rem;
 }
 
 /* ==========================================
@@ -71,6 +72,11 @@ img, svg, video, canvas {
   height: auto;
 }
 
+/* Ensure the HTML 'hidden' attribute reliably hides elements */
+[hidden] {
+  display: none !important;
+}
+
 button, input, select {
   font: inherit;
 }
@@ -93,6 +99,8 @@ p.helper {
   width: 100%;
   margin: 0 auto;
   padding: 1rem;
+  padding-left: max(var(--gutter), env(safe-area-inset-left));
+  padding-right: max(var(--gutter), env(safe-area-inset-right));
   max-width: 480px;
   box-sizing: border-box; /* Padding wird in Breite eingerechnet */
   overflow-x: hidden; /* Verhindert horizontales Scrollen innerhalb des Containers */
@@ -118,6 +126,25 @@ header h1 {
   grid-template-columns: 1fr; /* Handy: eine Spalte */
 }
 
+/* Rechner Layout */
+.rechner-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1rem, 2vw, 1.75rem);
+  align-items: start;
+}
+
+.rechner-card {
+  height: 100%;
+}
+
+.rechner-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  height: 100%;
+}
+
 /* ==========================================
    KARTEN / PANELS
    ========================================== */
@@ -128,6 +155,25 @@ header h1 {
   padding: 1rem;
   box-shadow: var(--shadow);
   margin-bottom: var(--space-3);
+}
+
+.rechner-grid .card,
+.rechner-grid .card-collapsible {
+  margin-bottom: 0;
+  padding: 1.25rem;
+}
+
+@media (width >= 1200px) {
+  .rechner-grid .card,
+  .rechner-grid .card-collapsible {
+    padding: 1.5rem;
+  }
+}
+
+.notes-column .card {
+  background: #f3f8ff;
+  border-color: #d9e6ff;
+  box-shadow: 0 10px 24px rgb(22 60 155 / 10%);
 }
 
 .tile {
@@ -225,6 +271,12 @@ header h1 {
   box-shadow: var(--shadow);
 }
 
+/* In der rechten VK-Spalte wird der Abstand über das Column-Gap gesteuert.
+   Dadurch sind „Berufliche Qualifikationen“ und „Bildungsweg“ gleich weit auseinander wie die anderen Boxen. */
+.vk-column .vk-category {
+  margin-bottom: 0;
+}
+
 .vk-category-title {
   font-size: 1rem;
   font-weight: 700;
@@ -242,6 +294,13 @@ header h1 {
   border: none;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+#vk-form {
+  margin: 0;
 }
 
 #vk-school-select {
@@ -267,6 +326,11 @@ header h1 {
 @media (width >= 600px) {
   .vk-category-body {
     flex-direction: row;
+  }
+
+  /* Für Bereiche, die auch auf Desktop untereinander bleiben sollen (z.B. Alter, Familie, Schulabschluss). */
+  .vk-category-body.vk-stack {
+    flex-direction: column;
   }
 
   .vk-category .tile {
@@ -295,6 +359,18 @@ header h1 {
   touch-action: manipulation; /* Verbessert Touch-Responsiveness auf Mobile */
 }
 .actionbar .spacer{ flex: 1 1 auto; }
+
+@media (width >= 900px) {
+  /* Buttons werden im Desktop per JS ins Grid umgehängt */
+  .actionbar.rechner-bereich[data-desktop-moved="true"] {
+    display: none;
+  }
+
+  /* Ergebnis teilen: unterhalb der Hinweise-Card (außerhalb des Containers) */
+  .desktop-share-action {
+    margin-top: var(--space-3);
+  }
+}
 
 /* ==========================================
    INTERAKTIVE ELEMENTE
@@ -1004,6 +1080,10 @@ input.error,
   .teilzeit-formula-line2 {
     text-align: right;
   }
+
+  .rechner-bereich.container {
+    max-width: 1680px;
+  }
 }
 
 .kv-2col{
@@ -1114,7 +1194,7 @@ input.error,
   display: block;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #19c530;
+  color: #10b981;
   margin: 0;
   margin-top: 0.5rem;
   text-align: left;
@@ -1150,6 +1230,11 @@ input.error,
     padding: 2rem;
   }
 
+  .rechner-bereich.container {
+    width: 100%;
+    max-width: calc(100vw - 2rem);
+  }
+
   header h1 { font-size: 2.6rem; }
 
   button.preset { width: 4.5rem; }
@@ -1166,11 +1251,40 @@ input.error,
     padding: 0;
     background: transparent;
     margin: var(--space-3) auto;
-    max-width: 980px;
+    width: 100%;
+    max-width: calc(100vw - 2rem);
   }
   .actionbar .btn{ padding: .9rem 1.2rem; }
 
 
+}
+
+/* === Desktop (≥1024px): Rechner als 2-Spalten-Layout (nur Desktop, keine Zwischenbreite) === */
+@media (width >= 1024px) {
+  /* Links stehen Eingaben + VK untereinander, rechts ist Platz für Ergebnis/Hinweise.
+     Ergebnis/Hinweise bleiben bis zum Klick per `hidden` unsichtbar. */
+  .rechner-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+
+    /* Vertikal wie bei den Cards; horizontal etwas luftiger. */
+    gap: var(--space-3) clamp(1rem, 2vw, 1.75rem);
+  }
+
+  .rechner-grid .eingaben-column {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .rechner-grid .vk-column {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .rechner-grid #ergebnis-container {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
 }
 
 /* === Large Desktop (≥1200px) === */
@@ -1208,6 +1322,24 @@ input.error,
 .startseite {
   padding: 0.5rem 0 var(--space-5) 0;
   margin-bottom: var(--space-5);
+}
+
+/* Robust viewport-height handling (mobile/desktop): prefer svh/dvh where supported.
+   Using min-height (not height) avoids clipping when content grows (e.g., long translations). */
+#startseite {
+  min-height: 100vh;
+}
+
+@supports (min-height: 100svh) {
+  #startseite {
+    min-height: 100svh;
+  }
+}
+
+@supports (min-height: 100dvh) {
+  #startseite {
+    min-height: 100dvh;
+  }
 }
 
 /* Header mit Sprachumschalter (Mobile) */
@@ -1316,8 +1448,9 @@ input.error,
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.3;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0;
   color: var(--text);
+  overflow-wrap: anywhere;
 }
 
 .startseite-title-accent {
@@ -1326,8 +1459,9 @@ input.error,
 
 .startseite-description {
   color: var(--muted);
-  margin-bottom: 1.3rem; /* näher an die Info-Punkte auf Mobile */
+  margin-bottom: 0;
   line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
 /* Zusammenhängendes Informationsfeld: direkt in Startseite integriert (kein separater Kasten) */
@@ -1515,12 +1649,13 @@ input.error,
     display: none;
   }
 
-  /* Startseite nimmt volle Viewport-Höhe ein, aber Scrollen ist erlaubt */
+  /* Desktop Spacing - feste Abstände für alle Sprachen */
+  .startseite-title {
+    margin-bottom: 1.5rem;
+  }
 
-  /* Container der Startseite auf Desktop komplett anders behandeln */
-
-  /* Fallback für Browser ohne :has() Support */
-  .container:not(.rechner-bereich) {
+  /* Container der Startseite auf Desktop: scoped, ohne :has() (Firefox-kompatibel). */
+  .startseite-container {
     max-width: 100% !important;
     width: 100% !important;
     padding: 0 !important;
@@ -1528,40 +1663,28 @@ input.error,
   }
 
   .startseite {
-    min-height: 100vh;
+    /* Use the #startseite min-height rules above; keep layout flexible. */
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
     position: relative;
 
-    /* Verhindert Abschneiden */
+    /* Avoid clipping/overlap; reduce vertical footprint on short screens via responsive padding */
     overflow: visible;
-    padding: 2rem 0;
+    padding-block: clamp(0.75rem, 3vh, 2rem);
 
     /* Sicherstellen, dass nichts abgeschnitten wird */
     box-sizing: border-box;
   }
 
-  .startseite .container {
-    width: 100%;
-    max-width: 100%;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    /* Verhindert Abschneiden */
-    overflow: visible;
-    box-sizing: border-box;
-  }
-
   .startseite-desktop {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: clamp(1.5rem, 4vw, 6rem);
     align-items: center;
-    padding: clamp(2rem, 6vw, 6rem);
+    padding-inline: clamp(1.25rem, 4vw, 6rem);
+    padding-block: clamp(1rem, 3vh, 4rem);
     width: 100%;
     max-width: 1600px;
     margin: 0 auto;
@@ -1572,26 +1695,10 @@ input.error,
 
     /* Verhindert Abschneiden */
     overflow: visible;
-    position: relative; /* Für absolute Positionierung des Language-Buttons */
+    position: relative;
   }
 
-  /* Container-Regel für Startseite komplett überschreiben */
-  .startseite > .container {
-    max-width: 100% !important;
-    width: 100% !important;
-    padding: 0 !important;
-    margin: 0 auto !important;
-  }
-
-  .container:has(.startseite) {
-    max-width: 100% !important;
-    width: 100% !important;
-    padding: 0 !important;
-    margin: 0 auto !important;
-  }
-
-  /* Spezifischer Selektor: Container direkt vor Rechner-Bereich (enthält Startseite) */
-  .container:not(.rechner-bereich):has(#startseite),
+  /* Ensure start section spans full width on desktop */
   #startseite {
     max-width: 100% !important;
     width: 100% !important;
@@ -1638,7 +1745,9 @@ input.error,
   .calendar-visualization {
     position: relative;
     width: 100%;
-    max-width: 600px;
+
+    /* Scale with viewport width so the calendar visibly shrinks when resizing. */
+    max-width: clamp(360px, 42vw, 600px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1652,7 +1761,7 @@ input.error,
     box-shadow: 0 12px 32px rgb(0 0 0 / 25%);
     position: relative;
     width: 100%;
-    max-width: 550px;
+    max-width: clamp(330px, 38vw, 550px);
   }
 
   .calendar-screen {
@@ -1767,21 +1876,17 @@ input.error,
     min-height: 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     overflow: visible;
-    
-    /* Overlay-Positionierung des Sprachumschalters bleibt am Grid orientiert */
   }
 
-  /* Language Switcher Desktop - unabhängig positioniert, am oberen Rand der Kalender-Umrandung */
+  /* Language Switcher Desktop - integriert ins Layout Flow */
   .language-switcher-desktop {
-    position: absolute;
-    top: 272px; /* Fixe Pixelwerte für konsistente Position in allen Engines */
-    right: 112px; /* Entspricht zuvor 7rem bei 16px Root */
+    position: relative;
+    align-self: flex-end;
+    margin-bottom: 1.5rem;
     z-index: 10;
     display: inline-block;
-
-    /* Unabhängig von anderen Elementen - wird nicht von Textlänge beeinflusst */
   }
 
   #lang-switcher-desktop {
@@ -1794,8 +1899,9 @@ input.error,
     padding: 0.5rem 2rem 0.5rem 2.2rem;
     border: 1px solid var(--border);
     border-radius: 6px;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 500;
+    height: 2.5rem;  /* Fixe Höhe - unabhängig von Sprachenlänge */
     background-color: #fff;
     cursor: pointer;
     transition: border-color 0.2s ease, background-color 0.2s ease;
@@ -1889,9 +1995,8 @@ input.error,
   .startseite-description-desktop {
     color: var(--muted);
     margin-bottom: 2rem;
-    line-height: 1.7;
-    font-size: 1.3rem;
-    max-width: 70ch;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
   }
 
   /* Desktop Feature Cards - Als zusammenhängende Box */
@@ -2011,6 +2116,133 @@ input.error,
   .btn-start-calculate-desktop svg {
     width: 22px;
     height: 22px;
+  }
+
+  /* Narrow desktop (e.g., Full-HD laptops, Windows 150% scaling, or not-maximized windows):
+     make BOTH columns feel compact when width is reduced (calendar already shrinks naturally). */
+  @media (width <= 1366px) {
+    .startseite-container .startseite-desktop {
+      gap: clamp(1.25rem, 3vw, 3.5rem);
+      padding-inline: clamp(1rem, 3vw, 3.5rem);
+      padding-block: clamp(0.75rem, 2vh, 2.5rem);
+      align-items: start;
+    }
+
+    .startseite-container .language-switcher-desktop {
+      margin-bottom: 1rem;
+    }
+
+    .startseite-container .startseite-title {
+      margin-bottom: 1.1rem;
+    }
+
+    .startseite-container .startseite-description-desktop {
+      margin-bottom: 1.5rem;
+    }
+
+    .startseite-container .info-card-desktop {
+      padding: var(--space-4);
+    }
+
+    .startseite-container .info-card-icon-desktop {
+      width: 64px;
+      height: 64px;
+      margin-bottom: var(--space-3);
+    }
+
+    .startseite-container .info-card-icon-desktop svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .startseite-container .info-card-title-desktop {
+      font-size: 1.2rem;
+    }
+
+    .startseite-container .btn-start-calculate-desktop {
+      min-width: clamp(220px, 22vw, 260px);
+      max-width: 100%;
+      padding: 16px 40px;
+      font-size: 19px;
+    }
+  }
+
+  /* Short-height desktop: reduce vertical footprint to avoid scroll at ~720px height. */
+  @media (height <= 760px) {
+    .startseite-container .startseite {
+      align-items: flex-start;
+    }
+
+    .startseite-container .startseite-desktop {
+      gap: clamp(1rem, 3vw, 3rem);
+      padding-inline: clamp(1rem, 3vw, 3rem);
+      padding-block: 0.75rem;
+      align-items: start;
+    }
+
+    .startseite-container .language-switcher-desktop {
+      margin-bottom: 0.75rem;
+    }
+
+    .startseite-container .startseite-title {
+      margin-bottom: 0.75rem;
+    }
+
+    .startseite-container .startseite-description-desktop {
+      margin-bottom: 1rem;
+    }
+
+    /* Calendar: keep look identical, only relax height slightly on short screens. */
+    .startseite-container .calendar-screen {
+      min-height: clamp(440px, 62vh, 640px);
+    }
+
+    .startseite-container .info-card-desktop {
+      padding: var(--space-3);
+    }
+
+    .startseite-container .info-card-icon-desktop {
+      width: 56px;
+      height: 56px;
+      margin-bottom: var(--space-3);
+      border-radius: 14px;
+    }
+
+    .startseite-container .info-card-icon-desktop svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .startseite-container .info-card-title-desktop {
+      font-size: 1.1rem;
+    }
+
+    .startseite-container .info-card-subtitle-desktop {
+      font-size: 1rem;
+    }
+
+    .startseite-container .btn-start-calculate-desktop {
+      min-width: clamp(200px, 26vw, 240px);
+      max-width: 100%;
+      padding: 14px 34px;
+      font-size: 18px;
+    }
+  }
+}
+
+/* Rechner-Bereich Desktop Layout Overrides */
+@media (width >= 1024px) {
+  .rechner-bereich.container {
+    width: 100%;
+    max-width: calc(100vw - 1.5rem);
+    padding: clamp(1.25rem, 2vw, 2.5rem);
+  }
+
+  .vk-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
   }
 }
 
