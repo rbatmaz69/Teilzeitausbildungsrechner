@@ -225,6 +225,14 @@ async function generierePDF() {
       if (!el.textContent.trim() && el.children.length === 0) el.remove();
     });
 
+    // "Dauer in Teilzeit" Zeile im PDF auf eine Zeile packen (genügend Platz in PDF)
+    ergebnisCopy.querySelectorAll("dt").forEach(dt => {
+      if (dt.textContent.includes("Dauer in Teilzeit")) {
+        dt.style.setProperty("white-space", "nowrap", "important");
+        dt.style.setProperty("font-size", "0.9rem", "important");
+      }
+    });
+
     pdfContent.appendChild(ergebnisCopy);
 
     // Kopiere Input-Details
