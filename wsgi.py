@@ -7,10 +7,10 @@ der Flask-App mit WSGI-Servern wie Gunicorn, uWSGI oder mod_wsgi.
 WSGI (Web Server Gateway Interface) ist der Standard für Python-Web-Apps.
 
 Verwendung:
-    gunicorn 'wsgi:app' --bind 0.0.0.0:5000 --workers 2
+    gunicorn 'wsgi:app' --bind 0.0.0.0:8000 --workers 2
     
 Oder in Docker:
-    CMD ["gunicorn", "wsgi:app", "--bind", "0.0.0.0:5000", "--workers", "2"]
+    CMD ["gunicorn", "wsgi:app", "--bind", "0.0.0.0:8000", "--workers", "2"]
 """
 
 from src.app import create_app

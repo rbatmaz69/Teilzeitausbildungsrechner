@@ -1,0 +1,241 @@
+{
+  "app": {
+    "title": "Yarı Zamanlı Eğitim Hesaplayıcısı"
+  },
+  "lang": {
+    "label": "Dil",
+    "aria": "Dil seçin",
+    "de": "Deutsch",
+    "en": "English",
+    "uk": "Українська",
+    "tr": "Türkçe"
+  },
+  "inputs": {
+    "title": "Hesabınız",
+    "unitsLegend": "Std = saat, M = ay",
+    "dauer": {
+      "label": "Tam zamanlı eğitim süreniz ne kadar?",
+      "labelShort": "Tam zamanlı eğitim",
+      "tooltip": "Ay cinsinden (örn. 36 ay)"
+    },
+    "stunden": {
+      "label": "Tam zamanlı eğitim haftada kaç saattir?",
+      "labelShort": "Haftalık saat (VZ)",
+      "tooltip": "Eğitimin normal haftalık saati (mesleki okul dahil)"
+    },
+    "teilzeit": {
+      "label": "Eğitim sırasında haftada kaç saat çalışmak istiyorsunuz?",
+      "labelShort": "Yarı zamanlı oran",
+      "tooltip": "Yarı zamanlı eğitim için en az %50 çalışmanız gerekir.",
+      "percent": "Yüzde",
+      "hours": "Saat",
+      "separator": "veya",
+      "button24h": "24 saat (3 gün)",
+      "button32h": "32 saat (4 gün)"
+    },
+    "verkuerzungen": {
+      "labelShort": "Kısaltmalar"
+    },
+    "afterShortening": "Kısaltma sonrası süre",
+    "inPartTime": "Yarı zamanlı süresi",
+    "noShortening": "Hiç kısaltma seçilmedi",
+    "toggleHint": "Göster/kapamak için tıklayın",
+    "toggleLabel": "Detayları göster",
+    "toggleLabelOpen": "Detayları gizle",
+    "decimalHint": "Ondalık sayı girilebilir (örn. 32,5)",
+    "roundingHint": "Değer {original} aylardan {rounded} aya yuvarlandı",
+    "placeholders": {
+      "dauer": "örn. 36",
+      "stunden": "örn. 40",
+      "teilzeitProzent": "örn. 75",
+      "teilzeitStunden": "örn. 30"
+    }
+  },
+  "vk": {
+    "heading": "Eğitim süresini kısaltma sebepleri",
+    "helper": "Sizinle ilgili olan tüm seçenekleri işaretleyin.",
+    "legend": "Kısaltma sebepleri",
+    "familie": {
+      "title": "Aile sorumlulukları",
+      "question_kinder": "Kendi çocuğunuza bakıyor musunuz veya bir çocuğun bakımından sorumlu musunuz?",
+      "question_pflege": "Bir yakınına bakım yapıyor musunuz veya düzenli olarak bakımda rol alıyor musunuz?",
+      "label_kinder": "Çocuk bakımı",
+      "label_pflege": "Yakınlara bakım",
+      "yes": "Evet",
+      "no": "Hayır",
+      "sr": "Aile veya bakım sorumluluğunuz varsa kısaltma mümkün olabilir."
+    },
+    "school": {
+      "question": "En yüksek okul diplomanız nedir?",
+      "label": "Okul derecesi",
+      "none": "Diplomasız",
+      "hauptschule": "Temel ortaöğretim (Almanca: Hauptschule)",
+      "realschule": "Ortaöğretim (Almanca: Realschule)",
+      "abitur": "Üniversite giriş diploması (Almanca: Abitur / Hochschulreife)"
+    },
+    "qual": {
+      "question": "Hangi mesleki niteliklere sahipsiniz?",
+      "yes": "Evet",
+      "no": "Hayır",
+      "months": "ay",
+      "abgeschlosseneAusbildung": "Aynı veya benzer bir meslekte tamamlanmış bir eğitim geçmişiniz var mı?",
+      "abgeschlosseneAusbildung_sr": "Aynı veya benzer meslekte tamamlanmış eğitim",
+      "abgeschlosseneAusbildung_short": "Tamamlanmış eğitim",
+      "nichtAbgeschlosseneAusbildung": "Aynı veya benzer bir meslekte başladığınız ama tamamlamadığınız bir eğitim var mı?",
+      "nichtAbgeschlosseneAusbildung_sr": "Başlanmış ama tamamlanmamış eğitim",
+      "nichtAbgeschlosseneAusbildung_dauer": "Tamamlanmamış eğitim kaç ay sürdü?",
+      "nichtAbgeschlosseneAusbildung_short": "Tamamlanmamış eğitim",
+      "praktischeErfahrung": "Benzer bir alanda çalıştınız veya eğitim için faydalı pratik deneyim kazandınız mı?",
+      "praktischeErfahrung_sr": "Benzer alanda pratik deneyim",
+      "praktischeErfahrung_short": "Pratik deneyim",
+      "berufsvorbereitendeSchule": "Eğitime başlamadan önce mesleki hazırlık okulu (örn. Mesleki Temel Eğitim Yılı) okudunuz mu?",
+      "berufsvorbereitendeSchule_sr": "Mesleki hazırlık okulu katılımı",
+      "berufsvorbereitendeSchule_short": "Mesleki hazırlık",
+      "massnahmeVorbereitung": "Eğitime hazırlık amaçlı bir programa katıldınız mı (örn. Giriş yeterlilik programı)?",
+      "massnahmeVorbereitung_sr": "Eğitime hazırlık programı",
+      "massnahmeVorbereitung_short": "Hazırlık programı",
+      "ectsStudium": "Üniversitede, mesleğinize uygun alanda en az 30 ECTS aldınız mı?",
+      "ectsStudium_sr": "İlgili alanda ECTS",
+      "ectsStudium_short": "Üniversite kredisi"
+    },
+    "bildungsweg": {
+      "question": "Eğitim öncesi öğrenim yolu"
+    },
+    "vork": {
+      "label1": "Tamamlanmış mesleki eğitim",
+      "label2": "İlgili temel mesleki eğitim kanıtı",
+      "label3": "İlgili mesleki çalışma",
+      "label4": "Mesleki alanda iş deneyimi",
+      "sr": "Mesleki ön bilgi eğitim sürenizi kısaltabilir."
+    },
+    "other": {
+      "question": "Kaç yaşındasınız?"
+    },
+    "alter21": {
+      "label": "21 yaşından büyük",
+      "yes": "Evet",
+      "no": "Hayır",
+      "sr": "21 yaşından büyükse, önceki deneyimler dikkate alınabilir."
+    },
+    "infoBox": {
+      "button": "Bu nedir?",
+      "buttonAria": "Kısaltma sebepleri hakkında bilgi göster",
+      "closeAria": "Modali kapat",
+      "title": "Kısaltma sebepleri nedir?",
+      "content": "<p><strong>Kısaltma sebepleri</strong>, normal eğitim süresini kısaltmaya imkan veren durumlar veya niteliklerdir. Bu sayede eğitiminizi daha hızlı tamamlayabilirsiniz.</p><p><strong>Nasıl uygulanır?</strong></p><p>Kısaltma sebepleri normal eğitim süresine eklenir. Sebebe bağlı olarak farklı süreler kısaltılabilir. Kısaltmalar maksimum değere ulaşana kadar toplanır.</p><p><strong>Aynı anda kaç tanesi mümkün?</strong></p><p><strong>Birkaç kısaltma sebebi</strong> belirtilebilir. Toplam kısaltma seçilen sebeplerin toplamından hesaplanır. Ancak en fazla 12 ay kısaltma olabileceğini unutmayın.</p>"
+    }
+  },
+  "res": {
+    "headline": "Yarı zamanlı eğitiminiz",
+    "helper": "Burada girdileriniz ve sonuç gösterilir.",
+    "notesTitle": "Önemli notlar",
+    "notes": "<li>Hesaplama sadece <strong>yardımcı</strong> ve bir <strong>kılavuz</strong> niteliğindedir.</li><li>Sonuç <strong>bağlayıcı değildir</strong>.</li><li>Sonucu eğitim yerinizle görüşün.</li><li>Yarı zamanlı eğitim, normal çalışma süresinin en az yarısını çalıştığınızda mümkündür.</li>",
+    "kv": {
+      "total": "Toplam süre",
+      "schoolPerWeek": "Haftalık eğitim",
+      "workPerWeek": "Haftalık çalışma"
+    },
+    "extension": {
+      "label1": "1. Kısaltma sebepleri nedeniyle:",
+      "label2": "2. Yarı zamanlı nedeniyle uzama:",
+      "plus": "+{n} ay",
+      "none": "Uzama yok"
+    },
+    "placeholders": {
+      "months": "–",
+      "extension": "–"
+    }
+  },
+  "cuts": {
+    "title": "Kısaltma sebepleri",
+    "total": "Toplam",
+    "newBase": "Yeni temel",
+    "sumAll": "Tüm kısaltmaların toplamı"
+  },
+  "units": {
+    "hours": {
+      "short": "s",
+      "full": "saat"
+    },
+    "months": {
+      "short": "ay",
+      "full": "ay"
+    },
+    "weeks": {
+      "short": "hft",
+      "full": "haftalar"
+    },
+    "years": {
+      "short": "y",
+      "full": "yıl"
+    },
+    "percent": "Yüzde"
+  },
+  "errors": {
+    "placeholder": "",
+    "fetch": "Veriler yüklenemedi.",
+    "unknown": "Bilinmeyen hata",
+    "tooShort": "Eğitim süresi en fazla 12 ay kısaltılabilir!",
+    "tooLong": "Eğitim süresi en fazla 1,5 kat olabilir!",
+    "invalidPercent": "Geçersiz giriş nedeniyle değer %50'ye düzeltildi",
+    "invalidHours": "Geçersiz giriş nedeniyle değer minimuma düzeltildi",
+    "regularHoursMin": "Değer en az 10 saat olmalıdır",
+    "regularHoursMax": "Değer en fazla 48 saat olabilir",
+    "durationMin": "Değer en az 24 ay olmalıdır",
+    "durationMax": "Değer en fazla 42 ay olabilir",
+    "alterMax": "Değer en fazla 99 olabilir",
+    "berufQ2DauerMax": "Değer en fazla 50 ay olabilir",
+    "percentMin": "Değer en az %50 olmalıdır",
+    "percentMax": "Değer en fazla %100 olabilir",
+    "hoursMin": "Değer normal saatlerin en az %50'si olmalıdır",
+    "hoursMax": "Değer normal haftalık saati aşamaz",
+    "invalidCut": "Uyarı: Seçilen kısaltmalar toplamı 12 aydan fazla. Kısaltma 12 ay ile sınırlanacaktır.",
+    "invalidCutShort": "Uyarı: Kısaltma maks. 12 ay ile sınırlıdır",
+    "regel8Abs3": "Uyarı: Yarı zamanlı çalışma süreniz eğitimi en fazla 6 ay daha uzatacaksa, eğitim normal süre sonunda sona erer (§ 8 Abs. 3 BBiG)."
+  },
+  "validation": {
+    "required": "Bu alan gereklidir"
+  },
+  "btn": {
+    "calculate": "Sonucu göster",
+    "reset": "Sıfırla",
+    "share": "Sonucu paylaş"
+  },
+  "share": {
+    "title": "Yarı zamanlı hesaplayıcı – Sonuç",
+    "text": "İşte benim sonucum.",
+    "copied": "Bağlantı kopyalandı.",
+    "error": "Paylaşma hatası. Lütfen bağlantıyı manuel kopyalayın.",
+    "noData": "Bağlantıyı paylaşmadan önce lütfen önce sonucu hesaplayın."
+  },
+  "reset": {
+    "confirm": "Tüm verileri sıfırlamak istediğinizden emin misiniz?"
+  },
+  "nav": {
+    "actions": "Eylemler"
+  },
+  "meta": {
+    "stampLabel": "Tarih itibarıyla"
+  },
+  "start": {
+    "title": {
+      "prefix": "Planlayın ",
+      "accent": "yarı zamanlı eğitiminizi",
+      "suffix": " kolayca"
+    },
+    "description": "Çalışma süresi ve eğitim arasında en uygun dağılımı hesaplayın. Hesaplayıcımız ihtiyaçlarınıza uygun çözümü bulmanıza yardımcı olur.",
+    "card1": {
+      "title": "Esnek zamanlar",
+      "subtitle": "Bireysel saat planlaması"
+    },
+    "card2": {
+      "title": "Hassas planlama",
+      "subtitle": "Kesin hesaplama"
+    },
+    "card3": {
+      "title": "Başarılı tamamlanma",
+      "subtitle": "Yapılandırılmış yol"
+    },
+    "button": "Hesaplayıcıya git"
+  }
+}
