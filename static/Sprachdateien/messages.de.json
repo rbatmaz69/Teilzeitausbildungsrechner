@@ -201,6 +201,27 @@
     "reset": "Zurücksetzen",
     "share": "Ergebnis teilen"
   },
+  "sharing": {
+    "title": "Ergebnis teilen",
+    "description": "Wählen Sie, wie Sie Ihre Berechnung weiterleiten möchten:",
+    "downloadPdf": "Als PDF herunterladen",
+    "downloadPdfDesc": "Erstellt ein PDF mit allen Eingaben und Ergebnissen",
+    "copyLink": "Link kopieren",
+    "copyLinkDesc": "Kopiert einen Link mit allen Eingaben in die Zwischenablage",
+    "copied": "Kopiert!",
+    "copiedSuccess": "Link wurde kopiert!",
+    "generating": "Erstelle PDF...",
+    "generated": "PDF erstellt",
+    "downloaded": "PDF heruntergeladen",
+    "page": "Seite",
+    "of": "von",
+    "error": {
+      "libraries": "PDF-Bibliotheken konnten nicht geladen werden",
+      "noResults": "Bitte führen Sie zuerst eine Berechnung durch",
+      "generation": "Fehler beim Erstellen der PDF-Datei",
+      "copy": "Link konnte nicht kopiert werden"
+    }
+  },
   "share": {
     "title": "Teilzeitrechner – Ergebnis",
     "text": "Hier ist mein Ergebnis.",
