@@ -6,11 +6,17 @@ function setzeText(selektor, text) {
   const element = $(selektor);
   if (element) element.textContent = text;
 }
-function zeige(element) {
-  if (element) element.hidden = false;
-}
+
 function verberge(element) {
   if (element) element.hidden = true;
+}
+
+function setzeErgebnisBegleitUIVisible(visible) {
+  const notesContainer = document.getElementById("notes-container") || document.querySelector(".rechner-column.notes-column");
+  if (notesContainer) notesContainer.hidden = !visible;
+
+  const btnShare = document.getElementById("btn-share");
+  if (btnShare) btnShare.hidden = !visible;
 }
 
 // i18n Helfer (nutzt die globale API aus script_Sprache_Auswaehlen.js)
@@ -25,10 +31,167 @@ function aktuelleSprache() {
   return (window.I18N && window.I18N.lang) || "de";
 }
 
+// Locale-aware Zahl parser: akzeptiert deutsches Komma und (optional) Tausenderpunkte.
+// Beispiele:
+// - "1,5" -> 1.5
+// - "1.234,5" -> 1234.5
+const parseNumber = (value) => {
+  const raw = String(value ?? "").trim();
+  if (!raw) return NaN;
+
+  // Spaces entfernen (inkl. NBSP)
+  let normalized = raw.replace(/[\s\u00A0]/g, "");
+
+  // Wenn ein Komma vorkommt, behandeln wir Punkte als Tausendertrennzeichen
+  if (normalized.includes(",")) {
+    normalized = normalized.replace(/\./g, "");
+    normalized = normalized.replace(/,/g, ".");
+  }
+
+  return parseFloat(normalized);
+};
+
 
 // Zustand merken, damit wir bei Sprachwechsel neu rendern können
 let LETZTE_EINGABEN = null;
 let LETZTE_BERECHNUNG = null;
+
+// Desktop-only Button-Layout (ohne Mobile zu verändern)
+let DESKTOP_BUTTON_LAYOUT = null;
+
+function initialisiereDesktopButtonLayout() {
+  // Nutzt bestehenden Desktop-Breakpoint aus CSS (@media (width >= 900px))
+  const mq = window.matchMedia("(min-width: 900px)");
+
+  const actionbar = document.querySelector("nav.actionbar.rechner-bereich");
+  const btnReset = document.getElementById("btn-reset");
+  const btnShare = document.getElementById("btn-share");
+  const btnBerechnen = document.getElementById("berechnenBtn");
+  const vkActions = document.querySelector(".vk-actions");
+  const notesColumn = document.querySelector(".rechner-column.notes-column");
+
+  if (!actionbar || !btnReset || !btnShare || !btnBerechnen || !vkActions || !notesColumn) {
+    return;
+  }
+
+  // Initiale State/Platzhalter nur einmal anlegen
+  if (!DESKTOP_BUTTON_LAYOUT) {
+    const resetPlaceholder = document.createComment("placeholder:btn-reset");
+    const sharePlaceholder = document.createComment("placeholder:btn-share");
+    const berechnenPlaceholder = document.createComment("placeholder:berechnenBtn");
+
+    // Platzhalter an den Originalpositionen setzen
+    actionbar.insertBefore(resetPlaceholder, btnReset);
+    actionbar.insertBefore(sharePlaceholder, btnShare);
+    vkActions.insertBefore(berechnenPlaceholder, btnBerechnen);
+
+    DESKTOP_BUTTON_LAYOUT = {
+      mq,
+      actionbar,
+      vkActions,
+      notesColumn,
+      btnReset,
+      btnShare,
+      btnBerechnen,
+      resetPlaceholder,
+      sharePlaceholder,
+      berechnenPlaceholder,
+      actionsGroup: null,
+      shareMount: null,
+      listenerAttached: false
+    };
+  }
+
+  const applyLayout = (isDesktop) => {
+    const layout = DESKTOP_BUTTON_LAYOUT;
+    if (!layout) return;
+
+    if (isDesktop) {
+      // 1) Reset links neben Ergebnis anzeigen in derselben Spalte
+      if (!layout.actionsGroup) {
+        const group = document.createElement("div");
+        group.className = "button-group desktop-calc-actions";
+        layout.actionsGroup = group;
+      }
+
+      if (layout.actionsGroup.parentNode !== layout.vkActions) {
+        layout.vkActions.appendChild(layout.actionsGroup);
+      }
+
+      // Reihenfolge: Reset links, Berechnen rechts
+      if (layout.btnBerechnen.parentNode !== layout.actionsGroup) {
+        layout.actionsGroup.appendChild(layout.btnBerechnen);
+      }
+      if (layout.btnReset.parentNode !== layout.actionsGroup) {
+        layout.actionsGroup.insertBefore(layout.btnReset, layout.btnBerechnen);
+      } else {
+        layout.actionsGroup.insertBefore(layout.btnReset, layout.btnBerechnen);
+      }
+
+      // 2) Share in die Hinweise-Spalte, aber unterhalb der Hinweise-Card
+      const notesCard = layout.notesColumn.querySelector(":scope > .card");
+      if (notesCard) {
+        if (!layout.shareMount) {
+          const mount = document.createElement("div");
+          mount.className = "desktop-share-action";
+          layout.shareMount = mount;
+        }
+
+        // Direkt nach der Card einfügen
+        if (layout.shareMount.parentNode !== layout.notesColumn) {
+          layout.notesColumn.insertBefore(layout.shareMount, notesCard.nextSibling);
+        } else if (notesCard.nextSibling !== layout.shareMount) {
+          layout.notesColumn.insertBefore(layout.shareMount, notesCard.nextSibling);
+        }
+
+        if (layout.btnShare.parentNode !== layout.shareMount) {
+          layout.shareMount.appendChild(layout.btnShare);
+        }
+      }
+
+      // Actionbar auf Desktop ausblenden, damit sie nicht leer bleibt
+      layout.actionbar.dataset.desktopMoved = "true";
+    } else {
+      // Mobile: alles exakt zurück in den Originalzustand
+
+      // Berechnen wieder direkt in .vk-actions (ohne Desktop-Wrapper)
+      if (layout.berechnenPlaceholder.parentNode === layout.vkActions) {
+        layout.vkActions.insertBefore(layout.btnBerechnen, layout.berechnenPlaceholder.nextSibling);
+      }
+
+      if (layout.actionsGroup && layout.actionsGroup.parentNode) {
+        layout.actionsGroup.parentNode.removeChild(layout.actionsGroup);
+      }
+      layout.actionsGroup = null;
+
+      // Reset/Share zurück in die Actionbar
+      if (layout.resetPlaceholder.parentNode === layout.actionbar) {
+        layout.actionbar.insertBefore(layout.btnReset, layout.resetPlaceholder.nextSibling);
+      }
+      if (layout.sharePlaceholder.parentNode === layout.actionbar) {
+        layout.actionbar.insertBefore(layout.btnShare, layout.sharePlaceholder.nextSibling);
+      }
+
+      if (layout.shareMount && layout.shareMount.parentNode) {
+        layout.shareMount.parentNode.removeChild(layout.shareMount);
+      }
+      layout.shareMount = null;
+
+      delete layout.actionbar.dataset.desktopMoved;
+    }
+  };
+
+  // Initial anwenden
+  applyLayout(mq.matches);
+
+  // Listener nur einmal registrieren
+  if (!DESKTOP_BUTTON_LAYOUT.listenerAttached) {
+    DESKTOP_BUTTON_LAYOUT.listenerAttached = true;
+    mq.addEventListener("change", (event) => {
+      applyLayout(event.matches);
+    });
+  }
+}
 
 /**
  * Sammelt alle Verkürzungsgründe und gibt sie als Objekt zurück,
@@ -39,8 +202,18 @@ function collectVerkuerzungsgruende() {
     abitur: false,
     realschule: false,
     alter_ueber_21: false,
+    familien_kinderbetreuung: false,
     familien_pflegeverantwortung: false,
-    vorkenntnisse_monate: 0
+    vorkenntnisse_monate: 0,
+    // Neue berufliche Fragen
+    beruf_q1: false,
+    beruf_q2: false,
+    beruf_q2_dauer_monate: 0,
+    beruf_q3: false,
+    beruf_q4: false,
+    beruf_q5: false,
+    beruf_q6: false,
+    berufliche_verkuerzung_monate: 0
   };
 
   // 1) Alle Checkbox-Kacheln mit data-vk-field
@@ -84,6 +257,63 @@ function collectVerkuerzungsgruende() {
     }
   }
 
+  // 3) Alter über 21
+  const alterInput = document.getElementById("alter");
+  if (alterInput) {
+    const alterInt = parseInt(alterInput.value);
+    if (!isNaN(alterInt) && alterInt > 21) {
+      result.alter_ueber_21 = true;
+    }
+  }
+
+  // 4) Neue berufliche Fragen (Ja/Nein und Dauer für Q2)
+  try {
+    const q1 = document.getElementById('vk_beruf_q1_ja');
+    const q2 = document.getElementById('vk_beruf_q2_ja');
+    const q2dur = document.getElementById('vk_beruf_q2_dauer_months');
+    const q3 = document.getElementById('vk_beruf_q3_ja');
+    const q4 = document.getElementById('vk_beruf_q4_ja');
+    const q5 = document.getElementById('vk_beruf_q5_ja');
+    const q6 = document.getElementById('vk_beruf_q6_ja');
+
+    if (q1 && q1.checked) result.beruf_q1 = true;
+    if (q2 && q2.checked) result.beruf_q2 = true;
+    if (q3 && q3.checked) result.beruf_q3 = true;
+    if (q4 && q4.checked) result.beruf_q4 = true;
+    if (q5 && q5.checked) result.beruf_q5 = true;
+    if (q6 && q6.checked) result.beruf_q6 = true;
+
+    // Q2 Dauer verarbeiten (nur wenn Q2 ausgewählt)
+    if (result.beruf_q2 && q2dur) {
+      const dur = parseInt(q2dur.value);
+      result.beruf_q2_dauer_monate = isNaN(dur) ? 0 : Math.max(0, dur);
+    }
+
+    // Berufliche Verkürzung nach Regeln: Q1/Q3/Q4 -> 12, Q5/Q6 -> 6, Q2 -> mapping
+    let berufMonate = 0;
+    if (result.beruf_q1) berufMonate += 12;
+    if (result.beruf_q3) berufMonate += 12;
+    if (result.beruf_q4) berufMonate += 12;
+    if (result.beruf_q5) berufMonate += 6;
+    if (result.beruf_q6) berufMonate += 6;
+    if (result.beruf_q2) {
+      const d = result.beruf_q2_dauer_monate || 0;
+      if (d >= 12) berufMonate += 12;
+      else if (d >= 6) berufMonate += 6;
+      // <6 => 0
+    }
+
+    // Legacy: falls vorkenntnisse_monate gesetzt (alte UI), mappe >0 -> 12
+    if (result.vorkenntnisse_monate && result.vorkenntnisse_monate > 0) {
+      berufMonate += 12;
+    }
+
+    result.berufliche_verkuerzung_monate = berufMonate;
+  } catch (e) {
+    // Falls DOM-Elemente fehlen, ignoriere silently (backwards compatible)
+    console.warn('Fehler beim Lesen beruflicher Fragen', e);
+  }
+
   return result;
 }
 
@@ -93,16 +323,212 @@ function collectVerkuerzungsgruende() {
  * Sammelt Formularwerte, sendet sie an den API-Endpunkt und normalisiert
  * das Ergebnis für die tabellarische Darstellung.
  */
+/**
+ * Validiert alle Eingabefelder und gibt Fehler aus wenn Felder leer sind.
+ * Scrollt zum ersten Fehler und hebt ihn hervor.
+ * @returns {boolean} true wenn alle Felder gültig sind, false sonst
+ */
+function validiereAlleEingaben() {
+  // Alle Fehler-Markierungen entfernen
+  document.querySelectorAll("input, .vk-yes-no-group").forEach(el => {
+    el.classList.remove("error");
+  });
+  document.querySelectorAll(".error-message, .error-message-ja-nein").forEach(el => {
+    el.textContent = "";
+  });
+
+  // Erforderliche Eingabefelder (number inputs)
+  const erforderlicheFelder = [
+    { id: "dauer", label: "Reguläre Ausbildungsdauer" },
+    { id: "stunden", label: "Reguläre Wochenstunden" }
+  ];
+
+  // Ja/Nein Gruppen (mind. eine Antwort pro Frage)
+  const jaNeineGruppen = [
+    { ja: "abitur-ja", nein: "abitur-nein", label: "Schulabschluss" },
+    { ja: "realschule-ja", nein: "realschule-nein", label: "Realschule" },
+    { ja: "kinderbetreuung-ja", nein: "kinderbetreuung-nein", label: "Kinderbetreuung" },
+    { ja: "pflege-ja", nein: "pflege-nein", label: "Pflege von Angehörigen" },
+    { ja: "vk_beruf_q1_ja", nein: "vk_beruf_q1_nein", label: "Abgeschlossene Ausbildung" },
+    { ja: "vk_beruf_q2_ja", nein: "vk_beruf_q2_nein", label: "Nicht abgeschlossene Ausbildung" },
+    { ja: "vk_beruf_q3_ja", nein: "vk_beruf_q3_nein", label: "Praktische Erfahrung" },
+    { ja: "vk_beruf_q4_ja", nein: "vk_beruf_q4_nein", label: "Berufsvorbereitende Schulform" },
+    { ja: "vk_beruf_q5_ja", nein: "vk_beruf_q5_nein", label: "Vorbereitungsmaßnahme" },
+    { ja: "vk_beruf_q6_ja", nein: "vk_beruf_q6_nein", label: "ECTS-Punkte im Studium" }
+  ];
+
+  let ersterFehler = null;
+
+  // 1. Prüfe erforderliche Felder
+  for (const feld of erforderlicheFelder) {
+    const element = document.getElementById(feld.id);
+    if (!element) continue;
+
+    const wert = element.value?.trim();
+    const zahl = parseNumber(wert);
+    if (!wert || wert === "" || zahl === 0 || isNaN(zahl)) {
+      element.classList.add("error");
+      const errorId = "error" + feld.id.charAt(0).toUpperCase() + feld.id.slice(1);
+      const errorElement = document.getElementById(errorId);
+      if (errorElement) {
+        errorElement.textContent = uebersetzung("validation.required", "Dieses Feld ist erforderlich");
+      }
+      if (!ersterFehler) ersterFehler = element;
+    }
+  }
+
+  // 2. Wenn Wochenstunden gesetzt sind, aber Teilzeitfelder leer, zeige Fehler
+  const wochenstundenElement = document.getElementById("stunden");
+  const teilzeitStundenElement = document.getElementById("teilzeitStunden");
+  const teilzeitProzentElement = document.getElementById("teilzeitProzent");
+  
+  if (wochenstundenElement && teilzeitStundenElement && teilzeitProzentElement) {
+    const wochenstunden = wochenstundenElement.value?.trim();
+    const teilzeitStunden = teilzeitStundenElement.value?.trim();
+    const teilzeitProzent = teilzeitProzentElement.value?.trim();
+    
+    // Wenn Wochenstunden gesetzt sind UND beide Teilzeitfelder leer sind
+    const wochenstundenZahl = parseNumber(wochenstunden);
+    if (wochenstunden && wochenstunden !== "" && wochenstundenZahl > 0 && 
+        (!teilzeitStunden || teilzeitStunden === "") && (!teilzeitProzent || teilzeitProzent === "")) {
+      
+      // Fehler für Teilzeit-Stunden
+      teilzeitStundenElement.classList.add("error");
+      const errorTeilStunden = document.getElementById("errorTeilStunden");
+      if (errorTeilStunden) {
+        errorTeilStunden.textContent = uebersetzung("validation.required", "Dieses Feld ist erforderlich");
+      }
+      if (!ersterFehler) ersterFehler = teilzeitStundenElement;
+      
+      // Fehler für Teilzeit-Prozent
+      teilzeitProzentElement.classList.add("error");
+      const errorProzent = document.getElementById("errorProzent");
+      if (errorProzent) {
+        errorProzent.textContent = uebersetzung("validation.required", "Dieses Feld ist erforderlich");
+      }
+    }
+  }
+
+  // 3. Alter separat nach Teilzeit prüfen
+  const alterElement = document.getElementById("alter");
+  if (alterElement) {
+    const alterWert = alterElement.value?.trim();
+    const alterZahl = parseNumber(alterWert);
+    if (!alterWert || alterWert === "" || alterZahl === 0 || isNaN(alterZahl)) {
+      alterElement.classList.add("error");
+      const errorAlter = document.getElementById("errorAlter");
+      if (errorAlter) {
+        errorAlter.textContent = uebersetzung("validation.required", "Dieses Feld ist erforderlich");
+      }
+      if (!ersterFehler) ersterFehler = alterElement;
+    }
+  }
+
+  // 4. Prüfe Ja/Nein Gruppen
+  for (const gruppe of jaNeineGruppen) {
+    const jaElement = document.getElementById(gruppe.ja);
+    const neinElement = document.getElementById(gruppe.nein);
+
+    if (!jaElement || !neinElement) continue;
+
+    const jaChecked = jaElement.checked;
+    const neinChecked = neinElement.checked;
+
+    if (!jaChecked && !neinChecked) {
+      // Beide sind nicht ausgewählt → Fehler
+      // Markiere das tile-Label, nicht das checkbox
+      const jaLabel = jaElement.closest(".tile");
+      const neinLabel = neinElement.closest(".tile");
+      
+      if (jaLabel) jaLabel.classList.add("error");
+      if (neinLabel) neinLabel.classList.add("error");
+
+      // Fehlermeldung unter der Gruppe anzeigen
+      // Finde die vk-yes-no-group und füge die Fehlermeldung danach ein
+      const yesNoGroup = jaElement.closest(".vk-yes-no-group");
+      if (yesNoGroup) {
+        let errorElement = yesNoGroup.nextElementSibling;
+        // Prüfe ob bereits eine error-message vorhanden ist
+        if (!errorElement || !errorElement.classList.contains("error-message-ja-nein")) {
+          errorElement = document.createElement("span");
+          errorElement.className = "error-message error-message-ja-nein";
+          yesNoGroup.parentNode.insertBefore(errorElement, yesNoGroup.nextSibling);
+        }
+        errorElement.textContent = uebersetzung("validation.required", "Dieses Feld ist erforderlich");
+      }
+
+      if (!ersterFehler) ersterFehler = jaElement;
+    }
+  }
+
+  // 5. Wenn Q2 "Ja" ist, prüfe ob Dauer eingegeben wurde
+  const berufQ2Ja = document.getElementById("vk_beruf_q2_ja");
+  const berufQ2Duration = document.getElementById("vk_beruf_q2_dauer_months");
+  if (berufQ2Ja && berufQ2Ja.checked && berufQ2Duration) {
+    const dauer = berufQ2Duration.value?.trim();
+    const dauerZahl = parseNumber(dauer);
+    if (!dauer || dauer === "" || dauerZahl === 0 || isNaN(dauerZahl)) {
+      berufQ2Duration.classList.add("error");
+      const errorElement = document.getElementById("errorBerufQ2Dauer");
+      if (errorElement) {
+        errorElement.textContent = uebersetzung("validation.required", "Dieses Feld ist erforderlich");
+      }
+      if (!ersterFehler) ersterFehler = berufQ2Duration;
+    }
+  }
+
+  // 6. Wenn Fehler vorhanden, zum ersten Fehler scrollen (gleiche Logik wie "Zum Rechner" Button)
+  if (ersterFehler) {
+    setTimeout(() => {
+      const elementTop = ersterFehler.getBoundingClientRect().top + window.pageYOffset;
+      const offset = 70; // Offset für Tooltip + Abstand oben
+      const targetScrollY = elementTop - offset;
+      
+      // Manuelle Scroll-Animation für langsames, sichtbares Scrollen
+      const startY = window.pageYOffset;
+      const distance = targetScrollY - startY;
+      const duration = 1000; // 1 Sekunde für langsames Scrollen
+      let startTime = null;
+      
+      const easeInOutQuad = (t) => {
+        // Easing-Funktion für sanfte Animation
+        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      };
+      
+      const animateScroll = (currentTime) => {
+        if (startTime === null) startTime = currentTime;
+        const elapsedTime = currentTime - startTime;
+        const progress = Math.min(elapsedTime / duration, 1);
+        const ease = easeInOutQuad(progress);
+        const currentY = startY + distance * ease;
+        
+        window.scrollTo(0, currentY);
+        
+        if (progress < 1) {
+          requestAnimationFrame(animateScroll);
+        } else {
+          ersterFehler.focus();
+        }
+      };
+      
+      requestAnimationFrame(animateScroll);
+    }, 50);
+    return false;
+  }
+
+  return true;
+}
+
 async function holeZusammenfassung() {
   const basisMonateElement = document.getElementById("dauer");
   const wochenstundenElement = document.getElementById("stunden");
   const prozentElement = document.getElementById("teilzeitProzent");
 
-  const basisMonate = Number(basisMonateElement?.value || 0);
-  const wochenstunden = Number(wochenstundenElement?.value || 0);
-  const teilzeitProzent = Number(prozentElement?.value || 0);
+  const basisMonate = parseNumber(basisMonateElement?.value || 0);
+  const wochenstunden = parseNumber(wochenstundenElement?.value || 0);
+  const teilzeitProzent = parseNumber(prozentElement?.value || 0);
 
-  const verkuerzungsgruende = collectVerkuerzungsgruende();
+  const verkuerzungsgruende = collectVerkuerzungsgruende();  
 
   const nutzdaten = {
     basis_dauer_monate: basisMonate,
@@ -130,7 +556,7 @@ async function holeZusammenfassung() {
   }
 
   const daten = await antwort.json();
-  const ergebnis = daten.result || {};
+  const ergebnis = daten.result || {};  
 
   const gesamtMonate = Number(ergebnis.finale_dauer_monate || 0);
   const verlaengerungMonate = Number(ergebnis.verlaengerung_durch_teilzeit_monate || 0);
@@ -140,25 +566,63 @@ async function holeZusammenfassung() {
   const regel8Abs3Angewendet = Boolean(ergebnis.regel_8_abs_3_angewendet || false);
 
   // Anzeige-Liste der gewählten Verkürzungsgründe aus dem Objekt bauen
+  // Reihenfolge entspricht der visuellen Reihenfolge der Fragen im Formular
   const verkuerzungen = [];
 
-  if (verkuerzungsgruende.abitur) {
-    verkuerzungen.push({ key: "abitur", months: 12 });
-  }
+  // 1) Schulabschluss (Select: Reihenfolge in Select beachten)
   if (verkuerzungsgruende.realschule) {
     verkuerzungen.push({ key: "realschule", months: 6 });
   }
+  if (verkuerzungsgruende.abitur) {
+    verkuerzungen.push({ key: "abitur", months: 12 });
+  }
+
+  // 2) Alter über 21
   if (verkuerzungsgruende.alter_ueber_21) {
     verkuerzungen.push({ key: "alter_ueber_21", months: 12 });
   }
+
+  // 3) (Legacy) Vorkenntnisse (falls gesetzt)
   if (verkuerzungsgruende.vorkenntnisse_monate && verkuerzungsgruende.vorkenntnisse_monate > 0) {
     verkuerzungen.push({
       key: "vorkenntnisse",
       months: verkuerzungsgruende.vorkenntnisse_monate
     });
   }
+
+  // 4) Familiäre Gründe: Kinderbetreuung zuerst, dann Pflege
+  if (verkuerzungsgruende.familien_kinderbetreuung) {
+    verkuerzungen.push({ key: "familien_kinderbetreuung", months: 12 });
+  }
   if (verkuerzungsgruende.familien_pflegeverantwortung) {
     verkuerzungen.push({ key: "familien_pflegeverantwortung", months: 12 });
+  }
+
+  // 5) Berufliche Qualifikationen (sichtbar in dieser Reihenfolge in der UI):
+  // q1, q2, q3, q5 (in der Qualifikationen-Box), danach q4 und q6 (in Bildungsweg-Box)
+  if (verkuerzungsgruende.beruf_q1) {
+    verkuerzungen.push({ key: "beruf_q1", months: 12 });
+  }
+  if (verkuerzungsgruende.beruf_q2) {
+    // Berechne Months für Q2: <6 -> 0, 6-11 -> 6, >=12 -> 12
+    const d = Number(verkuerzungsgruende.beruf_q2_dauer_monate || 0);
+    let m = 0;
+    if (d >= 12) m = 12;
+    else if (d >= 6) m = 6;
+    if (m > 0) verkuerzungen.push({ key: "beruf_q2", months: m });
+  }
+  if (verkuerzungsgruende.beruf_q3) {
+    verkuerzungen.push({ key: "beruf_q3", months: 12 });
+  }
+  if (verkuerzungsgruende.beruf_q5) {
+    verkuerzungen.push({ key: "beruf_q5", months: 6 });
+  }
+  // Q4 and Q6 are placed in the "Bildungsweg vor der Ausbildung" box in the DOM
+  if (verkuerzungsgruende.beruf_q4) {
+    verkuerzungen.push({ key: "beruf_q4", months: 12 });
+  }
+  if (verkuerzungsgruende.beruf_q6) {
+    verkuerzungen.push({ key: "beruf_q6", months: 6 });
   }
 
   return {
@@ -213,15 +677,15 @@ function fuelleEingabenliste(eingaben, berechnung) {
   const zeilen = [
     [
       uebersetzung("inputs.dauer.labelShort", "Ausbildung (Vollzeit)"),
-      `${eingaben.basisMonate} M`
+      `${eingaben.basisMonate} ${uebersetzung("units.months.short", "M")}`
     ],
     [
       uebersetzung("inputs.stunden.labelShort", "Wochenstunden (Vollzeit)"),
-      `${eingaben.wochenstunden} ${uebersetzung("units.hours.short", "h")}`
+      `${eingaben.wochenstunden} ${uebersetzung("units.hours.short", "Std")}`
     ],
     [
       uebersetzung("inputs.teilzeit.labelShort", "Teilzeit"),
-      `${eingaben.teilzeitProzent}% <-> ${teilzeitStunden} ${uebersetzung("units.hours.short", "h")}`
+      `${eingaben.teilzeitProzent}% <-> ${teilzeitStunden} ${uebersetzung("units.hours.short", "Std")}`
     ]
   ];
 
@@ -235,12 +699,12 @@ function fuelleEingabenliste(eingaben, berechnung) {
     liste.append(wrapper);
   }
 
-  // Verkürzungen hinzufügen, wenn vorhanden
+  // Verkürzungen hinzufügen (immer anzeigen, auch wenn keine vorhanden)
   const verkuerzungen = Array.isArray(eingaben.verkuerzungen)
     ? eingaben.verkuerzungen
     : [];
   
-  if (verkuerzungen.length > 0 && berechnung) {
+  if (berechnung) {
     const verkuerzungenWrapper = document.createElement("div");
     const verkuerzungenDt = document.createElement("dt");
     verkuerzungenDt.className = "verkuerzungen-label";
@@ -249,9 +713,16 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const verkuerzungenDd = document.createElement("dd");
     verkuerzungenDd.className = "verkuerzungen-content";
     
-    // Liste der Verkürzungsgründe
-    const verkuerzungenListe = document.createElement("ul");
-    verkuerzungenListe.className = "verkuerzungen-list";
+    // Warnhinweis-Element erstellen (wird später ggf. verwendet)
+    const warnhinweis = document.createElement("p");
+    warnhinweis.className = "error-message verkuerzungen-warning";
+    warnhinweis.id = "errorVerkuerzungenInListe";
+    warnhinweis.style.display = "none";
+    
+    if (verkuerzungen.length > 0) {
+      // Liste der Verkürzungsgründe
+      const verkuerzungenListe = document.createElement("ul");
+      verkuerzungenListe.className = "verkuerzungen-list";
 
   verkuerzungen.forEach((verkuerzung) => {
     const li = document.createElement("li");
@@ -271,7 +742,29 @@ function fuelleEingabenliste(eingaben, berechnung) {
         beschriftungsSchluessel = "vk.vork.label";
         break;
       case "familien_pflegeverantwortung":
-        beschriftungsSchluessel = "vk.familie.label";
+        beschriftungsSchluessel = "vk.familie.label_pflege";
+        break;
+      case "familien_kinderbetreuung":
+        beschriftungsSchluessel = "vk.familie.label_kinder";
+        break;
+      // Berufliche Fragen (kurze Zusammenfassung für Ergebnisse)
+      case "beruf_q1":
+        beschriftungsSchluessel = "vk.qual.abgeschlosseneAusbildung_short";
+        break;
+      case "beruf_q2":
+        beschriftungsSchluessel = "vk.qual.nichtAbgeschlosseneAusbildung_short";
+        break;
+      case "beruf_q3":
+        beschriftungsSchluessel = "vk.qual.praktischeErfahrung_short";
+        break;
+      case "beruf_q4":
+        beschriftungsSchluessel = "vk.qual.berufsvorbereitendeSchule_short";
+        break;
+      case "beruf_q5":
+        beschriftungsSchluessel = "vk.qual.massnahmeVorbereitung_short";
+        break;
+      case "beruf_q6":
+        beschriftungsSchluessel = "vk.qual.ectsStudium_short";
         break;
       default:
         beschriftungsSchluessel = "";
@@ -288,8 +781,8 @@ function fuelleEingabenliste(eingaben, berechnung) {
         
         const valueSpan = document.createElement("span");
         valueSpan.className = "verkuerzung-value";
-        // Einheitlich kurze Form "M" für alle Geräte
-        valueSpan.textContent = `${verkuerzung.months} M`;
+        // Einheitlich vollständige Form "Monate" für alle Geräte
+        valueSpan.textContent = `${verkuerzung.months} ${uebersetzung("units.months.short", "M")}`;
         
         li.appendChild(labelSpan);
         li.appendChild(valueSpan);
@@ -299,31 +792,15 @@ function fuelleEingabenliste(eingaben, berechnung) {
       verkuerzungenListe.appendChild(li);
     });
     
-    verkuerzungenDd.appendChild(verkuerzungenListe);
-    
-    // Summe aller Verkürzungen (unbegrenzt)
-    const summeAllerVerkuerzungen = document.createElement("div");
-    summeAllerVerkuerzungen.className = "verkuerzungen-summe";
-    const summeBeschriftung = uebersetzung("cuts.sumAll", "Summe aller Verkürzungen");
-    
-    const summeLabelSpan = document.createElement("span");
-    summeLabelSpan.className = "verkuerzung-label";
-    summeLabelSpan.textContent = `${summeBeschriftung}:`;
-    
-    const summeValueSpan = document.createElement("span");
-    summeValueSpan.className = "verkuerzung-value";
-    summeValueSpan.textContent = `${berechnung.gesamteVerkuerzungMonateOhneBegrenzung} M`;
-    
-    summeAllerVerkuerzungen.appendChild(summeLabelSpan);
-    summeAllerVerkuerzungen.appendChild(summeValueSpan);
-    verkuerzungenDd.appendChild(summeAllerVerkuerzungen);
-    
-    // Warnhinweis, falls nötig
-    const warnhinweis = document.createElement("p");
-    warnhinweis.className = "error-message verkuerzungen-warning";
-    warnhinweis.id = "errorVerkuerzungenInListe";
-    warnhinweis.style.display = "none";
-    verkuerzungenDd.appendChild(warnhinweis);
+      verkuerzungenDd.appendChild(verkuerzungenListe);
+      verkuerzungenDd.appendChild(warnhinweis);
+    } else {
+      // Keine Verkürzungen ausgewählt
+      const keineVerkuerzung = document.createElement("p");
+      keineVerkuerzung.className = "keine-verkuerzung";
+      keineVerkuerzung.textContent = uebersetzung("inputs.noShortening", "Keine Verkürzung ausgewählt");
+      verkuerzungenDd.appendChild(keineVerkuerzung);
+    }
     
     verkuerzungenWrapper.append(verkuerzungenDt, verkuerzungenDd);
     liste.append(verkuerzungenWrapper);
@@ -334,7 +811,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const nachVerkuerzungDt = document.createElement("dt");
     nachVerkuerzungDt.textContent = nachVerkuerzungBeschriftung;
     const nachVerkuerzungDd = document.createElement("dd");
-    nachVerkuerzungDd.textContent = `${berechnung.neueBasis} M`;
+    nachVerkuerzungDd.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.short", "M")}`;
     nachVerkuerzungWrapper.append(nachVerkuerzungDt, nachVerkuerzungDd);
     liste.append(nachVerkuerzungWrapper);
     
@@ -343,21 +820,21 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const inTeilzeitDt = document.createElement("dt");
     inTeilzeitDt.textContent = inTeilzeitBeschriftung;
     const inTeilzeitDd = document.createElement("dd");
-    inTeilzeitDd.className = "teilzeit-formula";
+    inTeilzeitDd.className = "teilzeit-formular";
     
     // Strukturiertes Format: Formel in separaten Elementen für Mobile/Desktop
     const formulaContainer = document.createElement("div");
     formulaContainer.className = "teilzeit-formula-container";
     
-    // Zeile 1: "24 M / 75%"
+    // Zeile 1: "24 Monate / 75%"
     const formulaLine1 = document.createElement("span");
     formulaLine1.className = "teilzeit-formula-line1";
-    formulaLine1.textContent = `${berechnung.neueBasis} M / ${eingaben.teilzeitProzent}%`;
+    formulaLine1.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.short", "M")} / ${eingaben.teilzeitProzent}%`;
     
-    // Zeile 2: "= 48 M"
+    // Zeile 2: "= 48 Monate"
     const formulaLine2 = document.createElement("span");
     formulaLine2.className = "teilzeit-formula-line2";
-    formulaLine2.textContent = `= ${berechnung.gesamtMonate} M`;
+    formulaLine2.textContent = ` = ${berechnung.gesamtMonate} ${uebersetzung("units.months.short", "M")}`;
     
     formulaContainer.appendChild(formulaLine1);
     formulaContainer.appendChild(formulaLine2);
@@ -385,12 +862,15 @@ function fuelleEingabenliste(eingaben, berechnung) {
     warnhinweis8Abs3.style.display = "block";
     liste.appendChild(warnhinweis8Abs3);
   }
-  
-  // Legende für Abkürzungen hinzufügen
+
+  // Einheiten-Legende
   const legende = document.createElement("p");
   legende.className = "units-legend";
-  legende.textContent = uebersetzung("inputs.unitsLegend", "Std = Stunden, M = Monate");
-  liste.append(legende);
+  legende.textContent = uebersetzung(
+    "inputs.unitsLegend",
+    "Std = Stunden, M = Monate"
+  );
+  liste.appendChild(legende);
 }
 
 /**
@@ -400,55 +880,150 @@ function fuelleEingabenliste(eingaben, berechnung) {
  * @param {Object} berechnung - Kernzahlen der Berechnung (Monate, Wochen, Stunden).
  */
 function fuelleErgebnisse(eingaben, berechnung) {
-  // Zahl + Einheit lokalisiert
-  const monateWort = uebersetzung("units.months.full", "Monate");
-  setzeText("#res-total-months", `${berechnung.gesamtMonate} ${monateWort}`);
+ if (!berechnung) return;
 
-  // Jahre-Anzeige
-  const jahreElement = $("#res-total-years");
-  if (jahreElement && berechnung.gesamtJahre) {
-    const jahreWort = uebersetzung("units.years.full", "Jahre");
-    setzeText("#res-total-years", `≈ ${berechnung.gesamtJahre} ${jahreWort}`);
-  }
+  // --- Haupt-Ergebnis: Gesamtmonate / -jahre ---
+  const totalMonths =
+    typeof berechnung.gesamtMonate === "number"
+      ? berechnung.gesamtMonate
+      : null;
 
-  // Validierungen mit i18n-Texten
-  if (berechnung.gesamtMonate < eingaben.basisMonate - 12) {
-    setzeText(
-      "#errorTotalMonths",
-      uebersetzung(
-        "errors.tooShort",
-        "Die Gesamtdauer darf maximal um 12 Monate verkürzt werden!"
-      )
-    );
-  } else if (berechnung.gesamtMonate > eingaben.basisMonate * 1.5) {
-    setzeText(
-      "#errorTotalMonths",
-      uebersetzung(
-        "errors.tooLong",
-        "Die Gesamtdauer darf maximal das 1,5-fache verlängert werden!"
-      )
-    );
+  const totalYears =
+    typeof berechnung.gesamtJahre === "number"
+      ? berechnung.gesamtJahre
+      : null;
+
+  // Monate mit Einheit ("32 Monate" / "32 months")
+  if (totalMonths !== null) {
+    const unitMonths = uebersetzung("units.months.full", "Monate");
+    setzeText("#res-total-months", `${totalMonths} ${unitMonths}`);
   } else {
-    setzeText("#errorTotalMonths", "");
+    setzeText("#res-total-months", "–");
   }
 
-  // Verlängerungsanzeige: Basis → Pfeil mit Delta → Ziel
-  const extensionWrapper = $("#res-extension-wrapper");
-  if (extensionWrapper) {
-    if (berechnung.verlaengerungMonate > 0) {
-      zeige(extensionWrapper);
-      const monateWort = uebersetzung("units.months.short", "Mon.");
-      
-      // Basis (verkürzte Dauer)
-      setzeText("#res-extension-basis", `${berechnung.neueBasis} ${monateWort}`);
-      
-      // Finale Dauer
-      setzeText("#res-extension-total", `${berechnung.gesamtMonate} ${monateWort}`);
+  // Jahre mit Einheit, lokal formatiert ("2,7 Jahre" / "2.7 years")
+  if (totalYears !== null) {
+    const sprache = aktuelleSprache();
+    const formatter = new Intl.NumberFormat(
+      sprache === "en" ? "en-US" : "de-DE",
+      { minimumFractionDigits: 0, maximumFractionDigits: 1 }
+    );
+    const formattedYears = formatter.format(totalYears);
+    const unitYears = uebersetzung("units.years.full", "Jahre");
+    setzeText("#res-total-years", `${formattedYears} ${unitYears}`);
+  } else {
+    setzeText("#res-total-years", "–");
+  }
 
-      // Delta (Verlängerung) - nur als Zahl unter dem Pfeil
-      setzeText("#res-extension-delta", `+${berechnung.verlaengerungMonate}`);
+  const errorTotalMonths = $("#errorTotalMonths");
+  if (errorTotalMonths) {
+    errorTotalMonths.textContent = "";
+  }
+
+  // --- 1. Block: Verkürzung durch Verkürzungsgründe ---
+  const shorteningWrapper = document.getElementById("res-shortening-wrapper");
+  if (shorteningWrapper) {
+    const vollzeitMonate =
+      typeof eingaben?.basisMonate === "number"
+        ? eingaben.basisMonate
+        : undefined;
+    const verkuerzungMonate =
+      typeof berechnung.gesamteVerkuerzungMonate === "number"
+        ? berechnung.gesamteVerkuerzungMonate
+        : undefined;
+    const basisNachVerkuerzung =
+      typeof berechnung.neueBasis === "number"
+        ? berechnung.neueBasis
+        : undefined;
+
+    if (
+      typeof vollzeitMonate === "number" &&
+      typeof verkuerzungMonate === "number" &&
+      typeof basisNachVerkuerzung === "number"
+    ) {
+      // z.B. "36 Monate"
+      setzeText(
+        "#res-extension-vollzeit",
+        `${vollzeitMonate} ${uebersetzung("units.months.full", "Monate")}`
+      );
+
+      // z.B. "-6 M"
+      const vorzeichen = verkuerzungMonate > 0 ? "-" : "";
+      setzeText(
+        "#res-extension-verkuerzungsdauer",
+        `${vorzeichen}${Math.abs(
+          verkuerzungMonate
+        )} ${uebersetzung("units.months.short", "M")}`
+      );
+
+      // z.B. "30 Monate"
+      setzeText(
+        "#res-shortening-total",
+        `${basisNachVerkuerzung} ${uebersetzung(
+          "units.months.full",
+          "Monate"
+        )}`
+      );
+
+      shorteningWrapper.hidden = false;
     } else {
-      verberge(extensionWrapper);
+      // Falls keine Daten → Block ausblenden und Platzhalter setzen
+      shorteningWrapper.hidden = true;
+      setzeText("#res-extension-vollzeit", "–");
+      setzeText("#res-extension-verkuerzungsdauer", "+–");
+      setzeText("#res-shortening-total", "–");
+    }
+  }
+
+  // --- 2. Block: Verlängerung durch Teilzeit ---
+  const extensionWrapper = document.getElementById("res-extension-wrapper");
+  if (extensionWrapper) {
+    // Basis für Teilzeit ist deine neue Basis (nach Verkürzung)
+    const basisMonate =
+      typeof berechnung.neueBasis === "number"
+        ? berechnung.neueBasis
+        : undefined;
+
+    const teilzeitDelta =
+      typeof berechnung.verlaengerungMonate === "number"
+        ? berechnung.verlaengerungMonate
+        : undefined;
+
+    const zielMonate = totalMonths;
+
+    if (
+      typeof basisMonate === "number" &&
+      typeof teilzeitDelta === "number" &&
+      typeof zielMonate === "number"
+    ) {
+      // z.B. "30 Monate"
+      setzeText(
+        "#res-extension-basis",
+        `${basisMonate} ${uebersetzung("units.months.full", "Monate")}`
+      );
+
+      // z.B. "+12 M"
+      const sign = teilzeitDelta >= 0 ? "+" : "";
+      setzeText(
+        "#res-extension-delta",
+        `${sign}${teilzeitDelta} ${uebersetzung(
+          "units.months.short",
+          "M"
+        )}`
+      );
+
+      // z.B. "42 Monate"
+      setzeText(
+        "#res-extension-total",
+        `${zielMonate} ${uebersetzung("units.months.full", "Monate")}`
+      );
+
+      extensionWrapper.hidden = false;
+    } else {
+      extensionWrapper.hidden = true;
+      setzeText("#res-extension-basis", "–");
+      setzeText("#res-extension-delta", "+–");
+      setzeText("#res-extension-total", "–");
     }
   }
 }
@@ -458,11 +1033,13 @@ function setzeDatumstempel() {
   const element = $("#stamp-date");
   if (!element) return;
   const sprache = aktuelleSprache();
-  const format = new Intl.DateTimeFormat(
-    sprache === "en" ? "en-US" : "de-DE",
-    { dateStyle: "long" }
-  );
-  const beschriftung = sprache === "en" ? "As of" : "Stand";
+  const localeMap = { en: "en-US", de: "de-DE", uk: "uk-UA", tr: "tr-TR" };
+  const locale = localeMap[sprache] || "de-DE";
+  const format = new Intl.DateTimeFormat(locale, { dateStyle: "long" });
+  const defaultLabel = sprache === "en" ? "As of" : "Stand";
+  const beschriftung = window.I18N && typeof window.I18N.t === "function"
+    ? window.I18N.t("meta.stampLabel", defaultLabel)
+    : defaultLabel;
   element.textContent = `${beschriftung}: ${format.format(new Date())}`;
 }
 
@@ -639,16 +1216,61 @@ function setzeDatenZurueck() {
   const dauerInput = document.getElementById("dauer");
   const stundenInput = document.getElementById("stunden");
   const teilzeitProzentInput = document.getElementById("teilzeitProzent");
+  const teilzeitStundenInput = document.getElementById("teilzeitStunden");
+  const presetButtons = document.querySelectorAll('.preset[data-type="percent"], .preset[data-type="hours"]');
+  const fehlerProzent = document.getElementById("errorProzent");
+  const fehlerStunden = document.getElementById("errorTeilStunden");
   
-  if (dauerInput) dauerInput.value = "36";
-  if (stundenInput) stundenInput.value = "40";
-  if (teilzeitProzentInput) teilzeitProzentInput.value = "75";
+  if (dauerInput) dauerInput.value = "";
+  if (stundenInput) stundenInput.value = "";
+  if (teilzeitProzentInput) teilzeitProzentInput.value = "";
+  if (teilzeitStundenInput) teilzeitStundenInput.value = "";
+
+  // Teilzeitfelder deaktivieren und optisch zurücksetzen
+  [teilzeitProzentInput, teilzeitStundenInput].forEach((inp) => {
+    if (!inp) return;
+    inp.disabled = true;
+    inp.classList.remove('error');
+  });
+  // Presets deaktivieren und aktiv-Zustand entfernen
+  presetButtons.forEach((btn) => {
+    btn.disabled = true;
+    btn.classList.remove('active');
+  });
+  if (fehlerProzent) fehlerProzent.textContent = "";
+  if (fehlerStunden) fehlerStunden.textContent = "";
   
   // Checkboxes für Verkürzungsgründe zurücksetzen
   const checkboxes = document.querySelectorAll('input[type="checkbox"][data-vk-field]');
   checkboxes.forEach(checkbox => {
     checkbox.checked = false;
   });
+  
+  // Alle Ja/Nein-Checkboxen für Verkürzungsgründe zurücksetzen (inkl. Nein-Buttons)
+  const allVkCheckboxes = document.querySelectorAll('#vk-fieldset input[type="checkbox"]');
+  allVkCheckboxes.forEach(checkbox => {
+    checkbox.checked = false;
+  });
+  
+  // Alter-Feld zurücksetzen
+  const alterInput = document.getElementById('alter');
+  if (alterInput) alterInput.value = "";
+  
+  // Fehler-Nachrichten für Alter zurücksetzen
+  const errorAlter = document.getElementById('errorAlter');
+  if (errorAlter) errorAlter.textContent = "";
+  
+  // Dauer-Inputs für berufliche Fragen zurücksetzen
+  const berufQ2Dauer = document.getElementById('vk_beruf_q2_dauer_months');
+  if (berufQ2Dauer) berufQ2Dauer.value = "";
+  
+  // Fehler-Nachrichten für Q2 Dauer zurücksetzen
+  const errorBerufQ2Dauer = document.getElementById('errorBerufQ2Dauer');
+  if (errorBerufQ2Dauer) errorBerufQ2Dauer.textContent = "";
+  
+  // Q2 Dauer-Container verstecken (falls sichtbar)
+  const berufQ2DurationContainer = document.getElementById('vk_beruf_q2_duration_container');
+  if (berufQ2DurationContainer) berufQ2DurationContainer.style.display = 'none';
   
   // Schulabschluss zurücksetzen
   const abiturCheckbox = document.getElementById("g-abitur");
@@ -667,6 +1289,7 @@ function setzeDatenZurueck() {
   // Gespeicherten Zustand löschen
   try {
     localStorage.removeItem("calculatorState");
+    localStorage.removeItem("teilzeitrechner_eingaben"); // Eingaben-Cache ebenfalls löschen
   } catch (fehler) {
     console.warn("Konnte calculatorState nicht löschen:", fehler);
   }
@@ -699,10 +1322,27 @@ function setzeDatenZurueck() {
   // Ergebnisse zurücksetzen
   setzeText("#res-total-months", "–");
   setzeText("#res-total-years", "–");
+
+  const shorteningWrapper = document.getElementById("res-shortening-wrapper");
+  if (shorteningWrapper) {
+    shorteningWrapper.hidden = true;
+  }
+  setzeText("#res-extension-vollzeit", "–");
+  setzeText("#res-extension-verkuerzungsdauer", "+–");
+  setzeText("#res-shortening-total", "–");
+
   const extensionWrapper = $("#res-extension-wrapper");
-  if (extensionWrapper) verberge(extensionWrapper);
+  if (extensionWrapper) {
+    verberge(extensionWrapper); // hattest du schon
+  }
+  setzeText("#res-extension-basis", "–");
+  setzeText("#res-extension-delta", "+–");
+  setzeText("#res-extension-total", "–");
+
   const errorTotalMonths = $("#errorTotalMonths");
-  if (errorTotalMonths) errorTotalMonths.textContent = "";
+  if (errorTotalMonths) {
+    errorTotalMonths.textContent = "";
+  }
   
   // Eingabenliste leeren
   const inputsList = $("#inputs-list");
@@ -713,13 +1353,30 @@ function setzeDatenZurueck() {
   if (ergebnisContainer) {
     ergebnisContainer.hidden = true;
   }
+
+  // Hinweise/Share wieder ausblenden
+  setzeErgebnisBegleitUIVisible(false);
+  
+  // Rote Border von Ergebnis-Box entfernen
+  const highlightBox = document.querySelector(".card.highlight");
+  if (highlightBox) {
+    highlightBox.classList.remove("active");
+  }
   
   // Gespeicherte Daten zurücksetzen
   LETZTE_EINGABEN = null;
   LETZTE_BERECHNUNG = null;
 
-  // Neu laden
-  location.reload();
+  // Nach Bestätigung sanft zum Eingabebereich scrollen (gleiche Logik wie "Zum Rechner" Button)
+  const eingabenSection = document.querySelector('section.card'); // Erste Eingabe-Section
+  if (eingabenSection) {
+    const sectionTop = eingabenSection.getBoundingClientRect().top + window.pageYOffset;
+    const offset = 70; // Offset für Tooltip + Abstand oben (gleich wie bei "Zum Rechner" Button)
+    window.scrollTo({
+      top: sectionTop - offset,
+      behavior: "smooth"
+    });
+  }
 }
 
 /* ------------------------------
@@ -823,21 +1480,19 @@ function stelleFormularWiederHer(zustand) {
         const checkbox = document.querySelector('input[data-vk-field="alter_ueber_21"]');
         if (checkbox) checkbox.checked = true;
       }
+      if (vk.key === "familien_kinderbetreuung") {
+        const checkbox = document.querySelector('input[data-vk-field="familien_kinderbetreuung"]');
+        if (checkbox) checkbox.checked = true;
+      }
       if (vk.key === "familien_pflegeverantwortung") {
         const checkbox = document.querySelector('input[data-vk-field="familien_pflegeverantwortung"]');
         if (checkbox) checkbox.checked = true;
       }
       if (vk.key === "vorkenntnisse" && vk.months > 0) {
-        const input = document.querySelector('input[data-vk-field="vorkenntnisse_monate"]');
-        if (input) input.value = vk.months;
+        const checkbox = document.querySelector('input[data-vk-field="vorkenntnisse_monate"]');
+        if (checkbox) checkbox.checked = true;
       }
     });
-    
-    // Vorkenntnisse-Monate direkt aus formularWerte wiederherstellen (falls vorhanden)
-    if (formularWerte.vorkenntnisseMonate) {
-      const input = document.querySelector('input[data-vk-field="vorkenntnisse_monate"]');
-      if (input) input.value = formularWerte.vorkenntnisseMonate;
-    }
   }
 }
 
@@ -849,6 +1504,69 @@ function stelleFormularWiederHer(zustand) {
 function initialisiere() {
   $("#btn-share")?.addEventListener("click", teileLink);
   $("#btn-reset")?.addEventListener("click", setzeDatenZurueck);
+
+  // Ergebnisbereich standardmäßig ausblenden.
+  // Er wird erst nach Klick auf "Ergebnis anzeigen" sichtbar.
+  const ergebnisContainer = document.getElementById("ergebnis-container");
+  if (ergebnisContainer) {
+    ergebnisContainer.hidden = true;
+  }
+
+  // Hinweise/Share standardmäßig ausblenden (erst sichtbar, wenn Ergebnis sichtbar ist)
+  setzeErgebnisBegleitUIVisible(false);
+
+  // Desktop-only Button-Layout (Reset neben Berechnen, Share unter Hinweise)
+  initialisiereDesktopButtonLayout();
+  
+  // Clear validation errors when the user interacts with inputs or yes/no tiles
+  const clearableInputs = ["dauer", "stunden", "alter", "vk_beruf_q2_dauer_months"];
+  clearableInputs.forEach(id => {
+    const el = document.getElementById(id) || document.querySelector(`input[data-vk-field="${id}"]`);
+    if (!el) return;
+    el.addEventListener("input", () => {
+      el.classList.remove("error");
+      const errorId = id === 'vk_beruf_q2_dauer_months' ? 'errorBerufQ2Dauer' : 'error' + id.charAt(0).toUpperCase() + id.slice(1);
+      const errEl = document.getElementById(errorId);
+      if (errEl) errEl.textContent = "";
+    });
+  });
+
+  // Ja/Nein groups: clear tile error and group message on change
+  const yesNoPairs = [
+    ["abitur-ja","abitur-nein"],
+    ["realschule-ja","realschule-nein"],
+    ["kinderbetreuung-ja","kinderbetreuung-nein"],
+    ["pflege-ja","pflege-nein"],
+    ["vk_beruf_q1_ja","vk_beruf_q1_nein"],
+    ["vk_beruf_q2_ja","vk_beruf_q2_nein"],
+    ["vk_beruf_q3_ja","vk_beruf_q3_nein"],
+    ["vk_beruf_q4_ja","vk_beruf_q4_nein"],
+    ["vk_beruf_q5_ja","vk_beruf_q5_nein"],
+    ["vk_beruf_q6_ja","vk_beruf_q6_nein"]
+  ];
+
+  yesNoPairs.forEach(([jaId, neinId]) => {
+    [jaId, neinId].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener("change", () => {
+        // remove error class from both tiles if present
+        const jaTile = document.getElementById(jaId)?.closest?.(".tile");
+        const neinTile = document.getElementById(neinId)?.closest?.(".tile");
+        if (jaTile) jaTile.classList.remove("error");
+        if (neinTile) neinTile.classList.remove("error");
+
+        // remove group error message if present
+        const yesNoGroup = el.closest(".vk-yes-no-group");
+        if (yesNoGroup) {
+          const next = yesNoGroup.nextElementSibling;
+          if (next && next.classList.contains("error-message-ja-nein")) {
+            next.parentNode.removeChild(next);
+          }
+        }
+      });
+    });
+  });
   
   // Prüfe zuerst URL-Parameter (hat Priorität, da es ein geteilter Link sein könnte)
   const urlDaten = ladeDatenAusUrl();
@@ -865,16 +1583,16 @@ function initialisiere() {
     // Verkürzungsgründe wiederherstellen
     if (urlDaten.eingaben.verkuerzungen && Array.isArray(urlDaten.eingaben.verkuerzungen)) {
       urlDaten.eingaben.verkuerzungen.forEach(vk => {
-        if (vk.key === "abitur") {
-          const checkbox = document.getElementById("g-abitur");
-          if (checkbox) checkbox.checked = true;
-        }
-        if (vk.key === "realschule") {
-          const checkbox = document.getElementById("g-realschule");
-          if (checkbox) checkbox.checked = true;
+        if (vk.key === "abitur" || vk.key === "realschule" || vk.key === "hauptschule" || vk.key === "none") {
+          const dropdown = document.getElementById("vk-school-select");
+          if (dropdown) dropdown.value = vk.key;
         }
         if (vk.key === "alter_ueber_21") {
           const checkbox = document.querySelector('input[data-vk-field="alter_ueber_21"]');
+          if (checkbox) checkbox.checked = true;
+        }
+        if (vk.key === "familien_kinderbetreuung") {
+          const checkbox = document.querySelector('input[data-vk-field="familien_kinderbetreuung"]');
           if (checkbox) checkbox.checked = true;
         }
         if (vk.key === "familien_pflegeverantwortung") {
@@ -882,8 +1600,8 @@ function initialisiere() {
           if (checkbox) checkbox.checked = true;
         }
         if (vk.key === "vorkenntnisse" && vk.months > 0) {
-          const input = document.querySelector('input[data-vk-field="vorkenntnisse_monate"]');
-          if (input) input.value = vk.months;
+          const checkbox = document.querySelector('input[data-vk-field="vorkenntnisse_monate"]');
+          if (checkbox) checkbox.checked = true;
         }
       });
     }
@@ -897,6 +1615,8 @@ function initialisiere() {
     if (ergebnisContainer) {
       ergebnisContainer.hidden = false;
     }
+
+    setzeErgebnisBegleitUIVisible(true);
     
     // Ergebnisse anzeigen
     fuelleEingabenliste(urlDaten.eingaben, urlDaten.berechnung);
@@ -914,27 +1634,19 @@ function initialisiere() {
     if (gespeicherterZustand && gespeicherterZustand.eingaben && gespeicherterZustand.berechnung) {
       // Formular wiederherstellen
       stelleFormularWiederHer(gespeicherterZustand);
-      
-      // Ergebnisse wiederherstellen
-      LETZTE_EINGABEN = gespeicherterZustand.eingaben;
-      LETZTE_BERECHNUNG = gespeicherterZustand.berechnung;
-      
-      // Ergebnis-Sektion anzeigen
-      const ergebnisContainer = document.getElementById("ergebnis-container");
-      if (ergebnisContainer) {
-        ergebnisContainer.hidden = false;
-      }
-      
-      // Ergebnisse anzeigen
-      fuelleEingabenliste(gespeicherterZustand.eingaben, gespeicherterZustand.berechnung);
-      fuelleErgebnisse(gespeicherterZustand.eingaben, gespeicherterZustand.berechnung);
-      setzeDatumstempel();
+
+      // Ergebnisbereich NICHT automatisch anzeigen.
+      // Der Nutzer muss aktiv auf "Ergebnis anzeigen" klicken.
+      LETZTE_EINGABEN = null;
+      LETZTE_BERECHNUNG = null;
     } else {
       // Ergebnis-Sektion initial verstecken
       const ergebnisContainer = document.getElementById("ergebnis-container");
       if (ergebnisContainer) {
         ergebnisContainer.hidden = true;
       }
+
+      setzeErgebnisBegleitUIVisible(false);
     }
   }
 }
@@ -972,7 +1684,7 @@ window.addEventListener("resize", () => {
     if (!LETZTE_EINGABEN || !LETZTE_BERECHNUNG) return;
     fuelleEingabenliste(LETZTE_EINGABEN, LETZTE_BERECHNUNG);
   }, 250);
-});
+}); 
 
 /**
  * Führt eine erneute Berechnung aus und aktualisiert die Ergebnisansicht.
@@ -980,12 +1692,24 @@ window.addEventListener("resize", () => {
  * Fehler werden im UI angezeigt.
  */
 async function berechnen() {
+  // Validierung vor Berechnung
+  if (!validiereAlleEingaben()) {
+    return; // Abbruch wenn Validierung fehlgeschlagen
+  }
+
   // Ergebnis-Sektion anzeigen
   const ergebnisContainer = document.getElementById("ergebnis-container");
   if (ergebnisContainer) {
     ergebnisContainer.hidden = false;
+    setzeErgebnisBegleitUIVisible(true);
     // Sanftes Scrollen zur Ergebnis-Sektion
     ergebnisContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  
+  // Rote Border zur Ergebnis-Box hinzufügen
+  const highlightBox = document.querySelector(".card.highlight");
+  if (highlightBox) {
+    highlightBox.classList.add("active");
   }
   
   try {

@@ -1,7 +1,7 @@
 // ../static/script_Sprache_Auswaehlen.js
 (() => {
   const STANDARD_SPRACHE = "de";
-  const UNTERSTUETZT = ["de", "en"];
+  const UNTERSTUETZT = ["de", "en", "uk", "tr"];
 
   // Sprachdateien liegen in /static/Sprachdateien/
   const I18N_PFAD = "/static/Sprachdateien";
@@ -94,16 +94,36 @@
       });
     });
 
-    const sprachAuswahl = document.getElementById("lang-switcher");
-    if (sprachAuswahl) {
-      [...sprachAuswahl.options].forEach((option) => {
-        const schluessel = option.dataset.i18n;
-        if (!schluessel) return;
+    // Setze data-label-open für Elemente mit data-i18n-open
+    document.querySelectorAll("[data-i18n-open]").forEach((element) => {
+      const schluessel = element.dataset.i18nOpen;
+      const wert = aufloesung(woerterbuch, schluessel);
+      if (wert != null) element.setAttribute("data-label-open", String(wert));
+    });
+
+    // Synchronisiere beide Sprachumschalter (Mobile und Desktop)
+    // Neue: Button-basierte Umschalter statt Select
+    const langButtons = document.querySelectorAll(".lang-btn");
+    
+    langButtons.forEach((btn) => {
+      const lang = btn.dataset.lang;
+      if (!lang) return;
+      
+      // Setze Texte aus i18n
+      const textSpan = btn.querySelector("span[data-i18n]");
+      if (textSpan) {
+        const schluessel = textSpan.dataset.i18n;
         const wert = aufloesung(woerterbuch, schluessel);
-        if (wert != null) option.textContent = String(wert);
-      });
-      sprachAuswahl.value = zustand.sprache;
-    }
+        if (wert != null) textSpan.textContent = String(wert);
+      }
+      
+      // Aktualisiere aktiven Status
+      if (lang === zustand.sprache) {
+        btn.classList.add("lang-btn-active");
+      } else {
+        btn.classList.remove("lang-btn-active");
+      }
+    });
   };
 
   /** Registriert eine globale I18N-Hilfs-API auf `window`. */
@@ -120,6 +140,17 @@
 
   /** Sendet ein benutzerdefiniertes Event, wenn sich die Sprache ändert. */
   const sendeSprachGeaendertEvent = () => {
+    // Konvertiere Dezimaltrenner in numerischen Eingabefeldern
+    const numericInputs = document.querySelectorAll('#stunden, #teilzeitProzent, #teilzeitStunden');
+    const decimalSep = zustand.sprache === 'de' ? ',' : '.';
+    const altSep = decimalSep === ',' ? '.' : ',';
+    
+    numericInputs.forEach(inp => {
+      if (inp.value) {
+        inp.value = inp.value.replace(new RegExp(`\\${altSep}`, 'g'), decimalSep);
+      }
+    });
+    
     window.dispatchEvent(new CustomEvent("i18n:changed", {
       detail: { lang: zustand.sprache }
     }));
@@ -144,21 +175,36 @@
   };
 
   document.addEventListener("DOMContentLoaded", async () => {
-    const sprachAuswahl = document.getElementById("lang-switcher");
     const anfaenglicheSprache =
       holeGespeicherteSprache() ||
       (navigator.language || navigator.userLanguage || "de").slice(0, 2);
 
     const startSprache = UNTERSTUETZT.includes(anfaenglicheSprache) ? anfaenglicheSprache : STANDARD_SPRACHE;
 
-    if (sprachAuswahl) sprachAuswahl.value = startSprache;
-
     await ladeUndWendeAn(startSprache);
     speichereSprache(startSprache);
 
-    if (sprachAuswahl) {
-      sprachAuswahl.addEventListener("change", async (ereignis) => {
-        const neueSprache = ereignis.target.value;
+    // Desktop-Sprachumschalter wird rein per CSS im Layout-Flow positioniert.
+
+    // Reagiere auf Language-Select-Änderungen (Mobile)
+    const langSwitcher = document.getElementById("lang-switcher");
+    if (langSwitcher) {
+      langSwitcher.addEventListener("change", async (event) => {
+        const neueSprache = event.target.value;
+        if (!neueSprache || !UNTERSTUETZT.includes(neueSprache)) return;
+        
+        speichereSprache(neueSprache);
+        await ladeUndWendeAn(neueSprache);
+      });
+    }
+
+    // Reagiere auf Language-Select-Änderungen (Desktop)
+    const langSwitcherDesktop = document.getElementById("lang-switcher-desktop");
+    if (langSwitcherDesktop) {
+      langSwitcherDesktop.addEventListener("change", async (event) => {
+        const neueSprache = event.target.value;
+        if (!neueSprache || !UNTERSTUETZT.includes(neueSprache)) return;
+        
         speichereSprache(neueSprache);
         await ladeUndWendeAn(neueSprache);
       });

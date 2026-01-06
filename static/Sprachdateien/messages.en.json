@@ -5,82 +5,136 @@
   "lang": {
     "label": "Language",
     "aria": "Choose language",
-    "de": "German",
-    "en": "English"
+    "de": "Deutsch",
+    "en": "English",
+    "uk": "Українська",
+    "tr": "Türkçe"
   },
   "inputs": {
-    "title": "Your details",
-    "unitsLegend": "h = Hours, M = Months",
+    "title": "Your Calculation",
+    "unitsLegend": "h = hours, m = months",
     "dauer": {
       "label": "How long is your training in full-time?",
-      "labelShort": "Training (full-time)",
+      "labelShort": "Training in full-time",
       "tooltip": "Enter in months (e.g. 36 months)"
     },
     "stunden": {
       "label": "How many hours per week does the full-time training have?",
-      "labelShort": "Hours per week (full-time)",
+      "labelShort": "Hours per week in full-time",
       "tooltip": "Regular weekly hours of training (incl. vocational school)"
     },
     "teilzeit": {
-      "label": "How much of full-time do you want to work?",
-      "labelShort": "Part-time",
+      "label": "How many hours per week would you like to work during your training?",
+      "labelShort": "Part-time share",
       "tooltip": "For part-time training, you must work at least 50%.",
       "percent": "Percent",
-      "hours": "Hours"
+      "hours": "Hours",
+      "separator": "or",
+      "button24h": "24 hours (3-day)",
+      "button32h": "32 hours (4-day)"
     },
     "verkuerzungen": {
       "labelShort": "Reductions"
     },
-    "afterShortening": "Training duration after shortening",
-    "inPartTime": "Training duration in part\u2011time"
+    "afterShortening": "Duration after shortening",
+    "inPartTime": "Duration in part-time",
+    "noShortening": "No reductions selected",
+    "toggleHint": "Click to show / hide this section",
+    "toggleLabel": "Show Details",
+    "toggleLabelOpen": "Hide Details",
+    "decimalHint": "Decimals allowed (e.g. 32.5)",
+    "roundingHint": "Value rounded from {original} to {rounded} months",
+    "placeholders": {
+      "dauer": "e.g. 36",
+      "stunden": "e.g. 40",
+      "teilzeitProzent": "e.g. 75",
+      "teilzeitStunden": "e.g. 30"
+    }
   },
   "vk": {
     "heading": "Reasons for shorter training",
     "helper": "Choose all options that apply to you.",
     "legend": "Shortening reasons",
     "familie": {
-      "question": "Do you have family responsibilities (child care or care for relatives)?",
-      "label": "Family and care responsibilities",
-      "badge": "−12 months",
+      "title": "Family Responsibilities",
+      "question_kinder": "Do you care for your own child or are you responsible for caring for a child?",
+      "question_pflege": "Do you care for a relative or are you regularly involved in care?",
+      "label_kinder": "Child care",
+      "label_pflege": "Care for relatives",
+      "yes": "Yes",
+      "no": "No",
       "sr": "If you have family or care responsibilities, a shortening may be possible."
     },
     "school": {
       "question": "What is your highest level of school education?",
       "label": "School degree",
       "none": "No degree",
-      "hauptschule": "Lower secondary school",
-      "realschule": "Intermediate secondary school",
-      "abitur": "Abitur / university entrance qualification"
+      "hauptschule": "Lower secondary school (german: Hauptschule)",
+      "realschule": "Intermediate secondary school (german: Realschule)",
+      "abitur": "University entrance qualification (german: Abitur / Hochschulreife)"
     },
     "qual": {
-      "question": "What professional qualifications do you have?"
+      "question": "What professional qualifications do you have?",
+      "yes": "Yes",
+      "no": "No",
+      "months": "Months",
+      "abgeschlosseneAusbildung": "Have you already completed vocational training in the same or a similar occupation?",
+      "abgeschlosseneAusbildung_sr": "Completed vocational training in the same or similar occupation",
+      "abgeschlosseneAusbildung_short": "Completed vocational training",
+      "nichtAbgeschlosseneAusbildung": "Have you started vocational training in the same or a similar occupation but not completed it?",
+      "nichtAbgeschlosseneAusbildung_sr": "Started but not completed vocational training",
+      "nichtAbgeschlosseneAusbildung_dauer": "How many months did the incomplete vocational training last?",
+      "nichtAbgeschlosseneAusbildung_short": "Incomplete vocational training",
+      "praktischeErfahrung": "Have you already worked in a similar field or gained practical experience that is useful for the training?",
+      "praktischeErfahrung_sr": "Practical experience in a similar field",
+      "praktischeErfahrung_short": "Practical experience",
+      "berufsvorbereitendeSchule": "Did you attend a pre-vocational school form before the training (e.g. basic vocational year, preparatory year or a one-year vocational school)?",
+      "berufsvorbereitendeSchule_sr": "Attended pre-vocational school form",
+      "berufsvorbereitendeSchule_short": "Pre-vocational school form",
+      "massnahmeVorbereitung": "Did you participate in a measure to prepare for vocational training before the apprenticeship (e.g. pre-vocational training measure or entry qualification)?",
+      "massnahmeVorbereitung_sr": "Measure to prepare for vocational training",
+      "massnahmeVorbereitung_short": "Preparation for vocational training",
+      "ectsStudium": "Have you already earned at least 30 ECTS credits in a field that matches your apprenticeship during your studies?",
+      "ectsStudium_sr": "ECTS in the matching study field",
+      "ectsStudium_short": "Academic achievements in studies"
+    },
+    "bildungsweg": {
+      "question": "Educational background before training"
     },
     "vork": {
       "label": "Professional experience",
-      "badge": "−12 months",
       "sr": "Professional experience can shorten your training duration."
     },
     "other": {
-      "question": "Which other reasons apply to you?"
+      "question": "How old are you?"
     },
     "alter21": {
-      "label": "Age over 21",
-      "badge": "−12 months",
+      "label": "Over 21 years old",
+      "yes": "Yes",
+      "no": "No",
       "sr": "If you are over 21, previous experience can be credited."
+    },
+    "infoBox": {
+      "button": "What is this?",
+      "buttonAria": "Show information about reduction reasons",
+      "closeAria": "Close modal",
+      "title": "What are reduction reasons?",
+      "content": "<p><strong>Reduction reasons</strong> are circumstances or qualifications that allow you to shorten the regular training duration. This can help you complete your training faster.</p><p><strong>How are they applied?</strong></p><p>Reduction reasons are credited to the regular training duration. Depending on the type of reason, different reductions may be granted. The reductions are added together until a maximum is reached.</p><p><strong>How many can be used simultaneously?</strong></p><p>You can specify <strong>multiple reduction reasons simultaneously</strong>. The total reduction is calculated from all selected reasons. However, note that there is a maximum reduction of 21 months that cannot be exceeded.</p>"
     }
   },
   "res": {
     "headline": "Your part-time training",
     "helper": "Here you can see your details and the result.",
     "notesTitle": "Important information",
-    "notes": "<li>This calculation is only a <strong>help</strong>.</li><li>The result is <strong>not official</strong>.</li><li>Discuss the result with your training company.</li><li>Part-time training is possible if you work at least 50% of the normal time.</li>",
+    "notes": "<li>This calculation is only a <strong>help</strong> and an <strong>orientation</strong>.</li><li>The result is <strong>not binding</strong>.</li><li>Discuss the result with your training company.</li><li>Part-time training is only possible if you work at least half of the normal training hours.</li>",
     "kv": {
       "total": "Total time",
       "schoolPerWeek": "School per week",
       "workPerWeek": "Work per week"
     },
     "extension": {
-      "label": "Automatic extension due to part-time:",
+      "label1": "Shortening due to reasons for shorter training:",
+      "label2": "Extension due to part-time work:",
       "plus": "+{n} months",
       "none": "No extension"
     },
@@ -101,7 +155,7 @@
       "full": "hours"
     },
     "months": {
-      "short": "months",
+      "short": "m",
       "full": "months"
     },
     "weeks": {
@@ -112,7 +166,7 @@
       "short": "Y.",
       "full": "years"
     },
-    "percent": "%"
+    "percent": "percent"
   },
   "errors": {
     "placeholder": "",
@@ -126,18 +180,23 @@
     "regularHoursMax": "The value must not exceed 48 hours",
     "durationMin": "The value must be at least 24 months",
     "durationMax": "The value must not exceed 42 months",
+    "alterMax": "The value must not exceed 99",
+    "berufQ2DauerMax": "The value must not exceed 50 months",
     "percentMin": "The value must be at least 50%",
     "percentMax": "The value must not exceed 100%",
     "hoursMin": "The value must be at least 50% of regular hours",
     "hoursMax": "The value must not exceed the regular weekly hours",
-    "invalidCut": "Note: Your selected reduction reasons add up to more than 12 months. The total reduction is therefore limited to a maximum of 12 months, as specified.",
+    "invalidCut": "Note: Your selected reduction reasons add up to more than 12 months. The reduction is therefore limited to a maximum of 12 months.",
     "invalidCutShort": "Note: Reduction limited to max. 12 months",
-    "regel8Abs3": "Note: According to § 8 para. 3 BBiG, the training duration was reduced to the standard training duration, as the excess is at most 6 months."
+    "regel8Abs3": "Note: Since your part-time training would only take up to 6 months longer, it ends after the normal full-time training duration (§ 8 para. 3 BBiG)."
+  },
+  "validation": {
+    "required": "This field is required"
   },
   "btn": {
     "calculate": "Show result",
     "reset": "Reset",
-    "share": "Share link"
+    "share": "Share result"
   },
   "share": {
     "title": "Part-Time Calculator – result",
@@ -151,6 +210,9 @@
   },
   "nav": {
     "actions": "Actions"
+  },
+  "meta": {
+    "stampLabel": "As of"
   },
   "start": {
     "title": {
@@ -171,6 +233,6 @@
       "title": "Successful completion",
       "subtitle": "Structured path"
     },
-    "button": "Calculate now"
+    "button": "To calculator"
   }
 }

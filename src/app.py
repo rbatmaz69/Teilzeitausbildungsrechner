@@ -11,13 +11,35 @@ Die Flask-App stellt folgende Funktionen bereit:
 - Strukturierte Fehlerbehandlung
 """
 
+import os
+import sys
+import time
 from pathlib import Path
 
-from flask import Flask, jsonify, render_template, request
+# Automatische venv-Aktivierung: Füge venv site-packages zum Python-Pfad hinzu
+# Muss VOR den Imports passieren, damit Flask gefunden wird
+project_root = Path(__file__).parent.parent
+venv_path = project_root / "venv"
+
+if venv_path.exists():
+    # Finde site-packages in venv
+    python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
+    venv_site_packages = venv_path / "lib" / f"python{python_version}" / "site-packages"
+
+    if venv_site_packages.exists():
+        # Füge venv site-packages zum Python-Pfad hinzu
+        if str(venv_site_packages) not in sys.path:
+            sys.path.insert(0, str(venv_site_packages))
+
+    # Setze VIRTUAL_ENV für Kompatibilität
+    os.environ["VIRTUAL_ENV"] = str(venv_path)
+
+from flask import Flask, g, jsonify, render_template, request  # noqa: E402
 
 # Import der zentralen Berechnungslogik
 # Diese enthält die komplette Implementierung gemäß BBiG § 7a und § 8
-from .api import verarbeite_berechnungsanfrage
+from .api import verarbeite_berechnungsanfrage  # noqa: E402
+from .logging_config import configure_logging  # noqa: E402
 
 
 def create_app() -> Flask:
@@ -38,11 +60,52 @@ def create_app() -> Flask:
     # Dies funktioniert unabhängig vom aktuellen Arbeitsverzeichnis
     # Ermittelt das Projekt-Root-Verzeichnis (ein Level über src/)
     base_dir = Path(__file__).parent.parent
+    # Zentrales Logging initialisieren (idempotent)
+    configure_logging()
+
     app = Flask(
         __name__,
         static_folder=str(base_dir / "static"),      # JavaScript, CSS-Dateien
         template_folder=str(base_dir / "templates"),  # HTML-Templates
     )
+
+    # Request-Lifecycle-Logging (PII-sicher)
+    @app.before_request
+    def _log_request_start():  # pragma: no cover - trivial
+        # Nur Startzeit speichern, keine Request-Daten loggen
+        g._start_time = time.perf_counter()
+
+    @app.after_request
+    def _log_request_end(response):  # pragma: no cover - trivial
+        try:
+            start = getattr(g, "_start_time", None)
+            duration_ms = None
+            if start is not None:
+                duration_ms = int((time.perf_counter() - start) * 1000)
+
+            import logging as _logging
+
+            logger = _logging.getLogger("src.app")
+            # Nur Methode, Pfad, Status und Dauer loggen (keine PII)
+            if duration_ms is None:
+                logger.info(
+                    "%s %s -> %s",
+                    request.method,
+                    request.path,
+                    response.status_code,
+                )
+            else:
+                logger.info(
+                    "%s %s -> %s (%dms)",
+                    request.method,
+                    request.path,
+                    response.status_code,
+                    duration_ms,
+                )
+        except Exception:
+            # Logging darf nie den Responsefluss stören
+            pass
+        return response
 
     @app.get("/")
     def index():
@@ -132,13 +195,10 @@ def create_app() -> Flask:
 #   oder
 #   python src/app.py
 #
-# Der Development-Server läuft dann auf http://localhost:5000/
-# Falls Port 5000 belegt ist, wird automatisch ein anderer Port verwendet
+# Der Development-Server läuft dann auf http://localhost:8000/
+# Falls Port 8000 belegt ist, wird automatisch ein anderer Port verwendet
 # debug=True aktiviert automatisches Neuladen bei Code-Änderungen
 if __name__ == "__main__":
-    import os
-    import sys
-
     app = create_app()
     port = int(os.getenv("PORT", 8000))
 

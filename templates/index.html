@@ -17,140 +17,378 @@
 </head>
 <body>
 
-  <!-- Sprachleiste oben -->
-  <nav class="langbar" aria-label="Sprache">
-    <label id="label-lang" class="sr-only" for="lang-switcher" data-i18n="lang.label">Sprache</label>
-    <div class="langbar-right">
-      <!-- Beides bleibt bestehen; wir priorisieren das sichtbare Label über aria-labelledby -->
-      <select id="lang-switcher" aria-label="Sprache wählen" aria-labelledby="label-lang" data-i18n-attr="aria-label:lang.aria">
-        <option value="de" data-i18n="lang.de">Deutsch</option>
-        <option value="en" data-i18n="lang.en">English</option>
-      </select>
-    </div>
-  </nav>
+  <!-- Sprachleiste wird in die Startseite verlagert -->
 
   <!-- ================================ STARTSEITE ================================ -->
-  <div class="container">
+  <div class="container startseite-container">
     <section id="startseite" class="startseite">
-      <h1 class="startseite-title">
-        <span data-i18n="start.title.prefix">Planen Sie Ihre </span><span class="startseite-title-accent" data-i18n="start.title.accent">Teilzeitausbildung</span><span data-i18n="start.title.suffix"> ganz einfach</span>
-      </h1>
-      <p class="startseite-description" data-i18n="start.description">
-        Berechnen Sie die optimale Aufteilung zwischen Arbeitszeit und Ausbildung. Unser Rechner hilft Ihnen dabei, die passende Teilzeitlösung für Ihre Bedürfnisse zu finden.
-      </p>
-
-      <div class="info-cards">
-        <div class="info-card">
-          <div class="info-card-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="12 6 12 12 16 14"></polyline>
-            </svg>
-          </div>
-          <div class="info-card-content">
-            <h3 class="info-card-title" data-i18n="start.card1.title">Flexible Zeiten</h3>
-            <p class="info-card-subtitle" data-i18n="start.card1.subtitle">Individuelle Stundenplanung</p>
-          </div>
-        </div>
-
-        <div class="info-card">
-          <div class="info-card-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="16" y1="2" x2="16" y2="6"></line>
-              <line x1="8" y1="2" x2="8" y2="6"></line>
-              <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-          </div>
-          <div class="info-card-content">
-            <h3 class="info-card-title" data-i18n="start.card2.title">Genaue Planung</h3>
-            <p class="info-card-subtitle" data-i18n="start.card2.subtitle">Präzise Berechnung</p>
-          </div>
-        </div>
-
-        <div class="info-card">
-          <div class="info-card-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-            </svg>
-          </div>
-          <div class="info-card-content">
-            <h3 class="info-card-title" data-i18n="start.card3.title">Erfolgreicher Abschluss</h3>
-            <p class="info-card-subtitle" data-i18n="start.card3.subtitle">Strukturierter Weg</p>
+      <!-- Mobile Version (default) -->
+      <div class="startseite-mobile">
+        <!-- Sprachumschalter oben rechts -->
+        <div class="startseite-header">
+          <label id="label-lang" class="sr-only" for="lang-switcher" data-i18n="lang.label">Sprache</label>
+          <div class="language-switcher">
+            <select id="lang-switcher" aria-label="Sprache wählen" aria-labelledby="label-lang" data-i18n-attr="aria-label:lang.aria">
+              <option value="de" data-flag="de" data-i18n="lang.de"></option>
+              <option value="en" data-flag="en" data-i18n="lang.en"></option>
+              <option value="uk" data-flag="uk" data-i18n="lang.uk"></option>
+              <option value="tr" data-flag="tr" data-i18n="lang.tr"></option>
+            </select>
+            <!-- SVG flags displayed via CSS -->
+            <div class="lang-flags-overlay">
+              <svg class="lang-flag lang-flag-de" viewBox="0 0 3 2" width="16" height="11" aria-hidden="true">
+                <rect width="3" height="2" fill="#ffce00"/>
+                <rect width="3" height="1" y="0" fill="#000"/>
+                <rect width="3" height="0.6667" y="0.6667" fill="#dd0000"/>
+              </svg>
+              <svg class="lang-flag lang-flag-en" viewBox="0 0 60 40" width="18" height="12" aria-hidden="true">
+                <rect width="60" height="40" fill="#012169"/>
+                <rect x="0" y="16" width="60" height="8" fill="#fff"/>
+                <rect x="26" y="0" width="8" height="40" fill="#fff"/>
+                <rect x="0" y="18" width="60" height="4" fill="#c8102e"/>
+                <rect x="28" y="0" width="4" height="40" fill="#c8102e"/>
+                <polygon points="0,0 60,40" stroke="#c8102e" stroke-width="6" fill="none"/>
+                <polygon points="60,0 0,40" stroke="#c8102e" stroke-width="6" fill="none"/>
+                <polygon points="0,0 60,40" stroke="#fff" stroke-width="4" fill="none" stroke-dasharray="6,6"/>
+                <polygon points="60,0 0,40" stroke="#fff" stroke-width="4" fill="none" stroke-dasharray="6,6"/>
+              </svg>
+              <svg class="lang-flag lang-flag-uk" viewBox="0 0 3 2" width="16" height="11" aria-hidden="true">
+                <rect width="3" height="1" y="0" fill="#0057b8"/>
+                <rect width="3" height="1" y="1" fill="#ffd700"/>
+              </svg>
+              <svg class="lang-flag lang-flag-tr" viewBox="0 0 36 24" width="18" height="12" aria-hidden="true">
+                <rect width="36" height="24" fill="#e30a17"/>
+                <!-- crescent: white circle minus red circle to form crescent -->
+                <circle cx="14" cy="12" r="4.8" fill="#fff" />
+                <circle cx="16.2" cy="12" r="3.6" fill="#e30a17" />
+                <!-- star: simple 5-point star -->
+                <polygon fill="#fff" points="21.5,9.5 20.1,12.0 17.5,12.0 19.6,13.5 18.8,15.9 21.5,14.5 24.2,15.9 23.4,13.5 25.5,12.0 22.9,12.0" />
+              </svg>
+            </div>
           </div>
         </div>
-      </div>
+
+        <h1 class="startseite-title">
+          <span data-i18n="start.title.prefix">Planen Sie Ihre </span><span class="startseite-title-accent" data-i18n="start.title.accent">Teilzeitausbildung</span><span data-i18n="start.title.suffix"> ganz einfach</span>
+        </h1>
+        <p class="startseite-description" data-i18n="start.description">
+          Berechnen Sie die optimale Aufteilung zwischen Arbeitszeit und Ausbildung. Unser Rechner hilft Ihnen dabei, die passende Teilzeitlösung für Ihre Bedürfnisse zu finden.
+        </p>
+
+        <!-- Zusammenhängendes Informationsfeld statt separater Karten -->
+        <div class="info-section" role="region" aria-label="Vorteile des Rechners">
+          <div class="info-item">
+            <div class="info-item-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div class="info-item-content">
+              <h3 class="info-item-title" data-i18n="start.card1.title">Flexible Zeiten</h3>
+              <p class="info-item-subtitle" data-i18n="start.card1.subtitle">Individuelle Stundenplanung</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-item-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+            </div>
+            <div class="info-item-content">
+              <h3 class="info-item-title" data-i18n="start.card2.title">Genaue Planung</h3>
+              <p class="info-item-subtitle" data-i18n="start.card2.subtitle">Präzise Berechnung</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-item-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+              </svg>
+            </div>
+            <div class="info-item-content">
+              <h3 class="info-item-title" data-i18n="start.card3.title">Erfolgreicher Abschluss</h3>
+              <p class="info-item-subtitle" data-i18n="start.card3.subtitle">Strukturierter Weg</p>
+            </div>
+          </div>
+        </div>
 
       <button id="btn-start-calculate" class="btn-start-calculate" type="button" data-i18n="start.button">
-        Jetzt berechnen
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
-      </button>
+        Zum Rechner
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Desktop Version (ab 1024px) -->
+      <div class="startseite-desktop">
+        <!-- Left Side: Calendar Visualization -->
+        <div class="startseite-desktop-left">
+          <div class="calendar-visualization">
+            <div class="calendar-device">
+              <div class="calendar-screen">
+                <div class="calendar-month">
+                  <div class="calendar-header">
+                    <span class="calendar-month-name">Jan</span>
+                    <span class="calendar-year">2026</span>
+                  </div>
+                  <div class="calendar-weekdays">
+                    <span>Mon</span>
+                    <span>Tue</span>
+                    <span>Wed</span>
+                    <span>Thu</span>
+                    <span>Fri</span>
+                    <span>Sat</span>
+                    <span>Sun</span>
+                  </div>
+                  <div class="calendar-days">
+                    <span class="calendar-day other-month">27</span>
+                    <span class="calendar-day other-month">28</span>
+                    <span class="calendar-day other-month">29</span>
+                    <span class="calendar-day other-month">30</span>
+                    <span class="calendar-day other-month">31</span>
+                    <span class="calendar-day">1</span>
+                    <span class="calendar-day">2</span>
+                    <span class="calendar-day">3</span>
+                    <span class="calendar-day">4</span>
+                    <span class="calendar-day">5</span>
+                    <span class="calendar-day">6</span>
+                    <span class="calendar-day">7</span>
+                    <span class="calendar-day">8</span>
+                    <span class="calendar-day">9</span>
+                    <span class="calendar-day">10</span>
+                    <span class="calendar-day">11</span>
+                    <span class="calendar-day">12</span>
+                    <span class="calendar-day">13</span>
+                    <span class="calendar-day">14</span>
+                    <span class="calendar-day">15</span>
+                    <span class="calendar-day">16</span>
+                    <span class="calendar-day">17</span>
+                    <span class="calendar-day">18</span>
+                    <span class="calendar-day">19</span>
+                    <span class="calendar-day">20</span>
+                    <span class="calendar-day">21</span>
+                    <span class="calendar-day">22</span>
+                    <span class="calendar-day">23</span>
+                    <span class="calendar-day">24</span>
+                    <span class="calendar-day">25</span>
+                    <span class="calendar-day">26</span>
+                    <span class="calendar-day">27</span>
+                    <span class="calendar-day">28</span>
+                    <span class="calendar-day">29</span>
+                    <span class="calendar-day">30</span>
+                    <span class="calendar-day">31</span>
+                  </div>
+                </div>
+                <div class="calendar-divider"></div>
+                <div class="calendar-month">
+                  <div class="calendar-header">
+                    <span class="calendar-month-name">Feb</span>
+                    <span class="calendar-year">2026</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Accent Icons -->
+            <div class="accent-icon accent-icon-clock" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div class="accent-icon accent-icon-graduation" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Text Content -->
+        <div class="startseite-desktop-right">
+          <!-- Sprachumschalter oben rechts (Desktop) -->
+          <div class="language-switcher-desktop">
+            <label id="label-lang-desktop" class="sr-only" for="lang-switcher-desktop" data-i18n="lang.label">Sprache</label>
+            <select id="lang-switcher-desktop" aria-label="Sprache wählen" aria-labelledby="label-lang-desktop" data-i18n-attr="aria-label:lang.aria">
+              <option value="de" data-flag="de" data-i18n="lang.de"></option>
+              <option value="en" data-flag="en" data-i18n="lang.en"></option>
+              <option value="uk" data-flag="uk" data-i18n="lang.uk"></option>
+              <option value="tr" data-flag="tr" data-i18n="lang.tr"></option>
+            </select>
+            <!-- SVG flags displayed via CSS -->
+            <div class="lang-flags-overlay-desktop">
+              <svg class="lang-flag lang-flag-de" viewBox="0 0 3 2" width="16" height="11" aria-hidden="true">
+                <rect width="3" height="2" fill="#ffce00"/>
+                <rect width="3" height="1" y="0" fill="#000"/>
+                <rect width="3" height="0.6667" y="0.6667" fill="#dd0000"/>
+              </svg>
+              <svg class="lang-flag lang-flag-en" viewBox="0 0 60 40" width="18" height="12" aria-hidden="true">
+                <rect width="60" height="40" fill="#012169"/>
+                <rect x="0" y="16" width="60" height="8" fill="#fff"/>
+                <rect x="26" y="0" width="8" height="40" fill="#fff"/>
+                <rect x="0" y="18" width="60" height="4" fill="#c8102e"/>
+                <rect x="28" y="0" width="4" height="40" fill="#c8102e"/>
+                <polygon points="0,0 60,40" stroke="#c8102e" stroke-width="8" fill="none"/>
+                <polygon points="60,0 0,40" stroke="#c8102e" stroke-width="8" fill="none"/>
+              </svg>
+              <svg class="lang-flag lang-flag-uk" viewBox="0 0 3 2" width="16" height="11" aria-hidden="true">
+                <rect width="3" height="1" y="0" fill="#0057b8"/>
+                <rect width="3" height="1" y="1" fill="#ffd700"/>
+              </svg>
+              <svg class="lang-flag lang-flag-tr" viewBox="0 0 36 24" width="18" height="12" aria-hidden="true">
+                <rect width="36" height="24" fill="#e30a17"/>
+                <circle cx="14" cy="12" r="4.8" fill="#fff" />
+                <circle cx="16.2" cy="12" r="3.6" fill="#e30a17" />
+                <polygon fill="#fff" points="21.5,9.5 20.1,12.0 17.5,12.0 19.6,13.5 18.8,15.9 21.5,14.5 24.2,15.9 23.4,13.5 25.5,12.0 22.9,12.0" />
+              </svg>
+            </div>
+          </div>
+
+          <h1 class="startseite-title">
+            <span data-i18n="start.title.prefix">Planen Sie Ihre </span><span class="startseite-title-accent" data-i18n="start.title.accent">Teilzeitausbildung</span><span data-i18n="start.title.suffix"> ganz einfach</span>
+          </h1>
+          <p class="startseite-description-desktop" data-i18n="start.description">
+            Berechnen Sie die optimale Aufteilung zwischen Arbeitszeit und Ausbildung. Unser Rechner hilft Ihnen dabei, die passende Teilzeitlösung für Ihre Bedürfnisse zu finden.
+          </p>
+
+          <div class="info-cards-desktop" role="region" aria-label="Vorteile des Rechners">
+            <div class="info-card-desktop">
+              <div class="info-card-icon-desktop">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <div class="info-card-content-desktop">
+                <h3 class="info-card-title-desktop" data-i18n="start.card1.title">Flexible Zeiten</h3>
+                <p class="info-card-subtitle-desktop" data-i18n="start.card1.subtitle">Individuelle Stundenplanung</p>
+              </div>
+            </div>
+
+            <div class="info-card-desktop">
+              <div class="info-card-icon-desktop">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+              </div>
+              <div class="info-card-content-desktop">
+                <h3 class="info-card-title-desktop" data-i18n="start.card2.title">Genaue Planung</h3>
+                <p class="info-card-subtitle-desktop" data-i18n="start.card2.subtitle">Präzise Berechnung</p>
+              </div>
+            </div>
+
+            <div class="info-card-desktop">
+              <div class="info-card-icon-desktop">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                  <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                </svg>
+              </div>
+              <div class="info-card-content-desktop">
+                <h3 class="info-card-title-desktop" data-i18n="start.card3.title">Erfolgreicher Abschluss</h3>
+                <p class="info-card-subtitle-desktop" data-i18n="start.card3.subtitle">Strukturierter Weg</p>
+              </div>
+            </div>
+          </div>
+
+          <button id="btn-start-calculate-desktop" class="btn-start-calculate-desktop" type="button" data-i18n="start.button">
+            Zum Rechner
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
     </section>
   </div>
 
-  <div class="container">
-    <!-- ================================ EINGABEN DES RECHNERS ================================ -->
+  <div class="container rechner-bereich" id="rechner-bereich">
+    <div class="rechner-grid">
+      <!-- ================================ EINGABEN DES RECHNERS ================================ -->
+      <div class="rechner-column eingaben-column" aria-labelledby="input-heading">
+      <section class="card rechner-card" aria-labelledby="input-heading">
+        <h1 id="input-heading" class="sr-only" data-i18n="inputs.heading">Eingaben</h1>
 
-    <!-- Eingabe reguläre Ausbildungsdauer -->
-    <section class="card" aria-labelledby="input-heading">
-      <h1 id="input-heading" class="sr-only" data-i18n="inputs.heading">Eingaben</h1>
-
-      <div class="input-group">
-        <label id="label-dauer">
-          <span data-i18n="inputs.dauer.label">Reguläre Ausbildungsdauer (Monate)</span>
-          <span class="info-icon"
-                data-tooltip="Die normale Dauer Ihrer Ausbildung bei Vollzeit"
-                data-i18n-attr="data-tooltip:inputs.dauer.tooltip"
-                aria-hidden="true">i</span>
-        </label>
-        <div class="input-with-unit">
-          <input type="number" id="dauer" value="36" min="24" max="42" step="1" required aria-labelledby="label-dauer" aria-describedby="hint-dauer">
-          <span class="unit">M</span>
+        <div class="input-group">
+          <label id="label-dauer">
+            <span data-i18n="inputs.dauer.label">Reguläre Ausbildungsdauer (Monate)</span>
+            <span class="info-icon"
+                  data-tooltip="Die normale Dauer Ihrer Ausbildung bei Vollzeit"
+                  data-i18n-attr="data-tooltip:inputs.dauer.tooltip"
+                  aria-hidden="true">i</span>
+          </label>
+          <div class="input-with-unit">
+            <input type="text" inputmode="numeric" autocomplete="off" id="dauer" placeholder="z.B. 36" data-i18n-attr="placeholder:inputs.placeholders.dauer" step="1" required aria-labelledby="label-dauer" aria-describedby="hint-dauer">
+            <span class="unit" data-i18n="units.months.full">Monate</span>
+          </div>
+          <span class="error-message" id="errorDauer"></span>
+          <!-- Unsichtbarer Hilfetext spiegelt das Tooltip (für SR) -->
+          <span id="hint-dauer" class="sr-only">
+            Die normale Dauer Ihrer Ausbildung bei Vollzeit.
+          </span>
         </div>
-        <span class="error-message" id="errorDauer"></span>
-        <!-- Unsichtbarer Hilfetext spiegelt das Tooltip (für SR) -->
-        <span id="hint-dauer" class="sr-only">
-          Die normale Dauer Ihrer Ausbildung bei Vollzeit.
-        </span>
-      </div>
 
-      <!-- Eingabe reguläre Wochenstunden -->
-      <div class="input-group">
-        <label id="label-stunden">
-          <span data-i18n="inputs.stunden.label">Reguläre Wochenstunden (gesamt)</span>
-          <span class="info-icon"
-                data-tooltip="Ihre gesamten Wochenstunden inkl. Berufsschule"
-                data-i18n-attr="data-tooltip:inputs.stunden.tooltip"
-                aria-hidden="true">i</span>
-        </label>
-        <div class="input-with-unit">
-          <input type="number" id="stunden" value="40" step="1" required aria-labelledby="label-stunden" aria-describedby="hint-stunden">
-          <span class="unit" data-i18n="units.hours.short">Std</span>
+        <!-- Eingabe reguläre Wochenstunden -->
+        <div class="input-group">
+          <label id="label-stunden">
+            <span data-i18n="inputs.stunden.label">Reguläre Wochenstunden (gesamt)</span>
+            <span class="info-icon"
+                  data-tooltip="Ihre gesamten Wochenstunden inkl. Berufsschule"
+                  data-i18n-attr="data-tooltip:inputs.stunden.tooltip"
+                  aria-hidden="true">i</span>
+          </label>
+          <div class="input-with-unit">
+            <input type="text" inputmode="decimal" autocomplete="off" id="stunden" placeholder="z.B. 40" data-i18n-attr="placeholder:inputs.placeholders.stunden" step="1" required aria-labelledby="label-stunden" aria-describedby="hint-stunden">
+            <span class="unit" data-i18n="units.hours.full">Stunden</span>
+          </div>
+          <span class="error-message" id="errorStunden"></span>
+          <span id="hint-stunden" class="sr-only">Ihre gesamten Wochenstunden inkl. Berufssschule.</span>
         </div>
-        <span class="error-message" id="errorRegularStunden"></span>
-        <span id="hint-stunden" class="sr-only">Ihre gesamten Wochenstunden inkl. Berufsschule.</span>
-      </div>
 
-      <!-- Eingabe Teilzeitanteil -->
-      <div class="input-group">
-        <label id="label-teilzeit">
-          <span data-i18n="inputs.teilzeit.label">Teilzeit-Anteil</span>
-          <span class="info-icon"
-                data-tooltip="Mindestens 50% für eine anerkannte Teilzeitausbildung"
-                data-i18n-attr="data-tooltip:inputs.teilzeit.tooltip"
-                aria-hidden="true">i</span>
-        </label>
+        <!-- Eingabe Teilzeitanteil -->
+        <div class="input-group">
+          <label id="label-teilzeit">
+            <span data-i18n="inputs.teilzeit.label">Wie viele Stunden pro Woche möchten Sie während der Ausbildung arbeiten?</span>
+            <span class="info-icon"
+                  data-tooltip="Mindestens 50% für eine anerkannte Teilzeitausbildung"
+                  data-i18n-attr="data-tooltip:inputs.teilzeit.tooltip"
+                  aria-hidden="true">i</span>
+          </label>
 
-        <!-- Prozentanteil -->
-        <div class="input-row">
-          <div class="input-group half">
-            <label id="label-teilzeit-prozent" data-i18n="inputs.teilzeit.percent">Prozent</label>
+          <!-- Stundenanteil (primär) -->
+          <div class="input-group">
             <div class="input-with-unit">
-              <input type="number" id="teilzeitProzent" value="75" step="5" aria-labelledby="label-teilzeit-prozent" aria-describedby="hint-teilzeit">
-              <span class="unit" data-i18n="units.percent">%</span>
+              <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitStunden" placeholder="z.B. 30" data-i18n-attr="placeholder:inputs.placeholders.teilzeitStunden" step="1" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
+              <span class="unit" data-i18n="units.hours.full">Stunden</span>
+            </div>
+            <span class="error-message" id="errorTeilStunden"></span>
+            <div class="button-container">
+              <div class="button-row">
+                <button class="preset" data-type="hours" data-value="24" data-i18n="inputs.teilzeit.button24h"></button>
+                <button class="preset" data-type="hours" data-value="32" data-i18n="inputs.teilzeit.button32h"></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trenner -->
+          <div class="input-separator" data-i18n="inputs.teilzeit.separator">oder</div>
+
+          <!-- Prozentanteil -->
+          <div class="input-group">
+            <div class="input-with-unit">
+              <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitProzent" placeholder="z.B. 75" data-i18n-attr="placeholder:inputs.placeholders.teilzeitProzent" step="5" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
+              <span class="unit" data-i18n="units.percent">Prozent</span>
             </div>
             <span class="error-message" id="errorProzent"></span>
             <div class="button-container">
@@ -160,227 +398,413 @@
               </div>
             </div>
           </div>
+          <!-- SR-Hinweis für beide Felder aus dem Info-Icon oben -->
+          <span id="hint-teilzeit" class="sr-only">
+            Mindestens 50&nbsp;% für eine anerkannte Teilzeitausbildung.
+          </span>
+        </div>
 
-          <!-- Stundenanteil -->
-          <div class="input-group half">
-            <label id="label-teilzeit-stunden" data-i18n="inputs.teilzeit.hours">Stunden</label>
-            <div class="input-with-unit">
-              <input type="number" id="teilzeitStunden" value="30" step="1" aria-labelledby="label-teilzeit-stunden" aria-describedby="hint-teilzeit">
-              <span class="unit" data-i18n="units.hours.short">h</span>
-            </div>
-            <span class="error-message" id="errorStunden"></span>
-            <div class="button-container">
-              <div class="button-row">
-                <button class="preset" data-type="hours" data-value="24">24 h</button>
-                <button class="preset" data-type="hours" data-value="32">32 h</button>
-              </div>
+      </section>
+
+      <!-- ================================ VERKÜRZUNGSGRÜNDE AUSWÄHLEN ================================ -->
+      <form id="vk-form" class="space-y-3">
+        <fieldset id="vk-fieldset" class="radio-group">
+          <legend class="sr-only" data-i18n="vk.legend">Verkürzungsgründe</legend>
+
+          <!-- ============================== -->
+          <!-- Überschrift + Info (ohne extra Card) -->
+          <!-- ============================== -->
+          <div class="vk-card-header" aria-labelledby="vk-heading">
+            <h1 id="vk-heading" class="text-2xl font-bold mb-3" data-i18n="vk.heading">
+              Gründe für eine kürzere Ausbildung
+            </h1>
+
+            <div class="row vk-info-row">
+              <p id="vk-helper" data-i18n="vk.helper" class="muted-text d-none">
+                Wähle alles aus, was zu dir passt.
+              </p>
+              <button id="vk-info-btn" class="vk-info-btn" type="button" aria-label="Informationen zu Verkürzungsgründen anzeigen" data-i18n="vk.infoBox.button" data-i18n-attr="aria-label:vk.infoBox.buttonAria">
+                <span class="vk-info-btn-icon" aria-hidden="true">ℹ</span>
+                <span data-i18n="vk.infoBox.button">Was ist das?</span>
+              </button>
             </div>
           </div>
-        </div>
-        <!-- SR-Hinweis für beide Felder aus dem Info-Icon oben -->
-        <span id="hint-teilzeit" class="sr-only">
-          Mindestens 50&nbsp;% für eine anerkannte Teilzeitausbildung.
-        </span>
-      </div>
-    </section>
+
+          <!-- ============================== -->
+          <!-- 1. SCHULABSCHLUSS              -->
+          <!-- ============================== -->
+          <section class="card rechner-card" aria-labelledby="vk-school-heading">
+            <h2 id="vk-school-heading" class="vk-category-title" data-i18n="vk.school.question">
+              Welchen höchsten Schulabschluss haben Sie erreicht?
+            </h2>
+
+            <div class="vk-category-body vk-stack">
+              <label for="vk-school-select" class="sr-only" data-i18n="vk.school.label">
+                Schulabschluss
+              </label>
+
+              <select id="vk-school-select" name="vk-school-select" data-vk-type="school-select">
+                <option value="none" data-i18n="vk.school.none">Kein Abschluss</option>
+                <option value="hauptschule" data-i18n="vk.school.hauptschule">Hauptschule</option>
+                <option value="realschule" data-vk-set-fields="realschule" data-i18n="vk.school.realschule">Realschule</option>
+                <option value="abitur" data-vk-set-fields="abitur" data-i18n="vk.school.abitur">Abitur / Hochschulreife</option>
+              </select>
+            </div>
+          </section>
+
+          <!-- ============================== -->
+          <!-- 2. Alter über 21 Jahre         -->
+          <!-- ============================== -->
+          <section class="card rechner-card" aria-labelledby="vk-alter-heading">
+            <h2 id="vk-alter-heading" class="vk-category-title" data-i18n="vk.other.question">
+              Wie alt sind Sie?
+            </h2>
+
+            <div class="vk-category-body vk-stack">
+              <input type="number" id="alter" step="1" min="0" max="99">
+
+              <span class="error-message" id="errorAlter"></span>
+
+              <span id="desc-alter21" class="sr-only" data-i18n="vk.alter21.sr">
+                Wenn Sie über 21 Jahre alt sind, können Vorerfahrungen angerechnet werden.
+              </span>
+            </div>
+          </section>
+
+          <!-- ============================== -->
+          <!-- 3. FAMILIENVORSORGE            -->
+          <!-- ============================== -->
+          <section class="card rechner-card" aria-labelledby="vk-familie-heading">
+            <h2 id="vk-familie-heading" class="vk-category-title" data-i18n="vk.familie.title">
+              Familiäre Verpflichtungen
+            </h2>
+
+            <div class="vk-category-body vk-stack">
+              <!-- Frage 1: Kinderbetreuung -->
+              <div>
+                <p class="vk-question" data-i18n="vk.familie.question_kinder">
+                  Betreuen Sie ein eigenes Kind oder sind Sie für die Betreuung eines Kindes verantwortlich?
+                </p>
+                <div class="vk-yes-no-group" style="display: flex; flex-direction: row; gap: 0.5rem;">
+                  <label class="tile">
+                    <input
+                      type="checkbox"
+                      id="kinderbetreuung-ja"
+                      aria-describedby="desc-familie-kinder"
+                      data-vk-field="familien_kinderbetreuung"
+                    >
+                    <div class="tile-body" style="flex:1">
+                      <div class="tile-header">
+                        <span data-i18n="vk.familie.yes">Ja</span>
+                      </div>
+                    </div>
+                  </label>
+                  <label class="tile">
+                    <input
+                      type="checkbox"
+                      id="kinderbetreuung-nein"
+                      aria-describedby="desc-familie-kinder"
+                    >
+                    <div class="tile-body" style="flex:1">
+                      <div class="tile-header">
+                        <span data-i18n="vk.familie.no">Nein</span>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+                <span id="desc-familie-kinder" class="sr-only" data-i18n="vk.familie.sr">
+                  Wenn Sie ein Kind betreuen müssen, ist eine Verkürzung möglich.
+                </span>
+              </div>
+
+              <!-- Frage 2: Pflege von Angehörigen -->
+              <div>
+                <p class="vk-question" data-i18n="vk.familie.question_pflege">
+                  Pflegen Sie einen Angehörigen oder sind Sie regelmäßig an der Pflege beteiligt?
+                </p>
+                <div class="vk-yes-no-group" style="display: flex; flex-direction: row; gap: 0.5rem;">
+                  <label class="tile">
+                    <input
+                      type="checkbox"
+                      id="pflege-ja"
+                      aria-describedby="desc-familie-pflege"
+                      data-vk-field="familien_pflegeverantwortung"
+                    >
+                    <div class="tile-body" style="flex:1">
+                      <div class="tile-header">
+                        <span data-i18n="vk.familie.yes">Ja</span>
+                      </div>
+                    </div>
+                  </label>
+                  <label class="tile">
+                    <input
+                      type="checkbox"
+                      id="pflege-nein"
+                      aria-describedby="desc-familie-pflege"
+                    >
+                    <div class="tile-body" style="flex:1">
+                      <div class="tile-header">
+                        <span data-i18n="vk.familie.no">Nein</span>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+                <span id="desc-familie-pflege" class="sr-only" data-i18n="vk.familie.sr">
+                  Wenn Sie einen Angehörigen pflegen müssen, ist eine Verkürzung möglich.
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- calculate button moved to second column -->
+        </fieldset>
+      </form>
+
   </div>
-  
-  <!-- ================================ VERKÜRZUNGSGRÜNDE AUSWÄHLEN ================================ -->
-  <div class="container">
-    <h1 id="vk-heading" class="text-2xl font-bold mb-3" data-i18n="vk.heading">
-      Gründe für eine kürzere Ausbildung
-    </h1>
 
-    <p id="vk-helper" data-i18n="vk.helper" class="muted-text d-none">
-      Wähle alles aus, was zu dir passt.
-    </p>
+  <!-- Column 2: berufliche Qualifikationen + Bildungsweg -->
+  <div class="rechner-column vk-column">
+    <!-- ============================================ -->
+    <!-- 4. BERUFLICHE QUALIFIKATIONEN                -->
+    <!-- ============================================ -->
+    <div class="vk-category vk-beruf">
+      <h2 class="vk-category-title" data-i18n="vk.qual.question">
+        Welche beruflichen Qualifikationen bringen Sie mit?
+      </h2>
 
-    <form id="vk-form" class="space-y-3">
-      <fieldset id="vk-fieldset" class="radio-group">
-        <legend class="sr-only" data-i18n="vk.legend">Verkürzungsgründe</legend>
-
-        <!-- ============================== -->
-        <!-- 1. SCHULABSCHLUSS (DROPDOWN)   -->
-        <!-- ============================== -->
-        <div class="vk-category">
-          <h2 class="vk-category-title" data-i18n="vk.school.question">
-            Welchen höchsten Schulabschluss haben Sie erreicht?
-          </h2>
-
-          <div class="vk-category-body">
-            <label for="vk-school-select" class="sr-only" data-i18n="vk.school.label">
-              Schulabschluss
+      <!-- Neue Ja/Nein Fragen für berufliche Qualifikationen -->
+      <div class="vk-category-body">
+        <!-- Q1 -->
+        <div>
+          <p class="vk-question" data-i18n="vk.qual.abgeschlosseneAusbildung">Haben Sie bereits eine abgeschlossene Ausbildung im selben oder einem ähnlichen Beruf?</p>
+          <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q1_ja" aria-describedby="desc-beruf-q1" data-vk-field="beruf_q1">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
             </label>
-
-            <select id="vk-school-select" name="vk-school-select" data-vk-type="school-select">
-              <option value="none" data-i18n="vk.school.none">Kein Abschluss</option>
-              <option value="hauptschule" data-i18n="vk.school.hauptschule">Hauptschule</option>
-              <option value="realschule" data-vk-set-fields="realschule" data-i18n="vk.school.realschule">Realschule</option>
-              <option value="abitur" data-vk-set-fields="abitur" data-i18n="vk.school.abitur">Abitur / Hochschulreife</option>
-            </select>
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q1_nein" aria-describedby="desc-beruf-q1">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+            </label>
           </div>
+          <span id="desc-beruf-q1" class="sr-only" data-i18n="vk.qual.abgeschlosseneAusbildung_sr">Abgeschlossene Ausbildung im selben/ähnlichen Beruf</span>
         </div>
 
-        <!-- ============================== -->
-        <!-- 2. FAMILIENVORSORGE            -->
-        <!-- ============================== -->
-        <div class="vk-category">
-          <h2 class="vk-category-title" data-i18n="vk.familie.question">
-            Haben Sie familiäre Verpflichtungen (Kinderbetreuung oder Pflege von Angehörigen)?
-          </h2>
-
-          <div class="vk-category-body">
+        <!-- Q2 (unterfrage) -->
+        <div>
+          <p class="vk-question" data-i18n="vk.qual.nichtAbgeschlosseneAusbildung">Haben Sie eine Ausbildung im selben oder einem ähnlichen Beruf begonnen, aber nicht abgeschlossen?</p>
+          <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
             <label class="tile">
-              <input
-                type="checkbox"
-                aria-describedby="desc-familie"
-                data-vk-field="familien_pflegeverantwortung"
-              >
-              <div class="tile-body" style="flex:1">
-                <div class="tile-header">
-                    <span data-i18n="vk.familie.label">Familien- und Pflegeverantwortung</span>
+              <input type="checkbox" id="vk_beruf_q2_ja" aria-describedby="desc-beruf-q2" data-vk-field="beruf_q2">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
+            </label>
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q2_nein" aria-describedby="desc-beruf-q2">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+            </label>
+          </div>
+          <div id="vk_beruf_q2_duration_container" style="display:none;margin-top:.5rem;">
+            <label for="vk_beruf_q2_dauer_months" style="display:block;margin-bottom:.5rem;font-weight:500;" data-i18n="vk.qual.nichtAbgeschlosseneAusbildung_dauer">Wie lange hat Ihre nicht abgeschlossene Ausbildung gedauert? (Monate)</label>
+            <input type="number" id="vk_beruf_q2_dauer_months" min="0" max="50" step="1" inputmode="numeric" data-i18n-attr="placeholder:vk.qual.months" placeholder="Monate" style="width:6rem;">
+            <span class="error-message" id="errorBerufQ2Dauer"></span>
+            <span class="sr-only">Geben Sie die Dauer in vollen Monaten an.</span>
+          </div>
+          <span id="desc-beruf-q2" class="sr-only" data-i18n="vk.qual.nichtAbgeschlosseneAusbildung_sr">Begonnene, aber nicht abgeschlossene Ausbildung</span>
+        </div>
+
+        <!-- Q3 -->
+        <div>
+          <p class="vk-question" data-i18n="vk.qual.praktischeErfahrung">Haben Sie bereits in einem ähnlichen Bereich gearbeitet oder praktische Erfahrungen gesammelt, die für die Ausbildung nützlich sind?</p>
+          <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q3_ja" aria-describedby="desc-beruf-q3" data-vk-field="beruf_q3">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
+            </label>
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q3_nein" aria-describedby="desc-beruf-q3">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+            </label>
+          </div>
+          <span id="desc-beruf-q3" class="sr-only" data-i18n="vk.qual.praktischeErfahrung_sr">Praktische Erfahrungen im ähnlichen Bereich</span>
+        </div>
+
+        <!-- Q4 -->
+        <div>
+          <p class="vk-question" data-i18n="vk.qual.massnahmeVorbereitung">Haben Sie vor der Ausbildung an einer Maßnahme zur Vorbereitung auf eine Ausbildung teilgenommen (z. B. Berufsvorbereitende Bildungsmaßnahme oder Einstiegsqualifizierung)?</p>
+          <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q5_ja" aria-describedby="desc-beruf-q5" data-vk-field="beruf_q5">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
+            </label>
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q5_nein" aria-describedby="desc-beruf-q5">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+            </label>
+          </div>
+          <span id="desc-beruf-q5" class="sr-only" data-i18n="vk.qual.massnahmeVorbereitung_sr">Maßnahme zur Vorbereitung auf eine Ausbildung</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- 5. BILDUNGSWEG VOR DER AUSBILDUNG            -->
+    <!-- ============================================ -->
+    <div class="vk-category vk-beruf">
+      <h2 class="vk-category-title" data-i18n="vk.bildungsweg.question">
+        Bildungsweg vor der Ausbildung
+      </h2>
+
+      <!-- Ja/Nein Fragen für Bildungsweg -->
+      <div class="vk-category-body">
+        <!-- Q4: Berufsvorbereitende Schulform -->
+        <div>
+          <p class="vk-question" data-i18n="vk.qual.berufsvorbereitendeSchule">Haben Sie vor der Ausbildung eine berufsvorbereitende Schulform besucht (z. B. Berufsgrundbildungsjahr, Berufsvorbereitungsjahr oder eine einjährige Berufsfachschule)?</p>
+          <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q4_ja" aria-describedby="desc-beruf-q4" data-vk-field="beruf_q4">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
+            </label>
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q4_nein" aria-describedby="desc-beruf-q4">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+            </label>
+          </div>
+          <span id="desc-beruf-q4" class="sr-only" data-i18n="vk.qual.berufsvorbereitendeSchule_sr">Berufsvorbereitende Schulform besucht</span>
+        </div>
+
+        <!-- Q6: ECTS-Punkte im Studium -->
+        <div>
+          <p class="vk-question" data-i18n="vk.qual.ectsStudium">Haben Sie im Studium bereits mindestens 30 ECTS-Punkte in einem Bereich erworben, der zu Ihrem Ausbildungsberuf passt?</p>
+          <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q6_ja" aria-describedby="desc-beruf-q6" data-vk-field="beruf_q6">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
+            </label>
+            <label class="tile">
+              <input type="checkbox" id="vk_beruf_q6_nein" aria-describedby="desc-beruf-q6">
+              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
+            </label>
+          </div>
+          <span id="desc-beruf-q6" class="sr-only" data-i18n="vk.qual.ectsStudium_sr">ECTS im passenden Studienbereich</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="vk-actions">
+      <button class="berechnen" id="berechnenBtn" type="button" data-i18n="btn.calculate">Ergebnis anzeigen</button>
+    </div>
+  </div>
+
+      <div class="rechner-column ergebnis-column" id="ergebnis-container" hidden>
+        <!-- Hauptkarte, optisch hervorgehoben -->
+        <div class="card highlight" aria-labelledby="res-headline">
+          <h1 id="res-headline" data-i18n="res.headline">Ihre Teilzeitausbildung</h1>
+          <p class="helper" data-i18n="res.helper">
+            Hier sehen Sie Ihre Eingaben und das berechnete Ergebnis auf einen Blick.
+          </p>
+
+          <!-- calculate button moved to Verkürzungsgründe column -->
+
+          <!-- Grid-Layout für Haupt- und Meta-Ergebnisse -->
+          <div class="grid">
+            <div class="highlight-main">
+              <p class="big-number" id="res-total-months" aria-live="polite" data-i18n="res.placeholders.months">–</p>
+              <p class="result-years" id="res-total-years">–</p>
+              <span class="error-message" id="errorTotalMonths" data-i18n="errors.placeholder"></span>
+              
+              <!-- Verlängerungsanzeige: Ausbildung(Vollzeit) → Pfeil mit Verkürzungsdauer → Basis -->
+              <div class="result-extension-wrapper" id="res-shortening-wrapper" hidden>
+                <p class="result-extension-label" data-i18n="res.extension.label1">1. Verkürzung durch Verkürzungründe</p>
+                <div class="result-extension-values">
+                  <span class="result-extension-basis" id="res-extension-vollzeit">–</span>
+                  <div class="result-extension-arrow-wrapper">
+                    <span class="result-extension-arrow">→</span>
+                    <span class="result-extension-delta" id="res-extension-verkuerzungsdauer">+–</span>
+                  </div>
+                  <span class="result-extension-total" id="res-shortening-total">–</span>
                 </div>
               </div>
-            </label>
 
-            <span id="desc-familie" class="sr-only" data-i18n="vk.familie.sr">
-              Wenn Sie Familien- oder Pflegeverantwortung haben, ist eine Verkürzung möglich.
-            </span>
-          </div>
-        </div>
-
-        <!-- ============================================ -->
-        <!-- 3. BERUFLICHE QUALIFIKATIONEN                -->
-        <!-- ============================================ -->
-        <div class="vk-category">
-          <h2 class="vk-category-title" data-i18n="vk.qual.question">
-            Welche beruflichen Qualifikationen bringen Sie mit?
-          </h2>
-
-          <div class="vk-category-body">
-            <label class="tile">
-              <input
-                type="checkbox"
-                aria-describedby="desc-vork"
-                data-vk-field="vorkenntnisse_monate"
-                data-vk-months="12"
-              >
-
-              <div class="tile-body">
-                <div class="tile-header">
-                    <span data-i18n="vk.vork.label">Berufliche Vorkenntnisse</span>
+              <!-- Verlängerungsanzeige: Basis → Pfeil mit Delta → Ziel -->
+              <div class="result-extension-wrapper" id="res-extension-wrapper" hidden>
+                <p class="result-extension-label" data-i18n="res.extension.label2">2. Verlängerung durch Teilzeit:</p>
+                <div class="result-extension-values">
+                  <span class="result-extension-basis" id="res-extension-basis">–</span>
+                  <div class="result-extension-arrow-wrapper">
+                    <span class="result-extension-arrow">→</span>
+                    <span class="result-extension-delta" id="res-extension-delta">+–</span>
+                  </div>
+                  <span class="result-extension-total" id="res-extension-total">–</span>
                 </div>
               </div>
-            </label>
-
-            <span id="desc-vork" class="sr-only" data-i18n="vk.vork.sr">
-              Berufliche Vorkenntnisse können Ihre Ausbildungsdauer verkürzen.
-            </span>
+            </div>
           </div>
         </div>
 
-        <!-- ============================== -->
-        <!-- 4. WEITERE ASPEKTE             -->
-        <!-- ============================== -->
-        <div class="vk-category">
-          <h2 class="vk-category-title" data-i18n="vk.other.question">
-            Welche weiteren Gründe treffen auf Sie zu?
-          </h2>
-
-          <div class="vk-category-body">
-            <label class="tile">
-              <input
-                type="checkbox"
-                aria-describedby="desc-alter21"
-                data-vk-field="alter_ueber_21"
-              >
-
-              <div class="tile-body">
-                <div class="tile-header">
-                    <span data-i18n="vk.alter21.label">Alter über 21 Jahre</span>
-                </div>
-              </div>
-            </label>
-
-            <span id="desc-alter21" class="sr-only" data-i18n="vk.alter21.sr">
-              Wenn Sie über 21 Jahre alt sind, können Vorerfahrungen angerechnet werden.
+        <!-- Karte: Alle Eingaben -->
+        <details class="card-collapsible inputs-collapsible" id="inputs-section">
+          <summary class="summary-toggle">
+            <span class="summary-title" id="inputs-title" data-i18n="inputs.title">
+              Ihre Berechnung
             </span>
+            <span class="summary-pill">
+              <span class="summary-pill-label" data-i18n="inputs.toggleLabel" data-i18n-open="inputs.toggleLabelOpen">
+                Details anzeigen
+              </span>
+              <span class="summary-icon">▸</span>
+            </span>
+          </summary>
+
+          <dl class="kv" id="inputs-list">
+            <!-- Inhalte per JS -->
+          </dl>
+          <span id="stamp-date" class="inputs-stamp"></span>
+        </details>
+
+        <div class="rechner-column notes-column" id="notes-container" hidden>
+          <div class="card" aria-labelledby="notes-title">
+            <h2 id="notes-title" data-i18n="res.notesTitle">Wichtige Hinweise</h2>
+            <ul class="notes" data-i18n="res.notes" data-i18n-html="true">
+              <li>Die Berechnung ist eine reine <strong>Orientierungshilfe</strong>.</li>
+              <li>Es besteht kein gesetzlicher Anspruch auf die dargestellte Auswertung</li>
+              <li>Die finale Vereinbarung erfolgt mit ihrem Ausbildungsbetrieb.</li>
+              <li>Für eine anerkannte Teilzeitausbildung muss die Ausbildungszeit mindestens 50 % der regulären Ausbildungszeit betragen</li>
+            </ul>
           </div>
         </div>
+      </div>
+    </div>
 
-        <button class="berechnen" id="berechnenBtn" type="button" data-i18n="btn.calculate">
-          Berechnen
+    <!-- Modal für "Was ist das?" Informationsbox -->
+    <div id="vk-info-modal" class="vk-info-modal" role="dialog" aria-modal="true" aria-labelledby="vk-info-title" hidden>
+      <div class="vk-info-overlay"></div>
+      <div class="vk-info-content">
+        <button class="vk-info-close" type="button" aria-label="Modal schließen" data-i18n-attr="aria-label:vk.infoBox.closeAria">
+          <span class="vk-info-close-icon" aria-hidden="true">×</span>
         </button>
-      </fieldset>
-    </form>
-  </div>
-
-  <!-- Ergebnisanzeige -->
-  <div class="container" id="ergebnis-container" hidden>
-    <!-- Hauptkarte, optisch hervorgehoben -->
-    <div class="card highlight" aria-labelledby="res-headline">
-      <h1 id="res-headline" data-i18n="res.headline">Ihre Teilzeitausbildung</h1>
-      <p class="helper" data-i18n="res.helper">
-        Hier sehen Sie Ihre Eingaben und das berechnete Ergebnis auf einen Blick.
-      </p>
-
-      <!-- Grid-Layout für Haupt- und Meta-Ergebnisse -->
-      <div class="grid">
-        <div class="highlight-main">
-          <p class="big-number" id="res-total-months" aria-live="polite" data-i18n="res.placeholders.months">–</p>
-          <p class="result-years" id="res-total-years">–</p>
-          <span class="error-message" id="errorTotalMonths" data-i18n="errors.placeholder"></span>
-          
-          <!-- Verlängerungsanzeige: Basis → Pfeil mit Delta → Ziel -->
-          <div class="result-extension-wrapper" id="res-extension-wrapper" hidden>
-            <p class="result-extension-label" data-i18n="res.extension.label">Automatische Verlängerung durch Teilzeit:</p>
-            <div class="result-extension-values">
-              <span class="result-extension-basis" id="res-extension-basis">–</span>
-              <div class="result-extension-arrow-wrapper">
-                <span class="result-extension-arrow">→</span>
-                <span class="result-extension-delta" id="res-extension-delta">+–</span>
-        </div>
-              <span class="result-extension-total" id="res-extension-total">–</span>
-            </div>
+        <div class="vk-info-header">
+          <div class="vk-info-icon" aria-hidden="true">
+            <span class="vk-info-icon-text">ℹ</span>
           </div>
+          <h2 id="vk-info-title" class="vk-info-title" data-i18n="vk.infoBox.title">Was sind Verkürzungsgründe?</h2>
+        </div>
+        <div class="vk-info-body">
+          <div data-i18n="vk.infoBox.content" data-i18n-html="true"></div>
         </div>
       </div>
-    </div>
-
-    <!-- Karte: Alle Eingaben -->
-    <div class="card" aria-labelledby="inputs-title">
-      <h2 id="inputs-title" data-i18n="inputs.title">Ihre Eingaben</h2>
-      <dl class="kv" id="inputs-list">
-        <!-- Inhalte werden dynamisch per JS gefüllt -->
-      </dl>
-    </div>
-
-    <!-- Karte: Hinweise -->
-    <div class="card" aria-labelledby="notes-title">
-      <h2 id="notes-title" data-i18n="res.notesTitle">Wichtige Hinweise</h2>
-      <ul class="notes" data-i18n="res.notes" data-i18n-html="true">
-        <li>Die Berechnung ist eine reine <strong>Orientierungshilfe</strong>.</li>
-        <li>Es besteht kein gesetzlicher Anspruch auf die dargestellte Auswertung</li>
-        <li>Die finale Vereinbarung erfolgt mit ihrem Ausbildungsbetrieb.</li>
-        <li>Für eine anerkannte Teilzeitausbildung muss die Ausbildungszeit mindestens 50 % der regulären Ausbildungszeit betragen</li>
-      </ul>
-    </div>
-
-    <!-- Zeitstempel -->
-    <div class="meta" aria-label="Metadaten">
-      <span id="stamp-date"></span>
     </div>
   </div>
 
   <!-- Navigationsleiste (mobil sticky) -->
-  <nav class="actionbar" aria-label="Aktionen" data-i18n-attr="aria-label:nav.actions">
+  <nav class="actionbar rechner-bereich" aria-label="Aktionen" data-i18n-attr="aria-label:nav.actions">
     <button class="btn ghost" id="btn-reset" type="button"
             aria-label="Zurücksetzen"
             data-i18n="btn.reset"
             data-i18n-attr="aria-label:btn.reset">
       Zurücksetzen
     </button>
-    <button class="btn outline" id="btn-share" type="button" data-i18n="btn.share">
+    <button class="btn outline" id="btn-share" type="button" data-i18n="btn.share" hidden>
       Link teilen
     </button>
   </nav>

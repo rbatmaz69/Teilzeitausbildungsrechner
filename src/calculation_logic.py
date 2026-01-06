@@ -19,6 +19,8 @@ VERKUERZUNG_REALSCHULE = 6  # § 8 Abs. 1 BBiG - Fachoberschulreife/Realschulabs
 VERKUERZUNG_ALTER_21 = 12  # § 8 Abs. 1 BBiG - Alter über 21 Jahre
 # § 8 Abs. 1 BBiG - Berufliche Vorkenntnisse (bis zu 12 Monate → fester Wert 12)
 VERKUERZUNG_VORKENNTNISSE = 12
+# Kinderbetreuung (bis zu 12 Monate → fester Wert 12)
+VERKUERZUNG_KINDERBETREUUNG = 12
 # Familien- und Pflegeverantwortung (bis zu 12 Monate → fester Wert 12)
 VERKUERZUNG_FAMILIEN_PFLEGE = 12
 
@@ -50,8 +52,8 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
             - 'abitur' (bool): Hat Abitur/Hochschulreife
             - 'realschule' (bool): Hat Realschulabschluss/Fachoberschulreife
             - 'alter_ueber_21' (bool): Ist über 21 Jahre alt
-            - 'familien_pflegeverantwortung' (bool): Hat Familien- oder
-              Pflegeverantwortung
+            - 'familien_kinderbetreuung' (bool): Hat Kinderbetreuungsverantwortung
+            - 'familien_pflegeverantwortung' (bool): Hat Pflegeverantwortung
             - 'vorkenntnisse_monate' (int): Berufliche Vorkenntnisse,
               wird auf einen festen Wert von 12 Monaten abgebildet, sobald > 0
 
@@ -77,14 +79,66 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
     if verkuerzungsgruende.get("alter_ueber_21", False):
         verkuerzung_gesamt += VERKUERZUNG_ALTER_21
 
+    if (verkuerzungsgruende.get("familien_kinderbetreuung", False)):
+        verkuerzung_gesamt += VERKUERZUNG_KINDERBETREUUNG
+
     # Familien- und Pflegeverantwortung: 12 Monate Verkürzung
     if verkuerzungsgruende.get("familien_pflegeverantwortung", False):
         verkuerzung_gesamt += VERKUERZUNG_FAMILIEN_PFLEGE
 
     # Berufliche Vorkenntnisse: bis zu 12 Monate → fester Wert 12, sobald vorhanden
-    vorkenntnisse = verkuerzungsgruende.get("vorkenntnisse_monate", 0)
-    if vorkenntnisse and vorkenntnisse > 0:
-        verkuerzung_gesamt += VERKUERZUNG_VORKENNTNISSE
+    # Neue Logik: unterstütze detaillierte berufliche Fragen (beruf_q1..q6,
+    # beruf_q2_dauer_monate)
+    # oder ein bereits berechnetes Feld 'berufliche_verkuerzung_monate' vom Client.
+    berufliche_total = 0
+    # Detect if any new beruf fields are present
+    has_new_beruf_fields = any(k in verkuerzungsgruende for k in (
+        "beruf_q1",
+        "beruf_q2",
+        "beruf_q2_dauer_monate",
+        "beruf_q3",
+        "beruf_q4",
+        "beruf_q5",
+        "beruf_q6",
+        "berufliche_verkuerzung_monate",
+    ))
+
+    if has_new_beruf_fields:
+        # If client provided a precomputed aggregate, prefer it
+        if verkuerzungsgruende.get("berufliche_verkuerzung_monate", 0):
+            berufliche_total += int(
+                verkuerzungsgruende.get("berufliche_verkuerzung_monate", 0)
+            )
+        else:
+            # Q1/Q3/Q4 => 12 Monate
+            if verkuerzungsgruende.get("beruf_q1", False):
+                berufliche_total += 12
+            if verkuerzungsgruende.get("beruf_q3", False):
+                berufliche_total += 12
+            if verkuerzungsgruende.get("beruf_q4", False):
+                berufliche_total += 12
+            # Q5/Q6 => 6 Monate
+            if verkuerzungsgruende.get("beruf_q5", False):
+                berufliche_total += 6
+            if verkuerzungsgruende.get("beruf_q6", False):
+                berufliche_total += 6
+            # Q2 => duration mapping
+            if verkuerzungsgruende.get("beruf_q2", False):
+                d = int(verkuerzungsgruende.get("beruf_q2_dauer_monate", 0) or 0)
+                if d >= 12:
+                    berufliche_total += 12
+                elif d >= 6:
+                    berufliche_total += 6
+                # else <6 => 0
+    else:
+        # Legacy behavior: fallback to old 'vorkenntnisse_monate' field
+        vorkenntnisse = verkuerzungsgruende.get("vorkenntnisse_monate", 0)
+        if vorkenntnisse and vorkenntnisse > 0:
+            berufliche_total += VERKUERZUNG_VORKENNTNISSE
+
+    # Add berufliche_total to Gesamtverkürzung
+    if berufliche_total:
+        verkuerzung_gesamt += berufliche_total
 
     # Gesamtverkürzung darf maximal 12 Monate betragen (Regel der zuständigen Stelle)
     verkuerzung_final = min(verkuerzung_gesamt, MAX_GESAMT_VERKUERZUNG_MONATE)
@@ -370,11 +424,11 @@ def berechne_gesamtdauer(
     finale_dauer = rundung_anwenden_schritt3(nach_schritt2)
 
     # Sonderregel § 8 Abs. 3 BBiG:
-    # Wenn die berechnete Ausbildungsdauer die Regelausbildungszeit
-    # um höchstens 6 Monate überschreitet, ist die Regelausbildungszeit
-    # als Ergebnis zu setzen (kein Nachteil für Auszubildende).
+    # Nur anwenden, wenn KEINE Verkürzungsgründe die Regeldauer bereits verkürzt haben.
+    # Wenn die berechnete Ausbildungsdauer die Regelausbildungszeit um höchstens
+    # 6 Monate überschreitet, ist die Regelausbildungszeit als Ergebnis zu setzen.
     regel_8_abs_3_angewendet = False
-    if finale_dauer > basis_dauer_monate:
+    if verkuerzte_dauer == basis_dauer_monate and finale_dauer > basis_dauer_monate:
         differenz = finale_dauer - basis_dauer_monate
         if differenz <= 6:
             finale_dauer = basis_dauer_monate
@@ -385,7 +439,7 @@ def berechne_gesamtdauer(
     verlaengerung_durch_teilzeit = finale_dauer - verkuerzte_dauer
 
     # Ergebnis zusammenstellen
-    return {
+    result = {
         "original_dauer_monate": basis_dauer_monate,
         "verkuerzte_dauer_monate": verkuerzte_dauer,
         "teilzeit_prozent": teilzeit_prozent,
@@ -400,6 +454,22 @@ def berechne_gesamtdauer(
         "verkuerzung_gesamt_ohne_begrenzung": verkuerzung_gesamt_ohne_begrenzung,
         "regel_8_abs_3_angewendet": regel_8_abs_3_angewendet,
     }
+
+    # PII-sicheres Ergebnis-Logging (nur Flags/Verlauf, keine Rohinputs)
+    try:  # pragma: no cover - Logging darf Tests nicht beeinflussen
+        import logging as _logging
+
+        logger = _logging.getLogger("src.calculation_logic")
+        cap_applied = nach_schritt2 < nach_schritt1
+        logger.info(
+            "Berechnung abgeschlossen | cap_applied=%s regel_8_abs_3=%s",
+            str(bool(cap_applied)),
+            str(bool(regel_8_abs_3_angewendet)),
+        )
+    except Exception:
+        pass
+
+    return result
 
 
 # Hilfsfunktionen
