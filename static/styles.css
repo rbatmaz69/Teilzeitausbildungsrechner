@@ -976,7 +976,7 @@ input.error,
   top: 0;
   left: 50%;
   transform: translate(-50%, 1px); /* leicht nach unten, wie im Rechner */
-  padding: 0.22rem 0.55rem 0.26rem 0.55rem; /* etwas mehr unten als oben */
+  padding: 0.22rem 0.55rem 0.26rem; /* etwas mehr unten als oben */
   border-radius: 4px;
   line-height: 1;
   white-space: nowrap;
@@ -2693,7 +2693,7 @@ body.modal-open {
   margin-bottom: 0.75rem;
 }
 
-@media (min-width: 640px) {
+@media (width >= 640px) {
   .sharing-buttons {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

@@ -1,3 +1,4 @@
+/* global html2canvas, jsPDF */
 /**
  * script_sharing.js – PDF-Export und Link-Sharing
  * Implementiert clientseitige PDF-Generierung und URL-basiertes Teilen von Berechnungen
