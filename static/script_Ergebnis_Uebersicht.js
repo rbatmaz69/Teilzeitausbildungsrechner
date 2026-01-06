@@ -70,19 +70,21 @@ function initialisiereDesktopButtonLayout() {
   const vkActions = document.querySelector(".vk-actions");
   const notesColumn = document.querySelector(".rechner-column.notes-column");
 
-  if (!actionbar || !btnReset || !btnShare || !btnBerechnen || !vkActions || !notesColumn) {
+  if (!actionbar || !btnReset || !btnBerechnen || !vkActions || !notesColumn) {
     return;
   }
 
   // Initiale State/Platzhalter nur einmal anlegen
   if (!DESKTOP_BUTTON_LAYOUT) {
     const resetPlaceholder = document.createComment("placeholder:btn-reset");
-    const sharePlaceholder = document.createComment("placeholder:btn-share");
+    const sharePlaceholder = btnShare ? document.createComment("placeholder:btn-share") : null;
     const berechnenPlaceholder = document.createComment("placeholder:berechnenBtn");
 
     // Platzhalter an den Originalpositionen setzen
     actionbar.insertBefore(resetPlaceholder, btnReset);
-    actionbar.insertBefore(sharePlaceholder, btnShare);
+    if (btnShare && sharePlaceholder) {
+      actionbar.insertBefore(sharePlaceholder, btnShare);
+    }
     vkActions.insertBefore(berechnenPlaceholder, btnBerechnen);
 
     DESKTOP_BUTTON_LAYOUT = {
@@ -128,24 +130,26 @@ function initialisiereDesktopButtonLayout() {
         layout.actionsGroup.insertBefore(layout.btnReset, layout.btnBerechnen);
       }
 
-      // 2) Share in die Hinweise-Spalte, aber unterhalb der Hinweise-Card
-      const notesCard = layout.notesColumn.querySelector(":scope > .card");
-      if (notesCard) {
-        if (!layout.shareMount) {
-          const mount = document.createElement("div");
-          mount.className = "desktop-share-action";
-          layout.shareMount = mount;
-        }
+      // 2) Share in die Hinweise-Spalte verschieben (falls vorhanden)
+      if (layout.btnShare) {
+        const notesCard = layout.notesColumn.querySelector(":scope > .card");
+        if (notesCard) {
+          if (!layout.shareMount) {
+            const mount = document.createElement("div");
+            mount.className = "desktop-share-action";
+            layout.shareMount = mount;
+          }
 
-        // Direkt nach der Card einfügen
-        if (layout.shareMount.parentNode !== layout.notesColumn) {
-          layout.notesColumn.insertBefore(layout.shareMount, notesCard.nextSibling);
-        } else if (notesCard.nextSibling !== layout.shareMount) {
-          layout.notesColumn.insertBefore(layout.shareMount, notesCard.nextSibling);
-        }
+          // Direkt nach der Card einfügen
+          if (layout.shareMount.parentNode !== layout.notesColumn) {
+            layout.notesColumn.insertBefore(layout.shareMount, notesCard.nextSibling);
+          } else if (notesCard.nextSibling !== layout.shareMount) {
+            layout.notesColumn.insertBefore(layout.shareMount, notesCard.nextSibling);
+          }
 
-        if (layout.btnShare.parentNode !== layout.shareMount) {
-          layout.shareMount.appendChild(layout.btnShare);
+          if (layout.btnShare.parentNode !== layout.shareMount) {
+            layout.shareMount.appendChild(layout.btnShare);
+          }
         }
       }
 
@@ -168,7 +172,7 @@ function initialisiereDesktopButtonLayout() {
       if (layout.resetPlaceholder.parentNode === layout.actionbar) {
         layout.actionbar.insertBefore(layout.btnReset, layout.resetPlaceholder.nextSibling);
       }
-      if (layout.sharePlaceholder.parentNode === layout.actionbar) {
+      if (layout.btnShare && layout.sharePlaceholder && layout.sharePlaceholder.parentNode === layout.actionbar) {
         layout.actionbar.insertBefore(layout.btnShare, layout.sharePlaceholder.nextSibling);
       }
 
