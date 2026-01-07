@@ -2714,12 +2714,11 @@ body.modal-open {
 
 .sharing-menu {
   background: var(--card);
-  border: 1px solid var(--border);
-  border-left: 1px solid var(--border);
+  border: 2px solid var(--border);
+  border-left: 2px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
   padding: clamp(1rem, 2vw, 1.5rem);
-  margin-top: 1.5rem;
 }
 
 .sharing-menu-title {
