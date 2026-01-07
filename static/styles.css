@@ -157,6 +157,15 @@ header h1 {
   margin-bottom: var(--space-3);
 }
 
+.card-collapsible {
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  box-shadow: var(--shadow);
+  margin-bottom: var(--space-3);
+}
+
 .rechner-grid .card,
 .rechner-grid .card-collapsible {
   margin-bottom: 0;
@@ -174,6 +183,47 @@ header h1 {
   background: #f3f8ff;
   border-color: #d9e6ff;
   box-shadow: 0 10px 24px rgb(22 60 155 / 10%);
+}
+
+/* Gesetzliche Grundlagen - Dauerhaft blauer Hintergrund, graue Border wenn zu */
+.legal-collapsible {
+  background: #f3f8ff;
+}
+
+/* Beim Öffnen: Hintergrund bleibt blau, Border wird blau */
+.legal-collapsible[open] {
+  background: #f3f8ff;
+  border-color: #d9e6ff;
+  box-shadow: 0 10px 24px rgb(22 60 155 / 10%);
+}
+
+/* Weißer/Hellblauer Button für Gesetzliche Grundlagen */
+.legal-collapsible .summary-pill {
+  background: #ffffff;
+  color: #1e40af;
+  border: 2px solid #3b82f6;
+  box-shadow: 0 2px 8px rgb(59 130 246 / 15%);
+}
+
+.legal-collapsible .summary-toggle:hover .summary-pill {
+  background: #eff6ff;
+  color: #1e40af;
+  border-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgb(59 130 246 / 20%);
+}
+
+.legal-collapsible .summary-toggle:active .summary-pill {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #1d4ed8;
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgb(59 130 246 / 15%);
+}
+
+.legal-collapsible .summary-toggle:focus-visible .summary-pill {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
 }
 
 .tile {
@@ -2546,7 +2596,8 @@ body.modal-open {
 }
 
 /* Summary als großer Click-Bereich */
-.inputs-collapsible > .summary-toggle {
+.inputs-collapsible > .summary-toggle,
+.legal-collapsible > .summary-toggle {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2557,7 +2608,8 @@ body.modal-open {
 }
 
 /* Standard-Dreieck ausblenden */
-.inputs-collapsible summary::-webkit-details-marker {
+.inputs-collapsible summary::-webkit-details-marker,
+.legal-collapsible summary::-webkit-details-marker {
    display: none;
 }
 
@@ -2628,16 +2680,19 @@ body.modal-open {
   border-color: #dc2626;
 }
 
-.inputs-collapsible[open] .summary-icon {
+.inputs-collapsible[open] .summary-icon,
+.legal-collapsible[open] .summary-icon {
   transform: rotate(90deg);
 }
 
 /* Button-Text ändern wenn geöffnet */
-.inputs-collapsible[open] .summary-pill-label {
+.inputs-collapsible[open] .summary-pill-label,
+.legal-collapsible[open] .summary-pill-label {
   font-size: 0; /* Original-Text ausblenden */
 }
 
-.inputs-collapsible[open] .summary-pill-label::before {
+.inputs-collapsible[open] .summary-pill-label::before,
+.legal-collapsible[open] .summary-pill-label::before {
   content: attr(data-label-open);
   font-size: 0.75rem; /* Schriftgröße wiederherstellen */
 }
