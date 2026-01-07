@@ -10,12 +10,12 @@
   <link rel="stylesheet" href="../static/styles.css">
 
   <!-- Verlinkung der JS Scripte -->
-  <script src="../static/script_eingabe.js" defer></script>
-  <script src="../static/script_Verkuerzungsgruende_Auswaehlen.js" defer></script>
-  <script src="../static/script_Ergebnis_Uebersicht.js" defer></script>
-  <script src="../static/script_Sprache_Auswaehlen.js" defer></script>
-  <script src="../static/script_sharing.js" defer></script>
-  <script src="../static/script_accessibility.js" defer></script>
+  <script src="../static/script_eingabe.js?v=2" defer></script>
+  <script src="../static/script_Verkuerzungsgruende_Auswaehlen.js?v=2" defer></script>
+  <script src="../static/script_Ergebnis_Uebersicht.js?v=2" defer></script>
+  <script src="../static/script_Sprache_Auswaehlen.js?v=2" defer></script>
+  <script src="../static/script_sharing.js?v=2" defer></script>
+  <script src="../static/script_accessibility.js?v=2" defer></script>
 </head>
 <body>
 
@@ -897,10 +897,10 @@
 
   <!-- Accessibility widget -->
   <button id="a11y-toggle" class="a11y-toggle" data-i18n-attr="aria-label:a11y.buttonAria" aria-haspopup="true" aria-expanded="false">
-    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" focusable="false">
-      <circle cx="12" cy="6" r="1.8" fill="currentColor" />
-      <circle cx="12" cy="12" r="1.8" fill="currentColor" />
-      <circle cx="12" cy="18" r="1.8" fill="currentColor" />
+    <svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" focusable="false" fill="currentColor">
+      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="12" cy="7" r="1.8"/>
+      <path d="M6 11 h12 M12 11 v3.5 M9 18.5 L11 14.5 M15 18.5 L13 14.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
     </svg>
     <span class="sr-only" data-i18n="a11y.button">Barrierefreiheit</span>
   </button>
@@ -912,6 +912,15 @@
     <div class="a11y-menu-body">
       <div class="a11y-row">
         <button id="a11y-read" class="a11y-btn" type="button" aria-pressed="false" data-i18n="a11y.read" data-i18n-attr="aria-label:a11y.readAria">Vorlesen</button>
+      </div>
+      <div class="a11y-sep" aria-hidden="true"></div>
+      <div class="a11y-row a11y-theme-row">
+        <label class="a11y-label" data-i18n="a11y.themeLabel">Farbschema</label>
+        <div class="a11y-theme-controls">
+          <button id="a11y-theme-light" class="a11y-btn a11y-theme-btn" type="button" data-theme-value="light" data-i18n="a11y.themeLight" data-i18n-attr="aria-label:a11y.themeLightAria">Hell</button>
+          <button id="a11y-theme-dark" class="a11y-btn a11y-theme-btn" type="button" data-theme-value="dark" data-i18n="a11y.themeDark" data-i18n-attr="aria-label:a11y.themeDarkAria">Dunkel</button>
+          <button id="a11y-theme-auto" class="a11y-btn a11y-theme-btn" type="button" data-theme-value="auto" data-i18n="a11y.themeAuto" data-i18n-attr="aria-label:a11y.themeAutoAria">Auto</button>
+        </div>
       </div>
       <div class="a11y-sep" aria-hidden="true"></div>
       <div class="a11y-row a11y-font-row">
