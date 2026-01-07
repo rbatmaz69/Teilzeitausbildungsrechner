@@ -19,10 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const berufQ2DurationContainer = document.getElementById('vk_beruf_q2_duration_container');
   const berufQ3Ja = document.getElementById('vk_beruf_q3_ja');
   const berufQ3Nein = document.getElementById('vk_beruf_q3_nein');
-  const berufQ4Ja = document.getElementById('vk_beruf_q4_ja');
-  const berufQ4Nein = document.getElementById('vk_beruf_q4_nein');
-  const berufQ5Ja = document.getElementById('vk_beruf_q5_ja');
-  const berufQ5Nein = document.getElementById('vk_beruf_q5_nein');
   const berufQ6Ja = document.getElementById('vk_beruf_q6_ja');
   const berufQ6Nein = document.getElementById('vk_beruf_q6_nein');
 
@@ -146,8 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setupYesNo(berufQ1Ja, berufQ1Nein);
   setupYesNo(berufQ2Ja, berufQ2Nein);
   setupYesNo(berufQ3Ja, berufQ3Nein);
-  setupYesNo(berufQ4Ja, berufQ4Nein);
-  setupYesNo(berufQ5Ja, berufQ5Nein);
   setupYesNo(berufQ6Ja, berufQ6Nein);
 
   // Show/Hide duration input for Q2
@@ -297,3 +291,97 @@ document.addEventListener('DOMContentLoaded', () => {
 
   infoModal.addEventListener('keydown', handleTabKey);
 });
+
+/* ========== MODAL-INITIALISIERUNG AUSSERHALB DOMContentLoaded ========== */
+// Dies stellt sicher, dass das Modal immer funktioniert, unabhängig vom Berechnungsstatus
+(function initModalGlobal() {
+  function tryInit() {
+    const infoButton = document.getElementById('vk-info-btn');
+    const infoModal = document.getElementById('vk-info-modal');
+    
+    if (!infoButton || !infoModal) {
+      // Noch nicht im DOM, retry nach 100ms
+      setTimeout(tryInit, 100);
+      return;
+    }
+
+    const infoCloseButton = infoModal.querySelector('.vk-info-close');
+    const infoOverlay = infoModal.querySelector('.vk-info-overlay');
+    const infoContent = infoModal.querySelector('.vk-info-content');
+    let previousActiveElement = null;
+
+    function oeffneModal() {
+      previousActiveElement = document.activeElement;
+      infoModal.removeAttribute('hidden');
+      infoModal.style.display = 'flex'; // Explizit setzen für Sicherheit
+      document.body.classList.add('modal-open');
+      setTimeout(() => infoCloseButton?.focus(), 100);
+    }
+
+    function schliesseModal() {
+      infoModal.setAttribute('hidden', '');
+      infoModal.style.display = ''; // Zurücksetzen
+      document.body.classList.remove('modal-open');
+      if (previousActiveElement) {
+        previousActiveElement.focus();
+        previousActiveElement = null;
+      }
+    }
+
+    function istKlickAusserhalb(event) {
+      return infoContent && !infoContent.contains(event.target);
+    }
+
+    // Button-Klick: Modal öffnen (entfernt alte Listener)
+    infoButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      oeffneModal();
+    }, { capture: true }); // Capture-Phase für höchste Priorität
+
+    // Close-Button: Modal schließen
+    infoCloseButton?.addEventListener('click', (event) => {
+      event.preventDefault();
+      schliesseModal();
+    });
+
+    // Overlay-Klick: Modal schließen
+    infoOverlay?.addEventListener('click', (event) => {
+      if (istKlickAusserhalb(event)) {
+        schliesseModal();
+      }
+    });
+
+    // Escape-Taste: Modal schließen
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !infoModal.hasAttribute('hidden')) {
+        schliesseModal();
+      }
+    });
+
+    // Focus-Trap
+    infoModal.addEventListener('keydown', (event) => {
+      if (infoModal.hasAttribute('hidden')) return;
+      const focusableElements = infoModal.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+      if (event.key === 'Tab') {
+        if (event.shiftKey && document.activeElement === firstElement) {
+          event.preventDefault();
+          lastElement?.focus();
+        } else if (!event.shiftKey && document.activeElement === lastElement) {
+          event.preventDefault();
+          firstElement?.focus();
+        }
+      }
+    });
+  }
+
+  // Sofort versuchen und bei Bedarf wiederholen
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', tryInit);
+  } else {
+    tryInit();
+  }
+})();
