@@ -780,25 +780,6 @@
         </ul>
       </div>
     </div>
-
-    <!-- Modal für "Was ist das?" Informationsbox -->
-    <div id="vk-info-modal" class="vk-info-modal" role="dialog" aria-modal="true" aria-labelledby="vk-info-title" hidden>
-      <div class="vk-info-overlay"></div>
-      <div class="vk-info-content">
-        <button class="vk-info-close" type="button" aria-label="Modal schließen" data-i18n-attr="aria-label:vk.infoBox.closeAria">
-          <span class="vk-info-close-icon" aria-hidden="true">×</span>
-        </button>
-        <div class="vk-info-header">
-          <div class="vk-info-icon" aria-hidden="true">
-            <span class="vk-info-icon-text">ℹ</span>
-          </div>
-          <h2 id="vk-info-title" class="vk-info-title" data-i18n="vk.infoBox.title">Was sind Verkürzungsgründe?</h2>
-        </div>
-        <div class="vk-info-body">
-          <div data-i18n="vk.infoBox.content" data-i18n-html="true"></div>
-        </div>
-      </div>
-    </div>
   </div>
 
 </div> <!-- /.rechner-grid -->
@@ -813,6 +794,25 @@
       Zurücksetzen
     </button>
   </nav>
+
+  <!-- Modal für "Was ist das?" Informationsbox - außerhalb aller versteckten Container -->
+  <div id="vk-info-modal" class="vk-info-modal" role="dialog" aria-modal="true" aria-labelledby="vk-info-title" hidden>
+    <div class="vk-info-overlay"></div>
+    <div class="vk-info-content">
+      <button class="vk-info-close" type="button" aria-label="Modal schließen" data-i18n-attr="aria-label:vk.infoBox.closeAria">
+        <span class="vk-info-close-icon" aria-hidden="true">×</span>
+      </button>
+      <div class="vk-info-header">
+        <div class="vk-info-icon" aria-hidden="true">
+          <span class="vk-info-icon-text">ℹ</span>
+        </div>
+        <h2 id="vk-info-title" class="vk-info-title" data-i18n="vk.infoBox.title">Was sind Verkürzungsgründe?</h2>
+      </div>
+      <div class="vk-info-body">
+        <div data-i18n="vk.infoBox.content" data-i18n-html="true"></div>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
