@@ -1227,8 +1227,8 @@ function setzeDatenZurueck() {
     checkbox.checked = false;
   });
   
-  // Alle Ja/Nein-Checkboxen für Verkürzungsgründe zurücksetzen (inkl. Nein-Buttons)
-  const allVkCheckboxes = document.querySelectorAll('#vk-fieldset input[type="checkbox"]');
+  // Alle Ja/Nein-Checkboxen (beide Spalten) zurücksetzen, inkl. Nein-Buttons
+  const allVkCheckboxes = document.querySelectorAll('.vk-yes-no-group input[type="checkbox"]');
   allVkCheckboxes.forEach(checkbox => {
     checkbox.checked = false;
   });
