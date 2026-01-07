@@ -205,7 +205,7 @@ header h1 {
 
 /* Gesetzliche Grundlagen - Blauer Button für Gesetzliche Grundlagen */
 .legal-collapsible .summary-pill {
-  background: #ffffff;
+  background: #fff;
   color: #1e40af;
   border: 2px solid #3b82f6;
   box-shadow: 0 2px 8px rgb(59 130 246 / 15%);
@@ -250,14 +250,14 @@ header h1 {
   font-size: 1rem;
   font-weight: 600;
   color: var(--text);
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.5rem;
 }
 
 .legal-section-description {
   color: var(--muted);
   font-size: 0.95rem;
   line-height: 1.5;
-  margin: 0 0 0.75rem 0;
+  margin: 0 0 0.75rem;
 }
 
 .legal-links {
@@ -318,7 +318,7 @@ header h1 {
   font-size: 0.95rem;
   font-weight: 600;
   color: #92400e;
-  margin: 0 0 0.35rem 0;
+  margin: 0 0 0.35rem;
 }
 
 .legal-disclaimer-text {
@@ -2726,6 +2726,19 @@ body.modal-open {
 }
 
 
+/* Labeltext im Pill-Button */
+.summary-pill-label {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.75rem;
+}
+
+/* Pfeil-Icon */
+.summary-icon {
+  font-size: 1.1rem;
+   transition: transform 0.25s ease;
+}
+
 /* Rechter, großer "Button" fürs Auf-/Zuklappen */
 .summary-pill {
   display: inline-flex;
@@ -2742,19 +2755,6 @@ body.modal-open {
   box-shadow: 0 6px 20px rgb(224 0 0 / 25%);
   transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
   flex-shrink: 0;
-}
-
-/* Labeltext im Pill-Button */
-.summary-pill-label {
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-size: 0.75rem;
-}
-
-/* Pfeil-Icon */
-.summary-icon {
-  font-size: 1.1rem;
-   transition: transform 0.25s ease;
 }
 
 .summary-toggle:hover .summary-pill {
