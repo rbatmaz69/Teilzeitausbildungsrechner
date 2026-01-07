@@ -17,6 +17,112 @@
   const DEFAULT_ROOT_FONT = parseFloat(getComputedStyle(rootEl).fontSize) || 16;
   let currentLevel = 0; // 0 = default
 
+  // ==========================================
+  // THEME (DARK MODE) MANAGEMENT
+  // ==========================================
+  const THEME_KEY = 'theme';
+  const themeLightBtn = document.getElementById('a11y-theme-light');
+  const themeDarkBtn = document.getElementById('a11y-theme-dark');
+  const themeAutoBtn = document.getElementById('a11y-theme-auto');
+
+  function getSystemTheme() {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  }
+
+  function applyTheme(theme) {
+    let effectiveTheme = theme;
+    if (theme === 'auto') {
+      effectiveTheme = getSystemTheme();
+    }
+    
+    if (effectiveTheme === 'dark') {
+      rootEl.setAttribute('data-theme', 'dark');
+    } else {
+      rootEl.removeAttribute('data-theme');
+    }
+    
+    // Update button states (aria-pressed)
+    if (themeLightBtn) themeLightBtn.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
+    if (themeDarkBtn) themeDarkBtn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+    if (themeAutoBtn) themeAutoBtn.setAttribute('aria-pressed', theme === 'auto' ? 'true' : 'false');
+    
+    // Add active class for visual feedback
+    [themeLightBtn, themeDarkBtn, themeAutoBtn].forEach(btn => {
+      if (btn) btn.classList.remove('a11y-theme-active');
+    });
+    if (theme === 'light' && themeLightBtn) themeLightBtn.classList.add('a11y-theme-active');
+    if (theme === 'dark' && themeDarkBtn) themeDarkBtn.classList.add('a11y-theme-active');
+    if (theme === 'auto' && themeAutoBtn) themeAutoBtn.classList.add('a11y-theme-active');
+  }
+
+  function saveTheme(theme) {
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+    } catch (e) {
+      console.warn('Could not save theme preference:', e);
+    }
+  }
+
+  function loadTheme() {
+    try {
+      return localStorage.getItem(THEME_KEY) || 'light';
+    } catch (e) {
+      console.warn('Could not load theme preference:', e);
+      return 'light';
+    }
+  }
+
+  function setTheme(theme) {
+    console.log('Setting theme to:', theme);
+    saveTheme(theme);
+    applyTheme(theme);
+  }
+
+  // Initialize theme on page load
+  const savedTheme = loadTheme();
+  console.log('Loaded theme:', savedTheme);
+  console.log('Theme buttons:', {light: themeLightBtn, dark: themeDarkBtn, auto: themeAutoBtn});
+  applyTheme(savedTheme);
+
+  // Theme button click handlers
+  if (themeLightBtn) {
+    console.log('Adding click listener to light button');
+    themeLightBtn.addEventListener('click', () => {
+      console.log('Light button clicked');
+      setTheme('light');
+    });
+  }
+  if (themeDarkBtn) {
+    console.log('Adding click listener to dark button');
+    themeDarkBtn.addEventListener('click', () => {
+      console.log('Dark button clicked');
+      setTheme('dark');
+    });
+  }
+  if (themeAutoBtn) {
+    console.log('Adding click listener to auto button');
+    themeAutoBtn.addEventListener('click', () => {
+      console.log('Auto button clicked');
+      setTheme('auto');
+    });
+  }
+
+  // Listen for system theme changes when in auto mode
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      const currentTheme = loadTheme();
+      if (currentTheme === 'auto') {
+        applyTheme('auto');
+      }
+    });
+  }
+
+  // ==========================================
+  // MENU MANAGEMENT
+  // ==========================================
   function openMenu(){
     toggle.setAttribute('aria-expanded','true');
     toggle.style.display = 'none';
