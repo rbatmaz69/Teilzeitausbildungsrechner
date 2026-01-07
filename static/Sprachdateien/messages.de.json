@@ -129,7 +129,7 @@
     "headline": "Ihre Teilzeitausbildung",
     "helper": "Hier sehen Sie Ihre Angaben und das Ergebnis.",
     "notesTitle": "Wichtige Hinweise",
-    "notes": "<li>Die Berechnung ist nur eine <strong>Hilfe</strong> und reine <strong>Orientierung</strong>.</li><li>Das Ergebnis ist <strong>nicht verbindlich</strong>.</li><li>Sprechen Sie das Ergebnis mit Ihrem Ausbildungsbetrieb ab.</li><li>Eine Teilzeitausbildung ist nur dann möglich, wenn Sie mindestens die hälfte der normalen Ausbildungszeit arbeiten.</li>",
+    "notes": "<li>Die Berechnung ist nur eine <strong>Hilfe</strong> und reine <strong>Orientierung</strong>.</li><li>Das Ergebnis ist <strong>nicht verbindlich</strong>.</li><li>Sprechen Sie das Ergebnis mit Ihrem <strong>Ausbildungsbetrieb</strong> ab.</li><li>Eine Teilzeitausbildung ist nur dann möglich, wenn Sie <strong>mindestens die Hälfte</strong> der normalen Ausbildungszeit arbeiten.</li>",
     "legalTitle": "Gesetzliche Grundlagen",
     "legalToggleLabel": "Details anzeigen",
     "legalToggleLabelOpen": "Details ausblenden",

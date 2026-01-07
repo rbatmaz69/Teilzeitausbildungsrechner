@@ -87,6 +87,12 @@ h1 {
   margin-bottom: .75rem;
 }
 
+h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: .75rem;
+}
+
 p.helper {
   color: var(--muted);
   margin-bottom: 1rem;
@@ -802,6 +808,8 @@ select:-ms-input-placeholder {
 .notes li {
   margin-bottom: 0.5rem;
   text-align: left;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .input-row {
@@ -2617,7 +2625,7 @@ body.modal-open {
 /* Titel „Ihre Eingaben“ – groß und fett */
 .summary-title {
   font-size: 1.25rem;
-  font-weight: bold;
+  font-weight: 700;
   flex: 1;
 }
 
@@ -2725,9 +2733,10 @@ body.modal-open {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1.1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
   color: var(--text);
-  margin: 0 0 0.35rem;
+  margin: 0 0 0.75rem;
 }
 
 .sharing-menu-title::before {
@@ -2736,7 +2745,7 @@ body.modal-open {
 
 .sharing-menu-description {
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: 1rem;
   margin: 0 0 1rem;
 }
 

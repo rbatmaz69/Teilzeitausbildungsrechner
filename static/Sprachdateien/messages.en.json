@@ -126,7 +126,7 @@
     "headline": "Your part-time training",
     "helper": "Here you can see your details and the result.",
     "notesTitle": "Important information",
-    "notes": "<li>This calculation is only a <strong>help</strong> and an <strong>orientation</strong>.</li><li>The result is <strong>not binding</strong>.</li><li>Discuss the result with your training company.</li><li>Part-time training is only possible if you work at least half of the normal training hours.</li>",
+    "notes": "<li>This calculation is only a <strong>help</strong> and an <strong>orientation</strong>.</li><li>The result is <strong>not binding</strong>.</li><li>Discuss the result with your <strong>training company</strong>.</li><li>Part-time training is only possible if you work <strong>at least half</strong> of the normal training hours.</li>",
     "legalTitle": "Legal Basis",
     "legalToggleLabel": "Show Details",
     "legalToggleLabelOpen": "Hide Details",

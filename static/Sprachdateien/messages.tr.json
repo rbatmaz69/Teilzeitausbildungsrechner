@@ -129,7 +129,7 @@
     "headline": "Yarı zamanlı eğitiminiz",
     "helper": "Burada girdileriniz ve sonuç gösterilir.",
     "notesTitle": "Önemli notlar",
-    "notes": "<li>Hesaplama sadece <strong>yardımcı</strong> ve bir <strong>kılavuz</strong> niteliğindedir.</li><li>Sonuç <strong>bağlayıcı değildir</strong>.</li><li>Sonucu eğitim yerinizle görüşün.</li><li>Yarı zamanlı eğitim, normal çalışma süresinin en az yarısını çalıştığınızda mümkündür.</li>",
+    "notes": "<li>Hesaplama sadece <strong>yardımcı</strong> ve bir <strong>kılavuz</strong> niteliğindedir.</li><li>Sonuç <strong>bağlayıcı değildir</strong>.</li><li>Sonucu <strong>eğitim yerinizle</strong> görüşün.</li><li>Yarı zamanlı eğitim, normal çalışma süresinin <strong>en az yarısını</strong> çalıştığınızda mümkündür.</li>",
     "legalTitle": "Yasal Dayanak",
     "legalToggleLabel": "Detayları Göster",
     "legalToggleLabelOpen": "Detayları Gizle",
