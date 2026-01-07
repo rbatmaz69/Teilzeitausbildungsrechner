@@ -214,8 +214,6 @@ function collectVerkuerzungsgruende() {
     beruf_q2: false,
     beruf_q2_dauer_monate: 0,
     beruf_q3: false,
-    beruf_q4: false,
-    beruf_q5: false,
     beruf_q6: false,
     berufliche_verkuerzung_monate: 0
   };
@@ -276,15 +274,11 @@ function collectVerkuerzungsgruende() {
     const q2 = document.getElementById('vk_beruf_q2_ja');
     const q2dur = document.getElementById('vk_beruf_q2_dauer_months');
     const q3 = document.getElementById('vk_beruf_q3_ja');
-    const q4 = document.getElementById('vk_beruf_q4_ja');
-    const q5 = document.getElementById('vk_beruf_q5_ja');
     const q6 = document.getElementById('vk_beruf_q6_ja');
 
     if (q1 && q1.checked) result.beruf_q1 = true;
     if (q2 && q2.checked) result.beruf_q2 = true;
     if (q3 && q3.checked) result.beruf_q3 = true;
-    if (q4 && q4.checked) result.beruf_q4 = true;
-    if (q5 && q5.checked) result.beruf_q5 = true;
     if (q6 && q6.checked) result.beruf_q6 = true;
 
     // Q2 Dauer verarbeiten (nur wenn Q2 ausgewählt)
@@ -293,12 +287,10 @@ function collectVerkuerzungsgruende() {
       result.beruf_q2_dauer_monate = isNaN(dur) ? 0 : Math.max(0, dur);
     }
 
-    // Berufliche Verkürzung nach Regeln: Q1/Q3/Q4 -> 12, Q5/Q6 -> 6, Q2 -> mapping
+    // Berufliche Verkürzung nach Regeln: Q1/Q3 -> 12, Q6 -> 6, Q2 -> mapping
     let berufMonate = 0;
     if (result.beruf_q1) berufMonate += 12;
     if (result.beruf_q3) berufMonate += 12;
-    if (result.beruf_q4) berufMonate += 12;
-    if (result.beruf_q5) berufMonate += 6;
     if (result.beruf_q6) berufMonate += 6;
     if (result.beruf_q2) {
       const d = result.beruf_q2_dauer_monate || 0;
@@ -356,8 +348,6 @@ function validiereAlleEingaben() {
     { ja: "vk_beruf_q1_ja", nein: "vk_beruf_q1_nein", label: "Abgeschlossene Ausbildung" },
     { ja: "vk_beruf_q2_ja", nein: "vk_beruf_q2_nein", label: "Nicht abgeschlossene Ausbildung" },
     { ja: "vk_beruf_q3_ja", nein: "vk_beruf_q3_nein", label: "Praktische Erfahrung" },
-    { ja: "vk_beruf_q4_ja", nein: "vk_beruf_q4_nein", label: "Berufsvorbereitende Schulform" },
-    { ja: "vk_beruf_q5_ja", nein: "vk_beruf_q5_nein", label: "Vorbereitungsmaßnahme" },
     { ja: "vk_beruf_q6_ja", nein: "vk_beruf_q6_nein", label: "ECTS-Punkte im Studium" }
   ];
 
@@ -618,13 +608,6 @@ async function holeZusammenfassung() {
   if (verkuerzungsgruende.beruf_q3) {
     verkuerzungen.push({ key: "beruf_q3", months: 12 });
   }
-  if (verkuerzungsgruende.beruf_q5) {
-    verkuerzungen.push({ key: "beruf_q5", months: 6 });
-  }
-  // Q4 and Q6 are placed in the "Bildungsweg vor der Ausbildung" box in the DOM
-  if (verkuerzungsgruende.beruf_q4) {
-    verkuerzungen.push({ key: "beruf_q4", months: 12 });
-  }
   if (verkuerzungsgruende.beruf_q6) {
     verkuerzungen.push({ key: "beruf_q6", months: 6 });
   }
@@ -760,12 +743,6 @@ function fuelleEingabenliste(eingaben, berechnung) {
         break;
       case "beruf_q3":
         beschriftungsSchluessel = "vk.qual.praktischeErfahrung_short";
-        break;
-      case "beruf_q4":
-        beschriftungsSchluessel = "vk.qual.berufsvorbereitendeSchule_short";
-        break;
-      case "beruf_q5":
-        beschriftungsSchluessel = "vk.qual.massnahmeVorbereitung_short";
         break;
       case "beruf_q6":
         beschriftungsSchluessel = "vk.qual.ectsStudium_short";
@@ -1544,8 +1521,6 @@ function initialisiere() {
     ["vk_beruf_q1_ja","vk_beruf_q1_nein"],
     ["vk_beruf_q2_ja","vk_beruf_q2_nein"],
     ["vk_beruf_q3_ja","vk_beruf_q3_nein"],
-    ["vk_beruf_q4_ja","vk_beruf_q4_nein"],
-    ["vk_beruf_q5_ja","vk_beruf_q5_nein"],
     ["vk_beruf_q6_ja","vk_beruf_q6_nein"]
   ];
 

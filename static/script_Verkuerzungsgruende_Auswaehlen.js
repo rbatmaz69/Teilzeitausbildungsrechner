@@ -19,10 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const berufQ2DurationContainer = document.getElementById('vk_beruf_q2_duration_container');
   const berufQ3Ja = document.getElementById('vk_beruf_q3_ja');
   const berufQ3Nein = document.getElementById('vk_beruf_q3_nein');
-  const berufQ4Ja = document.getElementById('vk_beruf_q4_ja');
-  const berufQ4Nein = document.getElementById('vk_beruf_q4_nein');
-  const berufQ5Ja = document.getElementById('vk_beruf_q5_ja');
-  const berufQ5Nein = document.getElementById('vk_beruf_q5_nein');
   const berufQ6Ja = document.getElementById('vk_beruf_q6_ja');
   const berufQ6Nein = document.getElementById('vk_beruf_q6_nein');
 
@@ -146,8 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setupYesNo(berufQ1Ja, berufQ1Nein);
   setupYesNo(berufQ2Ja, berufQ2Nein);
   setupYesNo(berufQ3Ja, berufQ3Nein);
-  setupYesNo(berufQ4Ja, berufQ4Nein);
-  setupYesNo(berufQ5Ja, berufQ5Nein);
   setupYesNo(berufQ6Ja, berufQ6Nein);
 
   // Show/Hide duration input for Q2
