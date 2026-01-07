@@ -29,6 +29,9 @@ PFLICHTFELDER = (
     "verkuerzungsgruende",
 )
 
+# Historische Felder, die jetzt ignoriert werden (werden entfernt, bevor validiert wird)
+LEGACY_IGNORED_KEYS = {"beruf_q4", "beruf_q5"}
+
 
 @dataclass(frozen=True)
 class BerechnungsAnfrage:
@@ -224,6 +227,11 @@ def _benoetige_dictionary(value: Any, field_name: str) -> Dict[str, Any]:
 
 
 def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
+    # Entferne Alt-Felder laut User Story 2.3
+    data = dict(data)
+    for legacy_key in LEGACY_IGNORED_KEYS:
+        data.pop(legacy_key, None)
+
     allowed_keys = {
         "abitur",
         "realschule",
@@ -235,8 +243,6 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
         "beruf_q2",
         "beruf_q2_dauer_monate",
         "beruf_q3",
-        "beruf_q4",
-        "beruf_q5",
         "beruf_q6",
         "berufliche_verkuerzung_monate",
     }
@@ -257,8 +263,6 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
         "beruf_q1",
         "beruf_q2",
         "beruf_q3",
-        "beruf_q4",
-        "beruf_q5",
         "beruf_q6",
     }
     for key in bool_keys:
@@ -291,6 +295,10 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
 
 
 def _normalisiere_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]:
+    data = dict(data)
+    for legacy_key in LEGACY_IGNORED_KEYS:
+        data.pop(legacy_key, None)
+
     # Berufserfahrung/Vorkenntnisse: Wenn > 0, wird auf festen 12-Monats-Wert abgebildet
     vorkenntnisse = _coerce_float(
         data.get("vorkenntnisse_monate", 0),
@@ -306,8 +314,6 @@ def _normalisiere_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]
         "verkuerzungsgruende.beruf_q2_dauer_monate",
     )
     beruf_q3 = bool(data.get("beruf_q3", False))
-    beruf_q4 = bool(data.get("beruf_q4", False))
-    beruf_q5 = bool(data.get("beruf_q5", False))
     beruf_q6 = bool(data.get("beruf_q6", False))
     wert = data.get("berufliche_verkuerzung_monate", 0) or 0
     berufliche_verkuerzung_monate = _coerce_int(
@@ -331,8 +337,6 @@ def _normalisiere_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]
         "beruf_q2": beruf_q2,
         "beruf_q2_dauer_monate": beruf_q2_dauer,
         "beruf_q3": beruf_q3,
-        "beruf_q4": beruf_q4,
-        "beruf_q5": beruf_q5,
         "beruf_q6": beruf_q6,
         "berufliche_verkuerzung_monate": berufliche_verkuerzung_monate,
     }
