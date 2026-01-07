@@ -123,7 +123,28 @@
     "headline": "Yarı zamanlı eğitiminiz",
     "helper": "Burada girdileriniz ve sonuç gösterilir.",
     "notesTitle": "Önemli notlar",
-    "notes": "<li>Hesaplama sadece <strong>yardımcı</strong> ve bir <strong>kılavuz</strong> niteliğindedir.</li><li>Sonuç <strong>bağlayıcı değildir</strong>.</li><li>Sonucu eğitim yerinizle görüşün.</li><li>Yarı zamanlı eğitim, normal çalışma süresinin en az yarısını çalıştığınızda mümkündür.</li>",
+    "notes": "<li>Hesaplama sadece <strong>yardımcı</strong> ve bir <strong>kılavuz</strong> niteliğindedir.</li><li>Sonuç <strong>bağlayıcı değildir</strong>.</li><li>Sonucu <strong>eğitim yerinizle</strong> görüşün.</li><li>Yarı zamanlı eğitim, normal çalışma süresinin <strong>en az yarısını</strong> çalıştığınızda mümkündür.</li>",
+    "legalTitle": "Yasal Dayanak",
+    "legalToggleLabel": "Detayları Göster",
+    "legalToggleLabelOpen": "Detayları Gizle",
+    "legal": {
+      "para7a": {
+        "title": "§ 7a BBiG – Yarı Zamanlı Mesleki Eğitim",
+        "description": "Eğitimin yarı zamanlı olarak tamamlanması seçeneğini düzenler (tam zamanlının en az %50'si).",
+        "linkText": "Yasal Metni Görüntüle",
+        "bibbLink": "BIBB Yarı Zamanlı Eğitim Tavsiyesi (PDF)"
+      },
+      "para8": {
+        "title": "§ 8 BBiG – Kısaltma ve Uzatma",
+        "description": "Eğitim süresinin kısaltılması seçeneklerini tanımlar (örn. okul niteliği, yaş, mesleki deneyim yoluyla).",
+        "linkText": "Yasal Metni Görüntüle",
+        "bibbLink": "BIBB Kısaltma Seçenekleri Tavsiyesi (PDF)"
+      },
+      "disclaimer": {
+        "title": "Önemli Uyarı",
+        "text": "Kısaltma nedenleri için <strong>yasal hak yoktur</strong>. Tüm kısaltmalar <strong>eğitim şirketi</strong> ve <strong>ilgili oda</strong> ile mutabık kalınmalıdır. Bu hesap makinesi yasal danışmanlığın yerini almaz."
+      }
+    },
     "kv": {
       "total": "Toplam süre",
       "schoolPerWeek": "Haftalık eğitim",

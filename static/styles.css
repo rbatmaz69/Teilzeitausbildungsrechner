@@ -87,6 +87,12 @@ h1 {
   margin-bottom: .75rem;
 }
 
+h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: .75rem;
+}
+
 p.helper {
   color: var(--muted);
   margin-bottom: 1rem;
@@ -157,6 +163,15 @@ header h1 {
   margin-bottom: var(--space-3);
 }
 
+.card-collapsible {
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  box-shadow: var(--shadow);
+  margin-bottom: var(--space-3);
+}
+
 .rechner-grid .card,
 .rechner-grid .card-collapsible {
   margin-bottom: 0;
@@ -174,6 +189,114 @@ header h1 {
   background: #f3f8ff;
   border-color: #d9e6ff;
   box-shadow: 0 10px 24px rgb(22 60 155 / 10%);
+}
+
+/* Gesetzliche Grundlagen - Dauerhaft blauer Hintergrund, graue Border wenn zu */
+.legal-collapsible {
+  background: #f3f8ff;
+}
+
+/* Beim Öffnen: Hintergrund bleibt blau, Border wird blau */
+.legal-collapsible[open] {
+  background: #f3f8ff;
+  border-color: #d9e6ff;
+  box-shadow: 0 10px 24px rgb(22 60 155 / 10%);
+}
+
+/* Inhalt der Gesetzliche Grundlagen Box */
+.legal-content {
+  padding-top: 1rem;
+  border-top: 2px solid #d9e6ff;
+}
+
+.legal-section {
+  margin-bottom: 1.5rem;
+}
+
+.legal-section:last-of-type {
+  margin-bottom: 1rem;
+}
+
+.legal-section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 0.5rem;
+}
+
+.legal-section-description {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0 0 0.75rem;
+}
+
+.legal-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.legal-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+  width: fit-content;
+}
+
+.legal-link:hover {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
+.legal-link:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.legal-link svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Disclaimer Box */
+.legal-disclaimer {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #fef3c7;
+  border: 2px solid #fbbf24;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+}
+
+.legal-disclaimer-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.legal-disclaimer-content {
+  flex: 1;
+}
+
+.legal-disclaimer-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #92400e;
+  margin: 0 0 0.35rem;
+}
+
+.legal-disclaimer-text {
+  font-size: 0.9rem;
+  color: #78350f;
+  line-height: 1.5;
+  margin: 0;
 }
 
 .tile {
@@ -752,6 +875,8 @@ select:-ms-input-placeholder {
 .notes li {
   margin-bottom: 0.5rem;
   text-align: left;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .input-row {
@@ -2546,7 +2671,8 @@ body.modal-open {
 }
 
 /* Summary als großer Click-Bereich */
-.inputs-collapsible > .summary-toggle {
+.inputs-collapsible > .summary-toggle,
+.legal-collapsible > .summary-toggle {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2557,7 +2683,8 @@ body.modal-open {
 }
 
 /* Standard-Dreieck ausblenden */
-.inputs-collapsible summary::-webkit-details-marker {
+.inputs-collapsible summary::-webkit-details-marker,
+.legal-collapsible summary::-webkit-details-marker {
    display: none;
 }
 
@@ -2565,10 +2692,23 @@ body.modal-open {
 /* Titel „Ihre Eingaben“ – groß und fett */
 .summary-title {
   font-size: 1.25rem;
-  font-weight: bold;
+  font-weight: 700;
   flex: 1;
 }
 
+
+/* Labeltext im Pill-Button */
+.summary-pill-label {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.75rem;
+}
+
+/* Pfeil-Icon */
+.summary-icon {
+  font-size: 1.1rem;
+   transition: transform 0.25s ease;
+}
 
 /* Rechter, großer "Button" fürs Auf-/Zuklappen */
 .summary-pill {
@@ -2588,17 +2728,12 @@ body.modal-open {
   flex-shrink: 0;
 }
 
-/* Labeltext im Pill-Button */
-.summary-pill-label {
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-size: 0.75rem;
-}
-
-/* Pfeil-Icon */
-.summary-icon {
-  font-size: 1.1rem;
-   transition: transform 0.25s ease;
+/* Gesetzliche Grundlagen - Blauer Button für Gesetzliche Grundlagen */
+.legal-collapsible .summary-pill {
+  background: #fff;
+  color: #1e40af;
+  border: 2px solid #3b82f6;
+  box-shadow: 0 2px 8px rgb(59 130 246 / 15%);
 }
 
 .summary-toggle:hover .summary-pill {
@@ -2622,22 +2757,46 @@ body.modal-open {
   outline-offset: 2px;
 }
 
+.legal-collapsible .summary-toggle:hover .summary-pill {
+  background: #eff6ff;
+  color: #1e40af;
+  border-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgb(59 130 246 / 20%);
+}
+
+.legal-collapsible .summary-toggle:active .summary-pill {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #1d4ed8;
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgb(59 130 246 / 15%);
+}
+
+.legal-collapsible .summary-toggle:focus-visible .summary-pill {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+
 /* Wenn geöffnet – Hintergrund und Text ändern, Pfeil drehen, Label ändern */
 .inputs-collapsible[open] {
   background: #fff;
   border-color: #dc2626;
 }
 
-.inputs-collapsible[open] .summary-icon {
+.inputs-collapsible[open] .summary-icon,
+.legal-collapsible[open] .summary-icon {
   transform: rotate(90deg);
 }
 
 /* Button-Text ändern wenn geöffnet */
-.inputs-collapsible[open] .summary-pill-label {
+.inputs-collapsible[open] .summary-pill-label,
+.legal-collapsible[open] .summary-pill-label {
   font-size: 0; /* Original-Text ausblenden */
 }
 
-.inputs-collapsible[open] .summary-pill-label::before {
+.inputs-collapsible[open] .summary-pill-label::before,
+.legal-collapsible[open] .summary-pill-label::before {
   content: attr(data-label-open);
   font-size: 0.75rem; /* Schriftgröße wiederherstellen */
 }
@@ -2659,21 +2818,21 @@ body.modal-open {
 
 .sharing-menu {
   background: var(--card);
-  border: 1px solid var(--border);
-  border-left: 1px solid var(--border);
+  border: 2px solid var(--border);
+  border-left: 2px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
   padding: clamp(1rem, 2vw, 1.5rem);
-  margin-top: 1.5rem;
 }
 
 .sharing-menu-title {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1.1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
   color: var(--text);
-  margin: 0 0 0.35rem;
+  margin: 0 0 0.75rem;
 }
 
 .sharing-menu-title::before {
@@ -2682,7 +2841,7 @@ body.modal-open {
 
 .sharing-menu-description {
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: 1rem;
   margin: 0 0 1rem;
 }
 
