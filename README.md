@@ -409,6 +409,7 @@ group-04/
 ├── static/
 │   ├── script_eingabe.js              # Eingabe-Logik (Teilzeit-Prozent/Stunden)
 │   ├── script_Ergebnis_Uebersicht.js  # Ergebnis-Anzeige (API-Integration)
+|   ├── script_sharing.js              # Link-teilen und PDF Funktion
 │   ├── script_Verkuerzungsgruende_Auswaehlen.js  # Verkürzungsgründe-UI
 │   ├── script_Sprache_Auswaehlen.js   # Mehrsprachigkeits-Unterstützung
 │   ├── styles.css                     # Styling

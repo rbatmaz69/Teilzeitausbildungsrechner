@@ -706,9 +706,9 @@ select:disabled {
    FOKUS-STYLE STEUERUNG (Keyboard vs. Maus/Touch)
    ========================================== */
 
-/* Entfernt den Standard-Fokusrahmen bei Maus/Touch (normales :focus) */
-*:focus {
-  outline: none !important;
+/* Entfernt Standard-Fokus nur bei Maus/Touch, behält ihn für Tastatur bei focus-visible */
+*:focus:not(:focus-visible) {
+  outline: none;
 }
 
 /* Zeige Fokus nur bei Tastatur-Navigation (focus-visible) */
@@ -969,13 +969,16 @@ input.error,
   font-weight: 600;
   color: #fff;
   background: #10b981;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translateX(-50%);
-  padding: 0.25rem 0.5rem;
+  transform: translate(-50%, 1px); /* leicht nach unten, wie im Rechner */
+  padding: 0.22rem 0.55rem 0.26rem; /* etwas mehr unten als oben */
   border-radius: 4px;
-  line-height: 1.2;
+  line-height: 1;
   white-space: nowrap;
 }
 
@@ -2649,4 +2652,109 @@ body.modal-open {
 .vk-category.vk-beruf .vk-category-body {
   flex-direction: column !important;
 }
+
+/* ==========================================
+   SHARING-MENÜ STYLES (angepasst an Karten)
+   ========================================== */
+
+.sharing-menu {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: clamp(1rem, 2vw, 1.5rem);
+  margin-top: 1.5rem;
+}
+
+.sharing-menu-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  color: var(--text);
+  margin: 0 0 0.35rem;
+}
+
+.sharing-menu-title::before {
+  content: none;
+}
+
+.sharing-menu-description {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 0 0 1rem;
+}
+
+.sharing-buttons {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+@media (width >= 640px) {
+  .sharing-buttons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.sharing-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1rem;
+  width: 100%;
+  min-height: 48px;
+  line-height: 1.2;
+}
+
+.sharing-btn.primary {
+  background: var(--primary);
+  color: #fff;
+  border: 1px solid var(--primary);
+}
+
+.sharing-btn-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.sharing-btn.outline {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.sharing-btn:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.sharing-feedback {
+  background: var(--accent-good);
+  color: white;
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  text-align: center;
+  margin-top: 0.5rem;
+  box-shadow: var(--shadow);
+}
+
+.sharing-feedback[hidden] {
+  display: none;
+}
+
+@media print {
+  .sharing-menu,
+  .actionbar {
+    display: none;
+  }
+}
+
 

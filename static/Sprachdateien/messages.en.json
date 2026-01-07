@@ -205,6 +205,27 @@
     "error": "Error sharing. Please copy the link manually.",
     "noData": "Please calculate a result first before sharing the link."
   },
+  "sharing": {
+    "title": "Share result",
+    "description": "Choose how you would like to share your calculation:",
+    "downloadPdf": "Download as PDF",
+    "downloadPdfDesc": "Creates a PDF with all inputs and results",
+    "copyLink": "Copy link",
+    "copyLinkDesc": "Copies a link with all inputs to your clipboard",
+    "copied": "Copied!",
+    "copiedSuccess": "Link copied!",
+    "generating": "Creating PDF...",
+    "generated": "PDF created",
+    "downloaded": "PDF downloaded",
+    "page": "Page",
+    "of": "of",
+    "error": {
+      "libraries": "PDF libraries could not be loaded",
+      "noResults": "Please calculate a result first",
+      "generation": "Error creating PDF file",
+      "copy": "Link could not be copied"
+    }
+  },
   "reset": {
     "confirm": "Would you like to reset all data?"
   },

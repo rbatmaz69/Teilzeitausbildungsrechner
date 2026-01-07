@@ -331,112 +331,76 @@ test.describe('Happy Path: Reset-Button', () => {
   });
 });
 
-test.describe.skip('Happy Path: Share-Button', () => {
-
-  test('Share-Button erstellt URL mit Berechnungsdaten', async ({ page }) => {
+test.describe('Happy Path: Sharing & PDF', () => {
+  async function prepareFormWithResult(page) {
     await gotoCalculator(page);
-    
-    // ERSTER SHARE: Fülle Formular mit "none" als Schulabschluss
-    await page.fill('#dauer', '30');
-    await page.fill('#stunden', '38');
-    await clickButton(page, '[data-type="percent"][data-value="75"]');
-    await page.waitForSelector('#vk-school-select', { state: 'visible', timeout: 2000 });
-    await page.locator('#vk-school-select').scrollIntoViewIfNeeded();
-    await page.selectOption('#vk-school-select', 'none');
-    // Keine Checkboxen aktiviert
-    
-    // Berechne Ergebnis
+    await page.fill('#dauer', '36');
+    await page.fill('#stunden', '40');
+    await page.fill('#teilzeitProzent', '75');
     await clickButton(page, '#berechnenBtn');
-    
-    // Warte auf Ergebnis
     await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
-    
-    // Mock clipboard API und alert für Test
+  }
+
+  test('Link teilen kopiert URL und lädt Werte korrekt', async ({ page }) => {
+    await prepareFormWithResult(page);
+
+    // Mock Clipboard & alert
     await page.evaluate(() => {
-      window.copiedText = '';
+      window.__copied = undefined;
       window.alert = () => {};
-      if (!navigator.clipboard) {
-        navigator.clipboard = {};
-      }
+      if (!navigator.clipboard) navigator.clipboard = {};
       navigator.clipboard.writeText = async (text) => {
-        window.copiedText = text;
+        window.__copied = text;
         return Promise.resolve();
       };
     });
-    
-    // Share-Button klicken
-    await clickButton(page, '#btn-share');
-    
-    // Warte bis copiedText gesetzt wurde
-    await page.waitForFunction(() => window.copiedText !== undefined, { timeout: 2000 });
-    
-    // Hole kopierten Link
-    const copiedUrl = await page.evaluate(() => window.copiedText);
-    
-    // Prüfe dass URL Daten enthält
-    expect(copiedUrl).toContain('?data=');
-    
-    // Navigiere zu kopiertem Link
-    await page.goto(copiedUrl);
+
+    await page.locator('#btn-copy-link').scrollIntoViewIfNeeded();
+    await page.click('#btn-copy-link');
+
+    await expect.poll(async () => page.evaluate(() => window.__copied), { timeout: 4000 }).not.toBeNull();
+    const finalUrl = await page.evaluate(() => window.__copied);
+    expect(finalUrl).toContain('dauer=36');
+    expect(finalUrl).toContain('stunden=40');
+    expect(finalUrl).toContain('teilzeitProzent=75');
+
+    await page.goto(finalUrl);
     await page.waitForLoadState('networkidle');
-    
-    // Prüfe dass Ergebnis direkt angezeigt wird
     await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
-    
-    // Prüfe dass die Werte korrekt geladen wurden
-    await expect(page.locator('#dauer')).toHaveValue('30');
-    await expect(page.locator('#stunden')).toHaveValue('38');
+    await expect(page.locator('#dauer')).toHaveValue('36');
+    await expect(page.locator('#stunden')).toHaveValue('40');
     await expect(page.locator('#teilzeitProzent')).toHaveValue('75');
-    await expect(page.locator('#vk-school-select')).toHaveValue('none');
-    // Neues UI: Altersabfrage als Eingabefeld `#alter`
-    // The UI helper sets '#alter' to '20' by default, and we now include form state in shared links.
-    await expect(page.locator('#alter')).toHaveValue('20');
-    // legacy assertion removed: new UI uses yes/no tiles for verkürzungsgründe
-    
-    // ZWEITER SHARE: Ändere auf Abitur und aktiviere Checkboxen
-    await page.waitForSelector('#vk-school-select', { state: 'visible', timeout: 2000 });
-    await page.locator('#vk-school-select').scrollIntoViewIfNeeded();
-    await page.selectOption('#vk-school-select', 'abitur');
-    // Neues UI: setze Alter >21 statt Checkbox
-    await page.fill('#alter', '25');
-    await page.locator('#alter').blur();
-    
-    // Berechne erneut
-    await clickButton(page, '#berechnenBtn');
-    await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
-    
-    // Mock clipboard API erneut (nach page.goto wurde die Seite neu geladen)
-    await page.evaluate(() => {
-      window.copiedText = '';
-      window.alert = () => {};
-      if (!navigator.clipboard) {
-        navigator.clipboard = {};
-      }
-      navigator.clipboard.writeText = async (text) => {
-        window.copiedText = text;
-        return Promise.resolve();
+  });
+
+  test('PDF erstellen ruft html2canvas/jsPDF und speichert', async ({ page }) => {
+    // Stub html2canvas und jsPDF vor dem ersten Page Load
+    await page.addInitScript(() => {
+      window.html2canvas = async () => ({
+        width: 1200,
+        height: 1800,
+        toDataURL: () => 'data:image/png;base64,TEST'
+      });
+      window.jspdf = {
+        jsPDF: function () {
+          return {
+            addImage: (...args) => { window.__pdfAddImageArgs = args; },
+            save: (name) => { window.__pdfSaved = name; }
+          };
+        }
       };
     });
-    
-    // Teile erneut
-    await clickButton(page, '#btn-share');
-    await page.waitForFunction(() => window.copiedText && window.copiedText.includes('data='), { timeout: 2000 });
-    
-    // Hole neuen Link
-    const copiedUrl2 = await page.evaluate(() => window.copiedText);
-    expect(copiedUrl2).toContain('?data=');
-    
-    // Navigiere zu neuem Link
-    await page.goto(copiedUrl2);
-    await page.waitForLoadState('networkidle');
-    
-    // Prüfe dass die GEÄNDERTEN Werte korrekt geladen wurden
-    await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
-    await expect(page.locator('#dauer')).toHaveValue('30');
-    await expect(page.locator('#stunden')).toHaveValue('38');
-    await expect(page.locator('#teilzeitProzent')).toHaveValue('75');
-    await expect(page.locator('#vk-school-select')).toHaveValue('abitur');
-    await expect(page.locator('#alter')).toHaveValue('25');
+
+    await prepareFormWithResult(page);
+
+    await page.locator('#btn-download-pdf').scrollIntoViewIfNeeded();
+    await page.click('#btn-download-pdf');
+
+    await expect.poll(async () => page.evaluate(() => window.__pdfSaved), { timeout: 5000 }).not.toBeNull();
+    const saveName = await page.evaluate(() => window.__pdfSaved);
+    const addImageArgs = await page.evaluate(() => window.__pdfAddImageArgs);
+    expect(saveName).toMatch(/Teilzeitausbildung_Berechnung_/);
+    expect(addImageArgs?.[4]).toBeGreaterThan(0); // width
+    expect(addImageArgs?.[5]).toBeGreaterThan(0); // height
   });
 });
 

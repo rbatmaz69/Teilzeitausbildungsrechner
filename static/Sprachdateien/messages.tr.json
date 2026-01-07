@@ -208,6 +208,27 @@
     "error": "Paylaşma hatası. Lütfen bağlantıyı manuel kopyalayın.",
     "noData": "Bağlantıyı paylaşmadan önce lütfen önce sonucu hesaplayın."
   },
+  "sharing": {
+    "title": "Sonucu paylaş",
+    "description": "Hesaplamanızı nasıl paylaşmak istediğinizi seçin:",
+    "downloadPdf": "PDF olarak indir",
+    "downloadPdfDesc": "Tüm girdiler ve sonuçlar içeren bir PDF oluşturur",
+    "copyLink": "Bağlantıyı kopyala",
+    "copyLinkDesc": "Tüm girdileri içeren bir bağlantıyı panonuza kopyalar",
+    "copied": "Kopyalandı!",
+    "copiedSuccess": "Bağlantı kopyalandı!",
+    "generating": "PDF oluşturuluyor...",
+    "generated": "PDF oluşturuldu",
+    "downloaded": "PDF indirildi",
+    "page": "Sayfa",
+    "of": "nın",
+    "error": {
+      "libraries": "PDF kitaplıkları yüklenemedi",
+      "noResults": "Lütfen önce sonuç hesaplayın",
+      "generation": "PDF dosyası oluşturulurken hata",
+      "copy": "Bağlantı kopyalanamadı"
+    }
+  },
   "reset": {
     "confirm": "Tüm verileri sıfırlamak istediğinizden emin misiniz?"
   },
