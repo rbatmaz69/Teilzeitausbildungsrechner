@@ -203,7 +203,7 @@ header h1 {
   box-shadow: 0 10px 24px rgb(22 60 155 / 10%);
 }
 
-/* Weißer/Hellblauer Button für Gesetzliche Grundlagen */
+/* Gesetzliche Grundlagen - Blauer Button für Gesetzliche Grundlagen */
 .legal-collapsible .summary-pill {
   background: #ffffff;
   color: #1e40af;
@@ -230,6 +230,102 @@ header h1 {
 .legal-collapsible .summary-toggle:focus-visible .summary-pill {
   outline: 3px solid #93c5fd;
   outline-offset: 2px;
+}
+
+/* Inhalt der Gesetzliche Grundlagen Box */
+.legal-content {
+  padding-top: 1rem;
+  border-top: 2px solid #d9e6ff;
+}
+
+.legal-section {
+  margin-bottom: 1.5rem;
+}
+
+.legal-section:last-of-type {
+  margin-bottom: 1rem;
+}
+
+.legal-section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 0.5rem 0;
+}
+
+.legal-section-description {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0 0 0.75rem 0;
+}
+
+.legal-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.legal-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+  width: fit-content;
+}
+
+.legal-link:hover {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
+.legal-link:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.legal-link svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Disclaimer Box */
+.legal-disclaimer {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #fef3c7;
+  border: 2px solid #fbbf24;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+}
+
+.legal-disclaimer-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.legal-disclaimer-content {
+  flex: 1;
+}
+
+.legal-disclaimer-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #92400e;
+  margin: 0 0 0.35rem 0;
+}
+
+.legal-disclaimer-text {
+  font-size: 0.9rem;
+  color: #78350f;
+  line-height: 1.5;
+  margin: 0;
 }
 
 .tile {

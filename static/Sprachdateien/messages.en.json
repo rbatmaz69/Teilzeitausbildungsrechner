@@ -124,6 +124,24 @@
     "legalTitle": "Legal Basis",
     "legalToggleLabel": "Show Details",
     "legalToggleLabelOpen": "Hide Details",
+    "legal": {
+      "para7a": {
+        "title": "§ 7a BBiG – Part-time Vocational Training",
+        "description": "Regulates the option to complete training on a part-time basis (at least 50% of full-time).",
+        "linkText": "View Legal Text",
+        "bibbLink": "BIBB Recommendation on Part-time Training (PDF)"
+      },
+      "para8": {
+        "title": "§ 8 BBiG – Shortening and Extension",
+        "description": "Defines the options for shortening the training duration (e.g. through school qualifications, age, professional experience).",
+        "linkText": "View Legal Text",
+        "bibbLink": "BIBB Recommendation on Shortening Options (PDF)"
+      },
+      "disclaimer": {
+        "title": "Important Notice",
+        "text": "There is <strong>no legal entitlement</strong> to the shortening reasons. All shortenings must be agreed with the <strong>training company</strong> and the <strong>responsible chamber</strong>. This calculator does not replace legal advice."
+      }
+    },
     "kv": {
       "total": "Total time",
       "schoolPerWeek": "School per week",

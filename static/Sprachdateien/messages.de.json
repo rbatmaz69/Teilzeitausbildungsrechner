@@ -127,6 +127,24 @@
     "legalTitle": "Gesetzliche Grundlagen",
     "legalToggleLabel": "Details anzeigen",
     "legalToggleLabelOpen": "Details ausblenden",
+    "legal": {
+      "para7a": {
+        "title": "§ 7a BBiG – Teilzeitberufsausbildung",
+        "description": "Regelt die Möglichkeit, eine Ausbildung in Teilzeit zu absolvieren (mindestens 50% der Vollzeit).",
+        "linkText": "Zum Gesetzestext",
+        "bibbLink": "Empfehlung des BIBB zur Teilzeitausbildung (PDF)"
+      },
+      "para8": {
+        "title": "§ 8 BBiG – Verkürzung und Verlängerung",
+        "description": "Definiert die Möglichkeiten zur Verkürzung der Ausbildungsdauer (z.B. durch Schulabschluss, Alter, berufliche Vorkenntnisse).",
+        "linkText": "Zum Gesetzestext",
+        "bibbLink": "Empfehlung des BIBB zu Verkürzungsmöglichkeiten (PDF)"
+      },
+      "disclaimer": {
+        "title": "Wichtiger Hinweis",
+        "text": "Es besteht <strong>kein Rechtsanspruch</strong> auf die Verkürzungsgründe. Alle Verkürzungen müssen mit dem <strong>Ausbildungsunternehmen</strong> und der <strong>zuständigen Kammer</strong> abgestimmt werden. Dieser Rechner ersetzt keine Rechtsberatung."
+      }
+    },
     "kv": {
       "total": "Gesamtdauer",
       "schoolPerWeek": "Ausbildung pro Woche",
