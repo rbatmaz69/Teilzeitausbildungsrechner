@@ -629,22 +629,6 @@
           <span id="desc-beruf-q3" class="sr-only" data-i18n="vk.qual.praktischeErfahrung_sr">Praktische Erfahrungen im ähnlichen Bereich</span>
         </div>
 
-        <!-- Q4 -->
-        <div>
-          <p class="vk-question" data-i18n="vk.qual.massnahmeVorbereitung">Haben Sie vor der Ausbildung an einer Maßnahme zur Vorbereitung auf eine Ausbildung teilgenommen (z. B. Berufsvorbereitende Bildungsmaßnahme oder Einstiegsqualifizierung)?</p>
-          <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
-            <label class="tile">
-              <input type="checkbox" id="vk_beruf_q5_ja" aria-describedby="desc-beruf-q5" data-vk-field="beruf_q5">
-              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
-            </label>
-            <label class="tile">
-              <input type="checkbox" id="vk_beruf_q5_nein" aria-describedby="desc-beruf-q5">
-              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
-            </label>
-          </div>
-          <span id="desc-beruf-q5" class="sr-only" data-i18n="vk.qual.massnahmeVorbereitung_sr">Maßnahme zur Vorbereitung auf eine Ausbildung</span>
-        </div>
-
       </div>
     </div>
 
@@ -658,22 +642,6 @@
 
       <!-- Ja/Nein Fragen für Bildungsweg -->
       <div class="vk-category-body">
-        <!-- Q4: Berufsvorbereitende Schulform -->
-        <div>
-          <p class="vk-question" data-i18n="vk.qual.berufsvorbereitendeSchule">Haben Sie vor der Ausbildung eine berufsvorbereitende Schulform besucht (z. B. Berufsgrundbildungsjahr, Berufsvorbereitungsjahr oder eine einjährige Berufsfachschule)?</p>
-          <div class="vk-yes-no-group" style="display:flex;flex-direction:row;gap:.5rem;">
-            <label class="tile">
-              <input type="checkbox" id="vk_beruf_q4_ja" aria-describedby="desc-beruf-q4" data-vk-field="beruf_q4">
-              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.yes">Ja</span></div></div>
-            </label>
-            <label class="tile">
-              <input type="checkbox" id="vk_beruf_q4_nein" aria-describedby="desc-beruf-q4">
-              <div class="tile-body" style="flex:1"><div class="tile-header"><span data-i18n="vk.qual.no">Nein</span></div></div>
-            </label>
-          </div>
-          <span id="desc-beruf-q4" class="sr-only" data-i18n="vk.qual.berufsvorbereitendeSchule_sr">Berufsvorbereitende Schulform besucht</span>
-        </div>
-
         <!-- Q6: ECTS-Punkte im Studium -->
         <div>
           <p class="vk-question" data-i18n="vk.qual.ectsStudium">Haben Sie im Studium bereits mindestens 30 ECTS-Punkte in einem Bereich erworben, der zu Ihrem Ausbildungsberuf passt?</p>
@@ -812,25 +780,6 @@
         </ul>
       </div>
     </div>
-
-    <!-- Modal für "Was ist das?" Informationsbox -->
-    <div id="vk-info-modal" class="vk-info-modal" role="dialog" aria-modal="true" aria-labelledby="vk-info-title" hidden>
-      <div class="vk-info-overlay"></div>
-      <div class="vk-info-content">
-        <button class="vk-info-close" type="button" aria-label="Modal schließen" data-i18n-attr="aria-label:vk.infoBox.closeAria">
-          <span class="vk-info-close-icon" aria-hidden="true">×</span>
-        </button>
-        <div class="vk-info-header">
-          <div class="vk-info-icon" aria-hidden="true">
-            <span class="vk-info-icon-text">ℹ</span>
-          </div>
-          <h2 id="vk-info-title" class="vk-info-title" data-i18n="vk.infoBox.title">Was sind Verkürzungsgründe?</h2>
-        </div>
-        <div class="vk-info-body">
-          <div data-i18n="vk.infoBox.content" data-i18n-html="true"></div>
-        </div>
-      </div>
-    </div>
   </div>
 
 </div> <!-- /.rechner-grid -->
@@ -845,6 +794,25 @@
       Zurücksetzen
     </button>
   </nav>
+
+  <!-- Modal für "Was ist das?" Informationsbox - außerhalb aller versteckten Container -->
+  <div id="vk-info-modal" class="vk-info-modal" role="dialog" aria-modal="true" aria-labelledby="vk-info-title" hidden>
+    <div class="vk-info-overlay"></div>
+    <div class="vk-info-content">
+      <button class="vk-info-close" type="button" aria-label="Modal schließen" data-i18n-attr="aria-label:vk.infoBox.closeAria">
+        <span class="vk-info-close-icon" aria-hidden="true">×</span>
+      </button>
+      <div class="vk-info-header">
+        <div class="vk-info-icon" aria-hidden="true">
+          <span class="vk-info-icon-text">ℹ</span>
+        </div>
+        <h2 id="vk-info-title" class="vk-info-title" data-i18n="vk.infoBox.title">Was sind Verkürzungsgründe?</h2>
+      </div>
+      <div class="vk-info-body">
+        <div data-i18n="vk.infoBox.content" data-i18n-html="true"></div>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>

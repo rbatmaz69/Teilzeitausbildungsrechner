@@ -149,8 +149,6 @@ Content-Type: application/json
     "beruf_q2": false,
     "beruf_q2_dauer_monate": 0,
     "beruf_q3": false,
-    "beruf_q4": false,
-    "beruf_q5": false,
     "beruf_q6": false,
     # optional: bereits vorab berechneter Gesamtwert
     "berufliche_verkuerzung_monate": 0
@@ -163,7 +161,7 @@ Wichtig — Pflichtfelder in `verkuerzungsgruende`:
 - Alle Ja/Nein‑Felder (bool) müssen vom Client explizit angegeben werden; sie sind Pflichtfelder:
   - `abitur`, `realschule`, `alter_ueber_21`,
   - `familien_kinderbetreuung`, `familien_pflegeverantwortung`,
-  - `beruf_q1`, `beruf_q2`, `beruf_q3`, `beruf_q4`, `beruf_q5`, `beruf_q6`
+  - `beruf_q1`, `beruf_q2`, `beruf_q3`, `beruf_q6`
 
 - Zahlenfelder (als Werte oder 0) — sollten ebenfalls explizit übergeben werden, wenn relevant:
   - `beruf_q2_dauer_monate`, `berufliche_verkuerzung_monate`
@@ -221,8 +219,6 @@ ergebnis = berechne_gesamtdauer(
         'beruf_q2': False,
         'beruf_q2_dauer_monate': 0,
         'beruf_q3': False,
-        'beruf_q4': False,
-        'beruf_q5': False,
         'beruf_q6': False,
     },
     eingabetyp='prozent'
@@ -250,8 +246,6 @@ ergebnis = berechne_gesamtdauer(
     'beruf_q2': False,
     'beruf_q2_dauer_monate': 0,
     'beruf_q3': False,
-    'beruf_q4': False,
-    'beruf_q5': False,
     'beruf_q6': False,
     'berufliche_verkuerzung_monate': 0,
   },
@@ -274,8 +268,8 @@ Die Berechnungslogik liegt in `src/calculation_logic.py` und folgt einem vierstu
 - **Alter über 21** (`alter_ueber_21`): 12 Monate
 - **Familien- und Pflegeverantwortung** (`familien_kinderbetreuung`, `familien_pflegeverantwortung`): bis zu 12 Monate
 - **Berufliche Gründe** (`beruf_q1`..`beruf_q6`, `beruf_q2_dauer_monate`, `berufliche_verkuerzung_monate`):
-  - `beruf_q1`, `beruf_q3`, `beruf_q4` → je 12 Monate (wenn true)
-  - `beruf_q5`, `beruf_q6` → je 6 Monate (wenn true)
+  - `beruf_q1`, `beruf_q3` → je 12 Monate (wenn true)
+  - `beruf_q6` → 6 Monate (wenn true)
   - `beruf_q2` ist eine Ja/Nein-Antwort mit zusätzlichem Eingabefeld `beruf_q2_dauer_monate`.
     Das Feld `beruf_q2_dauer_monate` wird wie folgt auf Monate gemappt:
     - < 6 Monate → 0
