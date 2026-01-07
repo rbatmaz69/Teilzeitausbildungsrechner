@@ -273,5 +273,18 @@
       "subtitle": "Strukturierter Weg"
     },
     "button": "Zum Rechner"
+  },
+  "a11y": {
+    "button": "Barrierefreiheit",
+    "buttonAria": "Barrierefreiheitsmenü öffnen",
+    "closeAria": "Menü schließen",
+    "read": "Vorlesen",
+    "readStop": "Vorlesen stoppen",
+    "readAria": "Seite vorlesen",
+    "fontSizeLabel": "Schriftgröße",
+    "decreaseAria": "Schriftgröße verringern",
+    "increaseAria": "Schriftgröße vergrößern",
+    "reset": "Zurücksetzen",
+    "resetAria": "Schriftgröße zurücksetzen"
   }
 }

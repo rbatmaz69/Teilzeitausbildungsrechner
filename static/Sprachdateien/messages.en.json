@@ -270,5 +270,18 @@
       "subtitle": "Structured path"
     },
     "button": "To calculator"
+  },
+  "a11y": {
+    "button": "Accessibility",
+    "buttonAria": "Open accessibility menu",
+    "closeAria": "Close menu",
+    "read": "Read aloud",
+    "readStop": "Stop reading",
+    "readAria": "Read page aloud",
+    "fontSizeLabel": "Font size",
+    "decreaseAria": "Decrease font size",
+    "increaseAria": "Increase font size",
+    "reset": "Reset",
+    "resetAria": "Reset font size"
   }
 }
