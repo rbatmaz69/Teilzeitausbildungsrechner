@@ -272,6 +272,17 @@
       "title": "Başarılı tamamlanma",
       "subtitle": "Yapılandırılmış yol"
     },
-    "button": "Hesaplayıcıya git"
-  }
+    "button": "Hesaplayıcıya git"  },
+  "a11y": {
+    "button": "Erişilebilirlik",
+    "buttonAria": "Erişilebilirlik menüsünü aç",
+    "closeAria": "Menüyü kapat",
+    "read": "Sesli oku",
+    "readStop": "Okumayı durdur",
+    "readAria": "Sayfayı sesli oku",
+    "fontSizeLabel": "Yazı boyutu",
+    "decreaseAria": "Yazı boyutunu küçült",
+    "increaseAria": "Yazı boyutunu büyüt",
+    "reset": "Sıfırla",
+    "resetAria": "Yazı boyutunu sıfırla"  }
 }

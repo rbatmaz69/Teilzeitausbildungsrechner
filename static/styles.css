@@ -2917,3 +2917,254 @@ body.modal-open {
 }
 
 
+/* ==========================================
+   ACCESSIBILITY WIDGET (merged from a11y.css)
+   ========================================== */
+.a11y-toggle {
+  position: fixed;
+  right: 16px; /* px so it doesn't move when root font-size changes */
+  bottom: 16px;
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgb(224 0 0 / 25%);
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.15s ease-out, transform 0.15s ease-out, box-shadow 0.15s ease-in-out;
+}
+
+.a11y-toggle:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Match global .btn hover/active behavior */
+.a11y-toggle:hover {
+  background-color: #a90000;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 15%);
+}
+
+.a11y-toggle:active {
+  background-color: #c60000;
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+}
+
+/* Make the gear icon large and centered inside the circular toggle */
+.a11y-toggle svg {
+  width: 36px;
+  height: 36px;
+  display: block;
+}
+
+.a11y-toggle svg path {
+  fill: currentcolor;
+}
+
+.a11y-menu {
+  position: fixed;
+  right: 16px; /* fixed px so menu stays at same screen position */
+  bottom: 88px; /* place above the toggle (toggle bottom 16px + 56px height + 16px gap) */
+  width: 260px;
+  max-width: calc(100% - 32px);
+  background: #fff;
+  color: #111;
+  border-radius: 8px;
+  box-shadow: 0 8px 28px rgb(0 0 0 / 18%);
+  z-index: 10000;
+  font-size: 14px;
+  border: 1px solid #e6eefc;
+  box-sizing: border-box;
+  max-height: 60vh;
+  overflow: auto;
+}
+
+.a11y-menu[aria-hidden="true"] {
+  display: none;
+}
+
+.a11y-menu-header {
+  position: relative;
+  padding: 8px 12px 28px; /* extra bottom padding so close sits above separator */
+  border-bottom: 1px solid #f0f4ff;
+  font-weight: 600;
+}
+
+.a11y-close {
+  position: absolute;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  box-shadow: 0 8px 18px rgb(0 0 0 / 10%);
+  color: var(--primary);
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 10001;
+  transition: background-color 0.15s ease-out, transform 0.15s ease-out, box-shadow 0.15s ease-in-out;
+}
+
+.a11y-close:hover {
+  background: #a90000;
+  color: #fff;
+  border-color: transparent;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 15%);
+}
+
+.a11y-close:active {
+  background: #c60000;
+  color: #fff;
+  border-color: transparent;
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+}
+
+.a11y-close:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Make only the inner close character larger while keeping button size */
+.a11y-close .a11y-close-x {
+  font-size: 30px;
+  line-height: 1;
+}
+
+.a11y-menu-body {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.a11y-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.a11y-btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 6px 20px rgb(224 0 0 / 25%);
+  transition: background-color 0.15s ease-out, transform 0.15s ease-out, box-shadow 0.15s ease-in-out;
+}
+
+.a11y-btn:hover {
+  background-color: #a90000;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 15%);
+}
+
+.a11y-btn:active {
+  background-color: #c60000;
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+}
+
+.a11y-btn:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.a11y-reset {
+  padding: 8px 12px;
+}
+
+/* Icon sizing inside buttons */
+.a11y-btn svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.a11y-btn .sr-only {
+  position: relative;
+}
+
+.a11y-step {
+  display: inline-block;
+  background: rgb(255 255 255 / 15%);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.a11y-level-display {
+  min-width: 40px;
+  text-align: center;
+  background: #f3f4f6;
+  color: #111;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-weight: 600;
+}
+
+.a11y-sep {
+  height: 1px;
+  background: linear-gradient(90deg, rgb(0 0 0 / 6%), rgb(0 0 0 / 4%));
+  margin: 20px 0 6px; /* leave space for the circular close button above */
+}
+
+.a11y-font-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.a11y-font-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.a11y-reset-wrapper {
+  display: none;
+}
+
+.a11y-range {
+  display: none;
+}
+
+.a11y-label {
+  font-size: 13px;
+  color: #333;
+}
+
+/* ensure high contrast for text when increased */
+.a11y-menu strong {
+  color: #0b5cff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .a11y-toggle,
+  .a11y-menu {
+    transition: none;
+  }
+}
