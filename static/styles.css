@@ -203,35 +203,6 @@ header h1 {
   box-shadow: 0 10px 24px rgb(22 60 155 / 10%);
 }
 
-/* Gesetzliche Grundlagen - Blauer Button für Gesetzliche Grundlagen */
-.legal-collapsible .summary-pill {
-  background: #fff;
-  color: #1e40af;
-  border: 2px solid #3b82f6;
-  box-shadow: 0 2px 8px rgb(59 130 246 / 15%);
-}
-
-.legal-collapsible .summary-toggle:hover .summary-pill {
-  background: #eff6ff;
-  color: #1e40af;
-  border-color: #2563eb;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgb(59 130 246 / 20%);
-}
-
-.legal-collapsible .summary-toggle:active .summary-pill {
-  background: #dbeafe;
-  color: #1e40af;
-  border-color: #1d4ed8;
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgb(59 130 246 / 15%);
-}
-
-.legal-collapsible .summary-toggle:focus-visible .summary-pill {
-  outline: 3px solid #93c5fd;
-  outline-offset: 2px;
-}
-
 /* Inhalt der Gesetzliche Grundlagen Box */
 .legal-content {
   padding-top: 1rem;
@@ -2757,6 +2728,14 @@ body.modal-open {
   flex-shrink: 0;
 }
 
+/* Gesetzliche Grundlagen - Blauer Button für Gesetzliche Grundlagen */
+.legal-collapsible .summary-pill {
+  background: #fff;
+  color: #1e40af;
+  border: 2px solid #3b82f6;
+  box-shadow: 0 2px 8px rgb(59 130 246 / 15%);
+}
+
 .summary-toggle:hover .summary-pill {
   background: #a90000;
   transform: translateY(-1px);
@@ -2775,6 +2754,27 @@ body.modal-open {
 
 .summary-toggle:focus-visible .summary-pill {
   outline: 3px solid #a5b4fc;
+  outline-offset: 2px;
+}
+
+.legal-collapsible .summary-toggle:hover .summary-pill {
+  background: #eff6ff;
+  color: #1e40af;
+  border-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgb(59 130 246 / 20%);
+}
+
+.legal-collapsible .summary-toggle:active .summary-pill {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #1d4ed8;
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgb(59 130 246 / 15%);
+}
+
+.legal-collapsible .summary-toggle:focus-visible .summary-pill {
+  outline: 3px solid #93c5fd;
   outline-offset: 2px;
 }
 
