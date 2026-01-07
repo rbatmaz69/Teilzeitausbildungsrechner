@@ -88,12 +88,6 @@
       "praktischeErfahrung": "Haben Sie bereits in einem ähnlichen Bereich gearbeitet oder praktische Erfahrungen gesammelt, die für die Ausbildung nützlich sind?",
       "praktischeErfahrung_sr": "Praktische Erfahrungen im ähnlichen Bereich",
       "praktischeErfahrung_short": "Praktische Vorerfahrung",
-      "berufsvorbereitendeSchule": "Haben Sie vor der Ausbildung eine berufsvorbereitende Schulform besucht (z. B. Berufsgrundbildungsjahr, Berufsvorbereitungsjahr oder eine einjährige Berufsfachschule)?",
-      "berufsvorbereitendeSchule_sr": "Berufsvorbereitende Schulform besucht",
-      "berufsvorbereitendeSchule_short": "Berufsvorbereitende Schulform",
-      "massnahmeVorbereitung": "Haben Sie vor der Ausbildung an einer Maßnahme zur Vorbereitung auf eine Ausbildung teilgenommen (z. B. Berufsvorbereitende Bildungsmaßnahme oder Einstiegsqualifizierung)?",
-      "massnahmeVorbereitung_sr": "Maßnahme zur Vorbereitung auf eine Ausbildung",
-      "massnahmeVorbereitung_short": "Vorbereitung auf eine Ausbildung",
       "ectsStudium": "Haben Sie im Studium bereits mindestens 30 ECTS-Punkte in einem Bereich erworben, der zu Ihrem Ausbildungsberuf passt?",
       "ectsStudium_sr": "ECTS im passenden Studienbereich",
       "ectsStudium_short": "Erbrachte Leistung im Studium"
@@ -129,7 +123,28 @@
     "headline": "Ihre Teilzeitausbildung",
     "helper": "Hier sehen Sie Ihre Angaben und das Ergebnis.",
     "notesTitle": "Wichtige Hinweise",
-    "notes": "<li>Die Berechnung ist nur eine <strong>Hilfe</strong> und reine <strong>Orientierung</strong>.</li><li>Das Ergebnis ist <strong>nicht verbindlich</strong>.</li><li>Sprechen Sie das Ergebnis mit Ihrem Ausbildungsbetrieb ab.</li><li>Eine Teilzeitausbildung ist nur dann möglich, wenn Sie mindestens die hälfte der normalen Ausbildungszeit arbeiten.</li>",
+    "notes": "<li>Die Berechnung ist nur eine <strong>Hilfe</strong> und reine <strong>Orientierung</strong>.</li><li>Das Ergebnis ist <strong>nicht verbindlich</strong>.</li><li>Sprechen Sie das Ergebnis mit Ihrem <strong>Ausbildungsbetrieb</strong> ab.</li><li>Eine Teilzeitausbildung ist nur dann möglich, wenn Sie <strong>mindestens die Hälfte</strong> der normalen Ausbildungszeit arbeiten.</li>",
+    "legalTitle": "Gesetzliche Grundlagen",
+    "legalToggleLabel": "Details anzeigen",
+    "legalToggleLabelOpen": "Details ausblenden",
+    "legal": {
+      "para7a": {
+        "title": "§ 7a BBiG – Teilzeitberufsausbildung",
+        "description": "Regelt die Möglichkeit, eine Ausbildung in Teilzeit zu absolvieren (mindestens 50% der Vollzeit).",
+        "linkText": "Zum Gesetzestext",
+        "bibbLink": "Empfehlung des BIBB zur Teilzeitausbildung (PDF)"
+      },
+      "para8": {
+        "title": "§ 8 BBiG – Verkürzung und Verlängerung",
+        "description": "Definiert die Möglichkeiten zur Verkürzung der Ausbildungsdauer (z.B. durch Schulabschluss, Alter, berufliche Vorkenntnisse).",
+        "linkText": "Zum Gesetzestext",
+        "bibbLink": "Empfehlung des BIBB zu Verkürzungsmöglichkeiten (PDF)"
+      },
+      "disclaimer": {
+        "title": "Wichtiger Hinweis",
+        "text": "Es besteht <strong>kein Rechtsanspruch</strong> auf die Verkürzungsgründe. Alle Verkürzungen müssen mit dem <strong>Ausbildungsunternehmen</strong> und der <strong>zuständigen Kammer</strong> abgestimmt werden. Dieser Rechner ersetzt keine Rechtsberatung."
+      }
+    },
     "kv": {
       "total": "Gesamtdauer",
       "schoolPerWeek": "Ausbildung pro Woche",
@@ -201,6 +216,27 @@
     "reset": "Zurücksetzen",
     "share": "Ergebnis teilen"
   },
+  "sharing": {
+    "title": "Ergebnis teilen",
+    "description": "Wählen Sie, wie Sie Ihre Berechnung weiterleiten möchten:",
+    "downloadPdf": "Als PDF herunterladen",
+    "downloadPdfDesc": "Erstellt ein PDF mit allen Eingaben und Ergebnissen",
+    "copyLink": "Link kopieren",
+    "copyLinkDesc": "Kopiert einen Link mit allen Eingaben in die Zwischenablage",
+    "copied": "Kopiert!",
+    "copiedSuccess": "Link wurde kopiert!",
+    "generating": "Erstelle PDF...",
+    "generated": "PDF erstellt",
+    "downloaded": "PDF heruntergeladen",
+    "page": "Seite",
+    "of": "von",
+    "error": {
+      "libraries": "PDF-Bibliotheken konnten nicht geladen werden",
+      "noResults": "Bitte führen Sie zuerst eine Berechnung durch",
+      "generation": "Fehler beim Erstellen der PDF-Datei",
+      "copy": "Link konnte nicht kopiert werden"
+    }
+  },
   "share": {
     "title": "Teilzeitrechner – Ergebnis",
     "text": "Hier ist mein Ergebnis.",
@@ -237,5 +273,25 @@
       "subtitle": "Strukturierter Weg"
     },
     "button": "Zum Rechner"
+  },
+  "a11y": {
+    "button": "Barrierefreiheit",
+    "buttonAria": "Barrierefreiheitsmenü öffnen",
+    "closeAria": "Menü schließen",
+    "read": "Vorlesen",
+    "readStop": "Vorlesen stoppen",
+    "readAria": "Seite vorlesen",
+    "themeLabel": "Farbschema",
+    "themeLight": "Hell",
+    "themeDark": "Dunkel",
+    "themeAuto": "Auto",
+    "themeLightAria": "Hellen Modus aktivieren",
+    "themeDarkAria": "Dunklen Modus aktivieren",
+    "themeAutoAria": "Automatischen Modus aktivieren (Systemeinstellung)",
+    "fontSizeLabel": "Schriftgröße",
+    "decreaseAria": "Schriftgröße verringern",
+    "increaseAria": "Schriftgröße vergrößern",
+    "reset": "Zurücksetzen",
+    "resetAria": "Schriftgröße zurücksetzen"
   }
 }

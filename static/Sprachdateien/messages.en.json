@@ -88,12 +88,6 @@
       "praktischeErfahrung": "Have you already worked in a similar field or gained practical experience that is useful for the training?",
       "praktischeErfahrung_sr": "Practical experience in a similar field",
       "praktischeErfahrung_short": "Practical experience",
-      "berufsvorbereitendeSchule": "Did you attend a pre-vocational school form before the training (e.g. basic vocational year, preparatory year or a one-year vocational school)?",
-      "berufsvorbereitendeSchule_sr": "Attended pre-vocational school form",
-      "berufsvorbereitendeSchule_short": "Pre-vocational school form",
-      "massnahmeVorbereitung": "Did you participate in a measure to prepare for vocational training before the apprenticeship (e.g. pre-vocational training measure or entry qualification)?",
-      "massnahmeVorbereitung_sr": "Measure to prepare for vocational training",
-      "massnahmeVorbereitung_short": "Preparation for vocational training",
       "ectsStudium": "Have you already earned at least 30 ECTS credits in a field that matches your apprenticeship during your studies?",
       "ectsStudium_sr": "ECTS in the matching study field",
       "ectsStudium_short": "Academic achievements in studies"
@@ -126,7 +120,28 @@
     "headline": "Your part-time training",
     "helper": "Here you can see your details and the result.",
     "notesTitle": "Important information",
-    "notes": "<li>This calculation is only a <strong>help</strong> and an <strong>orientation</strong>.</li><li>The result is <strong>not binding</strong>.</li><li>Discuss the result with your training company.</li><li>Part-time training is only possible if you work at least half of the normal training hours.</li>",
+    "notes": "<li>This calculation is only a <strong>help</strong> and an <strong>orientation</strong>.</li><li>The result is <strong>not binding</strong>.</li><li>Discuss the result with your <strong>training company</strong>.</li><li>Part-time training is only possible if you work <strong>at least half</strong> of the normal training hours.</li>",
+    "legalTitle": "Legal Basis",
+    "legalToggleLabel": "Show Details",
+    "legalToggleLabelOpen": "Hide Details",
+    "legal": {
+      "para7a": {
+        "title": "§ 7a BBiG – Part-time Vocational Training",
+        "description": "Regulates the option to complete training on a part-time basis (at least 50% of full-time).",
+        "linkText": "View Legal Text",
+        "bibbLink": "BIBB Recommendation on Part-time Training (PDF)"
+      },
+      "para8": {
+        "title": "§ 8 BBiG – Shortening and Extension",
+        "description": "Defines the options for shortening the training duration (e.g. through school qualifications, age, professional experience).",
+        "linkText": "View Legal Text",
+        "bibbLink": "BIBB Recommendation on Shortening Options (PDF)"
+      },
+      "disclaimer": {
+        "title": "Important Notice",
+        "text": "There is <strong>no legal entitlement</strong> to the shortening reasons. All shortenings must be agreed with the <strong>training company</strong> and the <strong>responsible chamber</strong>. This calculator does not replace legal advice."
+      }
+    },
     "kv": {
       "total": "Total time",
       "schoolPerWeek": "School per week",
@@ -205,6 +220,27 @@
     "error": "Error sharing. Please copy the link manually.",
     "noData": "Please calculate a result first before sharing the link."
   },
+  "sharing": {
+    "title": "Share result",
+    "description": "Choose how you would like to share your calculation:",
+    "downloadPdf": "Download as PDF",
+    "downloadPdfDesc": "Creates a PDF with all inputs and results",
+    "copyLink": "Copy link",
+    "copyLinkDesc": "Copies a link with all inputs to your clipboard",
+    "copied": "Copied!",
+    "copiedSuccess": "Link copied!",
+    "generating": "Creating PDF...",
+    "generated": "PDF created",
+    "downloaded": "PDF downloaded",
+    "page": "Page",
+    "of": "of",
+    "error": {
+      "libraries": "PDF libraries could not be loaded",
+      "noResults": "Please calculate a result first",
+      "generation": "Error creating PDF file",
+      "copy": "Link could not be copied"
+    }
+  },
   "reset": {
     "confirm": "Would you like to reset all data?"
   },
@@ -234,5 +270,25 @@
       "subtitle": "Structured path"
     },
     "button": "To calculator"
+  },
+  "a11y": {
+    "button": "Accessibility",
+    "buttonAria": "Open accessibility menu",
+    "closeAria": "Close menu",
+    "read": "Read aloud",
+    "readStop": "Stop reading",
+    "readAria": "Read page aloud",
+    "themeLabel": "Color scheme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeAuto": "Auto",
+    "themeLightAria": "Activate light mode",
+    "themeDarkAria": "Activate dark mode",
+    "themeAutoAria": "Activate automatic mode (system setting)",
+    "fontSizeLabel": "Font size",
+    "decreaseAria": "Decrease font size",
+    "increaseAria": "Increase font size",
+    "reset": "Reset",
+    "resetAria": "Reset font size"
   }
 }

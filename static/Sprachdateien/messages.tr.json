@@ -88,12 +88,6 @@
       "praktischeErfahrung": "Benzer bir alanda çalıştınız veya eğitim için faydalı pratik deneyim kazandınız mı?",
       "praktischeErfahrung_sr": "Benzer alanda pratik deneyim",
       "praktischeErfahrung_short": "Pratik deneyim",
-      "berufsvorbereitendeSchule": "Eğitime başlamadan önce mesleki hazırlık okulu (örn. Mesleki Temel Eğitim Yılı) okudunuz mu?",
-      "berufsvorbereitendeSchule_sr": "Mesleki hazırlık okulu katılımı",
-      "berufsvorbereitendeSchule_short": "Mesleki hazırlık",
-      "massnahmeVorbereitung": "Eğitime hazırlık amaçlı bir programa katıldınız mı (örn. Giriş yeterlilik programı)?",
-      "massnahmeVorbereitung_sr": "Eğitime hazırlık programı",
-      "massnahmeVorbereitung_short": "Hazırlık programı",
       "ectsStudium": "Üniversitede, mesleğinize uygun alanda en az 30 ECTS aldınız mı?",
       "ectsStudium_sr": "İlgili alanda ECTS",
       "ectsStudium_short": "Üniversite kredisi"
@@ -129,7 +123,28 @@
     "headline": "Yarı zamanlı eğitiminiz",
     "helper": "Burada girdileriniz ve sonuç gösterilir.",
     "notesTitle": "Önemli notlar",
-    "notes": "<li>Hesaplama sadece <strong>yardımcı</strong> ve bir <strong>kılavuz</strong> niteliğindedir.</li><li>Sonuç <strong>bağlayıcı değildir</strong>.</li><li>Sonucu eğitim yerinizle görüşün.</li><li>Yarı zamanlı eğitim, normal çalışma süresinin en az yarısını çalıştığınızda mümkündür.</li>",
+    "notes": "<li>Hesaplama sadece <strong>yardımcı</strong> ve bir <strong>kılavuz</strong> niteliğindedir.</li><li>Sonuç <strong>bağlayıcı değildir</strong>.</li><li>Sonucu <strong>eğitim yerinizle</strong> görüşün.</li><li>Yarı zamanlı eğitim, normal çalışma süresinin <strong>en az yarısını</strong> çalıştığınızda mümkündür.</li>",
+    "legalTitle": "Yasal Dayanak",
+    "legalToggleLabel": "Detayları Göster",
+    "legalToggleLabelOpen": "Detayları Gizle",
+    "legal": {
+      "para7a": {
+        "title": "§ 7a BBiG – Yarı Zamanlı Mesleki Eğitim",
+        "description": "Eğitimin yarı zamanlı olarak tamamlanması seçeneğini düzenler (tam zamanlının en az %50'si).",
+        "linkText": "Yasal Metni Görüntüle",
+        "bibbLink": "BIBB Yarı Zamanlı Eğitim Tavsiyesi (PDF)"
+      },
+      "para8": {
+        "title": "§ 8 BBiG – Kısaltma ve Uzatma",
+        "description": "Eğitim süresinin kısaltılması seçeneklerini tanımlar (örn. okul niteliği, yaş, mesleki deneyim yoluyla).",
+        "linkText": "Yasal Metni Görüntüle",
+        "bibbLink": "BIBB Kısaltma Seçenekleri Tavsiyesi (PDF)"
+      },
+      "disclaimer": {
+        "title": "Önemli Uyarı",
+        "text": "Kısaltma nedenleri için <strong>yasal hak yoktur</strong>. Tüm kısaltmalar <strong>eğitim şirketi</strong> ve <strong>ilgili oda</strong> ile mutabık kalınmalıdır. Bu hesap makinesi yasal danışmanlığın yerini almaz."
+      }
+    },
     "kv": {
       "total": "Toplam süre",
       "schoolPerWeek": "Haftalık eğitim",
@@ -208,6 +223,27 @@
     "error": "Paylaşma hatası. Lütfen bağlantıyı manuel kopyalayın.",
     "noData": "Bağlantıyı paylaşmadan önce lütfen önce sonucu hesaplayın."
   },
+  "sharing": {
+    "title": "Sonucu paylaş",
+    "description": "Hesaplamanızı nasıl paylaşmak istediğinizi seçin:",
+    "downloadPdf": "PDF olarak indir",
+    "downloadPdfDesc": "Tüm girdiler ve sonuçlar içeren bir PDF oluşturur",
+    "copyLink": "Bağlantıyı kopyala",
+    "copyLinkDesc": "Tüm girdileri içeren bir bağlantıyı panonuza kopyalar",
+    "copied": "Kopyalandı!",
+    "copiedSuccess": "Bağlantı kopyalandı!",
+    "generating": "PDF oluşturuluyor...",
+    "generated": "PDF oluşturuldu",
+    "downloaded": "PDF indirildi",
+    "page": "Sayfa",
+    "of": "nın",
+    "error": {
+      "libraries": "PDF kitaplıkları yüklenemedi",
+      "noResults": "Lütfen önce sonuç hesaplayın",
+      "generation": "PDF dosyası oluşturulurken hata",
+      "copy": "Bağlantı kopyalanamadı"
+    }
+  },
   "reset": {
     "confirm": "Tüm verileri sıfırlamak istediğinizden emin misiniz?"
   },
@@ -236,6 +272,24 @@
       "title": "Başarılı tamamlanma",
       "subtitle": "Yapılandırılmış yol"
     },
-    "button": "Hesaplayıcıya git"
-  }
+    "button": "Hesaplayıcıya git"  },
+  "a11y": {
+    "button": "Erişilebilirlik",
+    "buttonAria": "Erişilebilirlik menüsünü aç",
+    "closeAria": "Menüyü kapat",
+    "read": "Sesli oku",
+    "readStop": "Okumayı durdur",
+    "readAria": "Sayfayı sesli oku",
+    "themeLabel": "Renk şeması",
+    "themeLight": "Açık",
+    "themeDark": "Koyu",
+    "themeAuto": "Otomatik",
+    "themeLightAria": "Açık modu etkinleştir",
+    "themeDarkAria": "Koyu modu etkinleştir",
+    "themeAutoAria": "Otomatik modu etkinleştir (sistem ayarı)",
+    "fontSizeLabel": "Yazı boyutu",
+    "decreaseAria": "Yazı boyutunu küçült",
+    "increaseAria": "Yazı boyutunu büyüt",
+    "reset": "Sıfırla",
+    "resetAria": "Yazı boyutunu sıfırla"  }
 }
