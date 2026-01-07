@@ -87,8 +87,8 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
         verkuerzung_gesamt += VERKUERZUNG_FAMILIEN_PFLEGE
 
     # Berufliche Vorkenntnisse: bis zu 12 Monate → fester Wert 12, sobald vorhanden
-    # Neue Logik: unterstütze detaillierte berufliche Fragen (beruf_q1..q6,
-    # beruf_q2_dauer_monate)
+    # Neue Logik: unterstütze detaillierte berufliche Fragen (beruf_q1..q3, q6
+    # und q2-Dauer) – die ehemaligen Felder q4/q5 sind entfernt
     # oder ein bereits berechnetes Feld 'berufliche_verkuerzung_monate' vom Client.
     berufliche_total = 0
     # Detect if any new beruf fields are present
@@ -97,8 +97,6 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
         "beruf_q2",
         "beruf_q2_dauer_monate",
         "beruf_q3",
-        "beruf_q4",
-        "beruf_q5",
         "beruf_q6",
         "berufliche_verkuerzung_monate",
     ))
@@ -110,16 +108,12 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
                 verkuerzungsgruende.get("berufliche_verkuerzung_monate", 0)
             )
         else:
-            # Q1/Q3/Q4 => 12 Monate
+            # Q1/Q3 => 12 Monate
             if verkuerzungsgruende.get("beruf_q1", False):
                 berufliche_total += 12
             if verkuerzungsgruende.get("beruf_q3", False):
                 berufliche_total += 12
-            if verkuerzungsgruende.get("beruf_q4", False):
-                berufliche_total += 12
-            # Q5/Q6 => 6 Monate
-            if verkuerzungsgruende.get("beruf_q5", False):
-                berufliche_total += 6
+            # Q6 => 6 Monate
             if verkuerzungsgruende.get("beruf_q6", False):
                 berufliche_total += 6
             # Q2 => duration mapping
