@@ -151,7 +151,7 @@
       "workPerWeek": "Arbeit pro Woche"
     },
     "extension": {
-      "label1": "1. Verkürzung durch Verkürzungründe:",
+      "label1": "1. Verkürzung durch Verkürzungsgründe:",
       "label2": "2. Verlängerung durch Teilzeit:",
       "plus": "+{n} Monate",
       "none": "Keine Verlängerung"
