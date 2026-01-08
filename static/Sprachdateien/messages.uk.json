@@ -69,9 +69,9 @@
       "question": "Який у вас найвищий шкільний диплом?",
       "label": "Освітній рівень",
       "none": "Без диплому",
-      "hauptschule": "Нижча середня школа (герман: Hauptschule)",
-      "realschule": "Середня школа (герман: Realschule)",
-      "abitur": "Атестат зрілості (герман: Abitur / Hochschulreife)"
+      "hauptschule": "Нижча середня школа (Герман: Hauptschule)",
+      "realschule": "Середня школа (Герман: Realschule)",
+      "abitur": "Атестат зрілості (Герман: Abitur / Hochschulreife)"
     },
     "qual": {
       "question": "Які професійні кваліфікації у вас є?",
