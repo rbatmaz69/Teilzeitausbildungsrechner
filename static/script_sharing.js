@@ -136,6 +136,34 @@ async function generierePDF() {
     pdfContent.style.backgroundColor = "#ffffff";
     pdfContent.style.fontFamily = "system-ui, -apple-system, sans-serif";
     pdfContent.style.lineHeight = "1.25"; // kompaktere Zeilenhöhe
+    
+    // Light Mode Werte dynamisch aus CSS auslesen und auf pdfContent anwenden
+    const root = document.documentElement;
+    const currentTheme = root.getAttribute("data-theme");
+    
+    // Kurz auf Light Mode schalten um Werte auszulesen (unsichtbar)
+    if (currentTheme === "dark") {
+      root.setAttribute("data-theme", "light");
+    }
+    
+    const computedStyle = getComputedStyle(root);
+    const lightModeVars = [
+      "--background", "--bg", "--panel", "--card-bg", "--card",
+      "--text", "--muted", "--border", "--info-bg", "--info-border",
+      "--disclaimer-title", "--disclaimer-text"
+    ];
+    
+    lightModeVars.forEach(varName => {
+      const value = computedStyle.getPropertyValue(varName).trim();
+      if (value) pdfContent.style.setProperty(varName, value);
+    });
+    
+    pdfContent.style.color = computedStyle.getPropertyValue("--text").trim();
+    
+    // Theme sofort wiederherstellen
+    if (currentTheme === "dark") {
+      root.setAttribute("data-theme", "dark");
+    }
 
     const currentDate = new Date().toLocaleDateString(aktuelleSprache() === "de" ? "de-DE" : "en-US");
     const currentTime = new Date().toLocaleTimeString(aktuelleSprache() === "de" ? "de-DE" : "en-US");
@@ -148,9 +176,9 @@ async function generierePDF() {
     header.style.marginBottom = "12px";
 
     const titleEl = document.createElement("h1");
-    titleEl.textContent = uebersetzung("res.headline", "Ihre Teilzeitausbildung");
+    titleEl.textContent = uebersetzung("res.headline", "Übersicht über Ihre Teilzeitausbildung");
     titleEl.style.margin = "0";
-    titleEl.style.fontSize = "1.35rem";
+    titleEl.style.fontSize = "1.75rem";
     titleEl.style.fontWeight = "700";
     header.appendChild(titleEl);
 
@@ -184,6 +212,12 @@ async function generierePDF() {
     const notesCard = ergebnisCopy.querySelector("[aria-labelledby='notes-title']");
     if (notesCard) {
       notesCard.remove();
+    }
+    
+    // Entferne Gesetzliche Grundlagen aus PDF
+    const legalSection = ergebnisCopy.querySelector(".legal-collapsible");
+    if (legalSection) {
+      legalSection.remove();
     }
     
     // Vertikale Abstände im Ergebnis-Clone reduzieren
@@ -247,9 +281,7 @@ async function generierePDF() {
       const summaryToggle = inputsCopy.querySelector('summary');
       if (summaryToggle) {
         const titleEl = document.createElement('h2');
-        const headingText = aktuelleSprache() === 'de'
-          ? 'Ihre Angaben'
-          : uebersetzung('inputs.title', 'Your inputs');
+        const headingText = uebersetzung('inputs.title', 'Ihre Berechnung');
         titleEl.textContent = headingText;
         titleEl.style.margin = '0 0 0.5rem 0'; // kein oberer Abstand
         titleEl.style.fontSize = '1.35rem';
@@ -338,9 +370,27 @@ async function generierePDF() {
 
     walkAndReplaceText(pdfContent, unitReplacements[sprache] || {});
 
-    document.body.appendChild(pdfContent);
+    // Erstelle Overlay um Layout-Änderungen während des Renderings zu verbergen
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--background') || '#f6f7fb';
+    overlay.style.zIndex = '9998';
+    overlay.style.display = 'flex';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    document.body.appendChild(overlay);
 
-    // Canvas aus HTML erstellen
+    document.body.appendChild(pdfContent);
+    
+    // Speichere originale Root-Schriftgröße und setze temporär auf Standard für PDF
+    const originalRootFontSize = root.style.fontSize;
+    root.style.fontSize = '16px';
+
+    // Canvas aus HTML erstellen (pdfContent ist bei -9999px, also unsichtbar)
     const canvas = await html2canvas(pdfContent, {
       scale: 2,
       useCORS: true,
@@ -348,6 +398,10 @@ async function generierePDF() {
       backgroundColor: "#ffffff",
       allowTaint: true
     });
+
+    // Root-Schriftgröße sofort wiederherstellen und Overlay entfernen
+    root.style.fontSize = originalRootFontSize;
+    document.body.removeChild(overlay);
 
     document.body.removeChild(pdfContent);
 
