@@ -47,8 +47,8 @@
   --link-color: #60a5fa;
   --link-hover: #93c5fd;
   --link-focus: #bfdbfe;
-  --disclaimer-title: #fbbf24;
-  --disclaimer-text: #fcd34d;
+  --disclaimer-title: #92400e;
+  --disclaimer-text: #78350f;
   --label-color: #e5e5e5;
   --disabled-text: #888;
   --disabled-bg: #2a2a2a;
@@ -90,6 +90,15 @@
   --error-dark: #f66;
   --success-light: #1a2a3a;
   --success-lighter: #1f3548;
+  --link-color: #60a5fa;
+  --link-hover: #93c5fd;
+  --link-focus: #bfdbfe;
+  --disclaimer-title: #fbbf24;
+  --disclaimer-text: #fcd34d;
+  --label-color: #e5e5e5;
+  --disabled-text: #888;
+  --disabled-bg: #2a2a2a;
+  --disabled-border: #3a3a3a;
 }
 
 /* ==========================================
