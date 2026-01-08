@@ -3515,6 +3515,11 @@ body.modal-open {
   background: var(--panel);
 }
 
+:root[data-theme="dark"] .inputs-collapsible[open] {
+  background: var(--panel);
+  border-color: var(--primary);
+}
+
 /* Wichtige Hinweise / Legal Box im Dark Mode */
 :root[data-theme="dark"] .notes-column .card {
   background: var(--panel);
