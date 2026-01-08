@@ -103,7 +103,7 @@
       "sr": "Mesleki ön bilgi eğitim sürenizi kısaltabilir."
     },
     "other": {
-      "question": "Kaç yaşındasınız?"
+      "question": "Eğitim sırasında kaç yaşındasınız?"
     },
     "alter21": {
       "label": "21 yaşından büyük",
@@ -120,7 +120,7 @@
     }
   },
   "res": {
-    "headline": "Yarı zamanlı eğitiminiz",
+    "headline": "Yarı Zamanlı Eğitiminize Genel Bakış",
     "helper": "Burada girdileriniz ve sonuç gösterilir.",
     "notesTitle": "Önemli notlar",
     "notes": "<li>Hesaplama sadece <strong>yardımcı</strong> ve bir <strong>kılavuz</strong> niteliğindedir.</li><li>Sonuç <strong>bağlayıcı değildir</strong>.</li><li>Sonucu <strong>eğitim yerinizle</strong> görüşün.</li><li>Yarı zamanlı eğitim, normal çalışma süresinin <strong>en az yarısını</strong> çalıştığınızda mümkündür.</li>",

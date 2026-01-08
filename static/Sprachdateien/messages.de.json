@@ -103,7 +103,7 @@
       "sr": "Berufliche Vorkenntnisse können Ihre Ausbildungsdauer verkürzen."
     },
     "other": {
-      "question": "Wie alt sind Sie?"
+      "question": "Wie alt sind Sie zum Zeitpunkt der Ausbildung?"
     },
     "alter21": {
       "label": "Über 21 Jahre alt",
@@ -120,7 +120,7 @@
     }
   },
   "res": {
-    "headline": "Ihre Teilzeitausbildung",
+    "headline": "Übersicht über Ihre Teilzeitausbildung",
     "helper": "Hier sehen Sie Ihre Angaben und das Ergebnis.",
     "notesTitle": "Wichtige Hinweise",
     "notes": "<li>Die Berechnung ist nur eine <strong>Hilfe</strong> und reine <strong>Orientierung</strong>.</li><li>Das Ergebnis ist <strong>nicht verbindlich</strong>.</li><li>Sprechen Sie das Ergebnis mit Ihrem <strong>Ausbildungsbetrieb</strong> ab.</li><li>Eine Teilzeitausbildung ist nur dann möglich, wenn Sie <strong>mindestens die Hälfte</strong> der normalen Ausbildungszeit arbeiten.</li>",
@@ -151,7 +151,7 @@
       "workPerWeek": "Arbeit pro Woche"
     },
     "extension": {
-      "label1": "1. Verkürzung durch Verkürzungründe:",
+      "label1": "1. Verkürzung durch Verkürzungsgründe:",
       "label2": "2. Verlängerung durch Teilzeit:",
       "plus": "+{n} Monate",
       "none": "Keine Verlängerung"

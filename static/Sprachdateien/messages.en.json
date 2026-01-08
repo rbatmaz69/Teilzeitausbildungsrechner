@@ -69,9 +69,9 @@
       "question": "What is your highest level of school education?",
       "label": "School degree",
       "none": "No degree",
-      "hauptschule": "Lower secondary school (german: Hauptschule)",
-      "realschule": "Intermediate secondary school (german: Realschule)",
-      "abitur": "University entrance qualification (german: Abitur / Hochschulreife)"
+      "hauptschule": "Lower secondary school (German: Hauptschule)",
+      "realschule": "Intermediate secondary school (German: Realschule)",
+      "abitur": "University entrance qualification (German: Abitur / Hochschulreife)"
     },
     "qual": {
       "question": "What professional qualifications do you have?",
@@ -100,7 +100,7 @@
       "sr": "Professional experience can shorten your training duration."
     },
     "other": {
-      "question": "How old are you?"
+      "question": "How old are you at the time of training?"
     },
     "alter21": {
       "label": "Over 21 years old",
@@ -117,7 +117,7 @@
     }
   },
   "res": {
-    "headline": "Your part-time training",
+    "headline": "Overview of Your Part-Time Training",
     "helper": "Here you can see your details and the result.",
     "notesTitle": "Important information",
     "notes": "<li>This calculation is only a <strong>help</strong> and an <strong>orientation</strong>.</li><li>The result is <strong>not binding</strong>.</li><li>Discuss the result with your <strong>training company</strong>.</li><li>Part-time training is only possible if you work <strong>at least half</strong> of the normal training hours.</li>",
