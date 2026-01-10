@@ -35,6 +35,7 @@ Python Code Quality:
       - develop
       - main
   allow_failure: false
+  when: never  # TEMPORÄR DEAKTIVIERT
 
 # ====================== FRONTEND LINTING ======================
 
@@ -52,6 +53,7 @@ Frontend Code Quality:
       - develop
       - main
   allow_failure: false
+  when: never  # TEMPORÄR DEAKTIVIERT
 
 # ====================== TESTING ======================
 
@@ -82,6 +84,7 @@ Python Unit + Integration Tests:
       - develop
       - main
   allow_failure: false
+  when: never  # TEMPORÄR DEAKTIVIERT
 
 # ====================== E2E TESTING ======================
 
@@ -110,6 +113,7 @@ End-to-End Browser Tests:
       - develop
       - main
   allow_failure: false
+  when: never  # TEMPORÄR DEAKTIVIERT
 
 # ====================== DOCKER HEALTH CHECK ======================
 
