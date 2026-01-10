@@ -31,11 +31,10 @@ Python Code Quality:
     - isort --check-only src/
   only:
     refs:
-      - merge_requests
+      # - merge_requests  # TEMPORÄR DEAKTIVIERT
       - develop
       - main
   allow_failure: false
-  when: never  # TEMPORÄR DEAKTIVIERT
 
 # ====================== FRONTEND LINTING ======================
 
@@ -49,11 +48,10 @@ Frontend Code Quality:
     - npm run lint
   only:
     refs:
-      - merge_requests
+      # - merge_requests  # TEMPORÄR DEAKTIVIERT
       - develop
       - main
   allow_failure: false
-  when: never  # TEMPORÄR DEAKTIVIERT
 
 # ====================== TESTING ======================
 
@@ -80,11 +78,10 @@ Python Unit + Integration Tests:
     expire_in: 1 week
   only:
     refs:
-      - merge_requests
+      # - merge_requests  # TEMPORÄR DEAKTIVIERT
       - develop
       - main
   allow_failure: false
-  when: never  # TEMPORÄR DEAKTIVIERT
 
 # ====================== E2E TESTING ======================
 
@@ -109,11 +106,10 @@ End-to-End Browser Tests:
     expire_in: 1 week
   only:
     refs:
-      - merge_requests
+      # - merge_requests  # TEMPORÄR DEAKTIVIERT
       - develop
       - main
   allow_failure: false
-  when: never  # TEMPORÄR DEAKTIVIERT
 
 # ====================== DOCKER HEALTH CHECK ======================
 
