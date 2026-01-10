@@ -122,7 +122,8 @@ Docker Container Health Check:
     - dind
   variables:
     DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TLS_CERTDIR: ""  # TLS deaktivieren für einfacheren Setup
+    DOCKER_HOST: "tcp://docker:2375"
   script:
     - |
       set -e
