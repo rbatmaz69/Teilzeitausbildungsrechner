@@ -5,6 +5,7 @@ stages:
   - Code Quality
   - Unit Tests
   - E2E Tests
+  - Docker Health Check
   - Publish
 
 variables:
@@ -110,16 +111,94 @@ End-to-End Browser Tests:
       - main
   allow_failure: false
 
-# ====================== DOCKER BUILD & PUSH (Kaniko) ======================
-Docker Build und Push:
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  stage: Publish
+# ====================== DOCKER HEALTH CHECK ======================
+
+Docker Container Health Check:
+  image: docker:24-cli
+  stage: Docker Health Check
+  services:
+    - docker:24-dind
+  tags:
+    - dind
   variables:
-    DOCKER_CONFIG: /kaniko/.docker/
-  before_script:
-    - echo "Starting Kaniko build and push (using image executor:debug)"
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""  # TLS deaktivieren für einfacheren Setup
+    DOCKER_HOST: "tcp://docker:2375"
+  script:
+    - |
+      set -e
+      echo "🐳 Baue Docker-Image..."
+      docker build --quiet -f Dockerfile.backend -t tzr-test:${CI_COMMIT_SHORT_SHA} . > /dev/null
+      echo "   ✓ Image erfolgreich gebaut"
+      
+      echo "🚀 Starte Container und warte auf Bereitschaft (max. 30s)..."
+      docker run -d --name tzr-container -p 8000:8000 tzr-test:${CI_COMMIT_SHORT_SHA} > /dev/null || {
+        echo "❌ Container konnte nicht gestartet werden"
+        exit 1
+      }
+      
+      for i in $(seq 1 15); do
+        sleep 2
+        if docker exec tzr-container curl -f -s -o /dev/null http://localhost:8000 2>/dev/null; then
+          echo "   ✓ Container bereit nach $((i*2))s"
+          break
+        fi
+        [ $i -eq 15 ] && { echo "❌ Container konnte nicht gestartet werden (Timeout nach 30s)"; docker logs tzr-container; exit 1; }
+      done
+      
+      echo "🔍 Prüfe Container-Status..."
+      if docker ps --filter name=tzr-container --format "{{.Status}}" | grep -q "Up"; then
+        echo "   ✓ Container läuft"
+      else
+        echo "❌ Container läuft nicht"
+        echo "📋 Container-Logs:"
+        docker logs tzr-container
+        exit 1
+      fi
+      
+      echo "🧪 Teste Erreichbarkeit..."
+      docker exec tzr-container curl -f -s -S -o /dev/null http://localhost:8000 || {
+        echo "❌ Container nicht erreichbar"
+        echo "📋 Container-Logs:"
+        docker logs tzr-container
+        exit 1
+      }
+      echo "   ✓ Container ist erreichbar"
+      
+      echo "✅ Container läuft und ist erreichbar"
+      
+      echo "🧹 Stoppe Container..."
+      docker stop tzr-container > /dev/null || {
+        echo "❌ Container konnte nicht gestoppt werden"
+        exit 1
+      }
+      echo "   ✓ Container gestoppt"
+      
+      echo "🗑️  Entferne Container..."
+      docker rm tzr-container > /dev/null || echo "⚠️  Warnung: Container konnte nicht entfernt werden (unkritisch)"
+      echo "   ✓ Container entfernt"
+      
+      echo "✅ Docker Health Check erfolgreich!"
+  only:
+    refs:
+      - merge_requests
+      - develop
+      - main
+  allow_failure: false
+
+# ====================== DOCKER BUILD & PUSH (Multi-Platform) ======================
+Docker Build und Push:
+  image: docker:24-cli
+  services:
+    - docker:24-dind
+  stage: Publish
+  tags:
+    - docker
+    - linux
+    - dind
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_HOST: "tcp://docker:2375"
   script: |
     set -euo pipefail
     if [ -z "$DOCKERHUB_USERNAME" ] || [ -z "$DOCKERHUB_TOKEN" ]; then
@@ -133,11 +212,20 @@ Docker Build und Push:
       TAG="$CI_COMMIT_TAG"
     fi
 
-    mkdir -p /kaniko/.docker
-    AUTH=$(echo -n "$DOCKERHUB_USERNAME:$DOCKERHUB_TOKEN" | base64 | tr -d '\n')
-    printf '{"auths":{"https://index.docker.io/v1/":{"auth":"%s"}}}' "$AUTH" > /kaniko/.docker/config.json
-
-    /kaniko/executor --context ${CI_PROJECT_DIR} --dockerfile ${CI_PROJECT_DIR}/Dockerfile.backend --destination ${IMAGE}:${TAG} --skip-tls-verify
+    echo "🔐 Login auf Docker Hub..."
+    echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin 2>&1 | grep -E "(Succeeded|succeeded|Error|error)"
+    
+    echo "🏗️ Multi-Platform Build für linux/amd64 und linux/arm64..."
+    docker buildx create --use --name multiarch --driver docker-container > /dev/null 2>&1 || true
+    docker buildx build \
+      --platform linux/amd64,linux/arm64 \
+      --tag ${IMAGE}:${TAG} \
+      --file ${CI_PROJECT_DIR}/Dockerfile.backend \
+      --push \
+      --progress=plain \
+      ${CI_PROJECT_DIR} 2>&1 | grep -E "(CACHED|DONE|exporting|pushing|writing|naming|error|Error|ERROR|failed|\[linux)" || cat
+    
+    echo "✅ Image ${IMAGE}:${TAG} erfolgreich für beide Plattformen gepusht!"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
       when: on_success
