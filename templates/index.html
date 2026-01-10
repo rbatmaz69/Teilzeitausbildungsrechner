@@ -897,17 +897,19 @@
 
   <!-- Accessibility widget -->
   <button id="a11y-toggle" class="a11y-toggle" data-i18n-attr="aria-label:a11y.buttonAria" aria-haspopup="true" aria-expanded="false">
-    <svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" focusable="false" fill="currentColor">
+    <svg id="a11y-icon-default" class="a11y-icon" aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" focusable="false" fill="currentColor">
       <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
       <circle cx="12" cy="7" r="1.8"/>
       <path d="M6 11 h12 M12 11 v3.5 M9 18.5 L11 14.5 M15 18.5 L13 14.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <svg id="a11y-icon-close" class="a11y-icon" aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" focusable="false" fill="currentColor" style="display: none;">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
     <span class="sr-only" data-i18n="a11y.button">Barrierefreiheit</span>
   </button>
 
   <div id="a11y-menu" class="a11y-menu" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="a11y-menu-header">
-      <button id="a11y-close" class="a11y-close" data-i18n-attr="aria-label:a11y.closeAria"><span class="a11y-close-x" aria-hidden="true">×</span></button>
     </div>
     <div class="a11y-menu-body">
       <div class="a11y-row">

@@ -123,20 +123,55 @@
   // ==========================================
   // MENU MANAGEMENT
   // ==========================================
+  const iconDefault = document.getElementById('a11y-icon-default');
+  const iconClose = document.getElementById('a11y-icon-close');
+
+  function updateToggleIcon(isOpen) {
+    if (!iconDefault || !iconClose) return;
+    
+    if (isOpen) {
+      // Rotate out default icon and rotate in close icon
+      iconDefault.style.display = 'none';
+      iconClose.style.display = 'block';
+      iconClose.style.animation = 'icon-rotate-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+    } else {
+      // Rotate out close icon and rotate in default icon
+      iconClose.style.display = 'none';
+      iconDefault.style.display = 'block';
+      iconDefault.style.animation = 'icon-rotate-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+    }
+  }
+
+  function updateAriaLabel(isOpen) {
+    if (!toggle) return;
+    const key = isOpen ? 'a11y.buttonAriaExpanded' : 'a11y.buttonAria';
+    const label = window.I18N && window.I18N.t ? window.I18N.t(key) : (isOpen ? 'Barrierefreiheitsmenü schließen' : 'Barrierefreiheitsmenü öffnen');
+    toggle.setAttribute('aria-label', label);
+  }
+
   function openMenu(){
     toggle.setAttribute('aria-expanded','true');
-    toggle.style.display = 'none';
     menu.setAttribute('aria-hidden','false');
+    updateToggleIcon(true);
+    updateAriaLabel(true);
     setTimeout(()=>{ if(readBtn) readBtn.focus() },50);
   }
   function closeMenu(){
     toggle.setAttribute('aria-expanded','false');
-    toggle.style.display = '';
     menu.setAttribute('aria-hidden','true');
+    updateToggleIcon(false);
+    updateAriaLabel(false);
     if(toggle) toggle.focus();
   }
 
-  if(toggle) toggle.addEventListener('click', openMenu);
+  if(toggle) toggle.addEventListener('click', function() {
+    const isOpen = menu.getAttribute('aria-hidden') === 'false';
+    if (isOpen) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
   if(closeBtn) closeBtn.addEventListener('click', closeMenu);
 
   // Close on Escape

@@ -3029,7 +3029,7 @@ body.modal-open {
   box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
 }
 
-/* Make the gear icon large and centered inside the circular toggle */
+/* Make the accessibility icon large and centered inside the circular toggle */
 .a11y-toggle svg {
   width: 44px;
   height: 44px;
@@ -3038,6 +3038,18 @@ body.modal-open {
 
 .a11y-toggle svg path {
   fill: currentcolor;
+}
+
+/* Icon rotation animation */
+@keyframes icon-rotate-in {
+  0% {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
 }
 
 .a11y-menu {
@@ -3103,7 +3115,7 @@ body.modal-open {
   right: 12px;
   width: 44px;
   height: 44px;
-  display: flex;
+  display: none; /* Hidden: Toggle button now serves as close button */
   align-items: center;
   justify-content: center;
   background: #fff;

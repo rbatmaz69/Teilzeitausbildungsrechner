@@ -277,6 +277,7 @@
   "a11y": {
     "button": "Barrierefreiheit",
     "buttonAria": "Barrierefreiheitsmenü öffnen",
+    "buttonAriaExpanded": "Barrierefreiheitsmenü schließen",
     "closeAria": "Menü schließen",
     "read": "Vorlesen",
     "readStop": "Vorlesen stoppen",

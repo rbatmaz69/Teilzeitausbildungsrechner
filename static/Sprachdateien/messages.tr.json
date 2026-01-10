@@ -276,6 +276,7 @@
   "a11y": {
     "button": "Erişilebilirlik",
     "buttonAria": "Erişilebilirlik menüsünü aç",
+    "buttonAriaExpanded": "Erişilebilirlik menüsünü kapat",
     "closeAria": "Menüyü kapat",
     "read": "Sesli oku",
     "readStop": "Okumayı durdur",

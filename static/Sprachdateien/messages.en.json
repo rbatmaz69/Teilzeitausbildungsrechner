@@ -274,6 +274,7 @@
   "a11y": {
     "button": "Accessibility",
     "buttonAria": "Open accessibility menu",
+    "buttonAriaExpanded": "Close accessibility menu",
     "closeAria": "Close menu",
     "read": "Read aloud",
     "readStop": "Stop reading",
