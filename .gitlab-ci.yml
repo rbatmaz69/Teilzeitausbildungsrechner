@@ -31,7 +31,7 @@ Python Code Quality:
     - isort --check-only src/
   only:
     refs:
-      # - merge_requests  # TEMPORÄR DEAKTIVIERT
+      - merge_requests
       - develop
       - main
   allow_failure: false
@@ -48,7 +48,7 @@ Frontend Code Quality:
     - npm run lint
   only:
     refs:
-      # - merge_requests  # TEMPORÄR DEAKTIVIERT
+      - merge_requests
       - develop
       - main
   allow_failure: false
@@ -78,7 +78,7 @@ Python Unit + Integration Tests:
     expire_in: 1 week
   only:
     refs:
-      # - merge_requests  # TEMPORÄR DEAKTIVIERT
+      - merge_requests
       - develop
       - main
   allow_failure: false
@@ -106,7 +106,7 @@ End-to-End Browser Tests:
     expire_in: 1 week
   only:
     refs:
-      # - merge_requests  # TEMPORÄR DEAKTIVIERT
+      - merge_requests
       - develop
       - main
   allow_failure: false
@@ -138,12 +138,12 @@ Docker Container Health Check:
       }
       
       for i in $(seq 1 15); do
+        sleep 2
         if docker exec tzr-container curl -f -s -o /dev/null http://localhost:8000 2>/dev/null; then
           echo "   ✓ Container bereit nach $((i*2))s"
           break
         fi
         [ $i -eq 15 ] && { echo "❌ Container konnte nicht gestartet werden (Timeout nach 30s)"; docker logs tzr-container; exit 1; }
-        sleep 2
       done
       
       echo "🔍 Prüfe Container-Status..."
