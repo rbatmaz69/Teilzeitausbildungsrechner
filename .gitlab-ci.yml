@@ -227,12 +227,6 @@ Docker Build und Push:
     
     echo "✅ Image ${IMAGE}:${TAG} erfolgreich für beide Plattformen gepusht!"
   rules:
-    # TEMPORÄR ZUM TESTEN: Auch bei Merge Requests auf develop
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop"'
-      when: on_success
-    - if: '$CI_COMMIT_BRANCH == "develop"'
-      when: on_success
-    # PRODUKTION: Nur main-Branch
     - if: '$CI_COMMIT_BRANCH == "main"'
       when: on_success
     - when: never
