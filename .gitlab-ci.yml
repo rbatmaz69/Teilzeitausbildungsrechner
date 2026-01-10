@@ -128,7 +128,7 @@ Docker Container Health Check:
     - |
       set -e
       echo "🐳 Baue Docker-Image..."
-      docker build -f Dockerfile.backend -t tzr-test:${CI_COMMIT_SHORT_SHA} .
+      docker build --quiet -f Dockerfile.backend -t tzr-test:${CI_COMMIT_SHORT_SHA} .
       
       echo "🚀 Starte Container..."
       docker run -d --name tzr-container -p 8000:8000 tzr-test:${CI_COMMIT_SHORT_SHA} || {
@@ -148,8 +148,7 @@ Docker Container Health Check:
       }
       
       echo "🧪 Teste Erreichbarkeit..."
-      apk add --no-cache curl
-      curl -f http://localhost:8000 || {
+      docker exec tzr-container curl -f http://localhost:8000 || {
         echo "❌ Container nicht erreichbar"
         echo "📋 Container-Logs:"
         docker logs tzr-container
