@@ -131,14 +131,12 @@ Docker Container Health Check:
       docker build --quiet -f Dockerfile.backend -t tzr-test:${CI_COMMIT_SHORT_SHA} . > /dev/null
       echo "   ✓ Image erfolgreich gebaut"
       
-      echo "🚀 Starte Container..."
+      echo "🚀 Starte Container und warte auf Bereitschaft (max. 30s)..."
       docker run -d --name tzr-container -p 8000:8000 tzr-test:${CI_COMMIT_SHORT_SHA} > /dev/null || {
         echo "❌ Container konnte nicht gestartet werden"
         exit 1
       }
-      echo "   ✓ Container gestartet"
       
-      echo "⏳ Warte auf Container-Start (max. 30s)..."
       for i in $(seq 1 15); do
         if docker exec tzr-container curl -f -s -o /dev/null http://localhost:8000 2>/dev/null; then
           echo "   ✓ Container bereit nach $((i*2))s"
@@ -180,7 +178,7 @@ Docker Container Health Check:
       docker rm tzr-container > /dev/null || echo "⚠️  Warnung: Container konnte nicht entfernt werden (unkritisch)"
       echo "   ✓ Container entfernt"
       
-      echo "✅ Docker Health Check erfolgreich"
+      echo "✅ Docker Health Check erfolgreich!"
   only:
     refs:
       - merge_requests
