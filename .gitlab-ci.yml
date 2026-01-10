@@ -186,16 +186,19 @@ Docker Container Health Check:
       - main
   allow_failure: false
 
-# ====================== DOCKER BUILD & PUSH (Kaniko) ======================
+# ====================== DOCKER BUILD & PUSH (Multi-Platform) ======================
 Docker Build und Push:
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
+  image: docker:24-cli
+  services:
+    - docker:24-dind
   stage: Publish
+  tags:
+    - docker
+    - linux
+    - dind
   variables:
-    DOCKER_CONFIG: /kaniko/.docker/
-  before_script:
-    - echo "Starting Kaniko build and push (using image executor:debug)"
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_HOST: "tcp://docker:2375"
   script: |
     set -euo pipefail
     if [ -z "$DOCKERHUB_USERNAME" ] || [ -z "$DOCKERHUB_TOKEN" ]; then
@@ -209,12 +212,26 @@ Docker Build und Push:
       TAG="$CI_COMMIT_TAG"
     fi
 
-    mkdir -p /kaniko/.docker
-    AUTH=$(echo -n "$DOCKERHUB_USERNAME:$DOCKERHUB_TOKEN" | base64 | tr -d '\n')
-    printf '{"auths":{"https://index.docker.io/v1/":{"auth":"%s"}}}' "$AUTH" > /kaniko/.docker/config.json
-
-    /kaniko/executor --context ${CI_PROJECT_DIR} --dockerfile ${CI_PROJECT_DIR}/Dockerfile.backend --destination ${IMAGE}:${TAG} --skip-tls-verify
+    echo "🔐 Login auf Docker Hub..."
+    echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+    
+    echo "🏗️ Multi-Platform Build für linux/amd64 und linux/arm64..."
+    docker buildx create --use --name multiarch --driver docker-container
+    docker buildx build \
+      --platform linux/amd64,linux/arm64 \
+      --tag ${IMAGE}:${TAG} \
+      --file ${CI_PROJECT_DIR}/Dockerfile.backend \
+      --push \
+      ${CI_PROJECT_DIR}
+    
+    echo "✅ Image ${IMAGE}:${TAG} erfolgreich für beide Plattformen gepusht!"
   rules:
+    # TEMPORÄR ZUM TESTEN: Auch bei Merge Requests auf develop
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop"'
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+      when: on_success
+    # PRODUKTION: Nur main-Branch
     - if: '$CI_COMMIT_BRANCH == "main"'
       when: on_success
     - when: never
