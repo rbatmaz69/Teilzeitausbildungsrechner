@@ -128,38 +128,48 @@ Docker Container Health Check:
     - |
       set -e
       echo "🐳 Baue Docker-Image..."
-      docker build --quiet -f Dockerfile.backend -t tzr-test:${CI_COMMIT_SHORT_SHA} .
+      docker build --quiet -f Dockerfile.backend -t tzr-test:${CI_COMMIT_SHORT_SHA} . > /dev/null
+      echo "   ✓ Image erfolgreich gebaut"
       
       echo "🚀 Starte Container..."
-      docker run -d --name tzr-container -p 8000:8000 tzr-test:${CI_COMMIT_SHORT_SHA} || {
+      docker run -d --name tzr-container -p 8000:8000 tzr-test:${CI_COMMIT_SHORT_SHA} > /dev/null || {
         echo "❌ Container konnte nicht gestartet werden"
         exit 1
       }
+      echo "   ✓ Container gestartet"
       
       echo "⏳ Warte auf Container-Start (15s)..."
       sleep 15
       
       echo "🔍 Prüfe Container-Status..."
-      docker ps | grep tzr-container || {
+      if docker ps --filter name=tzr-container --format "{{.Status}}" | grep -q "Up"; then
+        echo "   ✓ Container läuft"
+      else
         echo "❌ Container läuft nicht"
         echo "📋 Container-Logs:"
         docker logs tzr-container
         exit 1
-      }
+      fi
       
       echo "🧪 Teste Erreichbarkeit..."
-      docker exec tzr-container curl -f http://localhost:8000 || {
+      docker exec tzr-container curl -f -s -S -o /dev/null http://localhost:8000 || {
         echo "❌ Container nicht erreichbar"
         echo "📋 Container-Logs:"
         docker logs tzr-container
         exit 1
       }
+      echo "   ✓ Container ist erreichbar"
       
       echo "✅ Container läuft und ist erreichbar"
       
-      echo "🧹 Räume auf..."
-      docker stop tzr-container
-      docker rm tzr-container
+      echo "🧹 Stoppe Container..."
+      docker stop tzr-container || {
+        echo "❌ Container konnte nicht gestoppt werden"
+        exit 1
+      }
+      
+      echo "🗑️  Entferne Container..."
+      docker rm tzr-container || echo "⚠️  Warnung: Container konnte nicht entfernt werden (unkritisch)"
       
       echo "✅ Docker Health Check erfolgreich"
   only:
