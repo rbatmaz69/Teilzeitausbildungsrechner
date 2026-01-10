@@ -213,16 +213,17 @@ Docker Build und Push:
     fi
 
     echo "🔐 Login auf Docker Hub..."
-    echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+    echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin 2>&1 | grep -E "(Succeeded|succeeded|Error|error)"
     
     echo "🏗️ Multi-Platform Build für linux/amd64 und linux/arm64..."
-    docker buildx create --use --name multiarch --driver docker-container
+    docker buildx create --use --name multiarch --driver docker-container > /dev/null 2>&1 || true
     docker buildx build \
       --platform linux/amd64,linux/arm64 \
       --tag ${IMAGE}:${TAG} \
       --file ${CI_PROJECT_DIR}/Dockerfile.backend \
       --push \
-      ${CI_PROJECT_DIR}
+      --progress=plain \
+      ${CI_PROJECT_DIR} 2>&1 | grep -E "(CACHED|DONE|exporting|pushing|writing|naming|error|Error|ERROR|failed|\[linux)" || cat
     
     echo "✅ Image ${IMAGE}:${TAG} erfolgreich für beide Plattformen gepusht!"
   rules:
