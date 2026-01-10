@@ -125,6 +125,16 @@
   // ==========================================
   const iconDefault = document.getElementById('a11y-icon-default');
   const iconClose = document.getElementById('a11y-icon-close');
+  const easyLanguageBtn = document.getElementById('a11y-easy-language');
+
+  function getCurrentLang() {
+    if (window.I18N && typeof window.I18N.lang === 'string') return window.I18N.lang;
+    return document.documentElement.getAttribute('lang') || 'de';
+  }
+
+  function isEasyLanguageSupportedForCurrentLang() {
+    return getCurrentLang() === 'de';
+  }
 
   function updateToggleIcon(isOpen) {
     if (!iconDefault || !iconClose) return;
@@ -178,6 +188,111 @@
   document.addEventListener('keydown', (e)=>{
     if(e.key === 'Escape' && menu && menu.getAttribute('aria-hidden') === 'false'){
       closeMenu();
+    }
+  });
+
+  // ==========================================
+  // EASY LANGUAGE (LEICHTE SPRACHE) TOGGLE
+  // ==========================================
+  const EASY_LANGUAGE_KEY = 'easyLanguage';
+
+  function loadEasyLanguage() {
+    try {
+      return localStorage.getItem(EASY_LANGUAGE_KEY) === 'true';
+    } catch (e) {
+      console.warn('Could not load easy language preference:', e);
+      return false;
+    }
+  }
+
+  function saveEasyLanguage(enabled) {
+    try {
+      localStorage.setItem(EASY_LANGUAGE_KEY, enabled ? 'true' : 'false');
+    } catch (e) {
+      console.warn('Could not save easy language preference:', e);
+    }
+  }
+
+  function applyEasyLanguage(enabled) {
+    if (enabled) {
+      rootEl.setAttribute('data-easy-language', 'true');
+    } else {
+      rootEl.removeAttribute('data-easy-language');
+    }
+    
+    if (easyLanguageBtn) {
+      easyLanguageBtn.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+      // Visual feedback
+      if (enabled) {
+        easyLanguageBtn.classList.add('a11y-btn-active');
+      } else {
+        easyLanguageBtn.classList.remove('a11y-btn-active');
+      }
+    }
+  }
+
+  function toggleEasyLanguage() {
+    if (!isEasyLanguageSupportedForCurrentLang()) return;
+    const currentState = loadEasyLanguage();
+    const newState = !currentState;
+    saveEasyLanguage(newState);
+    applyEasyLanguage(newState);
+
+    window.dispatchEvent(new CustomEvent('easyLanguage:changed', {
+      detail: { enabled: newState }
+    }));
+  }
+
+  function setEasyLanguageButtonEnabled(enabled) {
+    if (!easyLanguageBtn) return;
+    if (enabled) {
+      easyLanguageBtn.removeAttribute('disabled');
+      easyLanguageBtn.setAttribute('aria-disabled', 'false');
+    } else {
+      easyLanguageBtn.setAttribute('disabled', 'true');
+      easyLanguageBtn.setAttribute('aria-disabled', 'true');
+      easyLanguageBtn.setAttribute('aria-pressed', 'false');
+      easyLanguageBtn.classList.remove('a11y-btn-active');
+    }
+  }
+
+  function syncEasyLanguageForCurrentLang() {
+    const supported = isEasyLanguageSupportedForCurrentLang();
+    setEasyLanguageButtonEnabled(supported);
+
+    if (!supported) {
+      // Leichte Sprache ist nur für Deutsch: erzwinge „aus“ ohne die gespeicherte Präferenz zu löschen.
+      const wasEnabled = rootEl.getAttribute('data-easy-language') === 'true';
+      applyEasyLanguage(false);
+      if (wasEnabled) {
+        window.dispatchEvent(new CustomEvent('easyLanguage:changed', {
+          detail: { enabled: false }
+        }));
+      }
+      return;
+    }
+
+    // Deutsch: wende gespeicherte Präferenz an
+    const saved = loadEasyLanguage();
+    applyEasyLanguage(saved);
+  }
+
+  // Initialize easy language on page load (Deutsch only; refresh when i18n finished)
+  syncEasyLanguageForCurrentLang();
+
+  // Easy language button click handler
+  if (easyLanguageBtn) {
+    easyLanguageBtn.addEventListener('click', toggleEasyLanguage);
+  }
+
+  // Wenn sich die Sprache ändert: Toggle aktivieren/deaktivieren und Zustand anwenden
+  window.addEventListener('i18n:changed', () => {
+    syncEasyLanguageForCurrentLang();
+    // i18n rendert im Handler in script_Sprache_Auswaehlen.js bei easyLanguage:changed neu.
+    if (isEasyLanguageSupportedForCurrentLang()) {
+      window.dispatchEvent(new CustomEvent('easyLanguage:changed', {
+        detail: { enabled: rootEl.getAttribute('data-easy-language') === 'true' }
+      }));
     }
   });
 

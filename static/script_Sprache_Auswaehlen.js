@@ -12,6 +12,19 @@
   };
 
   /**
+   * Leichte Sprache ist ausschließlich für Deutsch verfügbar.
+   * Aktiv, wenn Sprache = de und <html data-easy-language="true"> gesetzt ist.
+   */
+  const istLeichteSpracheAktiv = () => {
+    try {
+      if (zustand.sprache !== "de") return false;
+      return document.documentElement.getAttribute("data-easy-language") === "true";
+    } catch {
+      return false;
+    }
+  };
+
+  /**
    * Liest die zuletzt vom Nutzer gewählte Sprache aus dem LocalStorage aus.
    * @returns {string|null} ISO-Sprachcode oder null, falls keiner gespeichert ist.
    */
@@ -30,6 +43,17 @@
    */
   const aufloesung = (objekt, pfad) =>
     pfad.split(".").reduce((o, schluessel) => (o && o[schluessel] !== undefined ? o[schluessel] : null), objekt);
+
+  /**
+   * Löst i18n-Schlüssel auf. Bei aktiver "Leichter Sprache" (nur DE) wird zuerst *_easy versucht.
+   */
+  const aufloesungMitLeichterSprache = (objekt, pfad) => {
+    if (istLeichteSpracheAktiv()) {
+      const wertEasy = aufloesung(objekt, `${pfad}_easy`);
+      if (wertEasy != null) return wertEasy;
+    }
+    return aufloesung(objekt, pfad);
+  };
 
   /**
    * Setzt die globalen `lang`- und `dir`-Attribute auf dem `<html>`-Element.
@@ -75,7 +99,7 @@
   const wendeUebersetzungenAn = (woerterbuch) => {
     document.querySelectorAll("[data-i18n]").forEach((element) => {
       const schluessel = element.dataset.i18n;
-      const wert = aufloesung(woerterbuch, schluessel);
+      const wert = aufloesungMitLeichterSprache(woerterbuch, schluessel);
       if (wert == null) return;
 
       if (Array.isArray(wert)) {
@@ -89,7 +113,7 @@
       const zuordnungen = element.dataset.i18nAttr.split(",").map((zeichenkette) => zeichenkette.trim());
       zuordnungen.forEach((zuordnung) => {
         const [attribut, schluessel] = zuordnung.split(":").map((zeichenkette) => zeichenkette.trim());
-        const wert = aufloesung(woerterbuch, schluessel);
+        const wert = aufloesungMitLeichterSprache(woerterbuch, schluessel);
         if (wert != null) element.setAttribute(attribut, String(wert));
       });
     });
@@ -97,7 +121,7 @@
     // Setze data-label-open für Elemente mit data-i18n-open
     document.querySelectorAll("[data-i18n-open]").forEach((element) => {
       const schluessel = element.dataset.i18nOpen;
-      const wert = aufloesung(woerterbuch, schluessel);
+      const wert = aufloesungMitLeichterSprache(woerterbuch, schluessel);
       if (wert != null) element.setAttribute("data-label-open", String(wert));
     });
 
@@ -113,7 +137,7 @@
       const textSpan = btn.querySelector("span[data-i18n]");
       if (textSpan) {
         const schluessel = textSpan.dataset.i18n;
-        const wert = aufloesung(woerterbuch, schluessel);
+        const wert = aufloesungMitLeichterSprache(woerterbuch, schluessel);
         if (wert != null) textSpan.textContent = String(wert);
       }
       
@@ -132,7 +156,7 @@
       get lang() { return zustand.sprache; },
       get dict() { return zustand.woerterbuch; },
       t(schluessel, ersatzwert) {
-        const wert = aufloesung(zustand.woerterbuch, schluessel);
+        const wert = aufloesungMitLeichterSprache(zustand.woerterbuch, schluessel);
         return wert != null ? (Array.isArray(wert) ? wert : String(wert)) : (ersatzwert ?? schluessel);
       }
     };
@@ -209,5 +233,12 @@
         await ladeUndWendeAn(neueSprache);
       });
     }
+
+    // Reagiere auf Umschalten der "Leichten Sprache" (ohne Reload)
+    window.addEventListener("easyLanguage:changed", () => {
+      if (!zustand.woerterbuch) return;
+      wendeUebersetzungenAn(zustand.woerterbuch);
+      registriereGlobaleAPI();
+    });
   });
 })();
