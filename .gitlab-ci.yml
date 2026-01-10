@@ -163,13 +163,15 @@ Docker Container Health Check:
       echo "✅ Container läuft und ist erreichbar"
       
       echo "🧹 Stoppe Container..."
-      docker stop tzr-container || {
+      docker stop tzr-container > /dev/null || {
         echo "❌ Container konnte nicht gestoppt werden"
         exit 1
       }
+      echo "   ✓ Container gestoppt"
       
       echo "🗑️  Entferne Container..."
-      docker rm tzr-container || echo "⚠️  Warnung: Container konnte nicht entfernt werden (unkritisch)"
+      docker rm tzr-container > /dev/null || echo "⚠️  Warnung: Container konnte nicht entfernt werden (unkritisch)"
+      echo "   ✓ Container entfernt"
       
       echo "✅ Docker Health Check erfolgreich"
   only:
