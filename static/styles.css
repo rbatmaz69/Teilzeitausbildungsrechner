@@ -1004,6 +1004,17 @@ select:-ms-input-placeholder {
   font-size: .9rem;
 }
 
+/* Verstecke Number-Input-Spinner (Pfeile) - Tastatursteuerung bleibt funktional */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 /* Fehler-Indikation für Eingabefelder */
 input.error,
 .input-with-unit input.error {
