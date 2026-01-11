@@ -3054,16 +3054,16 @@ body.modal-open {
 
 .a11y-menu {
   position: fixed;
-  right: 16px; /* fixed px so menu stays at same screen position */
-  bottom: 88px; /* place above the toggle (toggle bottom 16px + 56px height + 16px gap) */
-  width: 260px;
-  max-width: calc(100% - 32px);
+  right: 16px !important;
+  bottom: 88px !important;
+  width: 260px !important;
+  max-width: calc(100% - 32px) !important;
   background: #fff;
   color: #111;
   border-radius: 8px;
   box-shadow: 0 8px 28px rgb(0 0 0 / 18%);
   z-index: 10000;
-  font-size: 14px;
+  font-size: 14px !important;
   border: 1px solid #e6eefc;
   box-sizing: border-box;
   max-height: 60vh;
@@ -3071,7 +3071,7 @@ body.modal-open {
   
   /* Animation setup */
   opacity: 0;
-  transform: translateX(20px) scale(0.95);
+  transform: translateX(20px) scale(0.95) !important;
   transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
               transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 0.3s ease;
@@ -3080,14 +3080,14 @@ body.modal-open {
 
 .a11y-menu[aria-hidden="false"] {
   opacity: 1;
-  transform: translateX(0) scale(1);
+  transform: translateX(0) scale(1) !important;
   pointer-events: auto;
   animation: menu-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .a11y-menu[aria-hidden="true"] {
   opacity: 0;
-  transform: translateX(20px) scale(0.95);
+  transform: translateX(20px) scale(0.95) !important;
   pointer-events: none;
 }
 
@@ -3244,7 +3244,7 @@ body.modal-open {
 .a11y-toggle-label {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 12px;
   font-size: 14px;
   font-weight: 500;
 }
