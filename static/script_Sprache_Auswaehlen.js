@@ -12,12 +12,11 @@
   };
 
   /**
-   * Leichte Sprache ist ausschließlich für Deutsch verfügbar.
-   * Aktiv, wenn Sprache = de und <html data-easy-language="true"> gesetzt ist.
+   * Leichte Sprache ist für alle Sprachen verfügbar (de, en, tr, uk).
+   * Aktiv, wenn <html data-easy-language="true"> gesetzt ist.
    */
   const istLeichteSpracheAktiv = () => {
     try {
-      if (zustand.sprache !== "de") return false;
       return document.documentElement.getAttribute("data-easy-language") === "true";
     } catch {
       return false;

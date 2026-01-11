@@ -155,7 +155,7 @@
   }
 
   function isEasyLanguageSupportedForCurrentLang() {
-    return getCurrentLang() === 'de';
+    return true;
   }
 
   function updateToggleIcon(isOpen) {
