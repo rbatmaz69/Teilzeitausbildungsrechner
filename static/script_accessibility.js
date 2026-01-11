@@ -3,6 +3,7 @@
   const menu = document.getElementById('a11y-menu');
   const closeBtn = document.getElementById('a11y-close');
   const readToggle = document.getElementById('a11y-read-toggle');
+  const easyLanguageToggle = document.getElementById('a11y-easy-language-toggle');
   const decBtn = document.getElementById('a11y-decrease');
   const resetBtn = document.getElementById('a11y-reset');
   const incBtn = document.getElementById('a11y-increase');
