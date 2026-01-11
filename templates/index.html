@@ -463,7 +463,10 @@
             </h2>
 
             <div class="vk-category-body vk-stack">
-              <input type="number" id="alter" step="1" min="0" max="99">
+              <div class="input-with-unit">
+                <input type="number" id="alter" step="1" min="0" max="99" placeholder="z.B. 25">
+                <span class="unit" data-i18n="units.years.full">Jahre</span>
+              </div>
 
               <span class="error-message" id="errorAlter"></span>
 
