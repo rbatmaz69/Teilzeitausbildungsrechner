@@ -279,6 +279,8 @@
     "read": "Read aloud",
     "readStop": "Stop reading",
     "readAria": "Read page aloud",
+    "easyLanguage": "Easy Language",
+    "easyLanguageAria": "Enable or disable easy language",
     "themeLabel": "Color scheme",
     "themeLight": "Light",
     "themeDark": "Dark",

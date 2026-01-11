@@ -281,6 +281,8 @@
     "read": "Sesli oku",
     "readStop": "Okumayı durdur",
     "readAria": "Sayfayı sesli oku",
+    "easyLanguage": "Kolay Dil",
+    "easyLanguageAria": "Kolay dili etkinleştir veya devre dışı bırak",
     "themeLabel": "Renk şeması",
     "themeLight": "Açık",
     "themeDark": "Koyu",

@@ -1,7 +1,6 @@
 (function(){
   const toggle = document.getElementById('a11y-toggle');
   const menu = document.getElementById('a11y-menu');
-  const closeBtn = document.getElementById('a11y-close');
   const readToggle = document.getElementById('a11y-read-toggle');
   const easyLanguageToggle = document.getElementById('a11y-easy-language-toggle');
   const decBtn = document.getElementById('a11y-decrease');
@@ -132,7 +131,6 @@
   // ==========================================
   const iconDefault = document.getElementById('a11y-icon-default');
   const iconClose = document.getElementById('a11y-icon-close');
-  const easyLanguageBtn = document.getElementById('a11y-easy-language');
 
   function getCurrentLang() {
     if (window.I18N && typeof window.I18N.lang === 'string') return window.I18N.lang;
@@ -166,13 +164,56 @@
     toggle.setAttribute('aria-label', label);
   }
 
+  // Focus trap management
+  let focusableElements = [];
+  let firstFocusable = null;
+  let lastFocusable = null;
+
+  function updateFocusableElements() {
+    if (!menu) return;
+    // Get all focusable elements within the menu
+    focusableElements = Array.from(menu.querySelectorAll(
+      'button:not([disabled]), input:not([disabled]), [tabindex="0"]:not([disabled])'
+    ));
+    firstFocusable = focusableElements[0];
+    lastFocusable = focusableElements[focusableElements.length - 1];
+  }
+
+  function handleMenuKeydown(e) {
+    // Only handle Tab when menu is open
+    if (menu.getAttribute('aria-hidden') === 'true') return;
+
+    if (e.key === 'Tab') {
+      // Trap focus within menu
+      if (e.shiftKey) {
+        // Shift+Tab: moving backwards
+        if (document.activeElement === firstFocusable) {
+          e.preventDefault();
+          lastFocusable?.focus();
+        }
+      } else {
+        // Tab: moving forwards
+        if (document.activeElement === lastFocusable) {
+          e.preventDefault();
+          firstFocusable?.focus();
+        }
+      }
+    }
+  }
+
   function openMenu(){
     toggle.setAttribute('aria-expanded','true');
     menu.setAttribute('aria-hidden','false');
     updateToggleIcon(true);
     updateAriaLabel(true);
-    setTimeout(()=>{ if(readBtn) readBtn.focus() },50);
+    
+    // Update focusable elements and focus first one
+    updateFocusableElements();
+    setTimeout(() => {
+      if (readToggle) readToggle.focus();
+    }, 50);
   }
+  
   function closeMenu(){
     toggle.setAttribute('aria-expanded','false');
     menu.setAttribute('aria-hidden','true');
@@ -189,13 +230,14 @@
       openMenu();
     }
   });
-  if(closeBtn) closeBtn.addEventListener('click', closeMenu);
 
-  // Close on Escape
+  // Handle Escape and Tab keys
   document.addEventListener('keydown', (e)=>{
     if(e.key === 'Escape' && menu && menu.getAttribute('aria-hidden') === 'false'){
       closeMenu();
     }
+    // Handle Tab/Shift+Tab for focus trap
+    handleMenuKeydown(e);
   });
 
   // ==========================================
