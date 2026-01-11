@@ -3419,6 +3419,7 @@ body.modal-open {
   height: 56px;
   min-width: 180px;
   flex-shrink: 0;
+  margin: 0 auto;
 }
 
 .a11y-theme-slider-container:focus-visible {
