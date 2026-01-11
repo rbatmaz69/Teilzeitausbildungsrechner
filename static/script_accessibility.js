@@ -423,9 +423,9 @@
 
   function updateStepLabels(){
     if(!decBtn || !incBtn) return;
-    // update simple button labels (keep A- / A+)
-    decBtn.textContent = 'A-';
-    incBtn.textContent = 'A+';
+    // update simple button labels
+    decBtn.textContent = '−';
+    incBtn.textContent = '+';
     // update the central level display
     const display = document.getElementById('a11y-level-display');
     if(display){
