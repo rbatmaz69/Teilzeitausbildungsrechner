@@ -912,8 +912,21 @@
     <div class="a11y-menu-header">
     </div>
     <div class="a11y-menu-body">
+      <div class="a11y-row a11y-toggle-row">
+        <div class="a11y-toggle-label">
+          <svg class="a11y-toggle-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+          </svg>
+          <span data-i18n="a11y.read">Vorlesen</span>
+        </div>
+        <label class="a11y-toggle-switch">
+          <input type="checkbox" id="a11y-read-toggle" class="a11y-toggle-input" aria-label="Vorlesefunktion aktivieren oder deaktivieren">
+          <span class="a11y-toggle-slider"></span>
+        </label>
+      </div>
+      <div class="a11y-sep" aria-hidden="true"></div>
       <div class="a11y-row">
-        <button id="a11y-read" class="a11y-btn" type="button" aria-pressed="false" data-i18n="a11y.read" data-i18n-attr="aria-label:a11y.readAria">Vorlesen</button>
+        <button id="a11y-easy-language" class="a11y-btn" type="button" aria-pressed="false" data-i18n="a11y.easyLanguage" data-i18n-attr="aria-label:a11y.easyLanguageAria">Leichte Sprache</button>
       </div>
       <div class="a11y-sep" aria-hidden="true"></div>
       <div class="a11y-row a11y-theme-row">

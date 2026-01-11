@@ -3216,6 +3216,98 @@ body.modal-open {
   outline-offset: 2px;
 }
 
+/* Active state for toggle buttons (aria-pressed="true") */
+.a11y-btn-active,
+.a11y-btn[aria-pressed="true"] {
+  background-color: #006600;
+  box-shadow: 0 4px 12px rgb(0 102 0 / 30%);
+}
+
+.a11y-btn-active:hover,
+.a11y-btn[aria-pressed="true"]:hover {
+  background-color: #008800;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgb(0 102 0 / 35%);
+}
+
+/* Toggle row with icon and switch */
+.a11y-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+}
+
+.a11y-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.a11y-toggle-icon {
+  flex-shrink: 0;
+  color: var(--text-primary);
+}
+
+/* Toggle Switch */
+.a11y-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.a11y-toggle-input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.a11y-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.3s;
+  border-radius: 26px;
+}
+
+.a11y-toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+.a11y-toggle-input:checked + .a11y-toggle-slider {
+  background-color: #006600;
+}
+
+.a11y-toggle-input:focus + .a11y-toggle-slider {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.a11y-toggle-input:checked + .a11y-toggle-slider:before {
+  transform: translateX(22px);
+}
+
+.a11y-toggle-input:disabled + .a11y-toggle-slider {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .a11y-label {
   font-size: 14px;
   font-weight: 600;

@@ -2,7 +2,7 @@
   const toggle = document.getElementById('a11y-toggle');
   const menu = document.getElementById('a11y-menu');
   const closeBtn = document.getElementById('a11y-close');
-  const readBtn = document.getElementById('a11y-read');
+  const readToggle = document.getElementById('a11y-read-toggle');
   const decBtn = document.getElementById('a11y-decrease');
   const resetBtn = document.getElementById('a11y-reset');
   const incBtn = document.getElementById('a11y-increase');
@@ -308,10 +308,8 @@
       synth.cancel();
     }
     isSpeaking = false;
-    if(readBtn){
-      const readLabel = window.I18N && window.I18N.t ? window.I18N.t('a11y.read','Vorlesen') : 'Vorlesen';
-      readBtn.setAttribute('aria-pressed','false');
-      readBtn.textContent = readLabel;
+    if(readToggle){
+      readToggle.checked = false;
     }
   }
 
@@ -391,20 +389,18 @@
 
     if(synth && synth.speaking) synth.cancel();
     synth.speak(utterance);
-    if(readBtn){
-      const stopLabel = window.I18N && window.I18N.t ? window.I18N.t('a11y.readStop','Vorlesen stoppen') : 'Vorlesen stoppen';
-      readBtn.setAttribute('aria-pressed','true');
-      readBtn.textContent = stopLabel;
+    if(readToggle){
+      readToggle.checked = true;
     }
     isSpeaking = true;
   }
 
-  if(readBtn){
-    readBtn.addEventListener('click', ()=>{
-      if(isSpeaking){
-        stopSpeaking();
-      } else {
+  if(readToggle){
+    readToggle.addEventListener('change', ()=>{
+      if(readToggle.checked){
         startSpeaking();
+      } else {
+        stopSpeaking();
       }
     });
   }
