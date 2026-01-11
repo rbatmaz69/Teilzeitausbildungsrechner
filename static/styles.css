@@ -1007,12 +1007,12 @@ select:-ms-input-placeholder {
 /* Verstecke Number-Input-Spinner (Pfeile) - Tastatursteuerung bleibt funktional */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
+  appearance: none;
   margin: 0;
 }
 
 input[type="number"] {
-  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 /* Fehler-Indikation für Eingabefelder */
@@ -3057,6 +3057,7 @@ body.modal-open {
     opacity: 0;
     transform: rotate(-90deg) scale(0.5);
   }
+
   100% {
     opacity: 1;
     transform: rotate(0deg) scale(1);
@@ -3232,13 +3233,13 @@ body.modal-open {
 /* Active state for toggle buttons (aria-pressed="true") */
 .a11y-btn-active,
 .a11y-btn[aria-pressed="true"] {
-  background-color: #006600;
+  background-color: #060;
   box-shadow: 0 4px 12px rgb(0 102 0 / 30%);
 }
 
 .a11y-btn-active:hover,
 .a11y-btn[aria-pressed="true"]:hover {
-  background-color: #008800;
+  background-color: #080;
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgb(0 102 0 / 35%);
 }
@@ -3283,16 +3284,13 @@ body.modal-open {
 .a11y-toggle-slider {
   position: absolute;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background-color: #ccc;
   transition: 0.3s;
   border-radius: 26px;
 }
 
-.a11y-toggle-slider:before {
+.a11y-toggle-slider::before {
   position: absolute;
   content: "";
   height: 20px;
@@ -3305,7 +3303,7 @@ body.modal-open {
 }
 
 .a11y-toggle-input:checked + .a11y-toggle-slider {
-  background-color: #006600;
+  background-color: #060;
 }
 
 .a11y-toggle-input:focus + .a11y-toggle-slider {
@@ -3313,17 +3311,17 @@ body.modal-open {
   outline-offset: 2px;
 }
 
-.a11y-toggle-input:not(:disabled) + .a11y-toggle-slider:hover {
-  filter: brightness(1.1);
-}
-
-.a11y-toggle-input:checked + .a11y-toggle-slider:before {
+.a11y-toggle-input:checked + .a11y-toggle-slider::before {
   transform: translateX(22px);
 }
 
 .a11y-toggle-input:disabled + .a11y-toggle-slider {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.a11y-toggle-input:not(:disabled) + .a11y-toggle-slider:hover {
+  filter: brightness(1.1);
 }
 
 .a11y-label {
@@ -3493,7 +3491,7 @@ body.modal-open {
   height: calc(100% - 12px);
   background: #fff;
   border-radius: 22px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
   transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 0;
   pointer-events: none;
@@ -3512,14 +3510,6 @@ body.modal-open {
   left: calc(66.666% - 4px);
 }
 
-/* Active icon highlighting */
-.a11y-theme-slider-container[data-theme="light"] .a11y-theme-option[data-theme="light"] .a11y-theme-icon,
-.a11y-theme-slider-container[data-theme="auto"] .a11y-theme-option[data-theme="auto"] .a11y-theme-icon,
-.a11y-theme-slider-container[data-theme="dark"] .a11y-theme-option[data-theme="dark"] .a11y-theme-icon {
-  color: var(--brand, #c60000);
-  transform: scale(1.2);
-}
-
 /* Dark mode adjustments */
 :root[data-theme="dark"] .a11y-theme-slider-container {
   background: var(--bg-secondary, #2a2a2a);
@@ -3527,11 +3517,19 @@ body.modal-open {
 
 :root[data-theme="dark"] .a11y-theme-slider-indicator {
   background: #444;
-  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgb(255 255 255 / 10%);
 }
 
 :root[data-theme="dark"] .a11y-theme-icon {
   color: var(--text-secondary, #aaa);
+}
+
+/* Active icon highlighting */
+.a11y-theme-slider-container[data-theme="light"] .a11y-theme-option[data-theme="light"] .a11y-theme-icon,
+.a11y-theme-slider-container[data-theme="auto"] .a11y-theme-option[data-theme="auto"] .a11y-theme-icon,
+.a11y-theme-slider-container[data-theme="dark"] .a11y-theme-option[data-theme="dark"] .a11y-theme-icon {
+  color: var(--brand, #c60000);
+  transform: scale(1.2);
 }
 
 /* Keep old styles for backwards compatibility if needed */
@@ -3588,7 +3586,7 @@ body.modal-open {
   font-weight: 700;
   background: var(--bg-secondary, #f0f0f0);
   color: var(--text-primary);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3597,13 +3595,13 @@ body.modal-open {
 .a11y-font-btn:hover {
   background: #e0e0e0;
   transform: translateY(-1px);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 3px 6px rgb(0 0 0 / 15%);
 }
 
 .a11y-font-btn:active {
   background: #d0d0d0;
   transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 10%);
 }
 
 :root[data-theme="dark"] .a11y-font-btn {

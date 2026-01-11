@@ -149,11 +149,6 @@
   const iconDefault = document.getElementById('a11y-icon-default');
   const iconClose = document.getElementById('a11y-icon-close');
 
-  function getCurrentLang() {
-    if (window.I18N && typeof window.I18N.lang === 'string') return window.I18N.lang;
-    return document.documentElement.getAttribute('lang') || 'de';
-  }
-
   function isEasyLanguageSupportedForCurrentLang() {
     return true;
   }
