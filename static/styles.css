@@ -3410,13 +3410,15 @@ body.modal-open {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
+  padding: 6px;
   background: var(--bg-secondary, #f0f0f0);
-  border-radius: 24px;
+  border-radius: 28px;
   cursor: pointer;
   user-select: none;
   outline: none;
-  height: 48px;
+  height: 56px;
+  min-width: 180px;
+  flex-shrink: 0;
 }
 
 .a11y-theme-slider-container:focus-visible {
@@ -3432,6 +3434,7 @@ body.modal-open {
   width: 100%;
   height: 100%;
   z-index: 1;
+  gap: 8px;
 }
 
 .a11y-theme-option {
@@ -3443,6 +3446,8 @@ body.modal-open {
   cursor: pointer;
   transition: opacity 0.2s ease;
   z-index: 2;
+  min-width: 48px;
+  padding: 8px;
 }
 
 .a11y-theme-option:hover {
@@ -3450,25 +3455,25 @@ body.modal-open {
 }
 
 .a11y-theme-icon {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   transition: transform 0.2s ease, color 0.2s ease;
   color: var(--text-secondary, #666);
 }
 
 .a11y-theme-option:hover .a11y-theme-icon {
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
 /* Slider Indicator (beweglicher Kreis) */
 .a11y-theme-slider-indicator {
   position: absolute;
-  left: 4px;
-  top: 4px;
-  width: calc(33.333% - 4px);
-  height: calc(100% - 8px);
+  left: 6px;
+  top: 6px;
+  width: calc(33.333% - 8px);
+  height: calc(100% - 12px);
   background: #fff;
-  border-radius: 20px;
+  border-radius: 22px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 0;
@@ -3477,15 +3482,15 @@ body.modal-open {
 
 /* Indicator positions based on data-theme attribute */
 .a11y-theme-slider-container[data-theme="light"] .a11y-theme-slider-indicator {
-  left: 4px;
+  left: 6px;
 }
 
 .a11y-theme-slider-container[data-theme="auto"] .a11y-theme-slider-indicator {
-  left: calc(33.333% + 2px);
+  left: calc(33.333% + 1px);
 }
 
 .a11y-theme-slider-container[data-theme="dark"] .a11y-theme-slider-indicator {
-  left: calc(66.666% + 0px);
+  left: calc(66.666% - 4px);
 }
 
 /* Active icon highlighting */
@@ -3493,7 +3498,7 @@ body.modal-open {
 .a11y-theme-slider-container[data-theme="auto"] .a11y-theme-option[data-theme="auto"] .a11y-theme-icon,
 .a11y-theme-slider-container[data-theme="dark"] .a11y-theme-option[data-theme="dark"] .a11y-theme-icon {
   color: var(--brand, #c60000);
-  transform: scale(1.15);
+  transform: scale(1.2);
 }
 
 /* Dark mode adjustments */
