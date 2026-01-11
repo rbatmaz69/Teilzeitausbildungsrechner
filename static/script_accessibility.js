@@ -22,9 +22,7 @@
   // THEME (DARK MODE) MANAGEMENT
   // ==========================================
   const THEME_KEY = 'theme';
-  const themeLightBtn = document.getElementById('a11y-theme-light');
-  const themeDarkBtn = document.getElementById('a11y-theme-dark');
-  const themeAutoBtn = document.getElementById('a11y-theme-auto');
+  const themeSlider = document.getElementById('a11y-theme-slider');
 
   function getSystemTheme() {
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -45,18 +43,14 @@
       rootEl.removeAttribute('data-theme');
     }
     
-    // Update button states (aria-pressed)
-    if (themeLightBtn) themeLightBtn.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
-    if (themeDarkBtn) themeDarkBtn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
-    if (themeAutoBtn) themeAutoBtn.setAttribute('aria-pressed', theme === 'auto' ? 'true' : 'false');
-    
-    // Add active class for visual feedback
-    [themeLightBtn, themeDarkBtn, themeAutoBtn].forEach(btn => {
-      if (btn) btn.classList.remove('a11y-theme-active');
-    });
-    if (theme === 'light' && themeLightBtn) themeLightBtn.classList.add('a11y-theme-active');
-    if (theme === 'dark' && themeDarkBtn) themeDarkBtn.classList.add('a11y-theme-active');
-    if (theme === 'auto' && themeAutoBtn) themeAutoBtn.classList.add('a11y-theme-active');
+    // Update slider position and ARIA
+    if (themeSlider) {
+      const position = theme === 'light' ? 0 : theme === 'auto' ? 1 : 2;
+      const labels = { 'light': 'Hell', 'auto': 'Auto', 'dark': 'Dunkel' };
+      themeSlider.setAttribute('aria-valuenow', position);
+      themeSlider.setAttribute('aria-valuetext', labels[theme]);
+      themeSlider.setAttribute('data-theme', theme);
+    }
   }
 
   function saveTheme(theme) {
@@ -69,10 +63,10 @@
 
   function loadTheme() {
     try {
-      return localStorage.getItem(THEME_KEY) || 'light';
+      return localStorage.getItem(THEME_KEY) || 'auto';
     } catch (e) {
       console.warn('Could not load theme preference:', e);
-      return 'light';
+      return 'auto';
     }
   }
 
@@ -85,29 +79,41 @@
   // Initialize theme on page load
   const savedTheme = loadTheme();
   console.log('Loaded theme:', savedTheme);
-  console.log('Theme buttons:', {light: themeLightBtn, dark: themeDarkBtn, auto: themeAutoBtn});
+  console.log('Theme slider:', themeSlider);
   applyTheme(savedTheme);
 
-  // Theme button click handlers
-  if (themeLightBtn) {
-    console.log('Adding click listener to light button');
-    themeLightBtn.addEventListener('click', () => {
-      console.log('Light button clicked');
-      setTheme('light');
+  // Theme slider interaction handlers
+  if (themeSlider) {
+    // Click on slider options
+    const options = themeSlider.querySelectorAll('.a11y-theme-option');
+    options.forEach(option => {
+      option.addEventListener('click', () => {
+        const theme = option.getAttribute('data-theme');
+        setTheme(theme);
+      });
     });
-  }
-  if (themeDarkBtn) {
-    console.log('Adding click listener to dark button');
-    themeDarkBtn.addEventListener('click', () => {
-      console.log('Dark button clicked');
-      setTheme('dark');
-    });
-  }
-  if (themeAutoBtn) {
-    console.log('Adding click listener to auto button');
-    themeAutoBtn.addEventListener('click', () => {
-      console.log('Auto button clicked');
-      setTheme('auto');
+    
+    // Keyboard navigation
+    themeSlider.addEventListener('keydown', (e) => {
+      const currentTheme = loadTheme();
+      const themes = ['light', 'auto', 'dark'];
+      const currentIndex = themes.indexOf(currentTheme);
+      
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        const newIndex = Math.max(0, currentIndex - 1);
+        setTheme(themes[newIndex]);
+      } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        const newIndex = Math.min(2, currentIndex + 1);
+        setTheme(themes[newIndex]);
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        setTheme('light');
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        setTheme('dark');
+      }
     });
   }
 

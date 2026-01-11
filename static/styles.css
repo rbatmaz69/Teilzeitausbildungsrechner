@@ -3401,9 +3401,116 @@ body.modal-open {
 .a11y-theme-row {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
+/* Theme Slider Container */
+.a11y-theme-slider-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  background: var(--bg-secondary, #f0f0f0);
+  border-radius: 24px;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  height: 48px;
+}
+
+.a11y-theme-slider-container:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.a11y-theme-slider-track {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.a11y-theme-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  z-index: 2;
+}
+
+.a11y-theme-option:hover {
+  opacity: 0.8;
+}
+
+.a11y-theme-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s ease, color 0.2s ease;
+  color: var(--text-secondary, #666);
+}
+
+.a11y-theme-option:hover .a11y-theme-icon {
+  transform: scale(1.1);
+}
+
+/* Slider Indicator (beweglicher Kreis) */
+.a11y-theme-slider-indicator {
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: calc(33.333% - 4px);
+  height: calc(100% - 8px);
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Indicator positions based on data-theme attribute */
+.a11y-theme-slider-container[data-theme="light"] .a11y-theme-slider-indicator {
+  left: 4px;
+}
+
+.a11y-theme-slider-container[data-theme="auto"] .a11y-theme-slider-indicator {
+  left: calc(33.333% + 2px);
+}
+
+.a11y-theme-slider-container[data-theme="dark"] .a11y-theme-slider-indicator {
+  left: calc(66.666% + 0px);
+}
+
+/* Active icon highlighting */
+.a11y-theme-slider-container[data-theme="light"] .a11y-theme-option[data-theme="light"] .a11y-theme-icon,
+.a11y-theme-slider-container[data-theme="auto"] .a11y-theme-option[data-theme="auto"] .a11y-theme-icon,
+.a11y-theme-slider-container[data-theme="dark"] .a11y-theme-option[data-theme="dark"] .a11y-theme-icon {
+  color: var(--brand, #c60000);
+  transform: scale(1.15);
+}
+
+/* Dark mode adjustments */
+:root[data-theme="dark"] .a11y-theme-slider-container {
+  background: var(--bg-secondary, #2a2a2a);
+}
+
+:root[data-theme="dark"] .a11y-theme-slider-indicator {
+  background: #444;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+:root[data-theme="dark"] .a11y-theme-icon {
+  color: var(--text-secondary, #aaa);
+}
+
+/* Keep old styles for backwards compatibility if needed */
 .a11y-theme-controls {
   display: flex;
   gap: 8px;
