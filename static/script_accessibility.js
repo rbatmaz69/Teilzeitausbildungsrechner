@@ -350,6 +350,14 @@
     easyLanguageToggle.addEventListener('change', () => {
       toggleEasyLanguage();
     });
+    
+    // Enable Enter key for toggle activation
+    easyLanguageToggle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        easyLanguageToggle.click();
+      }
+    });
   }
 
   // Wenn sich die Sprache ändert: Toggle aktivieren/deaktivieren und Zustand anwenden
@@ -472,6 +480,14 @@
       } else {
         stopSpeaking();
         announceToScreenReader('Vorlesefunktion deaktiviert');
+      }
+    });
+    
+    // Enable Enter key for toggle activation
+    readToggle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        readToggle.click();
       }
     });
   }
