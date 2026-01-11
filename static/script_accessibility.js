@@ -22,6 +22,19 @@
   // ==========================================
   const THEME_KEY = 'theme';
   const themeSlider = document.getElementById('a11y-theme-slider');
+  const statusRegion = document.getElementById('a11y-status');
+
+  // ==========================================
+  // SCREEN READER ANNOUNCEMENTS
+  // ==========================================
+  function announceToScreenReader(message) {
+    if (!statusRegion) return;
+    // Clear first to ensure announcement is triggered even for repeated messages
+    statusRegion.textContent = '';
+    setTimeout(() => {
+      statusRegion.textContent = message;
+    }, 100);
+  }
 
   function getSystemTheme() {
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -73,6 +86,10 @@
     console.log('Setting theme to:', theme);
     saveTheme(theme);
     applyTheme(theme);
+    
+    // Announce theme change to screen readers
+    const themeNames = { 'light': 'Helles Design', 'auto': 'Automatisches Design', 'dark': 'Dunkles Design' };
+    announceToScreenReader(themeNames[theme] + ' aktiviert');
   }
 
   // Initialize theme on page load
@@ -271,6 +288,7 @@
     
     if (easyLanguageToggle) {
       easyLanguageToggle.checked = enabled;
+      easyLanguageToggle.setAttribute('aria-checked', enabled ? 'true' : 'false');
     }
   }
 
@@ -280,6 +298,9 @@
     const newState = !currentState;
     saveEasyLanguage(newState);
     applyEasyLanguage(newState);
+
+    // Announce to screen readers
+    announceToScreenReader(newState ? 'Leichte Sprache aktiviert' : 'Leichte Sprache deaktiviert');
 
     window.dispatchEvent(new CustomEvent('easyLanguage:changed', {
       detail: { enabled: newState }
@@ -356,6 +377,7 @@
     isSpeaking = false;
     if(readToggle){
       readToggle.checked = false;
+      readToggle.setAttribute('aria-checked', 'false');
     }
   }
 
@@ -437,8 +459,10 @@
     synth.speak(utterance);
     if(readToggle){
       readToggle.checked = true;
+      readToggle.setAttribute('aria-checked', 'true');
     }
     isSpeaking = true;
+    announceToScreenReader('Vorlesefunktion aktiviert');
   }
 
   if(readToggle){
@@ -447,6 +471,7 @@
         startSpeaking();
       } else {
         stopSpeaking();
+        announceToScreenReader('Vorlesefunktion deaktiviert');
       }
     });
   }
@@ -461,6 +486,29 @@
     rootEl.style.fontSize = clampedPx + 'px';
     currentLevel = level;
     updateStepLabels();
+    updateFontButtonStates();
+  }
+
+  function updateFontButtonStates() {
+    if (!decBtn || !incBtn) return;
+    
+    // Update decrease button
+    if (currentLevel <= MIN_LEVEL) {
+      decBtn.setAttribute('aria-disabled', 'true');
+      decBtn.disabled = true;
+    } else {
+      decBtn.removeAttribute('aria-disabled');
+      decBtn.disabled = false;
+    }
+    
+    // Update increase button
+    if (currentLevel >= MAX_LEVEL) {
+      incBtn.setAttribute('aria-disabled', 'true');
+      incBtn.disabled = true;
+    } else {
+      incBtn.removeAttribute('aria-disabled');
+      incBtn.disabled = false;
+    }
   }
 
   function updateStepLabels(){
@@ -478,20 +526,28 @@
 
   if(decBtn) decBtn.addEventListener('click', ()=>{
     const next = Math.max(currentLevel - 1, MIN_LEVEL);
-    applyZoomForLevel(next);
+    if (next < currentLevel) {
+      applyZoomForLevel(next);
+      announceToScreenReader('Schriftgröße verringert');
+    }
   });
   if(incBtn) incBtn.addEventListener('click', ()=>{
     const next = Math.min(currentLevel + 1, MAX_LEVEL);
-    applyZoomForLevel(next);
+    if (next > currentLevel) {
+      applyZoomForLevel(next);
+      announceToScreenReader('Schriftgröße vergrößert');
+    }
   });
   if(resetBtn) resetBtn.addEventListener('click', ()=>{
     rootEl.style.fontSize = '';
     currentLevel = 0;
     updateStepLabels();
+    updateFontButtonStates();
+    announceToScreenReader('Schriftgröße zurückgesetzt');
   });
 
-  // initialize labels
+  // initialize labels and button states
   updateStepLabels();
-  
+  updateFontButtonStates();
 
 })();

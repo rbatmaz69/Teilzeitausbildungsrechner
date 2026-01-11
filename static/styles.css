@@ -3302,6 +3302,10 @@ body.modal-open {
   outline-offset: 2px;
 }
 
+.a11y-toggle-input:not(:disabled) + .a11y-toggle-slider:hover {
+  filter: brightness(1.1);
+}
+
 .a11y-toggle-input:checked + .a11y-toggle-slider:before {
   transform: translateX(22px);
 }
