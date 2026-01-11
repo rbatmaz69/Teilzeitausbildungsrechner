@@ -220,14 +220,8 @@
       rootEl.removeAttribute('data-easy-language');
     }
     
-    if (easyLanguageBtn) {
-      easyLanguageBtn.setAttribute('aria-pressed', enabled ? 'true' : 'false');
-      // Visual feedback
-      if (enabled) {
-        easyLanguageBtn.classList.add('a11y-btn-active');
-      } else {
-        easyLanguageBtn.classList.remove('a11y-btn-active');
-      }
+    if (easyLanguageToggle) {
+      easyLanguageToggle.checked = enabled;
     }
   }
 
@@ -243,16 +237,17 @@
     }));
   }
 
-  function setEasyLanguageButtonEnabled(enabled) {
-    if (!easyLanguageBtn) return;
-    if (enabled) {
-      easyLanguageBtn.removeAttribute('disabled');
-      easyLanguageBtn.setAttribute('aria-disabled', 'false');
+  function setEasyLanguageButtonEnabled(isGerman) {
+    if (!easyLanguageToggle) return;
+    if (isGerman) {
+      easyLanguageToggle.removeAttribute('disabled');
+      easyLanguageToggle.parentElement.style.opacity = '1';
+      easyLanguageToggle.parentElement.style.cursor = 'pointer';
     } else {
-      easyLanguageBtn.setAttribute('disabled', 'true');
-      easyLanguageBtn.setAttribute('aria-disabled', 'true');
-      easyLanguageBtn.setAttribute('aria-pressed', 'false');
-      easyLanguageBtn.classList.remove('a11y-btn-active');
+      easyLanguageToggle.setAttribute('disabled', 'true');
+      easyLanguageToggle.checked = false;
+      easyLanguageToggle.parentElement.style.opacity = '0.5';
+      easyLanguageToggle.parentElement.style.cursor = 'not-allowed';
     }
   }
 
@@ -281,8 +276,10 @@
   syncEasyLanguageForCurrentLang();
 
   // Easy language button click handler
-  if (easyLanguageBtn) {
-    easyLanguageBtn.addEventListener('click', toggleEasyLanguage);
+  if (easyLanguageToggle) {
+    easyLanguageToggle.addEventListener('change', () => {
+      toggleEasyLanguage();
+    });
   }
 
   // Wenn sich die Sprache ändert: Toggle aktivieren/deaktivieren und Zustand anwenden

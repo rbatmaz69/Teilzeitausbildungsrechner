@@ -925,8 +925,17 @@
         </label>
       </div>
       <div class="a11y-sep" aria-hidden="true"></div>
-      <div class="a11y-row">
-        <button id="a11y-easy-language" class="a11y-btn" type="button" aria-pressed="false" data-i18n="a11y.easyLanguage" data-i18n-attr="aria-label:a11y.easyLanguageAria">Leichte Sprache</button>
+      <div class="a11y-row a11y-toggle-row">
+        <div class="a11y-toggle-label">
+          <svg class="a11y-toggle-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
+          </svg>
+          <span data-i18n="a11y.easyLanguage">Leichte Sprache</span>
+        </div>
+        <label class="a11y-toggle-switch">
+          <input type="checkbox" id="a11y-easy-language-toggle" class="a11y-toggle-input" aria-label="Leichte Sprache aktivieren oder deaktivieren">
+          <span class="a11y-toggle-slider"></span>
+        </label>
       </div>
       <div class="a11y-sep" aria-hidden="true"></div>
       <div class="a11y-row a11y-theme-row">
