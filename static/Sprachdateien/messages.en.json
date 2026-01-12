@@ -48,9 +48,9 @@
       "separator": "or",
       "separator_easy": "or",
       "button24h": "24 hours (3-day)",
-      "button24h_easy": "24 hours",
+      "button24h_easy": "24 hours (3-day)",
       "button32h": "32 hours (4-day)",
-      "button32h_easy": "32 hours"
+      "button32h_easy": "32 hours (4-day)"
     },
     "verkuerzungen": {
       "labelShort": "Reductions",
@@ -180,7 +180,7 @@
     },
     "infoBox": {
       "button": "What is this?",
-      "button_easy": "More info",
+      "button_easy": "What is this?",
       "buttonAria": "Show information about reduction reasons",
       "buttonAria_easy": "Show more information",
       "closeAria": "Close modal",
@@ -193,7 +193,7 @@
   },
   "res": {
     "headline": "Overview of Your Part-Time Training",
-    "headline_easy": "Your result",
+    "headline_easy": "Overview of Your Part-Time Training",
     "helper": "Here you can see your details and the result.",
     "helper_easy": "Here is your result.",
     "notesTitle": "Important information",

@@ -32,7 +32,7 @@
     },
     "stunden": {
       "label": "Wie viele Stunden pro Woche hat die Ausbildung in Vollzeit?",
-      "label_easy": "Wie viele Stunden pro Woche hat die Vollzeit-Ausbildung?",
+      "label_easy": "Wie viele Stunden pro Woche hat die Ausbildung in Vollzeit?",
       "labelShort": "Wochenstunden in Vollzeit",
       "labelShort_easy": "Wochenstunden in Vollzeit",
       "tooltip": "Reguläre Wochenstunden der Ausbildung (inkl. Berufsschule)",
@@ -52,9 +52,9 @@
       "separator": "oder",
       "separator_easy": "oder",
       "button24h": "24 Stunden (3-Tage)",
-      "button24h_easy": "24 Stunden (3 Tage)",
+      "button24h_easy": "24 Stunden (3-Tage)",
       "button32h": "32 Stunden (4-Tage)",
-      "button32h_easy": "32 Stunden (4 Tage)"
+      "button32h_easy": "32 Stunden (4-Tage)"
     },
     "verkuerzungen": {
       "labelShort": "Verkürzungen",
@@ -194,7 +194,7 @@
     },
     "infoBox": {
       "button": "Was ist das?",
-      "button_easy": "Was bedeutet das?",
+      "button_easy": "Was ist das?",
       "buttonAria": "Informationen zu Verkürzungsgründen anzeigen",
       "buttonAria_easy": "Infos zu Verkürzungsgründen anzeigen",
       "closeAria": "Modal schließen",
@@ -207,7 +207,7 @@
   },
   "res": {
     "headline": "Übersicht über Ihre Teilzeitausbildung",
-    "headline_easy": "Ihr Ergebnis zur Teilzeitausbildung",
+    "headline_easy": "Übersicht über Ihre Teilzeitausbildung",
     "helper": "Hier sehen Sie Ihre Angaben und das Ergebnis.",
     "helper_easy": "Hier stehen Ihre Angaben und das Ergebnis.",
     "notesTitle": "Wichtige Hinweise",

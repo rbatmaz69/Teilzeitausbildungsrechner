@@ -48,9 +48,9 @@
       "separator": "veya",
       "separator_easy": "veya",
       "button24h": "24 saat (3 gün)",
-      "button24h_easy": "24 saat",
+      "button24h_easy": "24 saat (3 gün)",
       "button32h": "32 saat (4 gün)",
-      "button32h_easy": "32 saat"
+      "button32h_easy": "32 saat (4 gün)"
     },
     "verkuerzungen": {
       "labelShort": "Kısaltmalar",
@@ -188,7 +188,7 @@
     },
     "infoBox": {
       "button": "Bu nedir?",
-      "button_easy": "Daha fazla bilgi",
+      "button_easy": "Bu nedir?",
       "buttonAria": "Kısaltma sebepleri hakkında bilgi göster",
       "buttonAria_easy": "Daha fazla bilgi göster",
       "closeAria": "Modali kapat",
@@ -201,7 +201,7 @@
   },
   "res": {
     "headline": "Yarı Zamanlı Eğitiminize Genel Bakış",
-    "headline_easy": "Sonucunuz",
+    "headline_easy": "Yarı Zamanlı Eğitiminize Genel Bakış",
     "helper": "Burada girdileriniz ve sonuç gösterilir.",
     "helper_easy": "Burada sonucunuz var.",
     "notesTitle": "Önemli notlar",
