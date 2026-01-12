@@ -3020,6 +3020,7 @@ body.modal-open {
   font-size: 20px;
   cursor: pointer;
   transition: background-color 0.15s ease-out, transform 0.15s ease-out, box-shadow 0.15s ease-in-out, opacity 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .a11y-toggle:focus-visible {
@@ -3140,6 +3141,7 @@ body.modal-open {
   z-index: 10001;
   transition: background-color 0.15s ease-out, transform 0.15s ease-out, box-shadow 0.15s ease-in-out;
   animation: close-button-pop 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s backwards;
+  -webkit-tap-highlight-color: transparent;
 }
 
 @keyframes close-button-pop {
@@ -3211,6 +3213,7 @@ body.modal-open {
   gap: 6px;
   box-shadow: 0 6px 20px rgb(224 0 0 / 25%);
   transition: background-color 0.15s ease-out, transform 0.15s ease-out, box-shadow 0.15s ease-in-out;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .a11y-btn:hover {
@@ -3273,6 +3276,7 @@ body.modal-open {
   width: 48px;
   height: 26px;
   flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .a11y-toggle-input {
@@ -3288,6 +3292,7 @@ body.modal-open {
   background-color: #ccc;
   transition: 0.3s;
   border-radius: 26px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .a11y-toggle-slider::before {
@@ -3436,6 +3441,7 @@ body.modal-open {
   min-width: 180px;
   flex-shrink: 0;
   margin: 0 auto;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .a11y-theme-slider-container:focus-visible {
