@@ -11,12 +11,13 @@
   // discrete levels: -3..+3 per request
   const MIN_LEVEL = -3;
   const MAX_LEVEL = 3;
-  const STEP_PX = 2; // each level changes base by 2px
   // adjust root font-size so rem-based text scales with A-/A+
   const rootEl = document.documentElement;
   const DEFAULT_ROOT_FONT = parseFloat(getComputedStyle(rootEl).fontSize) || 16;
+  // 3 Stufen in beide Richtungen, so dass MIN/MAX exakt beim 3. Klick erreicht werden.
+  const STEP_DOWN_PX = (DEFAULT_ROOT_FONT - MIN_FONT) / Math.max(1, Math.abs(MIN_LEVEL));
+  const STEP_UP_PX = (MAX_FONT - DEFAULT_ROOT_FONT) / Math.max(1, MAX_LEVEL);
   let currentLevel = 0; // 0 = default
-  let currentRootPx = DEFAULT_ROOT_FONT;
 
   // ==========================================
   // THEME (DARK MODE) MANAGEMENT
@@ -197,18 +198,29 @@
     if (menu.getAttribute('aria-hidden') === 'true') return;
 
     if (e.key === 'Tab') {
+      updateFocusableElements();
+      if (!firstFocusable || !lastFocusable) return;
+
+      // Beim Öffnen Fokus NICHT automatisch ins Menü springen.
+      // Erst wenn der Nutzer Tab drückt, geht es ins Menü.
+      if (document.activeElement === toggle) {
+        e.preventDefault();
+        (e.shiftKey ? lastFocusable : firstFocusable)?.focus();
+        return;
+      }
+
       // Trap focus within menu
       if (e.shiftKey) {
         // Shift+Tab: moving backwards
         if (document.activeElement === firstFocusable) {
           e.preventDefault();
-          lastFocusable?.focus();
+          toggle?.focus();
         }
       } else {
         // Tab: moving forwards
         if (document.activeElement === lastFocusable) {
           e.preventDefault();
-          firstFocusable?.focus();
+          toggle?.focus();
         }
       }
     }
@@ -220,11 +232,8 @@
     updateToggleIcon(true);
     updateAriaLabel(true);
     
-    // Update focusable elements and focus first one
+    // Update focusable elements; Fokus bleibt auf dem Toggle (erst Tab bewegt ins Menü)
     updateFocusableElements();
-    setTimeout(() => {
-      if (readToggle) readToggle.focus();
-    }, 50);
   }
   
   function closeMenu(){
@@ -493,25 +502,26 @@
     // clamp level
     if(level < MIN_LEVEL) level = MIN_LEVEL;
     if(level > MAX_LEVEL) level = MAX_LEVEL;
-    const nextPx = DEFAULT_ROOT_FONT + (level * STEP_PX);
+
+    const nextPx =
+      level === 0
+        ? DEFAULT_ROOT_FONT
+        : level < 0
+          ? DEFAULT_ROOT_FONT + (level * STEP_DOWN_PX)
+          : DEFAULT_ROOT_FONT + (level * STEP_UP_PX);
+
     const clampedPx = Math.min(Math.max(nextPx, MIN_FONT), MAX_FONT);
     rootEl.style.fontSize = clampedPx + 'px';
-    currentRootPx = clampedPx;
-    // Wenn MIN/MAX durch Clamping erreicht wurde, Level auf den effektiven Wert korrigieren,
-    // damit Button-States und Anzeige zur tatsächlichen Schriftgröße passen.
-    currentLevel = Math.round((clampedPx - DEFAULT_ROOT_FONT) / STEP_PX);
+    currentLevel = level;
     updateStepLabels();
     updateFontButtonStates();
   }
 
   function updateFontButtonStates() {
     if (!decBtn || !incBtn) return;
-
-    // nutze den effektiven Root-Font (wegen Clamping kann Level sonst „zu weit“ laufen)
-    const px = typeof currentRootPx === 'number' ? currentRootPx : DEFAULT_ROOT_FONT;
     
     // Update decrease button
-    if (px <= MIN_FONT + 0.01) {
+    if (currentLevel <= MIN_LEVEL) {
       decBtn.setAttribute('aria-disabled', 'true');
       decBtn.disabled = true;
     } else {
@@ -520,7 +530,7 @@
     }
     
     // Update increase button
-    if (px >= MAX_FONT - 0.01) {
+    if (currentLevel >= MAX_LEVEL) {
       incBtn.setAttribute('aria-disabled', 'true');
       incBtn.disabled = true;
     } else {
@@ -559,7 +569,6 @@
   if(resetBtn) resetBtn.addEventListener('click', ()=>{
     rootEl.style.fontSize = '';
     currentLevel = 0;
-    currentRootPx = DEFAULT_ROOT_FONT;
     updateStepLabels();
     updateFontButtonStates();
     announceToScreenReader('Schriftgröße zurückgesetzt');
