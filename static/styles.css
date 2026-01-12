@@ -160,6 +160,7 @@ h1 {
 h2 {
   font-size: 1.25rem;
   font-weight: 700;
+  margin-top: 0;
   margin-bottom: .75rem;
 }
 
@@ -431,6 +432,7 @@ header h1 {
   justify-content: space-between;
   align-items: center;
   gap: 8px;
+  font-size: .95rem;
   font-weight: 600;
   width: 100%;
 }
@@ -472,9 +474,10 @@ header h1 {
 }
 
 .vk-category-title {
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 700;
-  margin-bottom: .5rem;
+  margin-top: 0;
+  margin-bottom: .75rem;
   color: var(--text);
 }
 
@@ -484,6 +487,13 @@ header h1 {
   gap: .5rem;
 }
 
+.vk-question {
+  font-size: .95rem;
+  margin: 0 0 .5rem 0;
+  font-weight: 500;
+  color: var(--text);
+}
+
 #vk-fieldset {
   border: none;
   margin: 0;
@@ -491,6 +501,11 @@ header h1 {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+}
+
+/* Erste Section nach vk-card-header soll minimalen Abstand haben */
+.vk-card-header + section.card {
+  margin-top: -1.25rem;
 }
 
 #vk-form {
@@ -503,7 +518,7 @@ header h1 {
   border-radius: 10px;
   border: 2px solid var(--border);
   background-color: #fff;
-  font-size: 1rem;
+  font-size: .95rem;
   color: var(--text, #000); /* Explizit schwarze Schrift für Safari */
   /* stylelint-disable-next-line property-no-vendor-prefix */
   -webkit-appearance: none; /* Safari-spezifisch */
@@ -2470,13 +2485,21 @@ input.error,
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: var(--space-4);
+  margin-bottom: 0.75rem;
   flex-wrap: wrap;
 }
 
 .vk-info-row #vk-helper {
   flex: 1;
   margin: 0;
+  font-size: .95rem;
+}
+
+/* Hauptüberschrift "Gründe für eine kürzere Ausbildung" */
+#vk-heading {
+  font-size: 1.35rem;
+  margin-top: 3rem;
+  margin-bottom: 0.5rem;
 }
 
 /* Button "Was ist das?" */
