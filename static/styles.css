@@ -523,12 +523,15 @@ header h1 {
   /* stylelint-disable-next-line property-no-vendor-prefix */
   -webkit-appearance: none; /* Safari-spezifisch */
   appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, #9ca3af 50%),
-                    linear-gradient(135deg, #9ca3af 50%, transparent 50%);
-  background-position: calc(100% - 18px) 50%,
-                       calc(100% - 13px) 50%;
-  background-size: 5px 5px, 5px 5px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23666' d='M1 2l5 4 5-4H1z'/%3E%3C/svg%3E");
+  background-position: calc(100% - 12px) 50%;
+  background-size: 12px 8px;
   background-repeat: no-repeat;
+  transition: background-image 0.2s ease;
+}
+
+#vk-school-select.opened {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23666' d='M1 6l5-4 5 4H1z'/%3E%3C/svg%3E");
 }
 
 /* Media */
@@ -861,7 +864,7 @@ button.berechnen:focus-visible {
 
 .button-group .btn.ghost:hover {
   background-color: var(--bg-hover, #f5f5f5);
-  transform: translateY(1px);
+  transform: translateY(-1px);
 }
 
 .button-group .btn.ghost:active {
@@ -2509,7 +2512,7 @@ input.error,
   gap: 0.5rem;
   padding: 0.75rem 1.25rem;
   margin: 0;
-  background: var(--card-bg);
+  background: rgba(224, 0, 0, 0.1);
   border: 2px solid var(--primary);
   border-radius: var(--radius-sm);
   color: var(--primary);
@@ -2517,7 +2520,6 @@ input.error,
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgb(224 0 0 / 10%);
   flex-shrink: 0;
   -webkit-tap-highlight-color: transparent;
 }
@@ -2607,10 +2609,10 @@ input.error,
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
-  border: 2px solid var(--border);
+  background: rgba(224, 0, 0, 0.1);
+  border: 2px solid var(--primary);
   border-radius: 50%;
-  color: var(--text);
+  color: var(--primary);
   cursor: pointer;
   transition: all 0.2s ease;
   z-index: 1002;
@@ -2663,10 +2665,10 @@ input.error,
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--primary);
-  color: white;
+  background: rgba(224, 0, 0, 0.1);
+  color: var(--primary);
+  border: 2px solid var(--primary);
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgb(224 0 0 / 20%);
 }
 
 .vk-info-icon-text {
@@ -2679,7 +2681,7 @@ input.error,
 }
 
 .vk-info-title {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: var(--text);
   margin: 0;
@@ -2692,6 +2694,7 @@ input.error,
 }
 
 .vk-info-body p {
+  font-size: .95rem;
   margin: 0 0 var(--space-3) 0;
   line-height: 1.6;
   color: var(--text);
@@ -3783,8 +3786,11 @@ body.modal-open {
   background-color: var(--input-bg);
   color: var(--text);
   border-color: var(--border);
-  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%),
-                    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23ffffff' d='M1 2l5 4 5-4H1z'/%3E%3C/svg%3E");
+}
+
+:root[data-theme="dark"] #vk-school-select.opened {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23ffffff' d='M1 6l5-4 5 4H1z'/%3E%3C/svg%3E");
 }
 
 :root[data-theme="dark"] input:not([type="checkbox"], [type="radio"]):focus,
@@ -3947,6 +3953,27 @@ body.modal-open {
 }
 
 :root[data-theme="dark"] .accent-icon svg {
+  color: var(--primary);
+}
+
+/* VK-Info Modal im Dark Mode */
+:root[data-theme="dark"] .vk-info-content {
+  background: var(--panel);
+  border-color: var(--primary);
+}
+
+:root[data-theme="dark"] .vk-info-header {
+  background: linear-gradient(180deg, #1a1a1a, #222);
+  border-bottom-color: var(--border);
+}
+
+:root[data-theme="dark"] .vk-info-body {
+  color: var(--text);
+}
+
+:root[data-theme="dark"] .vk-info-close {
+  background: rgba(224, 0, 0, 0.1);
+  border-color: var(--primary);
   color: var(--primary);
 }
 
