@@ -1388,4 +1388,40 @@ document.addEventListener("DOMContentLoaded", () => {
       teilzeitStundenEingabe.dispatchEvent(new Event('blur'));
     });
   }
+
+  // Pfeiltasten-Funktionalität für numerische Eingabefelder
+  const numericFields = [
+    { element: dauerEingabe, step: 1, min: 1, max: 60 },
+    { element: wochenstundenEingabe, step: 1, min: 0, max: 100 },
+    { element: teilzeitStundenEingabe, step: 1, min: 0, max: 100 },
+    { element: teilzeitProzentEingabe, step: 1, min: 0, max: 100 },
+    { element: document.getElementById('alter'), step: 1, min: 0, max: 99 },
+    { element: document.getElementById('vk_beruf_q2_dauer_months'), step: 1, min: 0, max: 50 }
+  ];
+
+  numericFields.forEach(({ element, step, min, max }) => {
+    if (!element) return;
+
+    element.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+      
+      e.preventDefault();
+      
+      const currentValue = parseNumber(element.value) || 0;
+      let newValue = currentValue;
+
+      if (e.key === 'ArrowUp') {
+        newValue = Math.min(currentValue + step, max);
+      } else if (e.key === 'ArrowDown') {
+        newValue = Math.max(currentValue - step, min);
+      }
+
+      // Formatiere den Wert (entferne .0 bei ganzen Zahlen)
+      const formattedValue = newValue % 1 === 0 ? String(Math.round(newValue)) : String(newValue);
+      element.value = formattedValue;
+
+      // Trigger input event für Validierung und weitere Logik
+      element.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+  });
 });
