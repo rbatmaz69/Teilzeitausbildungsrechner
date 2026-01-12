@@ -3757,6 +3757,11 @@ body.modal-open {
   border-color: var(--border);
 }
 
+:root[data-theme="dark"] .actionbar {
+  background: rgb(26 26 26 / 95%);
+  border-top-color: var(--border);
+}
+
 :root[data-theme="dark"] .btn.outline {
   background: var(--panel);
   color: var(--text);
