@@ -826,6 +826,7 @@ button.berechnen:focus-visible {
   background: #fff;
   color: var(--text);
   border: 1px solid var(--border);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .button-group .btn.ghost {
@@ -854,7 +855,7 @@ button.berechnen:focus-visible {
 
 .actionbar .btn {
   touch-action: manipulation; /* Verbessert Touch-Responsiveness auf Mobile */
-  -webkit-tap-highlight-color: rgb(0 0 0 / 10%); /* Sichtbares Feedback beim Tippen */
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn.outline{
@@ -3505,15 +3506,15 @@ body.modal-open {
 
 /* Indicator positions based on data-theme attribute */
 .a11y-theme-slider-container[data-theme="light"] .a11y-theme-slider-indicator {
-  left: 6px;
+  left: 4px;
 }
 
 .a11y-theme-slider-container[data-theme="auto"] .a11y-theme-slider-indicator {
-  left: calc(33.333% + 1px);
+  left: calc(33.333% + 4px);
 }
 
 .a11y-theme-slider-container[data-theme="dark"] .a11y-theme-slider-indicator {
-  left: calc(66.666% - 4px);
+  left: calc(66.666% + 4px);
 }
 
 /* Dark mode adjustments */
@@ -3637,17 +3638,20 @@ body.modal-open {
   padding: 8px 16px;
   font-size: 14px;
   font-weight: 500;
+  transition: background-color 0.15s ease-out, transform 0.15s ease-out, box-shadow 0.15s ease-in-out;
 }
 
 .a11y-reset-btn:hover {
   background: var(--bg-secondary, #f5f5f5);
   color: var(--text-primary);
-  transform: none;
-  box-shadow: none;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgb(0 0 0 / 10%);
 }
 
 .a11y-reset-btn:active {
   background: var(--bg-secondary, #e0e0e0);
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
 }
 
 :root[data-theme="dark"] .a11y-reset-btn {
@@ -3657,6 +3661,14 @@ body.modal-open {
 
 :root[data-theme="dark"] .a11y-reset-btn:hover {
   background: #333;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgb(0 0 0 / 20%);
+}
+
+:root[data-theme="dark"] .a11y-reset-btn:active {
+  background: #222;
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 10%);
 }
 
 .a11y-reset-wrapper {
