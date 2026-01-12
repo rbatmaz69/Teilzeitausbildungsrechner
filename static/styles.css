@@ -3845,23 +3845,35 @@ body.modal-open {
 
 /* Wichtige Hinweise / Legal Box im Dark Mode */
 :root[data-theme="dark"] .notes-column .card {
-  background: var(--panel);
-  border-color: var(--border);
+  background: #1c1e24;
+  border-color: #2a3d5a;
   box-shadow: var(--shadow);
 }
 
 :root[data-theme="dark"] .legal-collapsible {
-  background: var(--panel);
+  background: #1c1e24;
   border-color: var(--border);
 }
 
 :root[data-theme="dark"] .legal-collapsible[open] {
-  background: var(--panel);
-  border-color: var(--border);
+  background: #1c1e24;
+  border-color: #2a3d5a;
 }
 
 :root[data-theme="dark"] .legal-content {
   border-top-color: var(--border);
+}
+
+:root[data-theme="dark"] .legal-collapsible .summary-pill {
+  background: #252a35;
+  color: #93c5fd;
+  border-color: #3d5a7a;
+  box-shadow: 0 2px 8px rgb(61 90 122 / 20%);
+}
+
+:root[data-theme="dark"] .legal-collapsible .summary-toggle:hover .summary-pill {
+  background: #2d3340;
+  border-color: #4d6a8a;
 }
 
 /* Kalender im Dark Mode - graue Bereiche werden dunkel */
