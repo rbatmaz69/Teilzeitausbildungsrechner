@@ -707,7 +707,7 @@ button.preset {
   background: var(--input-bg);
   color: var(--text);
   border: 2px solid var(--border);
-  border-radius: 6px;
+  border-radius: 14px;
   padding: .45rem .5rem;
   min-width: 3.9rem;
   font-weight: 600;
