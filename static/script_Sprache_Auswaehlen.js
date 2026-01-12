@@ -33,10 +33,28 @@
   };
 
   /**
+   * Liest die zuletzt vom Nutzer gewählte Sprache aus dem LocalStorage aus.
+   * @returns {string|null} ISO-Sprachcode oder null, falls keiner gespeichert ist.
+   */
+  const holeGespeicherteSprache = () => {
+    try {
+      return localStorage.getItem("lang");
+    } catch {
+      return null;
+    }
+  };
+
+  /**
    * Persistiert die gewählte Sprache im LocalStorage.
    * @param {string} sprache ISO-Sprachcode (z.B. "de" oder "en").
    */
-  const speichereSprache = (sprache) => localStorage.setItem("lang", sprache);
+  const speichereSprache = (sprache) => {
+    try {
+      localStorage.setItem("lang", sprache);
+    } catch {
+      // ignore
+    }
+  };
 
   /**
    * Führt einen sicheren Zugriff auf verschachtelte Schlüssel in einem Objekt aus.
@@ -181,10 +199,13 @@
   };
 
   document.addEventListener("DOMContentLoaded", async () => {
-    // Standardmäßig immer auf Deutsch starten (auch nach Reload / Hard-Reload).
-    // Nutzer kann danach weiterhin aktiv umschalten.
-    await ladeUndWendeAn(STANDARD_SPRACHE);
-    speichereSprache(STANDARD_SPRACHE);
+    // Beim ersten Besuch: Deutsch. Danach: gespeicherte Sprache verwenden.
+    const gespeicherteSprache = holeGespeicherteSprache();
+    const startSprache =
+      gespeicherteSprache && UNTERSTUETZT.includes(gespeicherteSprache) ? gespeicherteSprache : STANDARD_SPRACHE;
+
+    await ladeUndWendeAn(startSprache);
+    speichereSprache(startSprache);
 
     // Desktop-Sprachumschalter wird rein per CSS im Layout-Flow positioniert.
 
