@@ -530,11 +530,6 @@ header h1 {
   background-position: calc(100% - 12px) 50%;
   background-size: 12px 8px;
   background-repeat: no-repeat;
-  transition: background-image 0.2s ease;
-}
-
-#vk-school-select.opened {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23666' d='M1 6l5-4 5 4H1z'/%3E%3C/svg%3E");
 }
 
 /* Media */
@@ -1601,16 +1596,17 @@ input.error,
 #lang-switcher {
   padding: 0.4rem 0.8rem;
   padding-left: 2.2rem;
-  border: 1px solid var(--border);
+  border: 2px solid var(--primary);
   border-radius: 6px;
   background-color: #fff;
   color: var(--text, #000);
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  transition: background-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23333' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23666' d='M1 2l5 4 5-4H1z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.5rem center;
   background-size: 1.2em;
@@ -1618,8 +1614,7 @@ input.error,
 }
 
 #lang-switcher:hover {
-  border-color: var(--primary);
-  background-color: #fafafa;
+  background-color: #f0f0f0;
 }
 
 #lang-switcher:focus-visible {
@@ -2149,19 +2144,24 @@ input.error,
     height: 2.5rem;  /* Fixe Höhe - unabhängig von Sprachenlänge */
     background-color: #fff;
     cursor: pointer;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23333' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    transition: background-color 0.2s ease;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23666' d='M1 2l5 4 5-4H1z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 0.5rem center;
     background-size: 1.2em;
     padding-right: 2rem;
   }
+  
+      /* Minimal override: only change border to primary, keep rest of the
+         existing rules elsewhere to avoid duplication. */
+      #lang-switcher-desktop {
+        border: 2px solid var(--primary);
+        -webkit-tap-highlight-color: transparent;
+      }
 
-  #lang-switcher-desktop:hover,
-  #lang-switcher-desktop:focus {
-    border-color: var(--primary);
-    background-color: #fafafa;
-  }
+      #lang-switcher-desktop:hover {
+        background-color: #f0f0f0;
+      }
 
   #lang-switcher-desktop:focus-visible {
     outline: 3px solid #a5b4fc;
@@ -3771,14 +3771,13 @@ body.modal-open {
 :root[data-theme="dark"] #lang-switcher-desktop {
   background-color: var(--panel);
   color: var(--text);
-  border-color: var(--border);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23e5e5e5' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  border-color: var(--primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23ffffff' d='M1 2l5 4 5-4H1z'/%3E%3C/svg%3E");
 }
 
 :root[data-theme="dark"] #lang-switcher:hover,
 :root[data-theme="dark"] #lang-switcher-desktop:hover {
   background-color: var(--input-bg);
-  border-color: var(--primary);
 }
 
 /* Input-Felder und Selects im Dark Mode */
@@ -3801,10 +3800,6 @@ body.modal-open {
   color: var(--text);
   border-color: var(--border);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23ffffff' d='M1 2l5 4 5-4H1z'/%3E%3C/svg%3E");
-}
-
-:root[data-theme="dark"] #vk-school-select.opened {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23ffffff' d='M1 6l5-4 5 4H1z'/%3E%3C/svg%3E");
 }
 
 :root[data-theme="dark"] input:not([type="checkbox"], [type="radio"]):focus,

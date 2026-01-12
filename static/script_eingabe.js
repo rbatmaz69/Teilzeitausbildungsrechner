@@ -45,46 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let aktiverButtonTyp = null; // "percent" oder "hours"
   let aktiverButtonWert = null; // Der feste Wert
 
-  // Dropdown-Pfeil-Animation für #vk-school-select
-  const schoolSelect = document.getElementById('vk-school-select');
-  if (schoolSelect) {
-    let dropdownOpened = false;
-    
-    // Erkennt Mausklick auf das Dropdown
-    schoolSelect.addEventListener('mousedown', () => {
-      setTimeout(() => {
-        dropdownOpened = !dropdownOpened;
-        if (dropdownOpened) {
-          schoolSelect.classList.add('opened');
-        } else {
-          schoolSelect.classList.remove('opened');
-        }
-      }, 10);
-    });
-    
-    // Erkennt wenn das Dropdown über Tastatur geöffnet/geschlossen wird
-    schoolSelect.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-        setTimeout(() => {
-          dropdownOpened = !dropdownOpened;
-          if (dropdownOpened) {
-            schoolSelect.classList.add('opened');
-          } else {
-            schoolSelect.classList.remove('opened');
-          }
-        }, 10);
-      }
-    });
-    
-    // Erkennt wenn der Fokus das Dropdown verlässt (schließt automatisch)
-    schoolSelect.addEventListener('blur', () => {
-      setTimeout(() => {
-        dropdownOpened = false;
-        schoolSelect.classList.remove('opened');
-      }, 150);
-    });
-  }
-
   /**
    * Formatiert eine Zahl und entfernt .0 bei ganzen Zahlen
    * @param {number} zahl - Die zu formatierende Zahl
