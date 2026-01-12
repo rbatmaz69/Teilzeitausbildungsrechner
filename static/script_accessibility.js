@@ -16,6 +16,7 @@
   const rootEl = document.documentElement;
   const DEFAULT_ROOT_FONT = parseFloat(getComputedStyle(rootEl).fontSize) || 16;
   let currentLevel = 0; // 0 = default
+  let currentRootPx = DEFAULT_ROOT_FONT;
 
   // ==========================================
   // THEME (DARK MODE) MANAGEMENT
@@ -495,16 +496,22 @@
     const nextPx = DEFAULT_ROOT_FONT + (level * STEP_PX);
     const clampedPx = Math.min(Math.max(nextPx, MIN_FONT), MAX_FONT);
     rootEl.style.fontSize = clampedPx + 'px';
-    currentLevel = level;
+    currentRootPx = clampedPx;
+    // Wenn MIN/MAX durch Clamping erreicht wurde, Level auf den effektiven Wert korrigieren,
+    // damit Button-States und Anzeige zur tatsächlichen Schriftgröße passen.
+    currentLevel = Math.round((clampedPx - DEFAULT_ROOT_FONT) / STEP_PX);
     updateStepLabels();
     updateFontButtonStates();
   }
 
   function updateFontButtonStates() {
     if (!decBtn || !incBtn) return;
+
+    // nutze den effektiven Root-Font (wegen Clamping kann Level sonst „zu weit“ laufen)
+    const px = typeof currentRootPx === 'number' ? currentRootPx : DEFAULT_ROOT_FONT;
     
     // Update decrease button
-    if (currentLevel <= MIN_LEVEL) {
+    if (px <= MIN_FONT + 0.01) {
       decBtn.setAttribute('aria-disabled', 'true');
       decBtn.disabled = true;
     } else {
@@ -513,7 +520,7 @@
     }
     
     // Update increase button
-    if (currentLevel >= MAX_LEVEL) {
+    if (px >= MAX_FONT - 0.01) {
       incBtn.setAttribute('aria-disabled', 'true');
       incBtn.disabled = true;
     } else {
@@ -552,6 +559,7 @@
   if(resetBtn) resetBtn.addEventListener('click', ()=>{
     rootEl.style.fontSize = '';
     currentLevel = 0;
+    currentRootPx = DEFAULT_ROOT_FONT;
     updateStepLabels();
     updateFontButtonStates();
     announceToScreenReader('Schriftgröße zurückgesetzt');
