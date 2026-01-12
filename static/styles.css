@@ -3263,15 +3263,15 @@ body.modal-open {
 /* Active state for toggle buttons (aria-pressed="true") */
 .a11y-btn-active,
 .a11y-btn[aria-pressed="true"] {
-  background-color: #060;
-  box-shadow: 0 4px 12px rgb(0 102 0 / 30%);
+  background-color: var(--primary);
+  box-shadow: 0 4px 12px rgb(224 0 0 / 30%);
 }
 
 .a11y-btn-active:hover,
 .a11y-btn[aria-pressed="true"]:hover {
-  background-color: #080;
+  background-color: #a90000;
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgb(0 102 0 / 35%);
+  box-shadow: 0 6px 16px rgb(224 0 0 / 35%);
 }
 
 /* Toggle row with icon and switch */
@@ -3335,7 +3335,7 @@ body.modal-open {
 }
 
 .a11y-toggle-input:checked + .a11y-toggle-slider {
-  background-color: #060;
+  background-color: var(--primary);
 }
 
 .a11y-toggle-input:focus + .a11y-toggle-slider {
