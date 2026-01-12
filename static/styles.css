@@ -1004,6 +1004,17 @@ select:-ms-input-placeholder {
   font-size: .9rem;
 }
 
+/* Verstecke Number-Input-Spinner (Pfeile) - Tastatursteuerung bleibt funktional */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  appearance: textfield;
+}
+
 /* Fehler-Indikation für Eingabefelder */
 input.error,
 .input-with-unit input.error {
@@ -3029,7 +3040,7 @@ body.modal-open {
   box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
 }
 
-/* Make the gear icon large and centered inside the circular toggle */
+/* Make the accessibility icon large and centered inside the circular toggle */
 .a11y-toggle svg {
   width: 44px;
   height: 44px;
@@ -3040,26 +3051,39 @@ body.modal-open {
   fill: currentcolor;
 }
 
+/* Icon rotation animation */
+@keyframes icon-rotate-in {
+  0% {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+  }
+
+  100% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
 .a11y-menu {
   position: fixed;
-  right: 16px; /* fixed px so menu stays at same screen position */
-  bottom: 88px; /* place above the toggle (toggle bottom 16px + 56px height + 16px gap) */
-  width: 260px;
-  max-width: calc(100% - 32px);
+  right: 16px !important;
+  bottom: 88px !important;
+  width: 260px !important;
+  max-width: calc(100% - 32px) !important;
   background: #fff;
   color: #111;
   border-radius: 8px;
   box-shadow: 0 8px 28px rgb(0 0 0 / 18%);
   z-index: 10000;
-  font-size: 14px;
+  font-size: 14px !important;
   border: 1px solid #e6eefc;
   box-sizing: border-box;
-  max-height: 60vh;
+  max-height: 75vh;
   overflow: auto;
   
   /* Animation setup */
   opacity: 0;
-  transform: translateX(20px) scale(0.95);
+  transform: translateX(20px) scale(0.95) !important;
   transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
               transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 0.3s ease;
@@ -3068,14 +3092,14 @@ body.modal-open {
 
 .a11y-menu[aria-hidden="false"] {
   opacity: 1;
-  transform: translateX(0) scale(1);
+  transform: translateX(0) scale(1) !important;
   pointer-events: auto;
   animation: menu-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .a11y-menu[aria-hidden="true"] {
   opacity: 0;
-  transform: translateX(20px) scale(0.95);
+  transform: translateX(20px) scale(0.95) !important;
   pointer-events: none;
 }
 
@@ -3093,7 +3117,7 @@ body.modal-open {
 
 .a11y-menu-header {
   position: relative;
-  padding: 8px 12px 28px; /* extra bottom padding so close sits above separator */
+  padding: 8px 12px 16px; /* compact header; close button is hidden */
   border-bottom: 1px solid #f0f4ff;
   font-weight: 600;
 }
@@ -3103,7 +3127,7 @@ body.modal-open {
   right: 12px;
   width: 44px;
   height: 44px;
-  display: flex;
+  display: none; /* Hidden: Toggle button now serves as close button */
   align-items: center;
   justify-content: center;
   background: #fff;
@@ -3158,16 +3182,18 @@ body.modal-open {
 }
 
 .a11y-menu-body {
-  padding: 10px 12px;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .a11y-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  min-height: 48px;
+  padding: 10px 12px;
 }
 
 .a11y-btn {
@@ -3202,6 +3228,100 @@ body.modal-open {
 .a11y-btn:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
+}
+
+/* Active state for toggle buttons (aria-pressed="true") */
+.a11y-btn-active,
+.a11y-btn[aria-pressed="true"] {
+  background-color: #060;
+  box-shadow: 0 4px 12px rgb(0 102 0 / 30%);
+}
+
+.a11y-btn-active:hover,
+.a11y-btn[aria-pressed="true"]:hover {
+  background-color: #080;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgb(0 102 0 / 35%);
+}
+
+/* Toggle row with icon and switch */
+.a11y-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  min-height: 48px;
+}
+
+.a11y-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.a11y-toggle-icon {
+  flex-shrink: 0;
+  color: var(--text-primary);
+}
+
+/* Toggle Switch */
+.a11y-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.a11y-toggle-input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.a11y-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #ccc;
+  transition: 0.3s;
+  border-radius: 26px;
+}
+
+.a11y-toggle-slider::before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+.a11y-toggle-input:checked + .a11y-toggle-slider {
+  background-color: #060;
+}
+
+.a11y-toggle-input:focus + .a11y-toggle-slider {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.a11y-toggle-input:checked + .a11y-toggle-slider::before {
+  transform: translateX(22px);
+}
+
+.a11y-toggle-input:disabled + .a11y-toggle-slider {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.a11y-toggle-input:not(:disabled) + .a11y-toggle-slider:hover {
+  filter: brightness(1.1);
 }
 
 .a11y-label {
@@ -3291,7 +3411,7 @@ body.modal-open {
 .a11y-sep {
   height: 1px;
   background: linear-gradient(90deg, rgb(0 0 0 / 6%), rgb(0 0 0 / 4%));
-  margin: 20px 0 6px; /* leave space for the circular close button above */
+  margin: 8px 0;
 }
 
 .a11y-theme-row {
@@ -3300,6 +3420,119 @@ body.modal-open {
   gap: 8px;
 }
 
+/* Theme Slider Container */
+.a11y-theme-slider-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  background: var(--bg-secondary, #f0f0f0);
+  border-radius: 28px;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  height: 48px;
+  min-width: 180px;
+  flex-shrink: 0;
+  margin: 0 auto;
+}
+
+.a11y-theme-slider-container:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.a11y-theme-slider-track {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  gap: 8px;
+}
+
+.a11y-theme-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  z-index: 2;
+  min-width: 44px;
+  padding: 6px;
+}
+
+.a11y-theme-option:hover {
+  opacity: 0.8;
+}
+
+.a11y-theme-icon {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s ease, color 0.2s ease;
+  color: var(--text-secondary, #666);
+}
+
+.a11y-theme-option:hover .a11y-theme-icon {
+  transform: scale(1.15);
+}
+
+/* Slider Indicator (beweglicher Kreis) */
+.a11y-theme-slider-indicator {
+  position: absolute;
+  left: 6px;
+  top: 4px;
+  width: calc(33.333% - 8px);
+  height: calc(100% - 8px);
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Indicator positions based on data-theme attribute */
+.a11y-theme-slider-container[data-theme="light"] .a11y-theme-slider-indicator {
+  left: 6px;
+}
+
+.a11y-theme-slider-container[data-theme="auto"] .a11y-theme-slider-indicator {
+  left: calc(33.333% + 1px);
+}
+
+.a11y-theme-slider-container[data-theme="dark"] .a11y-theme-slider-indicator {
+  left: calc(66.666% - 4px);
+}
+
+/* Dark mode adjustments */
+:root[data-theme="dark"] .a11y-theme-slider-container {
+  background: var(--bg-secondary, #2a2a2a);
+}
+
+:root[data-theme="dark"] .a11y-theme-slider-indicator {
+  background: #444;
+  box-shadow: 0 2px 8px rgb(255 255 255 / 10%);
+}
+
+:root[data-theme="dark"] .a11y-theme-icon {
+  color: var(--text-secondary, #aaa);
+}
+
+/* Active icon highlighting */
+.a11y-theme-slider-container[data-theme="light"] .a11y-theme-option[data-theme="light"] .a11y-theme-icon,
+.a11y-theme-slider-container[data-theme="auto"] .a11y-theme-option[data-theme="auto"] .a11y-theme-icon,
+.a11y-theme-slider-container[data-theme="dark"] .a11y-theme-option[data-theme="dark"] .a11y-theme-icon {
+  color: var(--brand, #c60000);
+  transform: scale(1.2);
+}
+
+/* Keep old styles for backwards compatibility if needed */
 .a11y-theme-controls {
   display: flex;
   gap: 8px;
@@ -3327,14 +3560,97 @@ body.modal-open {
 .a11y-font-row {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
+  padding: 10px 12px;
+  min-height: 48px;
+  justify-content: center;
+}
+
+.a11y-font-section {
+  display: flex;
+  flex-direction: column;
 }
 
 .a11y-font-controls {
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  gap: 6px;
   align-items: center;
+  flex-shrink: 0;
+}
+
+.a11y-font-btn {
+  min-width: 34px;
+  height: 34px;
+  padding: 6px 10px;
+  font-size: 18px;
+  font-weight: 700;
+  background: var(--bg-secondary, #f0f0f0);
+  color: var(--text-primary);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.a11y-font-btn:hover {
+  background: #e0e0e0;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgb(0 0 0 / 15%);
+}
+
+.a11y-font-btn:active {
+  background: #d0d0d0;
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 10%);
+}
+
+:root[data-theme="dark"] .a11y-font-btn {
+  background: #2a2a2a;
+  color: var(--text-primary);
+}
+
+:root[data-theme="dark"] .a11y-font-btn:hover {
+  background: #333;
+}
+
+:root[data-theme="dark"] .a11y-font-btn:active {
+  background: #222;
+}
+
+.a11y-reset-row {
+  padding: 6px 12px 8px;
+  justify-content: center;
+  min-height: auto;
+}
+
+.a11y-reset-btn {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border, #ddd);
+  box-shadow: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.a11y-reset-btn:hover {
+  background: var(--bg-secondary, #f5f5f5);
+  color: var(--text-primary);
+  transform: none;
+  box-shadow: none;
+}
+
+.a11y-reset-btn:active {
+  background: var(--bg-secondary, #e0e0e0);
+}
+
+:root[data-theme="dark"] .a11y-reset-btn {
+  border-color: #555;
+  color: var(--text-primary);
+}
+
+:root[data-theme="dark"] .a11y-reset-btn:hover {
+  background: #333;
 }
 
 .a11y-reset-wrapper {
