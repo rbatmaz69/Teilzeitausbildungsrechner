@@ -11,6 +11,15 @@
     woerterbuch: null
   };
 
+  /** Synchronisiert die beiden Select-Sprachumschalter (Mobile + Desktop) auf die aktive Sprache. */
+  const synchronisiereSelectUmschalter = () => {
+    const langSwitcher = document.getElementById("lang-switcher");
+    if (langSwitcher && zustand.sprache) langSwitcher.value = zustand.sprache;
+
+    const langSwitcherDesktop = document.getElementById("lang-switcher-desktop");
+    if (langSwitcherDesktop && zustand.sprache) langSwitcherDesktop.value = zustand.sprache;
+  };
+
   /**
    * Leichte Sprache ist für alle Sprachen verfügbar (de, en, tr, uk).
    * Aktiv, wenn <html data-easy-language="true"> gesetzt ist.
@@ -23,11 +32,6 @@
     }
   };
 
-  /**
-   * Liest die zuletzt vom Nutzer gewählte Sprache aus dem LocalStorage aus.
-   * @returns {string|null} ISO-Sprachcode oder null, falls keiner gespeichert ist.
-   */
-  const holeGespeicherteSprache = () => localStorage.getItem("lang");
   /**
    * Persistiert die gewählte Sprache im LocalStorage.
    * @param {string} sprache ISO-Sprachcode (z.B. "de" oder "en").
@@ -44,7 +48,7 @@
     pfad.split(".").reduce((o, schluessel) => (o && o[schluessel] !== undefined ? o[schluessel] : null), objekt);
 
   /**
-   * Löst i18n-Schlüssel auf. Bei aktiver "Leichter Sprache" (nur DE) wird zuerst *_easy versucht.
+   * Löst i18n-Schlüssel auf. Bei aktiver "Leichter Sprache" wird zuerst *_easy versucht.
    */
   const aufloesungMitLeichterSprache = (objekt, pfad) => {
     if (istLeichteSpracheAktiv()) {
@@ -124,29 +128,8 @@
       if (wert != null) element.setAttribute("data-label-open", String(wert));
     });
 
-    // Synchronisiere beide Sprachumschalter (Mobile und Desktop)
-    // Neue: Button-basierte Umschalter statt Select
-    const langButtons = document.querySelectorAll(".lang-btn");
-    
-    langButtons.forEach((btn) => {
-      const lang = btn.dataset.lang;
-      if (!lang) return;
-      
-      // Setze Texte aus i18n
-      const textSpan = btn.querySelector("span[data-i18n]");
-      if (textSpan) {
-        const schluessel = textSpan.dataset.i18n;
-        const wert = aufloesungMitLeichterSprache(woerterbuch, schluessel);
-        if (wert != null) textSpan.textContent = String(wert);
-      }
-      
-      // Aktualisiere aktiven Status
-      if (lang === zustand.sprache) {
-        btn.classList.add("lang-btn-active");
-      } else {
-        btn.classList.remove("lang-btn-active");
-      }
-    });
+    // Select-Umschalter (Mobile + Desktop) auf aktuelle Sprache setzen
+    synchronisiereSelectUmschalter();
   };
 
   /** Registriert eine globale I18N-Hilfs-API auf `window`. */
@@ -198,14 +181,10 @@
   };
 
   document.addEventListener("DOMContentLoaded", async () => {
-    const anfaenglicheSprache =
-      holeGespeicherteSprache() ||
-      (navigator.language || navigator.userLanguage || "de").slice(0, 2);
-
-    const startSprache = UNTERSTUETZT.includes(anfaenglicheSprache) ? anfaenglicheSprache : STANDARD_SPRACHE;
-
-    await ladeUndWendeAn(startSprache);
-    speichereSprache(startSprache);
+    // Standardmäßig immer auf Deutsch starten (auch nach Reload / Hard-Reload).
+    // Nutzer kann danach weiterhin aktiv umschalten.
+    await ladeUndWendeAn(STANDARD_SPRACHE);
+    speichereSprache(STANDARD_SPRACHE);
 
     // Desktop-Sprachumschalter wird rein per CSS im Layout-Flow positioniert.
 
@@ -218,6 +197,7 @@
         
         speichereSprache(neueSprache);
         await ladeUndWendeAn(neueSprache);
+        synchronisiereSelectUmschalter();
       });
     }
 
@@ -230,6 +210,7 @@
         
         speichereSprache(neueSprache);
         await ladeUndWendeAn(neueSprache);
+        synchronisiereSelectUmschalter();
       });
     }
 
