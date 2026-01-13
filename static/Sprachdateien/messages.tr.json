@@ -137,8 +137,8 @@
       "abitur_easy": "Üniversite diploması"
     },
     "qual": {
-      "question": "Hangi mesleki niteliklere sahipsiniz?",
-      "question_easy": "Hangi iş deneyiminiz var?",
+      "question": "Mesleki nitelikler",
+      "question_easy": "Mesleki deneyimler",
       "yes": "Evet",
       "yes_easy": "Evet",
       "no": "Hayır",

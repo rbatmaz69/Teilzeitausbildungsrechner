@@ -218,6 +218,7 @@ function collectVerkuerzungsgruende() {
     berufliche_verkuerzung_monate: 0
   };
 
+
   // 1) Alle Checkbox-Kacheln mit data-vk-field
   const checkboxInputs = document.querySelectorAll(
     '#vk-fieldset input[type="checkbox"][data-vk-field]'
@@ -672,7 +673,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
     ],
     [
       uebersetzung("inputs.teilzeit.labelShort", "Teilzeit"),
-      `${eingaben.teilzeitProzent}% <-> ${teilzeitStunden} ${uebersetzung("units.hours.short", "Std")}`
+      `${eingaben.teilzeitProzent}% ↔ ${teilzeitStunden} ${uebersetzung("units.hours.short", "Std")}`
     ]
   ];
 
@@ -1357,14 +1358,10 @@ function setzeDatenZurueck() {
   LETZTE_BERECHNUNG = null;
 
   // Nach Bestätigung sanft zum Eingabebereich scrollen (gleiche Logik wie "Zum Rechner" Button)
-  const eingabenSection = document.querySelector('section.card'); // Erste Eingabe-Section
+  const eingabenSection = document.querySelector('section.card');
   if (eingabenSection) {
-    const sectionTop = eingabenSection.getBoundingClientRect().top + window.pageYOffset;
-    const offset = 70; // Offset für Tooltip + Abstand oben (gleich wie bei "Zum Rechner" Button)
-    window.scrollTo({
-      top: sectionTop - offset,
-      behavior: "smooth"
-    });
+    const top = eingabenSection.getBoundingClientRect().top + window.pageYOffset - 70 + 38;
+    window.scrollTo({ top, behavior: "smooth" });
   }
 }
 
@@ -1711,7 +1708,8 @@ async function berechnen() {
     setzeErgebnisBegleitUIVisible(true);
     // Sanftes Scrollen zur Ergebnis-Sektion (außer bei geteilten Links)
     if (!window.__skipScrollToResults) {
-      ergebnisContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+      const top = ergebnisContainer.getBoundingClientRect().top + window.pageYOffset - 38;
+      window.scrollTo({ top, behavior: "smooth" });
     }
   }
   
