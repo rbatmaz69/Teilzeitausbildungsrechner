@@ -3,6 +3,10 @@
   const STANDARD_SPRACHE = "de";
   const UNTERSTUETZT = ["de", "en", "uk", "tr", "ar", "fr", "ru", "pl", "ro"];
 
+  // Sitzungspersistenz: sessionStorage überlebt Reloads im selben Tab.
+  // Optional kann zusätzlich localStorage genutzt werden (überlebt Tab schließen).
+  const PERSISTIERE_IN_LOCALSTORAGE = true;
+
   // Sprachdateien liegen in /static/Sprachdateien/
   const I18N_PFAD = "/static/Sprachdateien";
 
@@ -33,24 +37,26 @@
   };
 
   /**
-   * Liest die zuletzt vom Nutzer gewählte Sprache aus dem LocalStorage aus.
+   * Liest die zuletzt vom Nutzer gewählte Sprache.
+   * Priorität: sessionStorage (laufende Sitzung) → optional localStorage (über Sitzungen hinweg).
    * @returns {string|null} ISO-Sprachcode oder null, falls keiner gespeichert ist.
    */
   const holeGespeicherteSprache = () => {
     try {
-      return localStorage.getItem("lang");
+      return sessionStorage.getItem("lang") || localStorage.getItem("lang");
     } catch {
       return null;
     }
   };
 
   /**
-   * Persistiert die gewählte Sprache im LocalStorage.
+   * Persistiert die gewählte Sprache (immer in sessionStorage; optional zusätzlich in localStorage).
    * @param {string} sprache ISO-Sprachcode (z.B. "de" oder "en").
    */
   const speichereSprache = (sprache) => {
     try {
-      localStorage.setItem("lang", sprache);
+      sessionStorage.setItem("lang", sprache);
+      if (PERSISTIERE_IN_LOCALSTORAGE) localStorage.setItem("lang", sprache);
     } catch {
       // ignore
     }

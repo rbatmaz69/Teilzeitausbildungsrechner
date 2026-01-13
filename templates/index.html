@@ -5,11 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Early RTL setup to avoid LTR flash when Arabic is stored in localStorage -->
+  <!-- Early RTL setup to avoid LTR flash when Arabic is stored in session/local storage -->
   <script>
     (() => {
       try {
-        const lang = localStorage.getItem("lang");
+        const lang = sessionStorage.getItem("lang") || localStorage.getItem("lang");
         if (!lang) return;
 
         document.documentElement.setAttribute("lang", lang);
