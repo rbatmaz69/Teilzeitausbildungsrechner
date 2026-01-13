@@ -1334,6 +1334,67 @@ textarea[dir="ltr"] {
   white-space: nowrap;
 }
 
+/* ==========================================
+   RTL: Ergebnis-Anpassungen (arabisch etc.)
+   - gesamte Ergebnis-Zeile rechtsbündig am Container
+   - Pfeil grafisch spiegeln
+   - Reihenfolge der Items tauschen (rechts ← links), Zahlenposition beibehalten
+   ========================================== */
+html[dir="rtl"] #ergebnis-container .highlight-main {
+  width: 100%;
+  text-align: right; /* Inhalt an rechte Kante des Containers anheften */
+}
+
+/* Vertausche visuell die Reihenfolge der drei Items (Basis, Pfeil, Total)
+   und pinne die Gruppe an die rechte Seite */
+html[dir="rtl"] #ergebnis-container .result-extension-values {
+  display: flex;
+  flex-direction: row-reverse; /* tauscht links/rechts */
+  justify-content: flex-end;   /* Gruppe am rechten Container-Rand anheften */
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+
+
+/* Zahlen bleiben in LTR-Reading innerhalb ihrer Box (Schreibrichtung korrekt),
+   aber die Platzierung wird durch row-reverse getauscht */
+html[dir="rtl"] #ergebnis-container .result-extension-basis,
+html[dir="rtl"] #ergebnis-container .result-extension-total {
+  direction: ltr;
+  unicode-bidi: isolate-override;
+  text-align: left; /* Inhalt der Zahl linksbündig innerhalb des eigenen Feldes */
+}
+
+/* Ensure big number and years are right-aligned and remain readable in RTL */
+html[dir="rtl"] .highlight-main .big-number,
+html[dir="rtl"] .highlight-main .result-years {
+  width: 100%;
+  text-align: right;
+  direction: rtl;
+  unicode-bidi: plaintext;
+}
+
+/* Explicit ordering for arrow row so the numbers visually swap in RTL */
+html[dir="rtl"] #ergebnis-container .result-extension-total {
+  order: 1; /* appears on the right edge */
+}
+
+html[dir="rtl"] #ergebnis-container .result-extension-arrow-wrapper {
+  order: 2;
+}
+
+html[dir="rtl"] #ergebnis-container .result-extension-basis {
+  order: 3; /* appears on the left in RTL layout */
+}
+
+/* Mirror the arrow graphic */
+html[dir="rtl"] #ergebnis-container .result-extension-arrow {
+  transform: scaleX(-1);
+}
+
+
 .muted{ color: var(--muted); }
 
 /* Key-Value (Definition List) */
@@ -4436,6 +4497,9 @@ html[dir="rtl"] .vk-info-body ul {
   padding-left: 0;
   padding-right: 1.5rem;
 }
+
+/* Ergebnis-Header: Monate/Jahre rechtsbündig unter der Beschreibung (RTL) */
+ 
 
 /* A11Y theme slider: keep icon order/indicator consistent in RTL */
 html[dir="rtl"] .a11y-theme-slider-container,
