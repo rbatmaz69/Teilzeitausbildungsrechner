@@ -4424,6 +4424,12 @@ html[dir="rtl"] .vk-info-body ul {
   padding-right: 1.5rem;
 }
 
+/* A11Y theme slider: keep icon order/indicator consistent in RTL */
+html[dir="rtl"] .a11y-theme-slider-container,
+html[dir="rtl"] .a11y-theme-slider-track {
+  direction: ltr;
+}
+
 /* Accessibility widget: keep bottom-right even in RTL (like other languages) */
 html[dir="rtl"] .a11y-toggle {
   left: auto;
