@@ -62,16 +62,12 @@
       "separator": "или",
       "separator_easy": "или",
       "button24h": "24 часа (3 дня)",
-      "button24h_easy": "24 часа (3 дня)",
-      "button32h": "32 часа (4 дня)",
-      "button32h_easy": "32 часа (4 дня)"
-    },
-    "verkuerzungen": {
-      "labelShort": "Сокращения",
-      "labelShort_easy": "Короче обучение"
+      "button24h": "24 часа (3-дня)",
+      "button24h_easy": "24 часа (3-дня)",
+      "button32h": "32 часа (4-дня)",
+      "button32h_easy": "32 часа (4-дня)"
     },
     "afterShortening": "Длительность после сокращения",
-    "afterShortening_easy": "Срок после сокращения",
     "inPartTime": "Длительность при неполной занятости",
     "inPartTime_easy": "Срок при неполной занятости",
     "noShortening": "Сокращения не выбраны",

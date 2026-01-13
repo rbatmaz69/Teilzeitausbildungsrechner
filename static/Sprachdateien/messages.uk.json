@@ -62,16 +62,12 @@
       "separator": "або",
       "separator_easy": "або",
       "button24h": "24 години (3 дні)",
-      "button24h_easy": "24 години (3 дні)",
-      "button32h": "32 години (4 дні)",
-      "button32h_easy": "32 години (4 дні)"
-    },
-    "verkuerzungen": {
-      "labelShort": "Скорочення",
-      "labelShort_easy": "Скорочення"
+      "button24h": "24 години (3-дні)",
+      "button24h_easy": "24 години (3-дні)",
+      "button32h": "32 години (4-дні)",
+      "button32h_easy": "32 години (4-дні)"
     },
     "afterShortening": "Тривалість після скорочення",
-    "afterShortening_easy": "Після скорочення",
     "inPartTime": "Тривалість при неповній зайнятості",
     "inPartTime_easy": "Неповний час",
     "noShortening": "Скорочення не вибрано",

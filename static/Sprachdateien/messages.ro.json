@@ -61,14 +61,10 @@
       "hours_easy": "Ore",
       "separator": "sau",
       "separator_easy": "sau",
-      "button24h": "24 ore (3 zile)",
-      "button24h_easy": "24 ore (3 zile)",
-      "button32h": "32 ore (4 zile)",
-      "button32h_easy": "32 ore (4 zile)"
-    },
-    "verkuerzungen": {
-      "labelShort": "Reduceri",
-      "labelShort_easy": "Formare mai scurtă"
+      "button24h": "24 ore (3-zile)",
+      "button24h_easy": "24 ore (3-zile)",
+      "button32h": "32 ore (4-zile)",
+      "button32h_easy": "32 ore (4-zile)"
     },
     "afterShortening": "Durata după reducere",
     "afterShortening_easy": "Durata după reducere",

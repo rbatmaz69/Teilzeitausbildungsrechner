@@ -61,14 +61,10 @@
       "hours_easy": "Heures",
       "separator": "ou",
       "separator_easy": "ou",
-      "button24h": "24 heures (3 jours)",
-      "button24h_easy": "24 heures (3 jours)",
-      "button32h": "32 heures (4 jours)",
-      "button32h_easy": "32 heures (4 jours)"
-    },
-    "verkuerzungen": {
-      "labelShort": "Réductions",
-      "labelShort_easy": "Formation plus courte"
+      "button24h": "24 heures (3-jours)",
+      "button24h_easy": "24 heures (3-jours)",
+      "button32h": "32 heures (4-jours)",
+      "button32h_easy": "32 heures (4-jours)"
     },
     "afterShortening": "Durée après réduction",
     "afterShortening_easy": "Durée après réduction",

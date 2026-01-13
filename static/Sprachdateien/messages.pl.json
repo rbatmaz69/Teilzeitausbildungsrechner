@@ -61,14 +61,10 @@
       "hours_easy": "Godziny",
       "separator": "lub",
       "separator_easy": "lub",
-      "button24h": "24 godziny (3 dni)",
-      "button24h_easy": "24 godziny (3 dni)",
-      "button32h": "32 godziny (4 dni)",
-      "button32h_easy": "32 godziny (4 dni)"
-    },
-    "verkuerzungen": {
-      "labelShort": "Skrócenia",
-      "labelShort_easy": "Krótsza nauka"
+      "button24h": "24 godziny (3-dni)",
+      "button24h_easy": "24 godziny (3-dni)",
+      "button32h": "32 godziny (4-dni)",
+      "button32h_easy": "32 godziny (4-dni)"
     },
     "afterShortening": "Czas po skróceniu",
     "afterShortening_easy": "Czas po skróceniu",

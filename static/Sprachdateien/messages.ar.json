@@ -61,14 +61,10 @@
       "hours_easy": "ساعات",
       "separator": "أو",
       "separator_easy": "أو",
-      "button24h": "24 ساعة (3 أيام)",
-      "button24h_easy": "24 ساعة (3 أيام)",
-      "button32h": "32 ساعة (4 أيام)",
-      "button32h_easy": "32 ساعة (4 أيام)"
-    },
-    "verkuerzungen": {
-      "labelShort": "تقليصات",
-      "labelShort_easy": "تدريب أقصر"
+      "button24h": "24 ساعة (3-أيام)",
+      "button24h_easy": "24 ساعة (3-أيام)",
+      "button32h": "32 ساعة (4-أيام)",
+      "button32h_easy": "32 ساعة (4-أيام)"
     },
     "afterShortening": "المدة بعد التقصير",
     "afterShortening_easy": "المدة بعد التقصير",
