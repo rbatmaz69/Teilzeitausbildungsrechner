@@ -133,6 +133,13 @@ body {
   max-width: 100vw;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+/* Verhindere Overflow bei allen direkten Kindern */
+body > * {
+  max-width: 100%;
 }
 
 /* Minimaler Reset für konsistentes Rendering */
@@ -180,7 +187,6 @@ p.helper {
   padding: 1rem;
   padding-left: max(var(--gutter), env(safe-area-inset-left));
   padding-right: max(var(--gutter), env(safe-area-inset-right));
-  max-width: 480px;
   box-sizing: border-box; /* Padding wird in Breite eingerechnet */
   overflow-x: hidden; /* Verhindert horizontales Scrollen innerhalb des Containers */
 }
@@ -211,17 +217,22 @@ header h1 {
   grid-template-columns: 1fr;
   gap: clamp(1rem, 2vw, 1.75rem);
   align-items: start;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .rechner-card {
   height: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .rechner-column {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  height: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 /* ==========================================
@@ -234,6 +245,8 @@ header h1 {
   padding: 1rem;
   box-shadow: var(--shadow);
   margin-bottom: var(--space-3);
+  max-width: 100%;
+  min-width: 0;
 }
 
 .card-collapsible {
@@ -243,6 +256,8 @@ header h1 {
   padding: 1rem;
   box-shadow: var(--shadow);
   margin-bottom: var(--space-3);
+  max-width: 100%;
+  min-width: 0;
 }
 
 .rechner-grid .card,
@@ -472,6 +487,8 @@ header h1 {
   margin-bottom: var(--space-3);
   background: var(--card-bg);
   box-shadow: var(--shadow);
+  max-width: 100%;
+  min-width: 0;
 }
 
 /* In der rechten VK-Spalte wird der Abstand über das Column-Gap gesteuert.
@@ -790,7 +807,7 @@ button.berechnen {
   border: none;
   border-radius: 999px;
   padding: 12px 32px;
-  font-size: 16px;
+  font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.15s ease-out, transform 0.15s ease-out, box-shadow 0.15s ease-in-out;
   box-shadow: 0 6px 20px rgb(224 0 0 / 25%);
@@ -859,7 +876,7 @@ button.berechnen:focus-visible {
   /* Button-Group spezifische Eigenschaften */
   flex: 1;
   padding: 12px 32px;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: bold;
   border-radius: 999px;
   min-height: 48px;
@@ -973,7 +990,11 @@ select:-ms-input-placeholder {
   opacity: 1;
 }
 
-.input-group { margin-bottom: .8rem; }
+.input-group { 
+  margin-bottom: .8rem;
+  max-width: 100%;
+  min-width: 0;
+}
 
 .notes {
   list-style: disc;
@@ -1036,6 +1057,8 @@ select:-ms-input-placeholder {
   position: relative;
   display: flex;
   align-items: center;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .input-with-unit .unit {
@@ -1145,6 +1168,8 @@ input.error,
 .highlight{
   background: #fff;
   border-color: var(--border);
+  max-width: 100%;
+  min-width: 0;
 }
 
 .highlight.active {
@@ -1818,7 +1843,7 @@ input.error,
   border: none;
   border-radius: 999px;
   padding: 14px 32px;
-  font-size: 16px;
+  font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.15s ease-out, transform 0.15s ease-out, box-shadow 0.15s ease-in-out;
   box-shadow: 0 6px 20px rgb(224 0 0 / 25%);
@@ -1972,7 +1997,6 @@ input.error,
 
   /* Container für Rechner-Bereich auf Desktop */
   .rechner-bereich.container {
-    max-width: 480px;
     padding: 1rem;
   }
 
@@ -2349,7 +2373,7 @@ input.error,
     border: none;
     border-radius: 999px;
     padding: 20px 50px;
-    font-size: 20px;
+    font-size: 1.25rem;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out, transform 0.05s ease-in-out, box-shadow 0.15s ease-in-out;
     box-shadow: 0 6px 20px rgb(224 0 0 / 25%);
@@ -2426,7 +2450,7 @@ input.error,
       min-width: clamp(220px, 22vw, 260px);
       max-width: 100%;
       padding: 16px 40px;
-      font-size: 19px;
+      font-size: 1.2rem;
     }
   }
 
@@ -2488,7 +2512,7 @@ input.error,
       min-width: clamp(200px, 26vw, 240px);
       max-width: 100%;
       padding: 14px 34px;
-      font-size: 18px;
+      font-size: 1.125rem;
     }
   }
 }
@@ -2823,6 +2847,7 @@ body.modal-open {
   cursor: pointer;
   list-style: none;
   padding: 0;
+  flex-wrap: wrap;
 }
 
 /* Standard-Dreieck ausblenden */
@@ -2860,7 +2885,7 @@ body.modal-open {
   justify-content: center;
   gap: 0.35rem;
   padding: 0.45rem 0.75rem;
-  min-width: 10rem;
+  min-width: 0;
   border-radius: 999px;
   background: var(--primary);
   color: #fff;
@@ -2868,7 +2893,7 @@ body.modal-open {
   font-weight: bold;
   box-shadow: 0 6px 20px rgb(224 0 0 / 25%);
   transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
-  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 /* Gesetzliche Grundlagen - Blauer Button für Gesetzliche Grundlagen */
@@ -2966,6 +2991,8 @@ body.modal-open {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
   padding: 1rem;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .sharing-menu-title {
@@ -3134,14 +3161,14 @@ body.modal-open {
   max-width: calc(100% - 32px) !important;
   background: #fff;
   color: #111;
-  border-radius: 8px;
+  border-radius: 16px;
   box-shadow: 0 8px 28px rgb(0 0 0 / 18%);
   z-index: 10000;
   font-size: 14px !important;
   border: 1px solid #e6eefc;
   box-sizing: border-box;
   max-height: 75vh;
-  overflow: auto;
+  overflow: hidden;
   
   /* Animation setup */
   opacity: 0;
@@ -3248,7 +3275,7 @@ body.modal-open {
   padding: 8px 10px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 3px;
 }
 
 .a11y-row {
@@ -3399,33 +3426,30 @@ body.modal-open {
 /* Stagger animation for menu items */
 .a11y-menu[aria-hidden="false"] .a11y-row,
 .a11y-menu[aria-hidden="false"] .a11y-btn,
-.a11y-menu[aria-hidden="false"] .a11y-label {
+.a11y-menu[aria-hidden="false"] .a11y-label,
+.a11y-menu[aria-hidden="false"] .a11y-font-section {
   animation: menu-item-fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
-.a11y-menu[aria-hidden="false"] .a11y-row:nth-child(1),
+/* Animation delays für neue Reihenfolge (berücksichtigt .a11y-sep als Kinder) */
+/* Kind 1: Dark/Auto/Light mode */
 .a11y-menu[aria-hidden="false"] > *:nth-child(1) {
   animation-delay: 0.05s;
 }
 
-.a11y-menu[aria-hidden="false"] .a11y-row:nth-child(2),
-.a11y-menu[aria-hidden="false"] > *:nth-child(2) {
+/* Kind 3: Vorlesen */
+.a11y-menu[aria-hidden="false"] > *:nth-child(3) {
   animation-delay: 0.1s;
 }
 
-.a11y-menu[aria-hidden="false"] .a11y-row:nth-child(3),
-.a11y-menu[aria-hidden="false"] > *:nth-child(3) {
+/* Kind 5: Leichte Sprache */
+.a11y-menu[aria-hidden="false"] > *:nth-child(5) {
   animation-delay: 0.15s;
 }
 
-.a11y-menu[aria-hidden="false"] .a11y-row:nth-child(4),
-.a11y-menu[aria-hidden="false"] > *:nth-child(4) {
+/* Kind 7: Schriftgröße Section */
+.a11y-menu[aria-hidden="false"] > *:nth-child(7) {
   animation-delay: 0.2s;
-}
-
-.a11y-menu[aria-hidden="false"] .a11y-row:nth-child(5),
-.a11y-menu[aria-hidden="false"] > *:nth-child(5) {
-  animation-delay: 0.25s;
 }
 
 @keyframes menu-item-fade-in {
@@ -3475,9 +3499,7 @@ body.modal-open {
 }
 
 .a11y-sep {
-  height: 1px;
-  background: linear-gradient(90deg, rgb(0 0 0 / 6%), rgb(0 0 0 / 4%));
-  margin: 8px 0;
+  display: none;
 }
 
 .a11y-theme-row {
