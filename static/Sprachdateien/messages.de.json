@@ -127,8 +127,8 @@
       "abitur_easy": "Abitur / Hochschulreife"
     },
     "qual": {
-      "question": "Welche beruflichen Qualifikationen bringen Sie mit?",
-      "question_easy": "Welche beruflichen Vorerfahrungen haben Sie?",
+      "question": "Berufliche Qualifikationen",
+      "question_easy": "Berufliche Erfahrungen",
       "yes": "Ja",
       "yes_easy": "Ja",
       "no": "Nein",
