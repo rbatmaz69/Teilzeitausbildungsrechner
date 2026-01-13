@@ -4300,6 +4300,19 @@ html[dir="rtl"] .startseite-header {
   justify-content: flex-start;
 }
 
+/* Startseite: layout should not mirror in RTL (calendar left, description right)
+   but keep RTL text semantics inside the content column. */
+@media (width >= 1024px) {
+  html[dir="rtl"] .startseite-desktop {
+    direction: ltr;
+  }
+
+  html[dir="rtl"] .startseite-desktop-right {
+    direction: rtl;
+    text-align: right;
+  }
+}
+
 html[dir="rtl"] .language-switcher-desktop {
   align-self: flex-start;
 }
