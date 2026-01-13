@@ -1073,48 +1073,29 @@ document.addEventListener("DOMContentLoaded", () => {
   aktualisiereButtonTexte();
 
   // Scroll-Funktion für "Zum Rechner" Button (Mobile und Desktop)
-  const btnStartCalculate = document.getElementById("btn-start-calculate");
-  const btnStartCalculateDesktop = document.getElementById("btn-start-calculate-desktop");
-  const eingabenSection = document.querySelector('section.card'); // Erste Eingabe-Section
-  const rechnerBereich = document.getElementById("rechner-bereich");
-  const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
-  
   const scrollToCalculator = () => {
-    // Auf Desktop: Rechner-Bereich sichtbar machen (aber Startseite bleibt sichtbar)
+    const eingabenSection = document.querySelector('section.card');
+    if (!eingabenSection) return;
+    
+    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+    const rechnerBereich = document.getElementById("rechner-bereich");
+    
+    // Auf Desktop: Rechner-Bereich einblenden
     if (isDesktop && rechnerBereich) {
       document.body.classList.add("show-rechner");
-      // Kurze Verzögerung, damit CSS-Transition greift
-      setTimeout(() => {
-        if (eingabenSection) {
-          // Scroll zu Section mit Offset, damit Tooltip sichtbar bleibt
-          const sectionTop = eingabenSection.getBoundingClientRect().top + window.pageYOffset;
-          const offset = 70; // Offset für Tooltip + Abstand oben
-          window.scrollTo({
-            top: sectionTop - offset,
-            behavior: "smooth"
-          });
-        }
-      }, 50);
-    } else {
-      // Auf Mobile: Einfach scrollen (Rechner ist immer sichtbar)
-      if (eingabenSection) {
-        const sectionTop = eingabenSection.getBoundingClientRect().top + window.pageYOffset;
-        const offset = 70; // Offset für Tooltip + Abstand oben
-        window.scrollTo({
-          top: sectionTop - offset,
-          behavior: "smooth"
-        });
-      }
     }
+    
+    // Scroll mit Offset (Desktop bekommt kurzen Delay für CSS-Transition)
+    const doScroll = () => {
+      const top = eingabenSection.getBoundingClientRect().top + window.pageYOffset - 70 + 38;
+      window.scrollTo({ top, behavior: "smooth" });
+    };
+    
+    isDesktop ? setTimeout(doScroll, 50) : doScroll();
   };
   
-  if (btnStartCalculate) {
-    btnStartCalculate.addEventListener("click", scrollToCalculator);
-  }
-  
-  if (btnStartCalculateDesktop) {
-    btnStartCalculateDesktop.addEventListener("click", scrollToCalculator);
-  }
+  document.getElementById("btn-start-calculate")?.addEventListener("click", scrollToCalculator);
+  document.getElementById("btn-start-calculate-desktop")?.addEventListener("click", scrollToCalculator);
 
   // Verhindere, dass Klicks auf Info-Icons das Input-Feld fokussieren
   // und positioniere Tooltips zentral
@@ -1407,4 +1388,40 @@ document.addEventListener("DOMContentLoaded", () => {
       teilzeitStundenEingabe.dispatchEvent(new Event('blur'));
     });
   }
+
+  // Pfeiltasten-Funktionalität für numerische Eingabefelder
+  const numericFields = [
+    { element: dauerEingabe, step: 1, min: 1, max: 60 },
+    { element: wochenstundenEingabe, step: 1, min: 0, max: 100 },
+    { element: teilzeitStundenEingabe, step: 1, min: 0, max: 100 },
+    { element: teilzeitProzentEingabe, step: 1, min: 0, max: 100 },
+    { element: document.getElementById('alter'), step: 1, min: 0, max: 99 },
+    { element: document.getElementById('vk_beruf_q2_dauer_months'), step: 1, min: 0, max: 50 }
+  ];
+
+  numericFields.forEach(({ element, step, min, max }) => {
+    if (!element) return;
+
+    element.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+      
+      e.preventDefault();
+      
+      const currentValue = parseNumber(element.value) || 0;
+      let newValue = currentValue;
+
+      if (e.key === 'ArrowUp') {
+        newValue = Math.min(currentValue + step, max);
+      } else if (e.key === 'ArrowDown') {
+        newValue = Math.max(currentValue - step, min);
+      }
+
+      // Formatiere den Wert (entferne .0 bei ganzen Zahlen)
+      const formattedValue = newValue % 1 === 0 ? String(Math.round(newValue)) : String(newValue);
+      element.value = formattedValue;
+
+      // Trigger input event für Validierung und weitere Logik
+      element.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+  });
 });

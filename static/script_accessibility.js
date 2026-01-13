@@ -1,8 +1,8 @@
 (function(){
   const toggle = document.getElementById('a11y-toggle');
   const menu = document.getElementById('a11y-menu');
-  const closeBtn = document.getElementById('a11y-close');
-  const readBtn = document.getElementById('a11y-read');
+  const readToggle = document.getElementById('a11y-read-toggle');
+  const easyLanguageToggle = document.getElementById('a11y-easy-language-toggle');
   const decBtn = document.getElementById('a11y-decrease');
   const resetBtn = document.getElementById('a11y-reset');
   const incBtn = document.getElementById('a11y-increase');
@@ -11,19 +11,32 @@
   // discrete levels: -3..+3 per request
   const MIN_LEVEL = -3;
   const MAX_LEVEL = 3;
-  const STEP_PX = 2; // each level changes base by 2px
   // adjust root font-size so rem-based text scales with A-/A+
   const rootEl = document.documentElement;
   const DEFAULT_ROOT_FONT = parseFloat(getComputedStyle(rootEl).fontSize) || 16;
+  // 3 Stufen in beide Richtungen, so dass MIN/MAX exakt beim 3. Klick erreicht werden.
+  const STEP_DOWN_PX = (DEFAULT_ROOT_FONT - MIN_FONT) / Math.max(1, Math.abs(MIN_LEVEL));
+  const STEP_UP_PX = (MAX_FONT - DEFAULT_ROOT_FONT) / Math.max(1, MAX_LEVEL);
   let currentLevel = 0; // 0 = default
 
   // ==========================================
   // THEME (DARK MODE) MANAGEMENT
   // ==========================================
   const THEME_KEY = 'theme';
-  const themeLightBtn = document.getElementById('a11y-theme-light');
-  const themeDarkBtn = document.getElementById('a11y-theme-dark');
-  const themeAutoBtn = document.getElementById('a11y-theme-auto');
+  const themeSlider = document.getElementById('a11y-theme-slider');
+  const statusRegion = document.getElementById('a11y-status');
+
+  // ==========================================
+  // SCREEN READER ANNOUNCEMENTS
+  // ==========================================
+  function announceToScreenReader(message) {
+    if (!statusRegion) return;
+    // Clear first to ensure announcement is triggered even for repeated messages
+    statusRegion.textContent = '';
+    setTimeout(() => {
+      statusRegion.textContent = message;
+    }, 100);
+  }
 
   function getSystemTheme() {
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -44,18 +57,14 @@
       rootEl.removeAttribute('data-theme');
     }
     
-    // Update button states (aria-pressed)
-    if (themeLightBtn) themeLightBtn.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
-    if (themeDarkBtn) themeDarkBtn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
-    if (themeAutoBtn) themeAutoBtn.setAttribute('aria-pressed', theme === 'auto' ? 'true' : 'false');
-    
-    // Add active class for visual feedback
-    [themeLightBtn, themeDarkBtn, themeAutoBtn].forEach(btn => {
-      if (btn) btn.classList.remove('a11y-theme-active');
-    });
-    if (theme === 'light' && themeLightBtn) themeLightBtn.classList.add('a11y-theme-active');
-    if (theme === 'dark' && themeDarkBtn) themeDarkBtn.classList.add('a11y-theme-active');
-    if (theme === 'auto' && themeAutoBtn) themeAutoBtn.classList.add('a11y-theme-active');
+    // Update slider position and ARIA
+    if (themeSlider) {
+      const position = theme === 'light' ? 0 : theme === 'auto' ? 1 : 2;
+      const labels = { 'light': 'Hell', 'auto': 'Auto', 'dark': 'Dunkel' };
+      themeSlider.setAttribute('aria-valuenow', position);
+      themeSlider.setAttribute('aria-valuetext', labels[theme]);
+      themeSlider.setAttribute('data-theme', theme);
+    }
   }
 
   function saveTheme(theme) {
@@ -68,10 +77,10 @@
 
   function loadTheme() {
     try {
-      return localStorage.getItem(THEME_KEY) || 'light';
+      return localStorage.getItem(THEME_KEY) || 'auto';
     } catch (e) {
       console.warn('Could not load theme preference:', e);
-      return 'light';
+      return 'auto';
     }
   }
 
@@ -79,34 +88,50 @@
     console.log('Setting theme to:', theme);
     saveTheme(theme);
     applyTheme(theme);
+    
+    // Announce theme change to screen readers
+    const themeNames = { 'light': 'Helles Design', 'auto': 'Automatisches Design', 'dark': 'Dunkles Design' };
+    announceToScreenReader(themeNames[theme] + ' aktiviert');
   }
 
   // Initialize theme on page load
   const savedTheme = loadTheme();
   console.log('Loaded theme:', savedTheme);
-  console.log('Theme buttons:', {light: themeLightBtn, dark: themeDarkBtn, auto: themeAutoBtn});
+  console.log('Theme slider:', themeSlider);
   applyTheme(savedTheme);
 
-  // Theme button click handlers
-  if (themeLightBtn) {
-    console.log('Adding click listener to light button');
-    themeLightBtn.addEventListener('click', () => {
-      console.log('Light button clicked');
-      setTheme('light');
+  // Theme slider interaction handlers
+  if (themeSlider) {
+    // Click on slider options
+    const options = themeSlider.querySelectorAll('.a11y-theme-option');
+    options.forEach(option => {
+      option.addEventListener('click', () => {
+        const theme = option.getAttribute('data-theme');
+        setTheme(theme);
+      });
     });
-  }
-  if (themeDarkBtn) {
-    console.log('Adding click listener to dark button');
-    themeDarkBtn.addEventListener('click', () => {
-      console.log('Dark button clicked');
-      setTheme('dark');
-    });
-  }
-  if (themeAutoBtn) {
-    console.log('Adding click listener to auto button');
-    themeAutoBtn.addEventListener('click', () => {
-      console.log('Auto button clicked');
-      setTheme('auto');
+    
+    // Keyboard navigation
+    themeSlider.addEventListener('keydown', (e) => {
+      const currentTheme = loadTheme();
+      const themes = ['light', 'auto', 'dark'];
+      const currentIndex = themes.indexOf(currentTheme);
+      
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        const newIndex = Math.max(0, currentIndex - 1);
+        setTheme(themes[newIndex]);
+      } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        const newIndex = Math.min(2, currentIndex + 1);
+        setTheme(themes[newIndex]);
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        setTheme('light');
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        setTheme('dark');
+      }
     });
   }
 
@@ -123,26 +148,231 @@
   // ==========================================
   // MENU MANAGEMENT
   // ==========================================
+  const iconDefault = document.getElementById('a11y-icon-default');
+  const iconClose = document.getElementById('a11y-icon-close');
+
+  function isEasyLanguageSupportedForCurrentLang() {
+    return true;
+  }
+
+  function updateToggleIcon(isOpen) {
+    if (!iconDefault || !iconClose) return;
+    
+    if (isOpen) {
+      // Rotate out default icon and rotate in close icon
+      iconDefault.style.display = 'none';
+      iconClose.style.display = 'block';
+      iconClose.style.animation = 'icon-rotate-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+    } else {
+      // Rotate out close icon and rotate in default icon
+      iconClose.style.display = 'none';
+      iconDefault.style.display = 'block';
+      iconDefault.style.animation = 'icon-rotate-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+    }
+  }
+
+  function updateAriaLabel(isOpen) {
+    if (!toggle) return;
+    const key = isOpen ? 'a11y.buttonAriaExpanded' : 'a11y.buttonAria';
+    const label = window.I18N && window.I18N.t ? window.I18N.t(key) : (isOpen ? 'Barrierefreiheitsmenü schließen' : 'Barrierefreiheitsmenü öffnen');
+    toggle.setAttribute('aria-label', label);
+  }
+
+  // Focus trap management
+  let focusableElements = [];
+  let firstFocusable = null;
+  let lastFocusable = null;
+
+  function updateFocusableElements() {
+    if (!menu) return;
+    // Get all focusable elements within the menu
+    focusableElements = Array.from(menu.querySelectorAll(
+      'button:not([disabled]), input:not([disabled]), [tabindex="0"]:not([disabled])'
+    ));
+    firstFocusable = focusableElements[0];
+    lastFocusable = focusableElements[focusableElements.length - 1];
+  }
+
+  function handleMenuKeydown(e) {
+    // Only handle Tab when menu is open
+    if (menu.getAttribute('aria-hidden') === 'true') return;
+
+    if (e.key === 'Tab') {
+      updateFocusableElements();
+      if (!firstFocusable || !lastFocusable) return;
+
+      // Beim Öffnen Fokus NICHT automatisch ins Menü springen.
+      // Erst wenn der Nutzer Tab drückt, geht es ins Menü.
+      if (document.activeElement === toggle) {
+        e.preventDefault();
+        (e.shiftKey ? lastFocusable : firstFocusable)?.focus();
+        return;
+      }
+
+      // Trap focus within menu
+      if (e.shiftKey) {
+        // Shift+Tab: moving backwards
+        if (document.activeElement === firstFocusable) {
+          e.preventDefault();
+          toggle?.focus();
+        }
+      } else {
+        // Tab: moving forwards
+        if (document.activeElement === lastFocusable) {
+          e.preventDefault();
+          toggle?.focus();
+        }
+      }
+    }
+  }
+
   function openMenu(){
     toggle.setAttribute('aria-expanded','true');
-    toggle.style.display = 'none';
     menu.setAttribute('aria-hidden','false');
-    setTimeout(()=>{ if(readBtn) readBtn.focus() },50);
+    updateToggleIcon(true);
+    updateAriaLabel(true);
+    
+    // Update focusable elements; Fokus bleibt auf dem Toggle (erst Tab bewegt ins Menü)
+    updateFocusableElements();
   }
+  
   function closeMenu(){
     toggle.setAttribute('aria-expanded','false');
-    toggle.style.display = '';
     menu.setAttribute('aria-hidden','true');
+    updateToggleIcon(false);
+    updateAriaLabel(false);
     if(toggle) toggle.focus();
   }
 
-  if(toggle) toggle.addEventListener('click', openMenu);
-  if(closeBtn) closeBtn.addEventListener('click', closeMenu);
+  if(toggle) toggle.addEventListener('click', function() {
+    const isOpen = menu.getAttribute('aria-hidden') === 'false';
+    if (isOpen) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
 
-  // Close on Escape
+  // Handle Escape and Tab keys
   document.addEventListener('keydown', (e)=>{
     if(e.key === 'Escape' && menu && menu.getAttribute('aria-hidden') === 'false'){
       closeMenu();
+    }
+    // Handle Tab/Shift+Tab for focus trap
+    handleMenuKeydown(e);
+  });
+
+  // ==========================================
+  // EASY LANGUAGE (LEICHTE SPRACHE) TOGGLE
+  // ==========================================
+  const EASY_LANGUAGE_KEY = 'easyLanguage';
+
+  function loadEasyLanguage() {
+    try {
+      return localStorage.getItem(EASY_LANGUAGE_KEY) === 'true';
+    } catch (e) {
+      console.warn('Could not load easy language preference:', e);
+      return false;
+    }
+  }
+
+  function saveEasyLanguage(enabled) {
+    try {
+      localStorage.setItem(EASY_LANGUAGE_KEY, enabled ? 'true' : 'false');
+    } catch (e) {
+      console.warn('Could not save easy language preference:', e);
+    }
+  }
+
+  function applyEasyLanguage(enabled) {
+    if (enabled) {
+      rootEl.setAttribute('data-easy-language', 'true');
+    } else {
+      rootEl.removeAttribute('data-easy-language');
+    }
+    
+    if (easyLanguageToggle) {
+      easyLanguageToggle.checked = enabled;
+      easyLanguageToggle.setAttribute('aria-checked', enabled ? 'true' : 'false');
+    }
+  }
+
+  function toggleEasyLanguage() {
+    if (!isEasyLanguageSupportedForCurrentLang()) return;
+    const currentState = loadEasyLanguage();
+    const newState = !currentState;
+    saveEasyLanguage(newState);
+    applyEasyLanguage(newState);
+
+    // Announce to screen readers
+    announceToScreenReader(newState ? 'Leichte Sprache aktiviert' : 'Leichte Sprache deaktiviert');
+
+    window.dispatchEvent(new CustomEvent('easyLanguage:changed', {
+      detail: { enabled: newState }
+    }));
+  }
+
+  function setEasyLanguageButtonEnabled(isGerman) {
+    if (!easyLanguageToggle) return;
+    if (isGerman) {
+      easyLanguageToggle.removeAttribute('disabled');
+      easyLanguageToggle.parentElement.style.opacity = '1';
+      easyLanguageToggle.parentElement.style.cursor = 'pointer';
+    } else {
+      easyLanguageToggle.setAttribute('disabled', 'true');
+      easyLanguageToggle.checked = false;
+      easyLanguageToggle.parentElement.style.opacity = '0.5';
+      easyLanguageToggle.parentElement.style.cursor = 'not-allowed';
+    }
+  }
+
+  function syncEasyLanguageForCurrentLang() {
+    const supported = isEasyLanguageSupportedForCurrentLang();
+    setEasyLanguageButtonEnabled(supported);
+
+    if (!supported) {
+      // Leichte Sprache ist nur für Deutsch: erzwinge „aus“ ohne die gespeicherte Präferenz zu löschen.
+      const wasEnabled = rootEl.getAttribute('data-easy-language') === 'true';
+      applyEasyLanguage(false);
+      if (wasEnabled) {
+        window.dispatchEvent(new CustomEvent('easyLanguage:changed', {
+          detail: { enabled: false }
+        }));
+      }
+      return;
+    }
+
+    // Deutsch: wende gespeicherte Präferenz an
+    const saved = loadEasyLanguage();
+    applyEasyLanguage(saved);
+  }
+
+  // Initialize easy language on page load (Deutsch only; refresh when i18n finished)
+  syncEasyLanguageForCurrentLang();
+
+  // Easy language button click handler
+  if (easyLanguageToggle) {
+    easyLanguageToggle.addEventListener('change', () => {
+      toggleEasyLanguage();
+    });
+    
+    // Enable Enter key for toggle activation
+    easyLanguageToggle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        easyLanguageToggle.click();
+      }
+    });
+  }
+
+  // Wenn sich die Sprache ändert: Toggle aktivieren/deaktivieren und Zustand anwenden
+  window.addEventListener('i18n:changed', () => {
+    syncEasyLanguageForCurrentLang();
+    // i18n rendert im Handler in script_Sprache_Auswaehlen.js bei easyLanguage:changed neu.
+    if (isEasyLanguageSupportedForCurrentLang()) {
+      window.dispatchEvent(new CustomEvent('easyLanguage:changed', {
+        detail: { enabled: rootEl.getAttribute('data-easy-language') === 'true' }
+      }));
     }
   });
 
@@ -158,10 +388,9 @@
       synth.cancel();
     }
     isSpeaking = false;
-    if(readBtn){
-      const readLabel = window.I18N && window.I18N.t ? window.I18N.t('a11y.read','Vorlesen') : 'Vorlesen';
-      readBtn.setAttribute('aria-pressed','false');
-      readBtn.textContent = readLabel;
+    if(readToggle){
+      readToggle.checked = false;
+      readToggle.setAttribute('aria-checked', 'false');
     }
   }
 
@@ -241,20 +470,29 @@
 
     if(synth && synth.speaking) synth.cancel();
     synth.speak(utterance);
-    if(readBtn){
-      const stopLabel = window.I18N && window.I18N.t ? window.I18N.t('a11y.readStop','Vorlesen stoppen') : 'Vorlesen stoppen';
-      readBtn.setAttribute('aria-pressed','true');
-      readBtn.textContent = stopLabel;
+    if(readToggle){
+      readToggle.checked = true;
+      readToggle.setAttribute('aria-checked', 'true');
     }
     isSpeaking = true;
+    announceToScreenReader('Vorlesefunktion aktiviert');
   }
 
-  if(readBtn){
-    readBtn.addEventListener('click', ()=>{
-      if(isSpeaking){
-        stopSpeaking();
-      } else {
+  if(readToggle){
+    readToggle.addEventListener('change', ()=>{
+      if(readToggle.checked){
         startSpeaking();
+      } else {
+        stopSpeaking();
+        announceToScreenReader('Vorlesefunktion deaktiviert');
+      }
+    });
+    
+    // Enable Enter key for toggle activation
+    readToggle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        readToggle.click();
       }
     });
   }
@@ -264,18 +502,48 @@
     // clamp level
     if(level < MIN_LEVEL) level = MIN_LEVEL;
     if(level > MAX_LEVEL) level = MAX_LEVEL;
-    const nextPx = DEFAULT_ROOT_FONT + (level * STEP_PX);
+
+    const nextPx =
+      level === 0
+        ? DEFAULT_ROOT_FONT
+        : level < 0
+          ? DEFAULT_ROOT_FONT + (level * STEP_DOWN_PX)
+          : DEFAULT_ROOT_FONT + (level * STEP_UP_PX);
+
     const clampedPx = Math.min(Math.max(nextPx, MIN_FONT), MAX_FONT);
     rootEl.style.fontSize = clampedPx + 'px';
     currentLevel = level;
     updateStepLabels();
+    updateFontButtonStates();
+  }
+
+  function updateFontButtonStates() {
+    if (!decBtn || !incBtn) return;
+    
+    // Update decrease button
+    if (currentLevel <= MIN_LEVEL) {
+      decBtn.setAttribute('aria-disabled', 'true');
+      decBtn.disabled = true;
+    } else {
+      decBtn.removeAttribute('aria-disabled');
+      decBtn.disabled = false;
+    }
+    
+    // Update increase button
+    if (currentLevel >= MAX_LEVEL) {
+      incBtn.setAttribute('aria-disabled', 'true');
+      incBtn.disabled = true;
+    } else {
+      incBtn.removeAttribute('aria-disabled');
+      incBtn.disabled = false;
+    }
   }
 
   function updateStepLabels(){
     if(!decBtn || !incBtn) return;
-    // update simple button labels (keep A- / A+)
-    decBtn.textContent = 'A-';
-    incBtn.textContent = 'A+';
+    // update simple button labels
+    decBtn.textContent = '−';
+    incBtn.textContent = '+';
     // update the central level display
     const display = document.getElementById('a11y-level-display');
     if(display){
@@ -286,20 +554,28 @@
 
   if(decBtn) decBtn.addEventListener('click', ()=>{
     const next = Math.max(currentLevel - 1, MIN_LEVEL);
-    applyZoomForLevel(next);
+    if (next < currentLevel) {
+      applyZoomForLevel(next);
+      announceToScreenReader('Schriftgröße verringert');
+    }
   });
   if(incBtn) incBtn.addEventListener('click', ()=>{
     const next = Math.min(currentLevel + 1, MAX_LEVEL);
-    applyZoomForLevel(next);
+    if (next > currentLevel) {
+      applyZoomForLevel(next);
+      announceToScreenReader('Schriftgröße vergrößert');
+    }
   });
   if(resetBtn) resetBtn.addEventListener('click', ()=>{
     rootEl.style.fontSize = '';
     currentLevel = 0;
     updateStepLabels();
+    updateFontButtonStates();
+    announceToScreenReader('Schriftgröße zurückgesetzt');
   });
 
-  // initialize labels
+  // initialize labels and button states
   updateStepLabels();
-  
+  updateFontButtonStates();
 
 })();
