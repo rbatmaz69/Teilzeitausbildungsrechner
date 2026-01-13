@@ -157,6 +157,8 @@
       "nichtAbgeschlosseneAusbildung_sr_easy": "Начатое, но не законченное обучение",
       "nichtAbgeschlosseneAusbildung_dauer": "Сколько месяцев длилось незавершенное обучение?",
       "nichtAbgeschlosseneAusbildung_dauer_easy": "Сколько месяцев длилось обучение?",
+      "nichtAbgeschlosseneAusbildung_placeholder": "напр. 12",
+      "nichtAbgeschlosseneAusbildung_placeholder_easy": "напр. 12",
       "nichtAbgeschlosseneAusbildung_short": "Незавершенное профобучение",
       "nichtAbgeschlosseneAusbildung_short_easy": "Незавершенное обучение",
       "praktischeErfahrung": "Вы уже работали в похожей сфере или получили практический опыт, полезный для обучения?",
@@ -192,7 +194,9 @@
     },
     "other": {
       "question": "Сколько вам лет на момент обучения?",
-      "question_easy": "Сколько вам лет?"
+      "question_easy": "Сколько вам лет?",
+      "placeholder": "напр. 25",
+      "placeholder_easy": "напр. 25"
     },
     "alter21": {
       "label": "Старше 21 года",

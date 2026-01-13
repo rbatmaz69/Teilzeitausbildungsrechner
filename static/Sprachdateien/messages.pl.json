@@ -157,6 +157,8 @@
       "nichtAbgeschlosseneAusbildung_sr_easy": "Zaczęta, ale nieukończona nauka",
       "nichtAbgeschlosseneAusbildung_dauer": "Ile miesięcy trwała nieukończona nauka zawodu?",
       "nichtAbgeschlosseneAusbildung_dauer_easy": "Ile miesięcy trwała ta nauka?",
+      "nichtAbgeschlosseneAusbildung_placeholder": "np. 12",
+      "nichtAbgeschlosseneAusbildung_placeholder_easy": "np. 12",
       "nichtAbgeschlosseneAusbildung_short": "Nieukończona nauka zawodu",
       "nichtAbgeschlosseneAusbildung_short_easy": "Nieukończona nauka",
       "praktischeErfahrung": "Czy pracowałeś/-aś już w podobnej branży lub masz doświadczenie praktyczne przydatne w kształceniu?",
@@ -192,7 +194,9 @@
     },
     "other": {
       "question": "Ile masz lat w czasie kształcenia?",
-      "question_easy": "Ile masz lat?"
+      "question_easy": "Ile masz lat?",
+      "placeholder": "np. 25",
+      "placeholder_easy": "np. 25"
     },
     "alter21": {
       "label": "Powyżej 21 lat",

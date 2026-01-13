@@ -157,6 +157,8 @@
       "nichtAbgeschlosseneAusbildung_sr_easy": "تدريب بدأ ولم ينتهِ",
       "nichtAbgeschlosseneAusbildung_dauer": "كم شهرًا استمر التدريب غير المكتمل؟",
       "nichtAbgeschlosseneAusbildung_dauer_easy": "كم شهرًا استمر التدريب؟",
+      "nichtAbgeschlosseneAusbildung_placeholder": "مثال: 12",
+      "nichtAbgeschlosseneAusbildung_placeholder_easy": "مثال: 12",
       "nichtAbgeschlosseneAusbildung_short": "تدريب غير مكتمل",
       "nichtAbgeschlosseneAusbildung_short_easy": "تدريب غير منتهٍ",
       "praktischeErfahrung": "هل عملت في مجال مشابه أو اكتسبت خبرة عملية مفيدة للتدريب؟",
@@ -192,7 +194,9 @@
     },
     "other": {
       "question": "كم عمرك وقت بدء التدريب؟",
-      "question_easy": "كم عمرك؟"
+      "question_easy": "كم عمرك؟",
+      "placeholder": "مثال: 25",
+      "placeholder_easy": "مثال: 25"
     },
     "alter21": {
       "label": "أكبر من 21 سنة",

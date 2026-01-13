@@ -157,6 +157,8 @@
       "nichtAbgeschlosseneAusbildung_sr_easy": "Formare începută, dar neterminată",
       "nichtAbgeschlosseneAusbildung_dauer": "Câte luni a durat formarea nefinalizată?",
       "nichtAbgeschlosseneAusbildung_dauer_easy": "Câte luni a durat formarea?",
+      "nichtAbgeschlosseneAusbildung_placeholder": "ex. 12",
+      "nichtAbgeschlosseneAusbildung_placeholder_easy": "ex. 12",
       "nichtAbgeschlosseneAusbildung_short": "Formare nefinalizată",
       "nichtAbgeschlosseneAusbildung_short_easy": "Formare neterminată",
       "praktischeErfahrung": "Ai lucrat deja într-un domeniu similar sau ai experiență practică utilă pentru formare?",
@@ -192,7 +194,9 @@
     },
     "other": {
       "question": "Câți ani ai în momentul formării?",
-      "question_easy": "Câți ani ai?"
+      "question_easy": "Câți ani ai?",
+      "placeholder": "ex. 25",
+      "placeholder_easy": "ex. 25"
     },
     "alter21": {
       "label": "Peste 21 de ani",

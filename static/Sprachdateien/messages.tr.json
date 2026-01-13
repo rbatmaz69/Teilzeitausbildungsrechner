@@ -157,6 +157,8 @@
       "nichtAbgeschlosseneAusbildung_sr_easy": "Başlanmış ama bitmemiş eğitim",
       "nichtAbgeschlosseneAusbildung_dauer": "Tamamlanmamış eğitim kaç ay sürdü?",
       "nichtAbgeschlosseneAusbildung_dauer_easy": "Eğitim kaç ay sürdü?",
+      "nichtAbgeschlosseneAusbildung_placeholder": "örn. 12",
+      "nichtAbgeschlosseneAusbildung_placeholder_easy": "örn. 12",
       "nichtAbgeschlosseneAusbildung_short": "Tamamlanmamış eğitim",
       "nichtAbgeschlosseneAusbildung_short_easy": "Bitmemiş eğitim",
       "praktischeErfahrung": "Benzer bir alanda çalıştınız veya eğitim için faydalı pratik deneyim kazandınız mı?",
@@ -192,7 +194,9 @@
     },
     "other": {
       "question": "Eğitim sırasında kaç yaşındasınız?",
-      "question_easy": "Kaç yaşındasınız?"
+      "question_easy": "Kaç yaşındasınız?",
+      "placeholder": "örn. 25",
+      "placeholder_easy": "örn. 25"
     },
     "alter21": {
       "label": "21 yaşından büyük",

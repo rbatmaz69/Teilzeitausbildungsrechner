@@ -157,6 +157,8 @@
       "nichtAbgeschlosseneAusbildung_sr_easy": "Started but not finished training",
       "nichtAbgeschlosseneAusbildung_dauer": "How many months did the incomplete vocational training last?",
       "nichtAbgeschlosseneAusbildung_dauer_easy": "How many months did the training last?",
+      "nichtAbgeschlosseneAusbildung_placeholder": "e.g. 12",
+      "nichtAbgeschlosseneAusbildung_placeholder_easy": "e.g. 12",
       "nichtAbgeschlosseneAusbildung_short": "Incomplete vocational training",
       "nichtAbgeschlosseneAusbildung_short_easy": "Unfinished training",
       "praktischeErfahrung": "Have you already worked in a similar field or gained practical experience that is useful for the training?",
@@ -192,7 +194,9 @@
     },
     "other": {
       "question": "How old are you at the time of training?",
-      "question_easy": "How old are you?"
+      "question_easy": "How old are you?",
+      "placeholder": "e.g. 25",
+      "placeholder_easy": "e.g. 25"
     },
     "alter21": {
       "label": "Over 21 years old",

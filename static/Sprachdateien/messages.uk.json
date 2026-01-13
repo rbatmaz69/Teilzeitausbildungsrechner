@@ -157,6 +157,8 @@
       "nichtAbgeschlosseneAusbildung_sr_easy": "Розпочата, але незакінчена освіта",
       "nichtAbgeschlosseneAusbildung_dauer": "Скільки місяців тривало незавершене навчання?",
       "nichtAbgeschlosseneAusbildung_dauer_easy": "Скільки місяців тривало навчання?",
+      "nichtAbgeschlosseneAusbildung_placeholder": "напр. 12",
+      "nichtAbgeschlosseneAusbildung_placeholder_easy": "напр. 12",
       "nichtAbgeschlosseneAusbildung_short": "Незавершена освіта",
       "nichtAbgeschlosseneAusbildung_short_easy": "Незакінчена освіта",
       "praktischeErfahrung": "Чи працювали ви в подібній сфері або маєте практичний досвід, корисний для навчання?",
@@ -192,7 +194,9 @@
     },
     "other": {
       "question": "Скільки вам років на момент навчання?",
-      "question_easy": "Скільки вам років?"
+      "question_easy": "Скільки вам років?",
+      "placeholder": "напр. 25",
+      "placeholder_easy": "напр. 25"
     },
     "alter21": {
       "label": "Ви старші за 21 рік",

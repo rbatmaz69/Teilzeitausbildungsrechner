@@ -157,6 +157,8 @@
       "nichtAbgeschlosseneAusbildung_sr_easy": "Formation commencée mais pas finie",
       "nichtAbgeschlosseneAusbildung_dauer": "Combien de mois a duré la formation non terminée ?",
       "nichtAbgeschlosseneAusbildung_dauer_easy": "Combien de mois a duré la formation ?",
+      "nichtAbgeschlosseneAusbildung_placeholder": "ex. 12",
+      "nichtAbgeschlosseneAusbildung_placeholder_easy": "ex. 12",
       "nichtAbgeschlosseneAusbildung_short": "Formation non terminée",
       "nichtAbgeschlosseneAusbildung_short_easy": "Formation non finie",
       "praktischeErfahrung": "Avez-vous déjà travaillé dans un domaine similaire ou acquis une expérience pratique utile pour la formation ?",
@@ -192,7 +194,9 @@
     },
     "other": {
       "question": "Quel âge avez-vous au moment de la formation ?",
-      "question_easy": "Quel âge avez-vous ?"
+      "question_easy": "Quel âge avez-vous ?",
+      "placeholder": "ex. 25",
+      "placeholder_easy": "ex. 25"
     },
     "alter21": {
       "label": "Plus de 21 ans",
