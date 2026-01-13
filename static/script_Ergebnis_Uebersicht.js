@@ -27,6 +27,18 @@ function uebersetzung(schluessel, fallback) {
   return fallback ?? schluessel;
 }
 
+// Formatiert Zahl + Einheit als HTML, setzt Richtung so dass in RTL die Einheit rechts steht.
+function formatValueUnitHtml(value, unitKey) {
+  const unit = uebersetzung(unitKey) || "";
+  // keep unit rendering simple; wrapper will enforce LTR order
+  // const dir = document.documentElement.getAttribute("dir") || "ltr";
+  const numHtml = `<span class="i18n-num" dir="ltr">${String(value)}</span>`;
+  const unitHtml = `<span class="i18n-unit" dir="auto">${String(unit)}</span>`;
+  // Wrap both in an explicit LTR container so the internal order is always "number then unit",
+  // which makes the unit appear to the right of the number even on RTL pages.
+  return `<span class="i18n-value-unit" dir="ltr">${numHtml}&nbsp;${unitHtml}</span>`;
+}
+
 function aktuelleSprache() {
   return (window.I18N && window.I18N.lang) || "de";
 }
@@ -665,15 +677,15 @@ function fuelleEingabenliste(eingaben, berechnung) {
   const zeilen = [
     [
       uebersetzung("inputs.dauer.labelShort", "Ausbildung (Vollzeit)"),
-      `${eingaben.basisMonate} ${uebersetzung("units.months.short")}`
+      { type: 'valueUnit', value: eingaben.basisMonate, unitKey: 'units.months.short' }
     ],
     [
       uebersetzung("inputs.stunden.labelShort", "Wochenstunden (Vollzeit)"),
-      `${eingaben.wochenstunden} ${uebersetzung("units.hours.short")}`
+      { type: 'valueUnit', value: eingaben.wochenstunden, unitKey: 'units.hours.short' }
     ],
     [
       uebersetzung("inputs.teilzeit.labelShort", "Teilzeit"),
-      `${eingaben.teilzeitProzent}% ↔ ${teilzeitStunden} ${uebersetzung("units.hours.short")}`
+      { type: 'percentCompare', percent: eingaben.teilzeitProzent, compareValue: teilzeitStunden, unitKey: 'units.hours.short' }
     ]
   ];
 
@@ -682,7 +694,16 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const dt = document.createElement("dt");
     dt.textContent = schluessel;
     const dd = document.createElement("dd");
-    dd.textContent = wert;
+    if (typeof wert === 'object' && wert.type === 'valueUnit') {
+      dd.innerHTML = formatValueUnitHtml(wert.value, wert.unitKey);
+    } else if (typeof wert === 'object' && wert.type === 'percentCompare') {
+      const percent = String(wert.percent) + "%";
+      const compareHtml = formatValueUnitHtml(wert.compareValue, wert.unitKey);
+      // Example: "60% ↔ 24 س" — percent on left, then arrow, then number+unit
+      dd.innerHTML = `${percent} ↔ ${compareHtml}`;
+    } else {
+      dd.textContent = String(wert);
+    }
     wrapper.append(dt, dd);
     liste.append(wrapper);
   }
@@ -766,7 +787,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
         valueSpan.classList.add("bidi-ltr");
         valueSpan.setAttribute("dir", "ltr");
         // Einheitlich vollständige Form "Monate" für alle Geräte
-        valueSpan.textContent = `${verkuerzung.months} ${uebersetzung("units.months.short")}`;
+        valueSpan.innerHTML = formatValueUnitHtml(verkuerzung.months, "units.months.short");
         
         li.appendChild(labelSpan);
         li.appendChild(valueSpan);
@@ -797,7 +818,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const nachVerkuerzungDd = document.createElement("dd");
     nachVerkuerzungDd.classList.add("bidi-ltr");
     nachVerkuerzungDd.setAttribute("dir", "ltr");
-    nachVerkuerzungDd.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.short")}`;
+    nachVerkuerzungDd.innerHTML = formatValueUnitHtml(berechnung.neueBasis, "units.months.short");
     nachVerkuerzungWrapper.append(nachVerkuerzungDt, nachVerkuerzungDd);
     liste.append(nachVerkuerzungWrapper);
     
@@ -823,12 +844,12 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const formulaLine2 = document.createElement("span");
     formulaLine2.className = "teilzeit-formula-line2 bidi-ltr";
     formulaLine2.setAttribute("dir", "ltr");
-    formulaLine2.textContent = ` = ${berechnung.gesamtMonate} ${uebersetzung("units.months.short")}`;
+      formulaLine1.innerHTML = `${formatValueUnitHtml(berechnung.neueBasis, "units.months.short")} / ${String(eingaben.teilzeitProzent)}%`;
     
     formulaContainer.appendChild(formulaLine1);
     formulaContainer.appendChild(formulaLine2);
     inTeilzeitDd.appendChild(formulaContainer);
-    
+      formulaLine2.innerHTML = ` = ${formatValueUnitHtml(berechnung.gesamtMonate, "units.months.short")}`;
     inTeilzeitWrapper.append(inTeilzeitDt, inTeilzeitDd);
     liste.append(inTeilzeitWrapper);
     
