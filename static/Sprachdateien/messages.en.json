@@ -307,8 +307,8 @@
       "full_easy": "hours"
     },
     "months": {
-      "short": "mo",
-      "short_easy": "mo",
+      "short": "m",
+      "short_easy": "m",
       "full": "months",
       "full_easy": "months"
     },
