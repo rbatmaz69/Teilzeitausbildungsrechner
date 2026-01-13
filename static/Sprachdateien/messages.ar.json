@@ -30,8 +30,8 @@
   "inputs": {
     "title": "حسابك",
     "title_easy": "حسابك",
-    "unitsLegend": "h = ساعات، m = أشهر",
-    "unitsLegend_easy": "h = ساعات، m = أشهر",
+    "unitsLegend": "س = ساعات، ش = أشهر",
+    "unitsLegend_easy": "س = ساعات، ش = أشهر",
     "dauer": {
       "label": "كم مدة تدريبك بدوام كامل؟",
       "label_easy": "كم مدة التدريب بدوام كامل؟",
@@ -66,6 +66,10 @@
       "button32h": "32 ساعة (4-أيام)",
       "button32h_easy": "32 ساعة (4-أيام)"
     },
+      "verkuerzungen": {
+        "labelShort": "أسباب التقصير",
+        "labelShort_easy": "أسباب التقصير"
+      },
     "afterShortening": "المدة بعد التقصير",
     "afterShortening_easy": "المدة بعد التقصير",
     "inPartTime": "المدة في الدوام الجزئي",
@@ -297,14 +301,14 @@
   },
   "units": {
     "hours": {
-      "short": "h",
-      "short_easy": "h",
+      "short": "س",
+      "short_easy": "س",
       "full": "ساعات",
       "full_easy": "ساعات"
     },
     "months": {
-      "short": "m",
-      "short_easy": "m",
+      "short": "ش",
+      "short_easy": "ش",
       "full": "أشهر",
       "full_easy": "أشهر"
     },

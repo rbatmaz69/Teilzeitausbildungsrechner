@@ -1054,7 +1054,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           // Fallback für Buttons ohne i18n-Key
           const wert = btn.dataset.value;
-          const einheit = uebersetzung("units.hours.full", "Stunden");
+          const einheit = uebersetzung("units.hours.full");
           btn.textContent = `${wert} ${einheit}`;
         }
       }

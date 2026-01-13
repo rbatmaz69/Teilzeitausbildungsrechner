@@ -665,15 +665,15 @@ function fuelleEingabenliste(eingaben, berechnung) {
   const zeilen = [
     [
       uebersetzung("inputs.dauer.labelShort", "Ausbildung (Vollzeit)"),
-      `${eingaben.basisMonate} ${uebersetzung("units.months.short", "M")}`
+      `${eingaben.basisMonate} ${uebersetzung("units.months.short")}`
     ],
     [
       uebersetzung("inputs.stunden.labelShort", "Wochenstunden (Vollzeit)"),
-      `${eingaben.wochenstunden} ${uebersetzung("units.hours.short", "Std")}`
+      `${eingaben.wochenstunden} ${uebersetzung("units.hours.short")}`
     ],
     [
       uebersetzung("inputs.teilzeit.labelShort", "Teilzeit"),
-      `${eingaben.teilzeitProzent}% ↔ ${teilzeitStunden} ${uebersetzung("units.hours.short", "Std")}`
+      `${eingaben.teilzeitProzent}% ↔ ${teilzeitStunden} ${uebersetzung("units.hours.short")}`
     ]
   ];
 
@@ -766,7 +766,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
         valueSpan.classList.add("bidi-ltr");
         valueSpan.setAttribute("dir", "ltr");
         // Einheitlich vollständige Form "Monate" für alle Geräte
-        valueSpan.textContent = `${verkuerzung.months} ${uebersetzung("units.months.short", "M")}`;
+        valueSpan.textContent = `${verkuerzung.months} ${uebersetzung("units.months.short")}`;
         
         li.appendChild(labelSpan);
         li.appendChild(valueSpan);
@@ -797,7 +797,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const nachVerkuerzungDd = document.createElement("dd");
     nachVerkuerzungDd.classList.add("bidi-ltr");
     nachVerkuerzungDd.setAttribute("dir", "ltr");
-    nachVerkuerzungDd.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.short", "M")}`;
+    nachVerkuerzungDd.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.short")}`;
     nachVerkuerzungWrapper.append(nachVerkuerzungDt, nachVerkuerzungDd);
     liste.append(nachVerkuerzungWrapper);
     
@@ -817,13 +817,13 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const formulaLine1 = document.createElement("span");
     formulaLine1.className = "teilzeit-formula-line1 bidi-ltr";
     formulaLine1.setAttribute("dir", "ltr");
-    formulaLine1.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.short", "M")} / ${eingaben.teilzeitProzent}%`;
+    formulaLine1.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.short")} / ${eingaben.teilzeitProzent}%`;
     
     // Zeile 2: "= 48 Monate"
     const formulaLine2 = document.createElement("span");
     formulaLine2.className = "teilzeit-formula-line2 bidi-ltr";
     formulaLine2.setAttribute("dir", "ltr");
-    formulaLine2.textContent = ` = ${berechnung.gesamtMonate} ${uebersetzung("units.months.short", "M")}`;
+    formulaLine2.textContent = ` = ${berechnung.gesamtMonate} ${uebersetzung("units.months.short")}`;
     
     formulaContainer.appendChild(formulaLine1);
     formulaContainer.appendChild(formulaLine2);
@@ -943,7 +943,7 @@ function fuelleErgebnisse(eingaben, berechnung) {
         "#res-extension-verkuerzungsdauer",
         `${vorzeichen}${Math.abs(
           verkuerzungMonate
-        )} ${uebersetzung("units.months.short", "M")}`
+        )} ${uebersetzung("units.months.short")}`
       );
 
       // z.B. "30 Monate"

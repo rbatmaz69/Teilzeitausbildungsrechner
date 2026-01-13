@@ -30,8 +30,8 @@
   "inputs": {
     "title": "Calculul tău",
     "title_easy": "Calculul tău",
-    "unitsLegend": "h = ore, m = luni",
-    "unitsLegend_easy": "h = ore, m = luni",
+    "unitsLegend": "h = ore, lun. = luni",
+    "unitsLegend_easy": "h = ore, lun. = luni",
     "dauer": {
       "label": "Cât durează formarea ta cu normă întreagă?",
       "label_easy": "Cât durează formarea cu normă întreagă?",
@@ -303,8 +303,8 @@
       "full_easy": "ore"
     },
     "months": {
-      "short": "m",
-      "short_easy": "m",
+      "short": "lun.",
+      "short_easy": "lun.",
       "full": "luni",
       "full_easy": "luni"
     },

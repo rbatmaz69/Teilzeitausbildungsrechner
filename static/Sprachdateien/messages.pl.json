@@ -30,8 +30,8 @@
   "inputs": {
     "title": "Twoje obliczenie",
     "title_easy": "Twoje obliczenie",
-    "unitsLegend": "h = godziny, m = miesiące",
-    "unitsLegend_easy": "h = godziny, m = miesiące",
+    "unitsLegend": "godz. = godziny, mies. = miesiące",
+    "unitsLegend_easy": "godz. = godziny, mies. = miesiące",
     "dauer": {
       "label": "Ile trwa Twoje kształcenie w pełnym wymiarze czasu?",
       "label_easy": "Ile trwa kształcenie w pełnym wymiarze?",

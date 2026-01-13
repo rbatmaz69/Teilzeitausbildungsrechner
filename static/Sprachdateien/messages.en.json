@@ -30,8 +30,8 @@
   "inputs": {
     "title": "Your Calculation",
     "title_easy": "Your Calculation",
-    "unitsLegend": "h = hours, m = months",
-    "unitsLegend_easy": "h = hours, m = months",
+    "unitsLegend": "h = hours, mo = months",
+    "unitsLegend_easy": "h = hours, mo = months",
     "dauer": {
       "label": "How long is your training in full-time?",
       "label_easy": "How long is full-time training?",
@@ -307,8 +307,8 @@
       "full_easy": "hours"
     },
     "months": {
-      "short": "m",
-      "short_easy": "m",
+      "short": "mo",
+      "short_easy": "mo",
       "full": "months",
       "full_easy": "months"
     },

@@ -310,7 +310,6 @@ async function generierePDF() {
     pdfContent.querySelectorAll('#stamp-date').forEach(el => el.remove());
 
     // Für PDF: Ersetze alle Kurz-Units durch ausgeschriebene Units via Text-Ersetzung
-    const sprache = aktuelleSprache();
     
     // Hilfsfunktion zum Ersetzen von Text in allen Text-Knoten (mit Kontextmustern)
     function walkAndReplaceText(node, replacements) {
@@ -346,29 +345,33 @@ async function generierePDF() {
       }
     }
 
-    // Definiere Unit-Ersetzungen für alle Sprachen
-    const unitReplacements = {
-      'de': {
-        'M': 'Monate',
-        'Std': 'Stunden',
-      },
-      'en': {
-        'm': 'months',
-        'h': 'hours',
-      },
-      'uk': {
-        'М': 'місяці',      // kyrillisches М (Großbuchstabe)
-        'м': 'місяці',      // kyrillisches м (Kleinbuchstabe)
-        'M': 'місяці',      // lateinisches M (Fallback)
-        'год': 'години',
-        'тиж': 'тижні',
-      },
-      'tr': {
-        's': 'saat',
-      }
-    };
+    // Build unit replacements from translations for the current language.
+    function buildUnitReplacements() {
+      const hoursShort = uebersetzung('units.hours.short') || '';
+      const hoursFull = uebersetzung('units.hours.full') || '';
+      const monthsShort = uebersetzung('units.months.short') || '';
+      const monthsFull = uebersetzung('units.months.full') || '';
 
-    walkAndReplaceText(pdfContent, unitReplacements[sprache] || {});
+      const replacements = {};
+      function addKeyVariants(key, value) {
+        if (!key) return;
+        replacements[key] = value;
+        const noDot = key.replace(/\./g, '');
+        if (noDot !== key) replacements[noDot] = value;
+        const lower = key.toLowerCase();
+        const upper = key.toUpperCase();
+        if (lower !== key) replacements[lower] = value;
+        if (upper !== key) replacements[upper] = value;
+      }
+
+      addKeyVariants(monthsShort, monthsFull);
+      addKeyVariants(hoursShort, hoursFull);
+
+      return replacements;
+    }
+
+    // Build replacements and apply
+    walkAndReplaceText(pdfContent, buildUnitReplacements());
 
     // Erstelle Overlay um Layout-Änderungen während des Renderings zu verbergen
     const overlay = document.createElement('div');

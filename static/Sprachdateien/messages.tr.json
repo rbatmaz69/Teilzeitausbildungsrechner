@@ -30,8 +30,8 @@
   "inputs": {
     "title": "Hesabınız",
     "title_easy": "Hesaplama",
-    "unitsLegend": "Std = saat, M = ay",
-    "unitsLegend_easy": "Std = saat, M = ay",
+    "unitsLegend": "s = saat, ay = ay",
+    "unitsLegend_easy": "s = saat, ay = ay",
     "dauer": {
       "label": "Tam zamanlı eğitim süreniz ne kadar?",
       "label_easy": "Tam zamanlı eğitim ne kadar sürer?",

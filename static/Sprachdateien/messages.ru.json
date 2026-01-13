@@ -30,8 +30,8 @@
   "inputs": {
     "title": "Ваш расчет",
     "title_easy": "Ваш расчет",
-    "unitsLegend": "h = часы, m = месяцы",
-    "unitsLegend_easy": "h = часы, m = месяцы",
+    "unitsLegend": "ч = часы, мес. = месяцы",
+    "unitsLegend_easy": "ч = часы, мес. = месяцы",
     "dauer": {
       "label": "Сколько длится обучение при полной занятости?",
       "label_easy": "Сколько длится обучение при полной занятости?",
@@ -66,6 +66,10 @@
       "button24h_easy": "24 часа (3-дня)",
       "button32h": "32 часа (4-дня)",
       "button32h_easy": "32 часа (4-дня)"
+    },
+    "verkuerzungen": {
+      "labelShort": "Сокращения",
+      "labelShort_easy": "Сокращения"
     },
     "afterShortening": "Длительность после сокращения",
     "inPartTime": "Длительность при неполной занятости",
@@ -297,14 +301,14 @@
   },
   "units": {
     "hours": {
-      "short": "h",
-      "short_easy": "h",
+      "short": "ч",
+      "short_easy": "ч",
       "full": "часы",
       "full_easy": "часы"
     },
     "months": {
-      "short": "m",
-      "short_easy": "m",
+      "short": "мес.",
+      "short_easy": "мес.",
       "full": "месяцы",
       "full_easy": "месяцы"
     },
