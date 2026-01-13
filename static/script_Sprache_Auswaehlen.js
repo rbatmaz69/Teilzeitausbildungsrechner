@@ -1,7 +1,7 @@
 // ../static/script_Sprache_Auswaehlen.js
 (() => {
   const STANDARD_SPRACHE = "de";
-  const UNTERSTUETZT = ["de", "en", "uk", "tr"];
+  const UNTERSTUETZT = ["de", "en", "uk", "tr", "ar", "fr", "ru", "pl", "ro"];
 
   // Sprachdateien liegen in /static/Sprachdateien/
   const I18N_PFAD = "/static/Sprachdateien";

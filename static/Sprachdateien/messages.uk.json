@@ -11,7 +11,12 @@
     "de": "Deutsch",
     "en": "English",
     "uk": "Українська",
-    "tr": "Türkçe"
+    "tr": "Türkçe",
+    "ar": "العربية",
+    "fr": "Français",
+    "ru": "Русский",
+    "pl": "Polski",
+    "ro": "Română"
   },
   "inputs": {
     "title": "Ваш розрахунок",

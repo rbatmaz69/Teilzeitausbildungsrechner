@@ -1654,6 +1654,82 @@ input.error,
   display: none;
 }
 
+/* New languages: Arabic, French, Russian, Polish, Romanian */
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-ar {
+  display: block;
+}
+
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-uk,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-tr,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-fr,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-ru,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-pl,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-ro {
+  display: none;
+}
+
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-fr {
+  display: block;
+}
+
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-uk,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-tr,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-ar,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-ru,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-pl,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-ro {
+  display: none;
+}
+
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-ru {
+  display: block;
+}
+
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-uk,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-tr,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-ar,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-fr,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-pl,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-ro {
+  display: none;
+}
+
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-pl {
+  display: block;
+}
+
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-uk,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-tr,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-ar,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-fr,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-ru,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-ro {
+  display: none;
+}
+
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-ro {
+  display: block;
+}
+
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-uk,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-tr,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-ar,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-fr,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-ru,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-pl {
+  display: none;
+}
+
 .startseite-title {
   font-size: 1.5rem;
   font-weight: 700;
@@ -2190,6 +2266,82 @@ input.error,
   #lang-switcher-desktop:has(option[value="tr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
   #lang-switcher-desktop:has(option[value="tr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
   #lang-switcher-desktop:has(option[value="tr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk {
+    display: none;
+  }
+
+  /* New languages: Arabic, French, Russian, Polish, Romanian (desktop) */
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ar {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-fr,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ru,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-pl,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ro {
+    display: none;
+  }
+
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-fr {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ar,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ru,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-pl,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ro {
+    display: none;
+  }
+
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ru {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ar,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-fr,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-pl,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ro {
+    display: none;
+  }
+
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-pl {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ar,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-fr,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ru,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ro {
+    display: none;
+  }
+
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ro {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ar,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-fr,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ru,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-pl {
     display: none;
   }
 

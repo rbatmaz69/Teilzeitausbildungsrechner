@@ -15,7 +15,17 @@
     "uk": "Українська",
     "uk_easy": "Українська",
     "tr": "Türkçe",
-    "tr_easy": "Türkçe"
+    "tr_easy": "Türkçe",
+    "ar": "العربية",
+    "ar_easy": "العربية",
+    "fr": "Français",
+    "fr_easy": "Français",
+    "ru": "Русский",
+    "ru_easy": "Русский",
+    "pl": "Polski",
+    "pl_easy": "Polski",
+    "ro": "Română",
+    "ro_easy": "Română"
   },
   "inputs": {
     "title": "Ihre Berechnung",
