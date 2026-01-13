@@ -375,6 +375,14 @@ header h1 {
   flex: 1;
 }
 
+/* Allow disclaimer text to shrink and wrap on small screens when font-size increases */
+.legal-disclaimer,
+.legal-disclaimer-content,
+.legal-disclaimer-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .legal-disclaimer-title {
   font-size: 0.95rem;
   font-weight: 600;
@@ -473,7 +481,9 @@ header h1 {
   border: 1px dashed var(--border);
   padding: 2px 8px;
   border-radius: 999px;
-  white-space: nowrap;
+  /* Allow wrapping when font-size is increased for accessibility (mobile) */
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 /* ==========================================
@@ -788,17 +798,19 @@ button.preset:disabled {
 
 .button-row {
   display: flex;
-  flex-wrap: nowrap;
+  /* Allow buttons to wrap onto multiple lines on narrow screens
+     so enlarged text doesn't overflow the button. */
+  flex-wrap: wrap;
   gap: .5rem;
   justify-content: flex-start;
 }
 
 /* Sicherstellen, dass Buttons auf mobilen Geräten ausreichend groß sind (Touch-Targets) */
-.button-row .preset {
+  .button-row .preset {
   min-height: 40px; /* Mindestgröße für Touch-Targets */
-  flex: 1 1 0;
+  flex: 1 1 auto;
   min-width: 0;
-}
+  }
 
 button.berechnen {
   background-color: var(--primary);
@@ -2736,6 +2748,13 @@ input.error,
   color: var(--text);
   margin: 0;
   line-height: 1.3;
+}
+
+/* Allow the title to wrap and shrink when font-size is increased */
+.vk-info-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 /* Modal Body */
