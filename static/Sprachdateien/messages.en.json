@@ -119,8 +119,8 @@
       "abitur_easy": "High school diploma"
     },
     "qual": {
-      "question": "What professional qualifications do you have?",
-      "question_easy": "What job experience do you have?",
+      "question": "Professional qualifications",
+      "question_easy": "Professional experience",
       "yes": "Yes",
       "yes_easy": "Yes",
       "no": "No",
