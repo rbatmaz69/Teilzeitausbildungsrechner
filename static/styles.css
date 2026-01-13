@@ -134,7 +134,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-wrap: break-word;
-  word-wrap: break-word;
 }
 
 /* Verhindere Overflow bei allen direkten Kindern */
@@ -514,7 +513,7 @@ header h1 {
 
 .vk-question {
   font-size: .95rem;
-  margin: 0 0 .5rem 0;
+  margin: 0 0 .5rem;
   font-weight: 500;
   color: var(--text);
 }
@@ -887,6 +886,17 @@ button.berechnen:focus-visible {
   justify-content: center;
 }
 
+.actionbar .btn {
+  touch-action: manipulation; /* Verbessert Touch-Responsiveness auf Mobile */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.actionbar .btn.ghost {
+  background: #fff;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
 .button-group .btn.ghost:hover {
   background-color: #eaeaea;
   transform: translateY(-1px);
@@ -901,17 +911,6 @@ button.berechnen:focus-visible {
 
 .button-group .btn.ghost:active {
   transform: translateY(2px);
-}
-
-.actionbar .btn {
-  touch-action: manipulation; /* Verbessert Touch-Responsiveness auf Mobile */
-  -webkit-tap-highlight-color: transparent;
-}
-
-.actionbar .btn.ghost {
-  background: #fff;
-  color: var(--text);
-  border: 1px solid var(--border);
 }
 
 .btn.outline{
@@ -1011,9 +1010,6 @@ select:-ms-input-placeholder {
   line-height: 1.5;
 }
 
-.notes li:last-child {
-  margin-bottom: 0;
-}
 
 .input-row {
   display: flex;
@@ -1025,6 +1021,31 @@ select:-ms-input-placeholder {
   flex: 1 1 0;
   min-width: 0;
 }
+
+/* Verkürzungen list (moved up to keep selector ordering consistent) */
+.verkuerzungen-list {
+  list-style: none;
+  padding: 0;
+  padding-left: 1rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.verkuerzungen-list li {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+  padding: 0.25rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+
+
 
 /* Trenner zwischen Eingabefeldern */
 .input-separator {
@@ -1405,32 +1426,11 @@ input.error,
   padding-left: 0;
 }
 
-.verkuerzungen-list {
-  list-style: none;
-  padding: 0;
-  padding-left: 1rem;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
 .keine-verkuerzung {
   padding-left: 1rem;
   margin: 0;
   font-size: 0.85rem;
   color: var(--muted);
-}
-
-.verkuerzungen-list li {
-  font-size: 0.85rem;
-  color: var(--muted);
-  line-height: 1.5;
-  padding: 0.25rem 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 0.5rem;
 }
 
 .verkuerzung-label {
@@ -1497,7 +1497,7 @@ input.error,
   }
 
   /* Verkürzungen: Auf Desktop normale Darstellung (beide in einer Zeile) */
-  .verkuerzungen-list li {
+  :where(.verkuerzungen-list) li {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
@@ -1807,7 +1807,7 @@ input.error,
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(224, 0, 0, 0.1);
+  background: rgb(224 0 0 / 10%);
   color: var(--primary);
   border: 2px solid var(--primary);
   border-radius: 8px;
@@ -2179,7 +2179,7 @@ input.error,
     -moz-appearance: none;
     appearance: none;
     padding: 0.5rem 2rem 0.5rem 2.2rem;
-    border: 1px solid var(--border);
+    border: 2px solid var(--primary);
     border-radius: 6px;
     font-size: 0.9rem;
     font-weight: 500;
@@ -2192,18 +2192,12 @@ input.error,
     background-position: right 0.5rem center;
     background-size: 1.2em;
     padding-right: 2rem;
+    -webkit-tap-highlight-color: transparent;
   }
-  
-      /* Minimal override: only change border to primary, keep rest of the
-         existing rules elsewhere to avoid duplication. */
-      #lang-switcher-desktop {
-        border: 2px solid var(--primary);
-        -webkit-tap-highlight-color: transparent;
-      }
 
-      #lang-switcher-desktop:hover {
-        background-color: #f0f0f0;
-      }
+  #lang-switcher-desktop:hover {
+    background-color: #f0f0f0;
+  }
 
   #lang-switcher-desktop:focus-visible {
     outline: 3px solid #a5b4fc;
@@ -2335,7 +2329,7 @@ input.error,
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(224, 0, 0, 0.1);
+    background: rgb(224 0 0 / 10%);
     color: var(--primary);
     border: 2px solid var(--primary);
     border-radius: 16px;
@@ -2568,7 +2562,7 @@ input.error,
   gap: 0.5rem;
   padding: 0.75rem 1.25rem;
   margin: 0;
-  background: rgba(224, 0, 0, 0.1);
+  background: rgb(224 0 0 / 10%);
   border: 2px solid var(--primary);
   border-radius: var(--radius-sm);
   color: var(--primary);
@@ -2665,7 +2659,7 @@ input.error,
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(224, 0, 0, 0.1);
+  background: rgb(224 0 0 / 10%);
   border: 2px solid var(--primary);
   border-radius: 50%;
   color: var(--primary);
@@ -2721,7 +2715,7 @@ input.error,
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(224, 0, 0, 0.1);
+  background: rgb(224 0 0 / 10%);
   color: var(--primary);
   border: 2px solid var(--primary);
   border-radius: 12px;
@@ -2778,6 +2772,11 @@ input.error,
 }
 
 .vk-info-body li:last-child {
+  margin-bottom: 0;
+}
+
+/* Place notes last-child rule after other list rules to satisfy selector ordering */
+.notes li:last-child {
   margin-bottom: 0;
 }
 
@@ -3424,6 +3423,12 @@ body.modal-open {
   margin: 0;
 }
 
+/* Base font section styles (placed before more-specific selectors) */
+.a11y-font-section {
+  display: flex;
+  flex-direction: column;
+}
+
 /* Stagger animation for menu items */
 .a11y-menu[aria-hidden="false"] .a11y-row,
 .a11y-menu[aria-hidden="false"] .a11y-btn,
@@ -3432,8 +3437,8 @@ body.modal-open {
   animation: menu-item-fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
-/* Animation delays für neue Reihenfolge (berücksichtigt .a11y-sep als Kinder) */
-/* Kind 1: Dark/Auto/Light mode */
+/* Animation delays für neue Reihenfolge (berücksichtigt .a11y-sep als Kinder)
+   Kind 1: Dark/Auto/Light mode */
 .a11y-menu[aria-hidden="false"] > *:nth-child(1) {
   animation-delay: 0.05s;
 }
@@ -3452,6 +3457,10 @@ body.modal-open {
 .a11y-menu[aria-hidden="false"] > *:nth-child(7) {
   animation-delay: 0.2s;
 }
+
+/* Ensure base selector exists before more-specific animation selectors */
+
+/* base .a11y-font-section defined later */
 
 @keyframes menu-item-fade-in {
   0% {
@@ -3656,10 +3665,7 @@ body.modal-open {
   justify-content: center;
 }
 
-.a11y-font-section {
-  display: flex;
-  flex-direction: column;
-}
+/* .a11y-font-section styles consolidated earlier to avoid duplicate selectors */
 
 .a11y-font-controls {
   display: flex;
@@ -4028,7 +4034,7 @@ body.modal-open {
 }
 
 :root[data-theme="dark"] .vk-info-close {
-  background: rgba(224, 0, 0, 0.1);
+  background: rgb(224 0 0 / 10%);
   border-color: var(--primary);
   color: var(--primary);
 }
