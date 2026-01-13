@@ -437,6 +437,8 @@
     },
     "description": "Çalışma süresi ve eğitim arasında en uygun dağılımı hesaplayın. Hesaplayıcımız ihtiyaçlarınıza uygun çözümü bulmanıza yardımcı olur.",
     "description_easy": "Yarı zamanlı eğitim için saatleri hesaplayın. Bu hesaplayıcı size yardım eder.",
+    "benefitsTitle": "Hesaplayıcının avantajları",
+    "benefitsTitle_easy": "Avantajlar",
     "card1": {
       "title": "Esnek zamanlar",
       "title_easy": "Esnek zamanlar",

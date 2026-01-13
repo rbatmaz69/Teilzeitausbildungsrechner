@@ -429,6 +429,8 @@
     },
     "description": "Calculează echilibrul optim între orele de lucru și formare. Calculatorul nostru te ajută să găsești soluția potrivită de timp parțial pentru nevoile tale.",
     "description_easy": "Calculează orele pentru formarea în timp parțial. Calculatorul te ajută.",
+    "benefitsTitle": "Avantajele calculatorului",
+    "benefitsTitle_easy": "Avantaje",
     "card1": {
       "title": "Ore flexibile",
       "title_easy": "Ore flexibile",

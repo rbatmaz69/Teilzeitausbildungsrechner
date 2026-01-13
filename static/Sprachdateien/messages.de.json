@@ -448,6 +448,8 @@
     },
     "description": "Berechnen Sie die optimale Aufteilung zwischen Arbeitszeit und Ausbildung. Unser Rechner hilft Ihnen dabei, die passende Teilzeitlösung für Ihre Bedürfnisse zu finden.",
     "description_easy": "Hier können Sie berechnen, wie Arbeit und Ausbildung in Teilzeit passen können.",
+    "benefitsTitle": "Vorteile des Rechners",
+    "benefitsTitle_easy": "Vorteile",
     "card1": {
       "title": "Flexible Zeiten",
       "title_easy": "Flexible Zeiten",

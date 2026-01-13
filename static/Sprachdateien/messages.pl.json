@@ -429,6 +429,8 @@
     },
     "description": "Oblicz najlepszą równowagę między pracą a kształceniem. Ten kalkulator pomaga znaleźć rozwiązanie na część etatu, które pasuje do Twoich potrzeb.",
     "description_easy": "Policz czas nauki na część etatu. Ten kalkulator Ci pomoże.",
+    "benefitsTitle": "Zalety kalkulatora",
+    "benefitsTitle_easy": "Zalety",
     "card1": {
       "title": "Elastyczne godziny",
       "title_easy": "Elastyczne godziny",

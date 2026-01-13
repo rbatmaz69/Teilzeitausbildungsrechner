@@ -429,6 +429,8 @@
     },
     "description": "Calculez l’équilibre optimal entre le temps de travail et la formation. Notre calculateur vous aide à trouver la solution à temps partiel adaptée à vos besoins.",
     "description_easy": "Calculez des heures pour une formation à temps partiel. Ce calculateur vous aide.",
+    "benefitsTitle": "Avantages du calculateur",
+    "benefitsTitle_easy": "Avantages",
     "card1": {
       "title": "Horaires flexibles",
       "title_easy": "Horaires flexibles",

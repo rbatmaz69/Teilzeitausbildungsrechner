@@ -127,7 +127,8 @@
         </p>
 
         <!-- Zusammenhängendes Informationsfeld statt separater Karten -->
-        <div class="info-section" role="region" aria-label="Vorteile des Rechners">
+        <h2 id="start-benefits-title-mobile" class="sr-only" data-i18n="start.benefitsTitle">Vorteile des Rechners</h2>
+        <div class="info-section" role="region" aria-labelledby="start-benefits-title-mobile">
           <div class="info-item">
             <div class="info-item-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -342,7 +343,8 @@
             Berechnen Sie die optimale Aufteilung zwischen Arbeitszeit und Ausbildung. Unser Rechner hilft Ihnen dabei, die passende Teilzeitlösung für Ihre Bedürfnisse zu finden.
           </p>
 
-          <div class="info-cards-desktop" role="region" aria-label="Vorteile des Rechners">
+          <h2 id="start-benefits-title-desktop" class="sr-only" data-i18n="start.benefitsTitle">Vorteile des Rechners</h2>
+          <div class="info-cards-desktop" role="region" aria-labelledby="start-benefits-title-desktop">
             <div class="info-card-desktop">
               <div class="info-card-icon-desktop">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -995,7 +997,8 @@
     <span class="sr-only" data-i18n="a11y.button">Barrierefreiheit</span>
   </button>
 
-  <div id="a11y-menu" class="a11y-menu" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Barrierefreiheitsmenü">
+  <div id="a11y-menu" class="a11y-menu" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="a11y-menu-title">
+    <h2 id="a11y-menu-title" class="sr-only" data-i18n="a11y.button">Barrierefreiheit</h2>
     <div class="a11y-menu-body">
       <div class="a11y-row a11y-toggle-row">
         <div class="a11y-toggle-label">
@@ -1005,7 +1008,7 @@
           <span data-i18n="a11y.read">Vorlesen</span>
         </div>
         <label class="a11y-toggle-switch">
-          <input type="checkbox" role="switch" id="a11y-read-toggle" class="a11y-toggle-input" aria-label="Vorlesefunktion aktivieren oder deaktivieren" aria-checked="false">
+          <input type="checkbox" role="switch" id="a11y-read-toggle" class="a11y-toggle-input" aria-checked="false" data-i18n-attr="aria-label:a11y.readAria">
           <span class="a11y-toggle-slider"></span>
         </label>
       </div>
@@ -1018,15 +1021,15 @@
           <span data-i18n="a11y.easyLanguage">Leichte Sprache</span>
         </div>
         <label class="a11y-toggle-switch">
-          <input type="checkbox" role="switch" id="a11y-easy-language-toggle" class="a11y-toggle-input" aria-label="Leichte Sprache aktivieren oder deaktivieren" aria-checked="false">
+          <input type="checkbox" role="switch" id="a11y-easy-language-toggle" class="a11y-toggle-input" aria-checked="false" data-i18n-attr="aria-label:a11y.easyLanguageAria">
           <span class="a11y-toggle-slider"></span>
         </label>
       </div>
       <div class="a11y-sep" aria-hidden="true"></div>
       <div class="a11y-row a11y-toggle-row">
-        <div class="a11y-theme-slider-container" role="slider" tabindex="0" aria-label="Darstellungsmodus auswählen" aria-valuenow="1" aria-valuemin="0" aria-valuemax="2" aria-valuetext="Auto" id="a11y-theme-slider">
+        <div class="a11y-theme-slider-container" role="slider" tabindex="0" aria-valuenow="1" aria-valuemin="0" aria-valuemax="2" aria-valuetext="Auto" id="a11y-theme-slider" data-i18n-attr="aria-label:a11y.themeLabel,aria-valuetext:a11y.themeAuto">
           <div class="a11y-theme-slider-track">
-            <div class="a11y-theme-option" data-theme="light" role="button" tabindex="-1" aria-label="Helles Design">
+            <div class="a11y-theme-option" data-theme="light" role="button" tabindex="-1" data-i18n-attr="aria-label:a11y.themeLightAria">
               <svg class="a11y-theme-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
                 <circle cx="12" cy="12" r="5"/>
                 <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -1039,12 +1042,12 @@
                 <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               </svg>
             </div>
-            <div class="a11y-theme-option" data-theme="auto" role="button" tabindex="-1" aria-label="Automatisches Design">
+            <div class="a11y-theme-option" data-theme="auto" role="button" tabindex="-1" data-i18n-attr="aria-label:a11y.themeAutoAria">
               <svg class="a11y-theme-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
               </svg>
             </div>
-            <div class="a11y-theme-option" data-theme="dark" role="button" tabindex="-1" aria-label="Dunkles Design">
+            <div class="a11y-theme-option" data-theme="dark" role="button" tabindex="-1" data-i18n-attr="aria-label:a11y.themeDarkAria">
               <svg class="a11y-theme-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
               </svg>
