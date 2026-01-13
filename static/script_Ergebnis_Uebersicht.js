@@ -1051,7 +1051,18 @@ function setzeDatumstempel() {
   const beschriftung = window.I18N && typeof window.I18N.t === "function"
     ? window.I18N.t("meta.stampLabel", defaultLabel)
     : defaultLabel;
-  element.textContent = `${beschriftung}: ${format.format(new Date())}`;
+  
+  // Für Arabisch: Label zuerst (wird rechts angezeigt), dann Datum LTR (wird links angezeigt)
+  if (sprache === "ar") {
+    const datumText = format.format(new Date());
+    element.innerHTML = `${beschriftung}: <span dir="ltr" style="display: inline-block; direction: ltr; unicode-bidi: embed;">${datumText}</span>`;
+    element.removeAttribute("dir");
+    element.style.direction = "";
+  } else {
+    element.textContent = `${beschriftung}: ${format.format(new Date())}`;
+    element.removeAttribute("dir");
+    element.style.direction = "";
+  }
 }
 
 /* ------------------------------
