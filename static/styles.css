@@ -1662,7 +1662,7 @@ html[dir="rtl"] #ergebnis-container .result-extension-arrow {
      Ergebnis/Hinweise bleiben bis zum Klick per `hidden` unsichtbar. */
   .rechner-grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: start;
+    grid-template-rows: auto 1fr;
 
     /* Vertikal wie bei den Cards; horizontal etwas luftiger. */
     gap: var(--space-3) clamp(1rem, 2vw, 1.75rem);
@@ -1671,16 +1671,20 @@ html[dir="rtl"] #ergebnis-container .result-extension-arrow {
   .rechner-grid .eingaben-column {
     grid-column: 1;
     grid-row: 1;
+    align-self: start;
   }
 
   .rechner-grid .vk-column {
     grid-column: 1;
     grid-row: 2;
+    align-self: start;
   }
 
   .rechner-grid #ergebnis-container {
     grid-column: 2;
     grid-row: 1 / 3;
+    align-self: start;
+    overflow-y: auto;
   }
 }
 
