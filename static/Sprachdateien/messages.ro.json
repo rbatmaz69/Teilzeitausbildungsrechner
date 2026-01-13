@@ -9,14 +9,23 @@
     "aria": "Alege limba",
     "aria_easy": "Alege limba",
     "de": "Deutsch",
+    "de_easy": "Deutsch",
     "en": "English",
+    "en_easy": "English",
     "uk": "Українська",
+    "uk_easy": "Українська",
     "tr": "Türkçe",
+    "tr_easy": "Türkçe",
     "ar": "العربية",
+    "ar_easy": "العربية",
     "fr": "Français",
+    "fr_easy": "Français",
     "ru": "Русский",
+    "ru_easy": "Русский",
     "pl": "Polski",
-    "ro": "Română"
+    "pl_easy": "Polski",
+    "ro": "Română",
+    "ro_easy": "Română"
   },
   "inputs": {
     "title": "Calculul tău",
@@ -79,9 +88,13 @@
     "roundingHint_easy": "Rotunjit de la {original} la {rounded} luni",
     "placeholders": {
       "dauer": "ex. 36",
+      "dauer_easy": "ex. 36",
       "stunden": "ex. 40",
+      "stunden_easy": "ex. 40",
       "teilzeitProzent": "ex. 75",
-      "teilzeitStunden": "ex. 30"
+      "teilzeitProzent_easy": "ex. 75",
+      "teilzeitStunden": "ex. 30",
+      "teilzeitStunden_easy": "ex. 30"
     }
   },
   "vk": {
@@ -166,6 +179,14 @@
     "vork": {
       "label": "Experiență profesională",
       "label_easy": "Experiență",
+      "label1": "Formare profesională finalizată",
+      "label1_easy": "Formare finalizată",
+      "label2": "Dovadă de formare profesională de bază relevantă",
+      "label2_easy": "Dovadă de formare de bază potrivită",
+      "label3": "Activitate profesională relevantă",
+      "label3_easy": "Muncă potrivită",
+      "label4": "Experiență de lucru în domeniul profesional",
+      "label4_easy": "Experiență în domeniu",
       "sr": "Experiența profesională poate scurta durata formării.",
       "sr_easy": "Experiența poate scurta formarea."
     },

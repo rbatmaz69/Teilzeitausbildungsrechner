@@ -9,14 +9,23 @@
     "aria": "Wybierz język",
     "aria_easy": "Wybierz język",
     "de": "Deutsch",
+    "de_easy": "Deutsch",
     "en": "English",
+    "en_easy": "English",
     "uk": "Українська",
+    "uk_easy": "Українська",
     "tr": "Türkçe",
+    "tr_easy": "Türkçe",
     "ar": "العربية",
+    "ar_easy": "العربية",
     "fr": "Français",
+    "fr_easy": "Français",
     "ru": "Русский",
+    "ru_easy": "Русский",
     "pl": "Polski",
-    "ro": "Română"
+    "pl_easy": "Polski",
+    "ro": "Română",
+    "ro_easy": "Română"
   },
   "inputs": {
     "title": "Twoje obliczenie",
@@ -79,9 +88,13 @@
     "roundingHint_easy": "Zaokrąglono z {original} do {rounded} miesięcy",
     "placeholders": {
       "dauer": "np. 36",
+      "dauer_easy": "np. 36",
       "stunden": "np. 40",
+      "stunden_easy": "np. 40",
       "teilzeitProzent": "np. 75",
-      "teilzeitStunden": "np. 30"
+      "teilzeitProzent_easy": "np. 75",
+      "teilzeitStunden": "np. 30",
+      "teilzeitStunden_easy": "np. 30"
     }
   },
   "vk": {
@@ -166,6 +179,14 @@
     "vork": {
       "label": "Doświadczenie zawodowe",
       "label_easy": "Doświadczenie",
+      "label1": "Ukończone wykształcenie zawodowe",
+      "label1_easy": "Ukończone wykształcenie zawodowe",
+      "label2": "Potwierdzenie odpowiedniego podstawowego przygotowania zawodowego",
+      "label2_easy": "Potwierdzenie podstawowego przygotowania",
+      "label3": "Odpowiednie doświadczenie zawodowe",
+      "label3_easy": "Odpowiednia praca",
+      "label4": "Doświadczenie w danej branży",
+      "label4_easy": "Doświadczenie w branży",
       "sr": "Doświadczenie zawodowe może skrócić czas kształcenia.",
       "sr_easy": "Doświadczenie może skrócić czas."
     },

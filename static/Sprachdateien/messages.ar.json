@@ -9,14 +9,23 @@
     "aria": "اختر اللغة",
     "aria_easy": "اختر اللغة",
     "de": "Deutsch",
+    "de_easy": "Deutsch",
     "en": "English",
+    "en_easy": "English",
     "uk": "Українська",
+    "uk_easy": "Українська",
     "tr": "Türkçe",
+    "tr_easy": "Türkçe",
     "ar": "العربية",
+    "ar_easy": "العربية",
     "fr": "Français",
+    "fr_easy": "Français",
     "ru": "Русский",
+    "ru_easy": "Русский",
     "pl": "Polski",
-    "ro": "Română"
+    "pl_easy": "Polski",
+    "ro": "Română",
+    "ro_easy": "Română"
   },
   "inputs": {
     "title": "حسابك",
@@ -79,9 +88,13 @@
     "roundingHint_easy": "تم التقريب من {original} إلى {rounded} شهرًا",
     "placeholders": {
       "dauer": "مثل 36",
+      "dauer_easy": "مثل 36",
       "stunden": "مثل 40",
+      "stunden_easy": "مثل 40",
       "teilzeitProzent": "مثل 75",
-      "teilzeitStunden": "مثل 30"
+      "teilzeitProzent_easy": "مثل 75",
+      "teilzeitStunden": "مثل 30",
+      "teilzeitStunden_easy": "مثل 30"
     }
   },
   "vk": {
@@ -166,6 +179,14 @@
     "vork": {
       "label": "خبرة مهنية",
       "label_easy": "خبرة عمل",
+      "label1": "إكمال تدريب مهني",
+      "label1_easy": "تدريب مهني مُكتمل",
+      "label2": "إثبات تدريب مهني أساسي مناسب",
+      "label2_easy": "إثبات تدريب أساسي مناسب",
+      "label3": "عمل مهني ذو صلة",
+      "label3_easy": "عمل ذو صلة",
+      "label4": "خبرة عمل في مجال المهنة",
+      "label4_easy": "خبرة في مجال المهنة",
       "sr": "الخبرة المهنية يمكن أن تقصر مدة تدريبك.",
       "sr_easy": "خبرة العمل قد تجعل التدريب أقصر."
     },

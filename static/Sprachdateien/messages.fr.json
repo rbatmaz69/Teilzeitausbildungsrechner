@@ -9,14 +9,23 @@
     "aria": "Choisir la langue",
     "aria_easy": "Choisir la langue",
     "de": "Deutsch",
+    "de_easy": "Deutsch",
     "en": "English",
+    "en_easy": "English",
     "uk": "Українська",
+    "uk_easy": "Українська",
     "tr": "Türkçe",
+    "tr_easy": "Türkçe",
     "ar": "العربية",
+    "ar_easy": "العربية",
     "fr": "Français",
+    "fr_easy": "Français",
     "ru": "Русский",
+    "ru_easy": "Русский",
     "pl": "Polski",
-    "ro": "Română"
+    "pl_easy": "Polski",
+    "ro": "Română",
+    "ro_easy": "Română"
   },
   "inputs": {
     "title": "Votre calcul",
@@ -79,9 +88,13 @@
     "roundingHint_easy": "Arrondi de {original} à {rounded} mois",
     "placeholders": {
       "dauer": "ex. 36",
+      "dauer_easy": "ex. 36",
       "stunden": "ex. 40",
+      "stunden_easy": "ex. 40",
       "teilzeitProzent": "ex. 75",
-      "teilzeitStunden": "ex. 30"
+      "teilzeitProzent_easy": "ex. 75",
+      "teilzeitStunden": "ex. 30",
+      "teilzeitStunden_easy": "ex. 30"
     }
   },
   "vk": {
@@ -166,6 +179,14 @@
     "vork": {
       "label": "Expérience professionnelle",
       "label_easy": "Expérience",
+      "label1": "Formation professionnelle terminée",
+      "label1_easy": "Formation terminée",
+      "label2": "Justificatif d’une formation professionnelle de base pertinente",
+      "label2_easy": "Preuve d’une formation de base pertinente",
+      "label3": "Activité professionnelle pertinente",
+      "label3_easy": "Travail pertinent",
+      "label4": "Expérience de travail dans le domaine professionnel",
+      "label4_easy": "Expérience dans le domaine",
       "sr": "L’expérience professionnelle peut réduire la durée de formation.",
       "sr_easy": "L’expérience peut réduire la durée."
     },

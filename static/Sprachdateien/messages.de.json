@@ -177,6 +177,8 @@
       "question_easy": "Was haben Sie vorher gemacht?"
     },
     "vork": {
+      "label": "Berufliche Vorerfahrung",
+      "label_easy": "Vorerfahrung",
       "label1": "Abgeschlossene Berufsausbildung",
       "label1_easy": "Abgeschlossene Berufsausbildung",
       "label2": "Nachweis einer einschlägigen beruflichen Grundausbildung",

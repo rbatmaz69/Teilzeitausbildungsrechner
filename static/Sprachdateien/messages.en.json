@@ -9,14 +9,23 @@
     "aria": "Choose language",
     "aria_easy": "Choose language",
     "de": "Deutsch",
+    "de_easy": "Deutsch",
     "en": "English",
+    "en_easy": "English",
     "uk": "Українська",
+    "uk_easy": "Українська",
     "tr": "Türkçe",
+    "tr_easy": "Türkçe",
     "ar": "العربية",
+    "ar_easy": "العربية",
     "fr": "Français",
+    "fr_easy": "Français",
     "ru": "Русский",
+    "ru_easy": "Русский",
     "pl": "Polski",
-    "ro": "Română"
+    "pl_easy": "Polski",
+    "ro": "Română",
+    "ro_easy": "Română"
   },
   "inputs": {
     "title": "Your Calculation",
@@ -79,9 +88,13 @@
     "roundingHint_easy": "Rounded from {original} to {rounded} months",
     "placeholders": {
       "dauer": "e.g. 36",
+      "dauer_easy": "e.g. 36",
       "stunden": "e.g. 40",
+      "stunden_easy": "e.g. 40",
       "teilzeitProzent": "e.g. 75",
-      "teilzeitStunden": "e.g. 30"
+      "teilzeitProzent_easy": "e.g. 75",
+      "teilzeitStunden": "e.g. 30",
+      "teilzeitStunden_easy": "e.g. 30"
     }
   },
   "vk": {
@@ -166,6 +179,14 @@
     "vork": {
       "label": "Professional experience",
       "label_easy": "Work experience",
+      "label1": "Completed vocational training",
+      "label1_easy": "Completed vocational training",
+      "label2": "Proof of relevant basic vocational training",
+      "label2_easy": "Proof of relevant basic training",
+      "label3": "Relevant professional activity",
+      "label3_easy": "Relevant work",
+      "label4": "Work experience in the occupational field",
+      "label4_easy": "Work experience in the field",
       "sr": "Professional experience can shorten your training duration.",
       "sr_easy": "Work experience can make training shorter."
     },
@@ -192,8 +213,8 @@
       "closeAria_easy": "Close",
       "title": "What are reduction reasons?",
       "title_easy": "What are reasons for shorter training?",
-      "content": "<p><strong>Reduction reasons</strong> are circumstances or qualifications that allow you to shorten the regular training duration. This can help you complete your training faster.</p><p><strong>How are they applied?</strong></p><p>Reduction reasons are credited to the regular training duration. Depending on the type of reason, different reductions may be granted. The reductions are added together until a maximum is reached.</p><p><strong>How many can be used simultaneously?</strong></p><p>You can specify <strong>multiple reduction reasons simultaneously</strong>. The total reduction is calculated from all selected reasons. However, note that there is a maximum reduction of 21 months that cannot be exceeded.</p>",
-      "content_easy": "<p><strong>Reasons for shorter training</strong> are things that can make your training shorter. For example: a school degree or work experience.</p><p><strong>How does it work?</strong></p><p>Each reason makes training shorter by some months. All reasons are added together.</p><p><strong>How many reasons can I use?</strong></p><p>You can use <strong>many reasons together</strong>. All reasons are added up. But training can be at most 21 months shorter.</p>"
+      "content": "<p><strong>Reduction reasons</strong> are circumstances or qualifications that allow you to shorten the regular training duration. This can help you complete your training faster.</p><p><strong>How are they applied?</strong></p><p>Reduction reasons are credited to the regular training duration. Depending on the type of reason, different reductions may be granted. The reductions are added together until a maximum is reached.</p><p><strong>How many can be used simultaneously?</strong></p><p>You can specify <strong>multiple reduction reasons simultaneously</strong>. The total reduction is calculated from all selected reasons. However, note that there is a maximum reduction of 12 months that cannot be exceeded.</p>",
+      "content_easy": "<p><strong>Reasons for shorter training</strong> are things that can make your training shorter. For example: a school degree or work experience.</p><p><strong>How does it work?</strong></p><p>Each reason makes training shorter by some months. All reasons are added together.</p><p><strong>How many reasons can I use?</strong></p><p>You can use <strong>many reasons together</strong>. All reasons are added up. But training can be at most 12 months shorter.</p>"
     }
   },
   "res": {

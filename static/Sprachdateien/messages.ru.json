@@ -9,14 +9,23 @@
     "aria": "Выберите язык",
     "aria_easy": "Выберите язык",
     "de": "Deutsch",
+    "de_easy": "Deutsch",
     "en": "English",
+    "en_easy": "English",
     "uk": "Українська",
+    "uk_easy": "Українська",
     "tr": "Türkçe",
+    "tr_easy": "Türkçe",
     "ar": "العربية",
+    "ar_easy": "العربية",
     "fr": "Français",
+    "fr_easy": "Français",
     "ru": "Русский",
+    "ru_easy": "Русский",
     "pl": "Polski",
-    "ro": "Română"
+    "pl_easy": "Polski",
+    "ro": "Română",
+    "ro_easy": "Română"
   },
   "inputs": {
     "title": "Ваш расчет",
@@ -79,9 +88,13 @@
     "roundingHint_easy": "Округлено с {original} до {rounded} месяцев",
     "placeholders": {
       "dauer": "напр. 36",
+      "dauer_easy": "напр. 36",
       "stunden": "напр. 40",
+      "stunden_easy": "напр. 40",
       "teilzeitProzent": "напр. 75",
-      "teilzeitStunden": "напр. 30"
+      "teilzeitProzent_easy": "напр. 75",
+      "teilzeitStunden": "напр. 30",
+      "teilzeitStunden_easy": "напр. 30"
     }
   },
   "vk": {
@@ -166,6 +179,14 @@
     "vork": {
       "label": "Опыт работы",
       "label_easy": "Опыт",
+      "label1": "Завершенное профессиональное образование",
+      "label1_easy": "Завершенное профобразование",
+      "label2": "Подтверждение соответствующей базовой профессиональной подготовки",
+      "label2_easy": "Подтверждение базовой подготовки",
+      "label3": "Соответствующая профессиональная деятельность",
+      "label3_easy": "Работа по специальности",
+      "label4": "Опыт работы в профессиональной сфере",
+      "label4_easy": "Опыт в этой сфере",
       "sr": "Опыт работы может сократить срок обучения.",
       "sr_easy": "Опыт может сократить срок."
     },
