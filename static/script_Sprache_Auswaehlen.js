@@ -2,6 +2,7 @@
 (() => {
   const STANDARD_SPRACHE = "de";
   const UNTERSTUETZT = ["de", "en", "uk", "tr", "ar", "fr", "ru", "pl", "ro"];
+  const FALLBACK_SPRACHE = "de";
 
   // Sitzungspersistenz: sessionStorage überlebt Reloads im selben Tab.
   // Optional kann zusätzlich localStorage genutzt werden (überlebt Tab schließen).
@@ -12,7 +13,8 @@
 
   const zustand = {
     sprache: null,
-    woerterbuch: null
+    woerterbuch: null,
+    fallbackWoerterbuch: null
   };
 
   /** Synchronisiert die beiden Select-Sprachumschalter (Mobile + Desktop) auf die aktive Sprache. */
@@ -77,9 +79,21 @@
   const aufloesungMitLeichterSprache = (objekt, pfad) => {
     if (istLeichteSpracheAktiv()) {
       const wertEasy = aufloesung(objekt, `${pfad}_easy`);
-      if (wertEasy != null) return wertEasy;
+      if (wertEasy != null && wertEasy !== "") return wertEasy;
     }
-    return aufloesung(objekt, pfad);
+    const wert = aufloesung(objekt, pfad);
+    return wert != null && wert !== "" ? wert : null;
+  };
+
+  /**
+   * Löst i18n-Schlüssel auf mit Fallback.
+   * 1) aktives Wörterbuch  2) Fallback-Wörterbuch (Deutsch)
+   */
+  const i18nWert = (pfad) => {
+    const prim = zustand.woerterbuch ? aufloesungMitLeichterSprache(zustand.woerterbuch, pfad) : null;
+    if (prim != null) return prim;
+    const fb = zustand.fallbackWoerterbuch ? aufloesungMitLeichterSprache(zustand.fallbackWoerterbuch, pfad) : null;
+    return fb;
   };
 
   /**
@@ -123,11 +137,11 @@
    * Wendet alle Übersetzungen auf Elemente mit data-i18n-Attributen an.
    * @param {Object} woerterbuch Wörterbuch mit Übersetzungen.
    */
-  const wendeUebersetzungenAn = (woerterbuch) => {
+  const wendeUebersetzungenAn = () => {
     document.querySelectorAll("[data-i18n]").forEach((element) => {
       const schluessel = element.dataset.i18n;
-      const wert = aufloesungMitLeichterSprache(woerterbuch, schluessel);
-      if (wert == null) return;
+      const wert = i18nWert(schluessel);
+      if (wert == null) return; // falls auch im HTML kein Default steht
 
       if (Array.isArray(wert)) {
         wendeTextAn(element, wert.map((eintrag) => `<li>${eintrag}</li>`).join(""));
@@ -140,7 +154,7 @@
       const zuordnungen = element.dataset.i18nAttr.split(",").map((zeichenkette) => zeichenkette.trim());
       zuordnungen.forEach((zuordnung) => {
         const [attribut, schluessel] = zuordnung.split(":").map((zeichenkette) => zeichenkette.trim());
-        const wert = aufloesungMitLeichterSprache(woerterbuch, schluessel);
+        const wert = i18nWert(schluessel);
         if (wert != null) element.setAttribute(attribut, String(wert));
       });
     });
@@ -148,7 +162,7 @@
     // Setze data-label-open für Elemente mit data-i18n-open
     document.querySelectorAll("[data-i18n-open]").forEach((element) => {
       const schluessel = element.dataset.i18nOpen;
-      const wert = aufloesungMitLeichterSprache(woerterbuch, schluessel);
+      const wert = i18nWert(schluessel);
       if (wert != null) element.setAttribute("data-label-open", String(wert));
     });
 
@@ -162,8 +176,8 @@
       get lang() { return zustand.sprache; },
       get dict() { return zustand.woerterbuch; },
       t(schluessel, ersatzwert) {
-        const wert = aufloesungMitLeichterSprache(zustand.woerterbuch, schluessel);
-        return wert != null ? (Array.isArray(wert) ? wert : String(wert)) : (ersatzwert ?? schluessel);
+        const wert = i18nWert(schluessel);
+        return wert != null ? (Array.isArray(wert) ? wert : String(wert)) : (ersatzwert ?? "");
       }
     };
   };
@@ -195,8 +209,19 @@
     setzeHtmlSprachRichtung(zustand.sprache);
 
     try {
-      zustand.woerterbuch = await ladeWoerterbuch(zustand.sprache);
-      wendeUebersetzungenAn(zustand.woerterbuch);
+      const zielSprache = zustand.sprache;
+      const fallbackSprache = FALLBACK_SPRACHE;
+
+      const [zielDict, fallbackDict] = await Promise.all([
+        ladeWoerterbuch(zielSprache),
+        // Fallback auch dann laden, wenn Ziel = Fallback ist (vereinfachte Logik)
+        ladeWoerterbuch(fallbackSprache)
+      ]);
+
+      zustand.woerterbuch = zielDict;
+      zustand.fallbackWoerterbuch = fallbackDict;
+
+      wendeUebersetzungenAn();
       registriereGlobaleAPI();
       sendeSprachGeaendertEvent();
     } catch (fehler) {
@@ -244,7 +269,7 @@
     // Reagiere auf Umschalten der "Leichten Sprache" (ohne Reload)
     window.addEventListener("easyLanguage:changed", () => {
       if (!zustand.woerterbuch) return;
-      wendeUebersetzungenAn(zustand.woerterbuch);
+      wendeUebersetzungenAn();
       registriereGlobaleAPI();
     });
   });
