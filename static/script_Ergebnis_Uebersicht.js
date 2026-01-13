@@ -218,6 +218,7 @@ function collectVerkuerzungsgruende() {
     berufliche_verkuerzung_monate: 0
   };
 
+
   // 1) Alle Checkbox-Kacheln mit data-vk-field
   const checkboxInputs = document.querySelectorAll(
     '#vk-fieldset input[type="checkbox"][data-vk-field]'
@@ -672,7 +673,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
     ],
     [
       uebersetzung("inputs.teilzeit.labelShort", "Teilzeit"),
-      `${eingaben.teilzeitProzent}% <-> ${teilzeitStunden} ${uebersetzung("units.hours.short", "Std")}`
+      `${eingaben.teilzeitProzent}% ↔ ${teilzeitStunden} ${uebersetzung("units.hours.short", "Std")}`
     ]
   ];
 
@@ -1349,14 +1350,10 @@ function setzeDatenZurueck() {
   LETZTE_BERECHNUNG = null;
 
   // Nach Bestätigung sanft zum Eingabebereich scrollen (gleiche Logik wie "Zum Rechner" Button)
-  const eingabenSection = document.querySelector('section.card'); // Erste Eingabe-Section
+  const eingabenSection = document.querySelector('section.card');
   if (eingabenSection) {
-    const sectionTop = eingabenSection.getBoundingClientRect().top + window.pageYOffset;
-    const offset = 70; // Offset für Tooltip + Abstand oben (gleich wie bei "Zum Rechner" Button)
-    window.scrollTo({
-      top: sectionTop - offset,
-      behavior: "smooth"
-    });
+    const top = eingabenSection.getBoundingClientRect().top + window.pageYOffset - 70 + 38;
+    window.scrollTo({ top, behavior: "smooth" });
   }
 }
 
@@ -1633,15 +1630,35 @@ function initialisiere() {
 // Erst-Init
 document.addEventListener("DOMContentLoaded", initialisiere);
 
-// Bei Sprachwechsel nur UI neu rendern (ohne neue API-Calls)
-// Nur wenn Ergebnisse bereits angezeigt wurden
-window.addEventListener("i18n:changed", () => {
+function rerendereErgebnisUIWennSichtbar() {
   const ergebnisContainer = document.getElementById("ergebnis-container");
   if (!ergebnisContainer || ergebnisContainer.hidden) return;
   if (!LETZTE_EINGABEN || !LETZTE_BERECHNUNG) return;
+
+  // Sicherstellen, dass der Titel in der Box "Ihre Berechnung" ebenfalls aktualisiert wird
+  const inputsTitle = document.getElementById("inputs-title");
+  if (inputsTitle) {
+    inputsTitle.textContent = uebersetzung("inputs.title", inputsTitle.textContent);
+  }
+
   fuelleEingabenliste(LETZTE_EINGABEN, LETZTE_BERECHNUNG);
   fuelleErgebnisse(LETZTE_EINGABEN, LETZTE_BERECHNUNG);
   setzeDatumstempel();
+}
+
+// Bei Sprachwechsel nur UI neu rendern (ohne neue API-Calls)
+// Nur wenn Ergebnisse bereits angezeigt wurden
+window.addEventListener("i18n:changed", () => {
+  rerendereErgebnisUIWennSichtbar();
+});
+
+// Beim Umschalten der "Leichten Sprache" wird i18n neu angewendet.
+// Da dieses Script vor der i18n-Initialisierung geladen wird, warten wir einen Tick,
+// damit `window.I18N` und das Wörterbuch bereits aktualisiert sind.
+window.addEventListener("easyLanguage:changed", () => {
+  setTimeout(() => {
+    rerendereErgebnisUIWennSichtbar();
+  }, 0);
 });
 
 // Bei Fenstergrößenänderung neu rendern (für Mobile/Desktop-Umschaltung)
@@ -1683,7 +1700,8 @@ async function berechnen() {
     setzeErgebnisBegleitUIVisible(true);
     // Sanftes Scrollen zur Ergebnis-Sektion (außer bei geteilten Links)
     if (!window.__skipScrollToResults) {
-      ergebnisContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+      const top = ergebnisContainer.getBoundingClientRect().top + window.pageYOffset - 38;
+      window.scrollTo({ top, behavior: "smooth" });
     }
   }
   

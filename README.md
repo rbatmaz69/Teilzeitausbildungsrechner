@@ -97,7 +97,13 @@ docker compose down
 
 ## 🐙 Docker Hub Image
 
-Das Projekt wird automatisch als Docker‑Image auf Docker Hub unter `jkeller5/group04-tzr` veröffentlicht (CI pusht das `latest` Tag bei erfolgreichen Builds auf `main`).
+Das Projekt wird automatisch als Multi-Platform Docker-Image auf Docker Hub unter `jkeller5/group04-tzr` veröffentlicht.
+
+**Unterstützte Plattformen:**
+- `linux/amd64` - Intel/AMD-Prozessoren (Standard Server, Desktop)
+- `linux/arm64` - Apple Silicon (M1/M2/M3), AWS Graviton, ARM-Server
+
+Die CI/CD-Pipeline baut beide Architekturen parallel und pusht sie als ein einziges Image-Tag. Docker wählt automatisch die passende Plattform beim Pull.
 
 Einfachste Nutzung (empfohlen):
 ```bash
@@ -506,15 +512,16 @@ Das Skript wertet die Docstrings der Kernmodule (`src/calculation_logic.py`, `sr
 ## 🔄 CI/CD Pipeline
 
 ### Pipeline-Stages
-- [x] **Lint** - Code Quality Checks für Backend & Frontend
+- [x] **Code Quality** - Code Quality Checks für Backend & Frontend
   - Python: Flake8, isort
   - JavaScript: ESLint
   - CSS: Stylelint
   - HTML: HTMLHint
-- [x] **Test** - Pytest mit Coverage-Report (siehe `coverage.xml` oder `pytest --cov`)
-- [x] **E2E** - Playwright End-to-End Tests (Tests unter `e2e/`, 64 Tests)
+- [x] **Unit Tests** - Pytest mit Coverage-Report (siehe `coverage.xml` oder `pytest --cov`)
+- [x] **E2E Tests** - Playwright End-to-End Tests (Tests unter `e2e/`, 64 Tests)
+- [x] **Docker Health Check** - Automatischer Build, Start und Erreichbarkeitstest des Containers
+- [x] **Publish** - Multi-Platform Build (linux/amd64 + linux/arm64) und Push zu Docker Hub
 - [x] **Coverage Report** - Automatische Coverage-Artefakte
-- [ ] **Deployment** - Automatisches Deployment nach Tests
 - [ ] **Status Badges** - Build-Status in README
 
 **Pipeline läuft automatisch bei:**

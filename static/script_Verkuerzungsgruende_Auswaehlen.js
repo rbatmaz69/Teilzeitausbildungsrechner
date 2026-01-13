@@ -6,6 +6,7 @@
  */
 document.addEventListener('DOMContentLoaded', () => {
   const alter = document.getElementById('alter');
+  const vkForm = document.getElementById('vk-form');
   const kinderbetreuungJa = document.getElementById('kinderbetreuung-ja');
   const kinderbetreuungNein = document.getElementById('kinderbetreuung-nein');
   const pflegeJa = document.getElementById('pflege-ja');
@@ -66,6 +67,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const forbidden = ['e', 'E', '+', '-', '.', ','];
     if (forbidden.includes(ev.key)) ev.preventDefault();
   });
+
+  // Prevent form submission via Enter inside inputs (keeps values intact)
+  if (vkForm) {
+    vkForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+    });
+  }
   
   alter.addEventListener('input', () => {
     let v = alter.value.replace(/[^0-9]/g, '');
