@@ -414,7 +414,7 @@
                   aria-hidden="true">i</span>
           </label>
           <div class="input-with-unit">
-            <input type="text" inputmode="numeric" autocomplete="off" id="dauer" placeholder="z.B. 36" data-i18n-attr="placeholder:inputs.placeholders.dauer" step="1" required aria-labelledby="label-dauer" aria-describedby="hint-dauer">
+            <input type="text" inputmode="numeric" autocomplete="off" id="dauer" dir="ltr" placeholder="z.B. 36" data-i18n-attr="placeholder:inputs.placeholders.dauer" step="1" required aria-labelledby="label-dauer" aria-describedby="hint-dauer">
             <span class="unit" data-i18n="units.months.full">Monate</span>
           </div>
           <span class="error-message" id="errorDauer"></span>
@@ -434,7 +434,7 @@
                   aria-hidden="true">i</span>
           </label>
           <div class="input-with-unit">
-            <input type="text" inputmode="decimal" autocomplete="off" id="stunden" placeholder="z.B. 40" data-i18n-attr="placeholder:inputs.placeholders.stunden" step="1" required aria-labelledby="label-stunden" aria-describedby="hint-stunden">
+            <input type="text" inputmode="decimal" autocomplete="off" id="stunden" dir="ltr" placeholder="z.B. 40" data-i18n-attr="placeholder:inputs.placeholders.stunden" step="1" required aria-labelledby="label-stunden" aria-describedby="hint-stunden">
             <span class="unit" data-i18n="units.hours.full">Stunden</span>
           </div>
           <span class="error-message" id="errorStunden"></span>
@@ -454,7 +454,7 @@
           <!-- Stundenanteil (primär) -->
           <div class="input-group">
             <div class="input-with-unit">
-              <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitStunden" placeholder="z.B. 30" data-i18n-attr="placeholder:inputs.placeholders.teilzeitStunden" step="1" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
+              <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitStunden" dir="ltr" placeholder="z.B. 30" data-i18n-attr="placeholder:inputs.placeholders.teilzeitStunden" step="1" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
               <span class="unit" data-i18n="units.hours.full">Stunden</span>
             </div>
             <span class="error-message" id="errorTeilStunden"></span>
@@ -472,7 +472,7 @@
           <!-- Prozentanteil -->
           <div class="input-group">
             <div class="input-with-unit">
-              <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitProzent" placeholder="z.B. 75" data-i18n-attr="placeholder:inputs.placeholders.teilzeitProzent" step="5" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
+              <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitProzent" dir="ltr" placeholder="z.B. 75" data-i18n-attr="placeholder:inputs.placeholders.teilzeitProzent" step="5" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
               <span class="unit" data-i18n="units.percent">Prozent</span>
             </div>
             <span class="error-message" id="errorProzent"></span>
@@ -547,7 +547,7 @@
 
             <div class="vk-category-body vk-stack">
               <div class="input-with-unit">
-                <input type="number" id="alter" step="1" min="0" max="99" placeholder="z.B. 25">
+                <input type="number" id="alter" dir="ltr" step="1" min="0" max="99" placeholder="z.B. 25" data-i18n-attr="placeholder:vk.other.placeholder">
                 <span class="unit" data-i18n="units.years.full">Jahre</span>
               </div>
 
@@ -694,7 +694,7 @@
           <div id="vk_beruf_q2_duration_container" style="display:none;margin-top:.5rem;">
             <label for="vk_beruf_q2_dauer_months" style="display:block;margin-bottom:.5rem;font-weight:500;" data-i18n="vk.qual.nichtAbgeschlosseneAusbildung_dauer">Wie lange hat Ihre nicht abgeschlossene Ausbildung gedauert? (Monate)</label>
             <div class="input-with-unit">
-              <input type="number" id="vk_beruf_q2_dauer_months" min="0" max="50" step="1" inputmode="numeric" placeholder="z.B. 12">
+              <input type="number" id="vk_beruf_q2_dauer_months" dir="ltr" min="0" max="50" step="1" inputmode="numeric" placeholder="z.B. 12" data-i18n-attr="placeholder:vk.qual.nichtAbgeschlosseneAusbildung_placeholder">
               <span class="unit" data-i18n="vk.qual.months">Monate</span>
             </div>
             <span class="error-message" id="errorBerufQ2Dauer"></span>
@@ -768,20 +768,20 @@
           <!-- Grid-Layout für Haupt- und Meta-Ergebnisse -->
           <div class="grid">
             <div class="highlight-main">
-              <p class="big-number" id="res-total-months" aria-live="polite">–</p>
-              <p class="result-years" id="res-total-years">–</p>
+              <p class="big-number bidi-ltr" id="res-total-months" dir="ltr" aria-live="polite">–</p>
+              <p class="result-years bidi-ltr" id="res-total-years" dir="ltr">–</p>
               <span class="error-message" id="errorTotalMonths" data-i18n="errors.placeholder"></span>
               
               <!-- Verlängerungsanzeige: Ausbildung(Vollzeit) → Pfeil mit Verkürzungsdauer → Basis -->
               <div class="result-extension-wrapper" id="res-shortening-wrapper" hidden>
                 <p class="result-extension-label" data-i18n="res.extension.label1">1. Verkürzung durch Verkürzungründe</p>
                 <div class="result-extension-values">
-                  <span class="result-extension-basis" id="res-extension-vollzeit">–</span>
+                  <span class="result-extension-basis bidi-ltr" id="res-extension-vollzeit" dir="ltr">–</span>
                   <div class="result-extension-arrow-wrapper">
                     <span class="result-extension-arrow">→</span>
-                    <span class="result-extension-delta" id="res-extension-verkuerzungsdauer">+–</span>
+                    <span class="result-extension-delta bidi-ltr" id="res-extension-verkuerzungsdauer" dir="ltr">+–</span>
                   </div>
-                  <span class="result-extension-total" id="res-shortening-total">–</span>
+                  <span class="result-extension-total bidi-ltr" id="res-shortening-total" dir="ltr">–</span>
                 </div>
               </div>
 
@@ -789,12 +789,12 @@
               <div class="result-extension-wrapper" id="res-extension-wrapper" hidden>
                 <p class="result-extension-label" data-i18n="res.extension.label2">2. Verlängerung durch Teilzeit:</p>
                 <div class="result-extension-values">
-                  <span class="result-extension-basis" id="res-extension-basis">–</span>
+                  <span class="result-extension-basis bidi-ltr" id="res-extension-basis" dir="ltr">–</span>
                   <div class="result-extension-arrow-wrapper">
                     <span class="result-extension-arrow">→</span>
-                    <span class="result-extension-delta" id="res-extension-delta">+–</span>
+                    <span class="result-extension-delta bidi-ltr" id="res-extension-delta" dir="ltr">+–</span>
                   </div>
-                  <span class="result-extension-total" id="res-extension-total">–</span>
+                  <span class="result-extension-total bidi-ltr" id="res-extension-total" dir="ltr">–</span>
                 </div>
               </div>
             </div>

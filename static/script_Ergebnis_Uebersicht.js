@@ -762,6 +762,8 @@ function fuelleEingabenliste(eingaben, berechnung) {
         
         const valueSpan = document.createElement("span");
         valueSpan.className = "verkuerzung-value";
+        valueSpan.classList.add("bidi-ltr");
+        valueSpan.setAttribute("dir", "ltr");
         // Einheitlich vollständige Form "Monate" für alle Geräte
         valueSpan.textContent = `${verkuerzung.months} ${uebersetzung("units.months.short", "M")}`;
         
@@ -792,6 +794,8 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const nachVerkuerzungDt = document.createElement("dt");
     nachVerkuerzungDt.textContent = nachVerkuerzungBeschriftung;
     const nachVerkuerzungDd = document.createElement("dd");
+    nachVerkuerzungDd.classList.add("bidi-ltr");
+    nachVerkuerzungDd.setAttribute("dir", "ltr");
     nachVerkuerzungDd.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.short", "M")}`;
     nachVerkuerzungWrapper.append(nachVerkuerzungDt, nachVerkuerzungDd);
     liste.append(nachVerkuerzungWrapper);
@@ -805,16 +809,19 @@ function fuelleEingabenliste(eingaben, berechnung) {
     
     // Strukturiertes Format: Formel in separaten Elementen für Mobile/Desktop
     const formulaContainer = document.createElement("div");
-    formulaContainer.className = "teilzeit-formula-container";
+    formulaContainer.className = "teilzeit-formula-container bidi-ltr";
+    formulaContainer.setAttribute("dir", "ltr");
     
     // Zeile 1: "24 Monate / 75%"
     const formulaLine1 = document.createElement("span");
-    formulaLine1.className = "teilzeit-formula-line1";
+    formulaLine1.className = "teilzeit-formula-line1 bidi-ltr";
+    formulaLine1.setAttribute("dir", "ltr");
     formulaLine1.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.short", "M")} / ${eingaben.teilzeitProzent}%`;
     
     // Zeile 2: "= 48 Monate"
     const formulaLine2 = document.createElement("span");
-    formulaLine2.className = "teilzeit-formula-line2";
+    formulaLine2.className = "teilzeit-formula-line2 bidi-ltr";
+    formulaLine2.setAttribute("dir", "ltr");
     formulaLine2.textContent = ` = ${berechnung.gesamtMonate} ${uebersetzung("units.months.short", "M")}`;
     
     formulaContainer.appendChild(formulaLine1);
@@ -846,7 +853,8 @@ function fuelleEingabenliste(eingaben, berechnung) {
 
   // Einheiten-Legende
   const legende = document.createElement("p");
-  legende.className = "units-legend";
+  legende.className = "units-legend bidi-ltr";
+  legende.setAttribute("dir", "ltr");
   legende.textContent = uebersetzung(
     "inputs.unitsLegend",
     "Std = Stunden, M = Monate"
