@@ -1829,9 +1829,9 @@ input.error,
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(224 0 0 / 10%);
+  background: #fff;
   color: var(--primary);
-  border: 2px solid var(--primary);
+  border: none;
   border-radius: 8px;
 }
 
@@ -2353,7 +2353,7 @@ input.error,
     justify-content: center;
     background: rgb(224 0 0 / 10%);
     color: var(--primary);
-    border: 2px solid var(--primary);
+    border: none;
     border-radius: 16px;
     margin-bottom: var(--space-4);
   }
@@ -2584,7 +2584,7 @@ input.error,
   gap: 0.5rem;
   padding: 0.75rem 1.25rem;
   margin: 0;
-  background: rgb(224 0 0 / 10%);
+  background: #fff;
   border: 2px solid var(--primary);
   border-radius: var(--radius-sm);
   color: var(--primary);
@@ -2611,6 +2611,24 @@ input.error,
 .vk-info-btn:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
+}
+
+/* Dark-mode: button background matches panel (grey) */
+:root[data-theme="dark"] .vk-info-btn {
+  background: var(--panel);
+}
+
+/* Dark-mode: hover/active should match light-mode (turn red) */
+:root[data-theme="dark"] .vk-info-btn:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgb(224 0 0 / 20%);
+}
+
+:root[data-theme="dark"] .vk-info-btn:active {
+  transform: none;
+  box-shadow: 0 4px 12px rgb(224 0 0 / 20%);
 }
 
 .vk-info-btn-icon {
@@ -2681,7 +2699,7 @@ input.error,
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(224 0 0 / 10%);
+  background: #fff;
   border: 2px solid var(--primary);
   border-radius: 50%;
   color: var(--primary);
@@ -2706,6 +2724,11 @@ input.error,
 .vk-info-close:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
+}
+
+/* Dark-mode: close button background should match panel (grey) */
+:root[data-theme="dark"] .vk-info-close {
+  background: var(--panel);
 }
 
 .vk-info-close-icon {
@@ -2739,7 +2762,7 @@ input.error,
   justify-content: center;
   background: rgb(224 0 0 / 10%);
   color: var(--primary);
-  border: 2px solid var(--primary);
+  border: none;
   border-radius: 12px;
 }
 
@@ -4063,9 +4086,17 @@ body.modal-open {
 }
 
 :root[data-theme="dark"] .vk-info-close {
-  background: rgb(224 0 0 / 10%);
+  background: var(--panel);
   border-color: var(--primary);
   color: var(--primary);
+}
+
+/* Ensure hover in dark mode turns the close button red (applies after other dark-mode rules) */
+:root[data-theme="dark"] .vk-info-close:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  transform: rotate(90deg);
 }
 
 @media (prefers-reduced-motion: reduce) {
