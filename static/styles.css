@@ -886,6 +886,12 @@ button.berechnen:focus-visible {
   -webkit-tap-highlight-color: transparent;
 }
 
+.actionbar .btn.ghost {
+  background: #fff;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
 .btn.outline{
   background: #fff;
   color: var(--brand-ink);
