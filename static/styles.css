@@ -293,8 +293,9 @@ header h1 {
 
 /* Inhalt der Gesetzliche Grundlagen Box */
 .legal-content {
-  padding-top: 0.75rem;
-  border-top: 2px solid #d9e6ff;
+  margin-top: 1rem; /* Abstand unter dem Summary, passend zu "Ihre Berechnung" */
+  padding-top: 1rem; /* wie bei .inputs-collapsible > dl */
+  border-top: 2px solid var(--info-border); /* ausgewaschenes Blau (Theme-Variable) */
 }
 
 .legal-section {
@@ -3971,7 +3972,7 @@ body.modal-open {
 }
 
 :root[data-theme="dark"] .legal-content {
-  border-top-color: var(--border);
+  border-top-color: var(--info-border);
 }
 
 :root[data-theme="dark"] .legal-collapsible .summary-pill {
