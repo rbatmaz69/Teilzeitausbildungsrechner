@@ -4424,37 +4424,25 @@ html[dir="rtl"] .vk-info-body ul {
   padding-right: 1.5rem;
 }
 
-/* Accessibility widget: move to bottom-left and mirror slide direction */
+/* Accessibility widget: keep bottom-right even in RTL (like other languages) */
 html[dir="rtl"] .a11y-toggle {
-  right: auto;
-  left: 16px;
+  left: auto;
+  right: 16px;
 }
 
 html[dir="rtl"] .a11y-menu {
-  right: auto !important;
-  left: 16px !important;
-  transform: translateX(-20px) scale(0.95) !important;
+  left: auto !important;
+  right: 16px !important;
+  transform: translateX(20px) scale(0.95) !important;
 }
 
 html[dir="rtl"] .a11y-menu[aria-hidden="false"] {
   transform: translateX(0) scale(1) !important;
-  animation: menu-slide-in-rtl 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: menu-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html[dir="rtl"] .a11y-menu[aria-hidden="true"] {
-  transform: translateX(-20px) scale(0.95) !important;
-}
-
-@keyframes menu-slide-in-rtl {
-  0% {
-    opacity: 0;
-    transform: translateX(-30px) scale(0.9);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
+  transform: translateX(20px) scale(0.95) !important;
 }
 
 /* Toggle switch knob direction */
