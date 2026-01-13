@@ -4030,3 +4030,140 @@ body.modal-open {
     transition: none;
   }
 }
+
+/* ==========================================
+   RTL OVERRIDES (e.g. Arabic)
+   ========================================== */
+
+html[dir="rtl"] .startseite-header {
+  justify-content: flex-start;
+}
+
+html[dir="rtl"] .language-switcher-desktop {
+  align-self: flex-start;
+}
+
+/* Mirror language switchers: caret left, flag right */
+html[dir="rtl"] #lang-switcher {
+  padding-left: 2rem;
+  padding-right: 2.2rem;
+  background-position: left 0.5rem center;
+}
+
+html[dir="rtl"] .lang-flags-overlay {
+  left: auto;
+  right: 0.5rem;
+}
+
+html[dir="rtl"] #lang-switcher-desktop {
+  padding: 0.5rem 2.2rem 0.5rem 2rem;
+  background-position: left 0.5rem center;
+}
+
+html[dir="rtl"] .lang-flags-overlay-desktop {
+  left: auto;
+  right: 0.5rem;
+}
+
+/* Inputs with unit badge: avoid overlaps by moving unit to left */
+html[dir="rtl"] .input-with-unit input {
+  padding-right: 0.5rem;
+  padding-left: 1.8rem;
+}
+
+html[dir="rtl"] .input-with-unit .unit {
+  right: auto;
+  left: 0.6rem;
+}
+
+/* Mirror two-column input rows */
+html[dir="rtl"] .input-row {
+  flex-direction: row-reverse;
+}
+
+/* Lists/notes forced LTR in base styles */
+html[dir="rtl"] .notes {
+  padding-left: 0;
+  padding-right: 1.5rem;
+  text-align: right;
+}
+
+html[dir="rtl"] .notes li {
+  text-align: right;
+}
+
+/* Info tooltip: spacing + text alignment */
+html[dir="rtl"] .info-icon {
+  margin-left: 0;
+  margin-right: 6px;
+}
+
+html[dir="rtl"] .info-icon::after {
+  text-align: right;
+}
+
+/* Info modal: mirror close button and header padding */
+html[dir="rtl"] .vk-info-close {
+  right: auto;
+  left: 1rem;
+}
+
+html[dir="rtl"] .vk-info-header {
+  padding-right: var(--space-5);
+  padding-left: 3.5rem;
+}
+
+@media (width >= 900px) {
+  html[dir="rtl"] .vk-info-header {
+    padding-right: var(--space-6);
+    padding-left: 4rem;
+  }
+}
+
+html[dir="rtl"] .vk-info-body ul {
+  padding-left: 0;
+  padding-right: 1.5rem;
+}
+
+/* Accessibility widget: move to bottom-left and mirror slide direction */
+html[dir="rtl"] .a11y-toggle {
+  right: auto;
+  left: 16px;
+}
+
+html[dir="rtl"] .a11y-menu {
+  right: auto !important;
+  left: 16px !important;
+  transform: translateX(-20px) scale(0.95) !important;
+}
+
+html[dir="rtl"] .a11y-menu[aria-hidden="false"] {
+  transform: translateX(0) scale(1) !important;
+  animation: menu-slide-in-rtl 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html[dir="rtl"] .a11y-menu[aria-hidden="true"] {
+  transform: translateX(-20px) scale(0.95) !important;
+}
+
+@keyframes menu-slide-in-rtl {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px) scale(0.9);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Toggle switch knob direction */
+html[dir="rtl"] .a11y-toggle-slider::before {
+  left: auto;
+  right: 3px;
+}
+
+html[dir="rtl"] .a11y-toggle-input:checked + .a11y-toggle-slider::before {
+  transform: translateX(-22px);
+}

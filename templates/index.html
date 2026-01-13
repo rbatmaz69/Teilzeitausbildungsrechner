@@ -4,6 +4,23 @@
   <!-- Zeichensatz und Responsive-Meta, wichtig für korrekte Darstellung -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Early RTL setup to avoid LTR flash when Arabic is stored in localStorage -->
+  <script>
+    (() => {
+      try {
+        const lang = localStorage.getItem("lang");
+        if (!lang) return;
+
+        document.documentElement.setAttribute("lang", lang);
+        const rtlSprachen = ["ar", "he", "fa", "ur"];
+        document.documentElement.setAttribute("dir", rtlSprachen.includes(lang) ? "rtl" : "ltr");
+      } catch {
+        // ignore
+      }
+    })();
+  </script>
+
   <title data-i18n="app.title">Teilzeitausbildungsrechner</title>
 
   <!-- externe CSS-Datei mit Styles -->
