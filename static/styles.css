@@ -184,10 +184,20 @@ p.helper {
   width: 100%;
   margin: 0 auto;
   padding: 1rem;
-  padding-left: max(var(--gutter), env(safe-area-inset-left));
-  padding-right: max(var(--gutter), env(safe-area-inset-right));
+      /* fixed horizontal gutter to avoid padding scaling with rem */
+      padding-left: max(16px, env(safe-area-inset-left));
+      padding-right: max(16px, env(safe-area-inset-right));
   box-sizing: border-box; /* Padding wird in Breite eingerechnet */
   overflow-x: hidden; /* Verhindert horizontales Scrollen innerhalb des Containers */
+}
+
+/* Keep cards/category elements from overflowing their container */
+.rechner-grid .card,
+.rechner-grid .card-collapsible,
+.rechner-grid .vk-category,
+.rechner-column > * {
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 header {
