@@ -30,8 +30,8 @@
   "inputs": {
     "title": "Ihre Berechnung",
     "title_easy": "Ihre Berechnung",
-    "unitsLegend": "Std, M",
-    "unitsLegend_easy": "Std, M",
+    "unitsLegend": "Std = Stunden, M = Monate",
+    "unitsLegend_easy": "Std = Stunden, M = Monate",
     "dauer": {
       "label": "Wie lange dauert Ihre Ausbildung in Vollzeit?",
       "label_easy": "Wie viele Monate dauert die Ausbildung in Vollzeit?",

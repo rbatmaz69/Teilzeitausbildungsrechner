@@ -30,8 +30,8 @@
   "inputs": {
     "title": "Votre calcul",
     "title_easy": "Votre calcul",
-    "unitsLegend": "h, m",
-    "unitsLegend_easy": "h, m",
+    "unitsLegend": "h = heures, m = mois",
+    "unitsLegend_easy": "h = heures, m = mois",
     "dauer": {
       "label": "Quelle est la durée de votre formation à temps plein ?",
       "label_easy": "Quelle est la durée à temps plein ?",
