@@ -440,8 +440,8 @@
     "actions_easy": "Действия"
   },
   "meta": {
-    "stampLabel": "Актуально на",
-    "stampLabel_easy": "Актуально на"
+    "stampLabel": "Сегодня",
+    "stampLabel_easy": "Сегодня"
   },
   "start": {
     "title": {
