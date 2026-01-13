@@ -673,7 +673,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
     ],
     [
       uebersetzung("inputs.teilzeit.labelShort", "Teilzeit"),
-      `${eingaben.teilzeitProzent}% <-> ${teilzeitStunden} ${uebersetzung("units.hours.short", "Std")}`
+      `${eingaben.teilzeitProzent}% ↔ ${teilzeitStunden} ${uebersetzung("units.hours.short", "Std")}`
     ]
   ];
 
