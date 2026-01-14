@@ -636,3 +636,42 @@ def test_sonderregel_8_abs_3_bei_mehr_als_6_monaten():
     
     assert result["finale_dauer_monate"] == 51
     assert result["original_dauer_monate"] == 36
+
+
+    # ============================================================
+    # Zusätzliche Grenz- und Sonderfalltests für Coverage
+    # ============================================================
+
+    def test_extrem_grosse_ausbildungsdauer():
+        """
+        Test: Extrem große Ausbildungsdauer (z.B. 420 Monate).
+        Erwartung: ValueError, da > 42 Monate nicht erlaubt.
+        """
+        data = VOLLZEIT_OHNE_VERKUERZUNG.copy()
+        data["basis_dauer_monate"] = 420
+        with pytest.raises(ValueError, match="zwischen 24 und 42"):
+            berechne_gesamtdauer(**data)
+
+    def test_min_max_vollzeit_stunden():
+        """
+        Test: Minimal und maximal erlaubte Vollzeit-Stunden.
+        Erwartung: Keine Fehler bei 10 und 48 Stunden.
+        """
+        data_min = VOLLZEIT_OHNE_VERKUERZUNG.copy()
+        data_min["vollzeit_stunden"] = 10
+        result_min = berechne_gesamtdauer(**data_min)
+        assert result_min["original_dauer_monate"] == 36
+
+        data_max = VOLLZEIT_OHNE_VERKUERZUNG.copy()
+        data_max["vollzeit_stunden"] = 48
+        result_max = berechne_gesamtdauer(**data_max)
+        assert result_max["original_dauer_monate"] == 36
+
+    def test_formatierung_leeres_ergebnis():
+        """
+        Test: Formatierung mit leerem Ergebnis-Dict.
+        Erwartung: Fehler oder sinnvolle Standardausgabe.
+        """
+        output = formatiere_ergebnis({})
+        assert isinstance(output, str)
+        assert "BERECHNUNGSERGEBNIS" in output
