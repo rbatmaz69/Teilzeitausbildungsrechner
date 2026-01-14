@@ -4556,3 +4556,57 @@ html[dir="rtl"] .a11y-toggle-input:checked + .a11y-toggle-slider::before {
 }
 
 /* stylelint-enable no-descending-specificity */
+
+/* ==========================================
+   MOBILE: Textumbruch bei großer Schrift
+   Verhindert Overflow langer Wörter überall
+   ========================================== */
+@media (width <= 640px) {
+  /* Globaler Override: Alle Text-Elemente dürfen umbrechen */
+  h1, h2, h3, h4,
+  p, li,
+  label, summary,
+  button, select,
+  dt, dd,
+  span, a,
+  .tile-body,
+  .vk-category-body,
+  .helper {
+    overflow-wrap: anywhere;
+    word-break: normal;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+
+  /* Flex/Grid-Kinder: min-width 0 damit sie schrumpfen können */
+  .summary-toggle,
+  .kv > div,
+  .legal-disclaimer,
+  .vk-info-header,
+  .tile,
+  .info-item {
+    min-width: 0;
+  }
+
+  /* Pill-Button: darf umbrechen */
+  .summary-pill,
+  .summary-pill-label {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+
+  /* AUSNAHME: Numerische Metriken bleiben atomisch */
+  .kv dd:not(.verkuerzungen-content):not(.teilzeit-formula),
+  .verkuerzung-value,
+  .big-number,
+  .result-years,
+  .result-extension-basis,
+  .result-extension-delta,
+  .result-extension-total {
+    white-space: nowrap;
+    overflow-wrap: normal;
+    hyphens: manual;
+  }
+}
