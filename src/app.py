@@ -194,7 +194,6 @@ def create_app() -> Flask:
     return app
 
 
-
 # ============================================================
 # Exportiere das Flask-App-Objekt für Tests und WSGI
 # ============================================================
