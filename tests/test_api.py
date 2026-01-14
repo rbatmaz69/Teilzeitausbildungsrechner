@@ -188,9 +188,9 @@ def test_berechnung_mit_vorkenntnissen_erfolgreich(client):
     data = resp.get_json()
     
     result = data["result"]
-    # Fixtures include newer beruf_* keys; current implementation treats
-    # those as the authoritative schema and does not map legacy
-    # 'vorkenntnisse_monate' -> 12 when the new keys are present.
+    # Die Fixtures enthalten neuere beruf_*-Keys; die aktuelle Implementierung
+    # behandelt diese als maßgebliches Schema und mapped das legacy-Feld
+    # 'vorkenntnisse_monate' nicht automatisch auf 12, wenn die neuen Keys vorhanden sind.
     assert result["verkuerzung_gesamt_monate"] == 0
 
 

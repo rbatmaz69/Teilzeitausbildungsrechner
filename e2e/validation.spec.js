@@ -228,7 +228,7 @@ test.describe('Validation: English Language Tests', () => {
     // Trigger blur
     await clickButton(page, '#stunden');
     
-    // Should be corrected to 24
+    // Sollte auf 24 korrigiert werden
     await expect(page.locator('#dauer')).toHaveValue('24');
     
     // Check English error message
@@ -239,20 +239,20 @@ test.describe('Validation: English Language Tests', () => {
   test('Minimum 50% part-time validation in English', async ({ page }) => {
     await gotoCalculatorEnglish(page);
     
-    // Ensure required inputs are set so percent buttons are enabled
+    // Pflichtfelder setzen, damit die Prozent-Buttons aktiviert werden
     await page.fill('#dauer', '36');
     await page.fill('#stunden', '40');
-    // Activate part-time
+    // Teilzeit aktivieren
     await clickButton(page, '[data-value="75"][data-type="percent"]');
     
-    // Set too low percentage
+    // Zu niedrigen Prozentsatz setzen
     await page.fill('#teilzeitProzent', '30');
     await clickButton(page, '#dauer');
     
-    // Should be corrected to 50 (mit Timeout für blur-Validierung)
+    // Sollte auf 50 korrigiert werden (mit Timeout für Blur-Validierung)
     await expect(page.locator('#teilzeitProzent')).toHaveValue('50', { timeout: 2000 });
     
-    // Check English error message
+    // Fehlermeldung (auf Englisch) prüfen
     await expect(page.locator('#errorProzent')).toContainText('at least 50%');
   });
 });
@@ -382,14 +382,14 @@ test.describe('Mobile Validation: Fehler verschwinden nach 4 Sekunden', () => {
   test('Mobile: Fehlermeldung verschwindet automatisch', async ({ page }) => {
     await gotoCalculator(page);
     
-    // Trigger error by setting invalid value
+    // Fehler auslösen durch Setzen eines ungültigen Wertes
     await page.fill('#dauer', '10');
     await clickButton(page, '#stunden');
     
-    // Error should be visible
+    // Fehler sollte sichtbar sein
     await expect(page.locator('#errorDauer')).toBeVisible();
     
-    // Wait for error to disappear automatically (4 seconds in code + 2s buffer)
+    // Auf automatisches Verschwinden des Fehlers warten (4s im Code + 2s Puffer)
     await expect(page.locator('#errorDauer')).toBeHidden({ timeout: 6000 });
   });
 });

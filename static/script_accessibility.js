@@ -8,10 +8,10 @@
   const incBtn = document.getElementById('a11y-increase');
   const MIN_FONT = 12;
   const MAX_FONT = 28;
-  // discrete levels: -3..+3 per request
+  // diskrete Level: -3..+3 pro Anforderung
   const MIN_LEVEL = -3;
   const MAX_LEVEL = 3;
-  // adjust root font-size so rem-based text scales with A-/A+
+  // Passe die Root-Schriftgröße an, damit rem-basierter Text mit A-/A+ skaliert
   const rootEl = document.documentElement;
   const DEFAULT_ROOT_FONT = parseFloat(getComputedStyle(rootEl).fontSize) || 16;
   // 3 Stufen in beide Richtungen, so dass MIN/MAX exakt beim 3. Klick erreicht werden.
@@ -20,18 +20,18 @@
   let currentLevel = 0; // 0 = default
 
   // ==========================================
-  // THEME (DARK MODE) MANAGEMENT
+  // THEME (DARK MODE) - Verwaltung
   // ==========================================
   const THEME_KEY = 'theme';
   const themeSlider = document.getElementById('a11y-theme-slider');
   const statusRegion = document.getElementById('a11y-status');
 
   // ==========================================
-  // SCREEN READER ANNOUNCEMENTS
+  // ANSAGEN FÜR SCREENREADER
   // ==========================================
   function announceToScreenReader(message) {
     if (!statusRegion) return;
-    // Clear first to ensure announcement is triggered even for repeated messages
+    // Zuerst löschen, damit Wiederholungen ebenfalls ausgelöst/angesagt werden
     statusRegion.textContent = '';
     setTimeout(() => {
       statusRegion.textContent = message;
@@ -89,12 +89,12 @@
     saveTheme(theme);
     applyTheme(theme);
     
-    // Announce theme change to screen readers
+    // Theme-Änderung für Screenreader ansagen
     const themeNames = { 'light': 'Helles Design', 'auto': 'Automatisches Design', 'dark': 'Dunkles Design' };
     announceToScreenReader(themeNames[theme] + ' aktiviert');
   }
 
-  // Initialize theme on page load
+  // Theme beim Laden der Seite initialisieren
   const savedTheme = loadTheme();
   console.log('Loaded theme:', savedTheme);
   console.log('Theme slider:', themeSlider);
@@ -102,7 +102,7 @@
 
   // Theme slider interaction handlers
   if (themeSlider) {
-    // Click on slider options
+    // Klick auf Slider-Optionen
     const options = themeSlider.querySelectorAll('.a11y-theme-option');
     options.forEach(option => {
       option.addEventListener('click', () => {
@@ -111,7 +111,7 @@
       });
     });
     
-    // Keyboard navigation
+    // Tastaturnavigation
     themeSlider.addEventListener('keydown', (e) => {
       const currentTheme = loadTheme();
       const themes = ['light', 'auto', 'dark'];
@@ -146,7 +146,7 @@
   }
 
   // ==========================================
-  // MENU MANAGEMENT
+  // MENÜ-VERWALTUNG
   // ==========================================
   const iconDefault = document.getElementById('a11y-icon-default');
   const iconClose = document.getElementById('a11y-icon-close');
@@ -159,12 +159,12 @@
     if (!iconDefault || !iconClose) return;
     
     if (isOpen) {
-      // Rotate out default icon and rotate in close icon
+      // Standard-Icon ausblenden und Close-Icon einblenden (Rotation)
       iconDefault.style.display = 'none';
       iconClose.style.display = 'block';
       iconClose.style.animation = 'icon-rotate-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards';
     } else {
-      // Rotate out close icon and rotate in default icon
+      // Close-Icon ausblenden und Standard-Icon einblenden (Rotation)
       iconClose.style.display = 'none';
       iconDefault.style.display = 'block';
       iconDefault.style.animation = 'icon-rotate-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards';
@@ -185,7 +185,7 @@
 
   function updateFocusableElements() {
     if (!menu) return;
-    // Get all focusable elements within the menu
+    // Alle fokussierbaren Elemente innerhalb des Menüs ermitteln
     focusableElements = Array.from(menu.querySelectorAll(
       'button:not([disabled]), input:not([disabled]), [tabindex="0"]:not([disabled])'
     ));
@@ -194,7 +194,7 @@
   }
 
   function handleMenuKeydown(e) {
-    // Only handle Tab when menu is open
+    // Tab-Taste nur behandeln, wenn das Menü geöffnet ist
     if (menu.getAttribute('aria-hidden') === 'true') return;
 
     if (e.key === 'Tab') {
@@ -304,7 +304,7 @@
     saveEasyLanguage(newState);
     applyEasyLanguage(newState);
 
-    // Announce to screen readers
+    // Für Screenreader ansagen
     announceToScreenReader(newState ? 'Leichte Sprache aktiviert' : 'Leichte Sprache deaktiviert');
 
     window.dispatchEvent(new CustomEvent('easyLanguage:changed', {
@@ -347,16 +347,16 @@
     applyEasyLanguage(saved);
   }
 
-  // Initialize easy language on page load (Deutsch only; refresh when i18n finished)
+  // Easy Language beim Laden initialisieren (nur für Deutsch; bei Abschluss von i18n aktualisieren)
   syncEasyLanguageForCurrentLang();
 
-  // Easy language button click handler
+  // Klick-Handler für die Leichte-Sprache-Toggle-Schaltfläche
   if (easyLanguageToggle) {
     easyLanguageToggle.addEventListener('change', () => {
       toggleEasyLanguage();
     });
     
-    // Enable Enter key for toggle activation
+    // Enter-Taste aktivieren, um das Toggle zu schalten
     easyLanguageToggle.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -488,7 +488,7 @@
       }
     });
     
-    // Enable Enter key for toggle activation
+    // Enter-Taste aktivieren, um das Vorlese-Toggle zu schalten
     readToggle.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -574,7 +574,7 @@
     announceToScreenReader('Schriftgröße zurückgesetzt');
   });
 
-  // initialize labels and button states
+  // Labels und Button-Zustände initialisieren
   updateStepLabels();
   updateFontButtonStates();
 

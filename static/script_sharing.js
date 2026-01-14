@@ -164,7 +164,7 @@ async function generierePDF() {
     pdfContent.setAttribute('lang', lang);
     const dir = ["ar", "he", "fa", "ur"].includes(lang) ? 'rtl' : 'ltr';
     pdfContent.setAttribute('dir', dir);
-    // Ensure inline direction is applied for html2canvas
+    // Sicherstellen, dass Inline-Richtung für html2canvas gesetzt ist
     pdfContent.style.direction = dir;
     
     // Theme sofort wiederherstellen
@@ -419,9 +419,10 @@ async function generierePDF() {
       el.style.unicodeBidi = 'isolate-override';
     });
 
-    // Fix parentheses direction/positioning by first wrapping entire parenthetical groups
-    // (e.g. "(دوام كامل)", "(ألمانيا: Abitur / Hochschulreife)") into a single LTR inline container.
-    // This keeps the parentheses and their inner content together and prevents reordering/mirroring.
+    // Korrigiere Klammer-Richtung/-Position, indem ganze Klammergruppen zuerst
+    // in einen einzelnen LTR Inline-Container gewrappt werden
+    // (z. B. "(دوام كامل)", "(ألمانيا: Abitur / Hochschulreife)").
+    // So bleiben Klammern und ihr Inhalt zusammen und es werden Umordnungen/Spiegelungen verhindert.
     (function wrapParenGroups(root) {
       const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false);
       const textNodes = [];
@@ -522,7 +523,7 @@ async function generierePDF() {
         el.style.display = 'block';
       });
 
-      // Ensure delta badges keep LTR content and don't mirror parentheses
+      // Sicherstellen, dass Delta-Badges LTR-Inhalt behalten und Klammern nicht spiegeln
       pdfContent.querySelectorAll('.result-extension-delta').forEach(el => {
         el.style.direction = 'ltr';
         el.style.unicodeBidi = 'isolate-override';

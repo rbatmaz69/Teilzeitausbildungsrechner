@@ -152,9 +152,9 @@ def test_verkuerzung_vorkenntnisse_6():
     """
     result = berechne_gesamtdauer(**MIT_VORKENNTNISSE_6)
     
-    # Current implementation: when new beruf_* keys are present in fixtures
-    # the legacy 'vorkenntnisse_monate' mapping is not applied. Therefore
-    # no 12-month reduction happens and final duration remains 48 months
+    # Aktuelles Verhalten: wenn neue beruf_*-Keys in den Fixtures vorhanden sind,
+    # wird die alte Zuordnung 'vorkenntnisse_monate' nicht angewendet. Daher
+    # erfolgt keine 12‑monatige Verkürzung und die finale Dauer bleibt 48 Monate
     assert result["finale_dauer_monate"] == 48
     assert result["verkuerzung_gesamt_monate"] == 0
 

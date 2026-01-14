@@ -35,7 +35,7 @@ async function gotoCalculator(page) {
     await page.locator('#alter').blur();
     const neinSelectors = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q2_nein','vk_beruf_q3_nein','vk_beruf_q4_nein'];
     for (const id of neinSelectors) {
-      // ensure checkbox is checked even if not visible by toggling via JS
+      // Sicherstellen, dass die Checkbox gesetzt ist, auch wenn sie nicht sichtbar ist (per JS togglen)
       await page.evaluate((elId) => {
         const el = document.getElementById(elId);
         if (!el) return;
@@ -248,40 +248,40 @@ test.describe('Happy Path: English Language Tests', () => {
   test('Full-time calculation in English: 36 months', async ({ page }) => {
     await gotoCalculatorEnglish(page);
     
-    // Verify English is loaded
+    // Prüfen, dass die englische Oberfläche geladen wurde
     await expect(page.locator('.startseite-title-accent').first()).toContainText('part-time training');
     
-    // Set required fields so controls become enabled
+    // Pflichtfelder setzen, damit die Steuerelemente aktiviert werden
     await page.fill('#dauer', '36');
     await page.fill('#stunden', '40');
     
-    // Set 100% (full-time)
+    // 100% setzen (Vollzeit)
     await page.click('#teilzeitProzent');
     await page.fill('#teilzeitProzent', '100');
     
-    // Calculate
+    // Berechnen
     await page.locator('#berechnenBtn').scrollIntoViewIfNeeded();
     await page.click('#berechnenBtn');
     
-    // Check result: 36 months
+    // Ergebnis prüfen: 36 Monate
     await expect(page.locator('#res-total-months')).toContainText('36');
   });
   
   test('Part-time 75% calculation in English: 48 months', async ({ page }) => {
     await gotoCalculatorEnglish(page);
     
-    // Ensure required inputs are set so percent buttons are enabled
+    // Sicherstellen, dass erforderliche Eingaben gesetzt sind, damit Prozent-Buttons aktiviert werden
     await page.fill('#dauer', '36');
     await page.fill('#stunden', '40');
     
-    // Click 75% preset button
+    // 75%-Voreinstellung klicken
     await page.click('[data-value="75"][data-type="percent"]');
     
-    // Calculate
+    // Berechnen
     await page.locator('#berechnenBtn').scrollIntoViewIfNeeded();
     await page.click('#berechnenBtn');
     
-    // Check result: 36 * 100/75 = 48 months
+    // Ergebnis prüfen: 36 * 100/75 = 48 Monate
     await expect(page.locator('#res-total-months')).toContainText('48');
   });
 });

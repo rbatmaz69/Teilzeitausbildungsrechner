@@ -30,7 +30,7 @@ function uebersetzung(schluessel, fallback) {
 // Formatiert Zahl + Einheit als HTML, setzt Richtung so dass in RTL die Einheit rechts steht.
 function formatValueUnitHtml(value, unitKey) {
   const unit = uebersetzung(unitKey) || "";
-  // keep unit rendering simple; wrapper will enforce LTR order
+  // Einheitendarstellung einfach halten; das Wrapper-Element erzwingt die LTR-Reihenfolge
   // const dir = document.documentElement.getAttribute("dir") || "ltr";
   const numHtml = `<span class="i18n-num" dir="ltr">${String(value)}</span>`;
   const unitHtml = `<span class="i18n-unit" dir="auto">${String(unit)}</span>`;
@@ -699,7 +699,7 @@ function fuelleEingabenliste(eingaben, berechnung) {
     } else if (typeof wert === 'object' && wert.type === 'percentCompare') {
       const percent = String(wert.percent) + "%";
       const compareHtml = formatValueUnitHtml(wert.compareValue, wert.unitKey);
-      // Example: "60% ↔ 24 س" — percent on left, then arrow, then number+unit
+      // Beispiel: "60% ↔ 24 س" — Prozent links, dann Pfeil, dann Zahl+Einheit
       dd.innerHTML = `${percent} ↔ ${compareHtml}`;
     } else {
       dd.textContent = String(wert);
