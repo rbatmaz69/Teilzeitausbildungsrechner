@@ -24,8 +24,11 @@ venv_path = project_root / "venv"
 if venv_path.exists():
     # Finde site-packages in venv
     python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
-    venv_site_packages = venv_path / "lib" / f"python{python_version}" / "site-packages"
-
+    venv_site_packages = (
+        venv_path / "lib" /
+        f"python{python_version}" /
+        "site-packages"
+    )
     if venv_site_packages.exists():
         # Füge venv site-packages zum Python-Pfad hinzu
         if str(venv_site_packages) not in sys.path:
@@ -199,20 +202,28 @@ def create_app() -> Flask:
 # ============================================================
 app = create_app()
 
+
 # Lokaler Entwicklungsstart
+
 def setup_venv():
     """Venv-Setup-Logik als Funktion für bessere Testbarkeit."""
     project_root = Path(__file__).parent.parent
     venv_path = project_root / "venv"
     if venv_path.exists():
         python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
-        venv_site_packages = venv_path / "lib" / f"python{python_version}" / "site-packages"
+        venv_site_packages = (
+            venv_path / "lib" /
+            f"python{python_version}" /
+            "site-packages"
+        )
         if venv_site_packages.exists():
             if str(venv_site_packages) not in sys.path:
                 sys.path.insert(0, str(venv_site_packages))
         os.environ["VIRTUAL_ENV"] = str(venv_path)
 
+
 setup_venv()
+
 
 def run_app_main():
     """__main__-Block als Funktion für bessere Testbarkeit."""
@@ -227,8 +238,13 @@ def run_app_main():
         app.run(host=host, port=port, debug=True)
     except OSError:
         fallback_port = port + 1
-        print(f"⚠️  Port {port} ist belegt, verwende Port {fallback_port}")
+        print(
+            f"⚠️  Port {port} ist belegt, "
+            f"verwende Port {fallback_port}"
+        )
         app.run(host=host, port=fallback_port, debug=True)
 
+
+# Lokaler Entwicklungsstart
 if __name__ == "__main__":
     run_app_main()
