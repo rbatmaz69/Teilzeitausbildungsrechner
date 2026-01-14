@@ -199,6 +199,11 @@ def create_app() -> Flask:
 # Falls Port 8000 belegt ist, wird automatisch ein anderer Port verwendet
 # debug=True aktiviert automatisches Neuladen bei Code-Änderungen
 if __name__ == "__main__":
+    """Development-Entrypoint
+
+    Startet die Flask-Entwicklungsinstanz via `create_app()` auf dem in
+    `PORT`/`HOST` konfigurierten Socket. Nur für lokale Entwicklungszwecke.
+    """
     app = create_app()
     port = int(os.getenv("PORT", 8000))
 
