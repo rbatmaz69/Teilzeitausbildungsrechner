@@ -1,4 +1,3 @@
-
 # Teilzeitrechner - Group 04
 
 > ✅ **Projekt abgeschlossen** – Meilenstein 3 ist abgeschlossen, das Projekt ist fertig und produktionsbereit.
@@ -361,6 +360,11 @@ LOG_LEVEL=INFO docker compose up -d
 - `tests/test_calculation_logic.py` - Unit-Tests für Berechnungslogik
 - `tests/test_calculation_service.py` - Unit-Tests für Service-Layer
 - `tests/test_api.py` - Integration-Tests für Flask-API
+- `tests/test_app.py` - Standard-API-Tests
+- `tests/test_app_extra.py` - Zusätzliche Edge-Case- und Fehlerfall-Tests für die App
+- `tests/test_app_refactor.py` - Tests für Refactoring und Setup/Startlogik
+- `tests/test_logging_config.py` - Tests für Logging-Konfiguration
+- `tests/test_calculation_logic.py` - Unit-Tests für Berechnungslogik
 - `tests/dummy_data.py` - Zentrale Testdaten (von allen Tests verwendet)
 
 ### End-to-End Tests (Playwright)
@@ -432,6 +436,10 @@ group-04/
 │   └── index.html             # Haupt-HTML-Template
 ├── tests/                     # Python-Tests
 │   ├── test_api.py            # Integration-Tests für Flask-API
+│   ├── test_app.py            # Standard-API-Tests
+│   ├── test_app_extra.py      # Zusätzliche Edge-Case- und Fehlerfall-Tests für die App
+│   ├── test_app_refactor.py   # Tests für Refactoring und Setup/Startlogik
+│   ├── test_logging_config.py # Tests für Logging-Konfiguration
 │   ├── test_calculation_logic.py # Unit-Tests für Berechnungslogik
 │   ├── test_calculation_service.py # Unit-Tests für Service-Layer
 │   └── dummy_data.py          # Zentrale Testdaten
@@ -650,7 +658,3 @@ Wenn beim Start eine Fehlermeldung wie "Address already in use" erscheint:
 ```bash
 pip install -r requirements.txt
 ```
-
----
-
-**Für Fragen oder Support:** Erstelle ein Issue im GitLab Repository.
