@@ -230,6 +230,22 @@
     "notesTitle_easy": "Important",
     "notes": "<li>This calculation is only a <strong>help</strong> and an <strong>orientation</strong>.</li><li>The result is <strong>not binding</strong>.</li><li>Discuss the result with your <strong>training company</strong>.</li><li>Part-time training is only possible if you work <strong>at least half</strong> of the normal training hours.</li>",
     "notes_easy": "<li>This calculation is only a <strong>help</strong>.</li><li>The result is <strong>not binding</strong>.</li><li>Talk about the result with your <strong>training company</strong>.</li><li>You must work <strong>at least half</strong> of normal hours.</li>",
+    "helpfulLinksTitle": "Further Information",
+    "helpfulLinksTitle_easy": "More Info",
+    "helpfulLinks": {
+      "arbeitsagentur": {
+        "title": "Federal Employment Agency",
+        "title_easy": "Employment Agency",
+        "desc": "General information about training and career counseling.",
+        "desc_easy": "Info about training and counseling."
+      },
+      "netzwerk": {
+        "title": "Part-Time Training Network",
+        "title_easy": "Part-Time Training Network",
+        "desc": "Specialized advice and support for part-time training.",
+        "desc_easy": "Advice for part-time training."
+      }
+    },
     "legalTitle": "Legal Basis",
     "legalTitle_easy": "Laws",
     "legalToggleLabel": "Show Details",
