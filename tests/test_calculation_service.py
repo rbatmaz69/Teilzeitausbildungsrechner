@@ -159,3 +159,41 @@ def test_nutzlast_validierungsfehler_custom_code_details():
     err = cs.NutzlastValidierungsFehler("msg", code="custom_code", details={"foo": "bar"})
     assert err.code == "custom_code"
     assert err.details == {"foo": "bar"}
+
+
+    # Zusätzliche Tests für Coverage
+    def test_unerlaubter_key_in_verkuerzungsgruende():
+        """Ein unerlaubter Key in verkuerzungsgruende löst einen Fehler aus."""
+        payload = dict(TEILZEIT_75_MIT_ABITUR)
+        payload["verkuerzungsgruende"] = dict(payload["verkuerzungsgruende"])
+        payload["verkuerzungsgruende"]["unbekannt"] = True
+        response = verarbeite_berechnungsanfrage(payload)
+        assert response.status_code == 422
+        assert response.body["error"]["code"] == "validation_error"
+        assert "unexpected" in response.body["error"]["details"]
+
+    def test_deutsches_zahlenformat_in_vorkenntnisse():
+        """Deutsches Zahlenformat ("1.234,5") wird korrekt geparst."""
+        payload = dict(TEILZEIT_75_MIT_ABITUR)
+        payload["verkuerzungsgruende"] = dict(payload["verkuerzungsgruende"])
+        payload["verkuerzungsgruende"]["vorkenntnisse_monate"] = "1.234,0"
+        response = verarbeite_berechnungsanfrage(payload)
+        assert response.status_code == 200
+        assert "result" in response.body
+
+    def test_coerce_int_with_string_ganzzahl():
+        """_coerce_int akzeptiert Ganzzahl-String."""
+        assert cs._coerce_int("42", "testfeld") == 42
+        assert cs._coerce_int("1.000", "testfeld") == 1000
+
+    def test_coerce_int_with_string_keine_ganzzahl():
+        """_coerce_int mit String, der keine Ganzzahl ist, wirft Fehler."""
+        with pytest.raises(cs.NutzlastValidierungsFehler):
+            cs._coerce_int("3,14", "testfeld")
+
+    def test_normalize_numeric_string_varianten():
+        """_normalize_numeric_string entfernt Leerzeichen, NBSP und wandelt Komma/Punkt."""
+        assert cs._normalize_numeric_string(" 1.234,5 ") == "1234.5"
+        assert cs._normalize_numeric_string("1 234,5") == "1234.5"
+        assert cs._normalize_numeric_string("1\u00A0234,5") == "1234.5"
+        assert cs._normalize_numeric_string("42") == "42"
