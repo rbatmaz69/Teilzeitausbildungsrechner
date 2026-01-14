@@ -97,7 +97,7 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
         "beruf_q2",
         "beruf_q2_dauer_monate",
         "beruf_q3",
-        "beruf_q6",
+        "beruf_q4",
         "berufliche_verkuerzung_monate",
     ))
 
@@ -113,8 +113,8 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
                 berufliche_total += 12
             if verkuerzungsgruende.get("beruf_q3", False):
                 berufliche_total += 12
-            # Q6 => 6 Monate
-            if verkuerzungsgruende.get("beruf_q6", False):
+            # Q4 => 6 Monate (früher Q6)
+            if verkuerzungsgruende.get("beruf_q4", False):
                 berufliche_total += 6
             # Q2 => duration mapping
             if verkuerzungsgruende.get("beruf_q2", False):

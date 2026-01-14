@@ -30,7 +30,8 @@ PFLICHTFELDER = (
 )
 
 # Historische Felder, die jetzt ignoriert werden (werden entfernt, bevor validiert wird)
-LEGACY_IGNORED_KEYS = {"beruf_q4", "beruf_q5"}
+# `beruf_q4` wurde reaktiviert; `beruf_q5` bleibt legacy
+LEGACY_IGNORED_KEYS = {"beruf_q5"}
 
 
 @dataclass(frozen=True)
@@ -242,8 +243,8 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
         "beruf_q1",
         "beruf_q2",
         "beruf_q2_dauer_monate",
-        "beruf_q3",
-        "beruf_q6",
+            "beruf_q3",
+            "beruf_q4",
         "berufliche_verkuerzung_monate",
     }
     unexpected_keys = sorted(set(data.keys()) - allowed_keys)
@@ -263,7 +264,7 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
         "beruf_q1",
         "beruf_q2",
         "beruf_q3",
-        "beruf_q6",
+        "beruf_q4",
     }
     for key in bool_keys:
         value = data.get(key, False)
@@ -314,7 +315,8 @@ def _normalisiere_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]
         "verkuerzungsgruende.beruf_q2_dauer_monate",
     )
     beruf_q3 = bool(data.get("beruf_q3", False))
-    beruf_q6 = bool(data.get("beruf_q6", False))
+    # beruf_q4: direkt aus dem Payload (default False)
+    beruf_q4 = bool(data.get("beruf_q4", False))
     wert = data.get("berufliche_verkuerzung_monate", 0) or 0
     berufliche_verkuerzung_monate = _coerce_int(
         wert,
@@ -337,7 +339,8 @@ def _normalisiere_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]
         "beruf_q2": beruf_q2,
         "beruf_q2_dauer_monate": beruf_q2_dauer,
         "beruf_q3": beruf_q3,
-        "beruf_q6": beruf_q6,
+        # Verwende `beruf_q4` als Standard-Key intern
+        "beruf_q4": beruf_q4,
         "berufliche_verkuerzung_monate": berufliche_verkuerzung_monate,
     }
 
