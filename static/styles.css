@@ -379,6 +379,105 @@ header h1 {
   margin-top: 2px;
 }
 
+/* Helpful Links Section */
+.helpful-links-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--info-border);
+}
+
+.helpful-links-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 1rem;
+}
+
+.helpful-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.helpful-link-item {
+  margin: 0;
+}
+
+.helpful-link {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--info-bg);
+  border: 1px solid var(--info-border);
+  border-radius: 8px;
+  color: var(--link-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  width: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.helpful-link:hover {
+  background: var(--info-border);
+  border-color: var(--link-hover);
+  color: var(--link-hover);
+}
+
+.helpful-link:focus-visible {
+  outline: 2px solid var(--link-focus);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.helpful-link-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.helpful-link-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.helpful-link-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.helpful-link-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.helpful-link:hover .helpful-link-title {
+  color: var(--link-hover);
+}
+
+/* Light Mode: dunklere Hintergrundfarbe für besseren Kontrast */
+:root:not([data-theme="dark"]) .helpful-link {
+  background: #e3f2fd;
+}
+
+:root:not([data-theme="dark"]) .helpful-link:hover {
+  background: #bbdefb;
+  color: #1565c0; /* Dunkleres Blau für bessere Lesbarkeit */
+  border-color: #1976d2;
+}
+
+:root:not([data-theme="dark"]) .helpful-link:hover .helpful-link-title {
+  color: #0d47a1; /* Noch dunkleres Blau für Titel */
+}
+
 /* Disclaimer Box */
 .legal-disclaimer {
   display: flex;
@@ -3286,7 +3385,7 @@ body.modal-open {
 .inputs-collapsible > dl {
   margin-top: 1rem;            
   padding-top: 1rem;             
-  border-top: 2px solid #f66; 
+  border-top: 2px solid var(--primary); 
 }
 
 /* Keep berufliche Fragen vertically stacked like the family section */
