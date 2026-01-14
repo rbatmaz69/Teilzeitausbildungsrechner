@@ -1,12 +1,16 @@
 /* script_Ergebnis_Übersicht.js – i18n-fähige Ergebnislogik */
 
 // Kurz-Helfer
+// DOM-Helfer: Kurzer Shortcut für `document.querySelector`
+// Erhöht Lesbarkeit in kleinen UI-Helper-Funktionen.
 const $ = (selektor) => document.querySelector(selektor);
+// Schreibt `text` in das gefundene Element; ignoriert, falls Element fehlt.
 function setzeText(selektor, text) {
   const element = $(selektor);
   if (element) element.textContent = text;
 }
 
+// Verbirgt ein Element auf eine A11Y-freundliche Weise (z.B. mit aria-hidden).
 function verberge(element) {
   if (element) element.hidden = true;
 }

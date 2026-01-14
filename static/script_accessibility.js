@@ -1,3 +1,10 @@
+/*
+  Barrierefreiheits-Hilfsfunktionen
+
+  Enthält Theme-/Kontrast-Management, Fokus‑Handling, Screenreader-Unterstützung
+  sowie kleine Accessibility-Utilities, die im Frontend mehrfach verwendet werden.
+  Kurze Kommentare in dieser Datei erklären die einzelnen Bereiche.
+*/
 (function(){
   const toggle = document.getElementById('a11y-toggle');
   const menu = document.getElementById('a11y-menu');

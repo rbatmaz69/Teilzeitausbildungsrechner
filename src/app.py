@@ -72,11 +72,21 @@ def create_app() -> Flask:
     # Request-Lifecycle-Logging (PII-sicher)
     @app.before_request
     def _log_request_start():  # pragma: no cover - trivial
+        """Speichert den Startzeitpunkt der Anfrage in `g._start_time`.
+
+        Dient der Messung der Request-Dauer (Performance-Metriken). Es werden
+        keine personenbezogenen Daten (PII) gespeichert.
+        """
         # Nur Startzeit speichern, keine Request-Daten loggen
         g._start_time = time.perf_counter()
 
     @app.after_request
     def _log_request_end(response):  # pragma: no cover - trivial
+        """Berechnet und protokolliert die Dauer der Anfrage sowie Methode/Pfad/Status.
+
+        Protokolliert ausschließlich Metadaten (Methode, Pfad, Status, Dauer)
+        und keine PII. Fehler im Logging dürfen den Responsefluss nicht stören.
+        """
         try:
             start = getattr(g, "_start_time", None)
             duration_ms = None

@@ -46,6 +46,19 @@ class BerechnungsAnfrage:
 
     @staticmethod
     def from_dict(payload: Mapping[str, Any]) -> "BerechnungsAnfrage":
+        """Erzeuge ein validiertes `BerechnungsAnfrage`-Objekt aus rohem Payload.
+
+        Validiert Pflichtfelder, normalisiert `verkuerzungsgruende` und konvertiert
+        numerische Werte. Wirft `FehlendeFelderFehler` oder
+        `NutzlastValidierungsFehler` bei Problemen.
+
+        Args:
+            payload: Rohes Mapping (z.B. von JSON-parsing)
+
+        Returns:
+            BerechnungsAnfrage: Instanz mit typisierten Feldern.
+        """
+
         missing = [field for field in PFLICHTFELDER if field not in payload]
         if missing:
             raise FehlendeFelderFehler(missing)
@@ -95,6 +108,12 @@ class DienstFehler:
     details: Optional[Dict[str, Any]] = None
 
     def to_dict(self) -> Dict[str, Any]:
+        """Serialisiert die Fehlerinformationen als Dict für API-Antworten.
+
+        Gibt `code`, `message` und optional `details` zurück, damit
+        die HTTP-Response eine strukturierte Fehlerbeschreibung enthält.
+        """
+
         payload = {"code": self.code, "message": self.message}
         if self.details:
             payload["details"] = self.details

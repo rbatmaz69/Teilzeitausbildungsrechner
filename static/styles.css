@@ -1,4 +1,17 @@
+:root {
+}
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap');
+
+/*
+  styles.css — Hauptstylesheet für die Anwendung
+
+  Enthält:
+  - CSS-Variablen für Theme-Farben (Light/Dark)
+  - Layout- und Komponentenstile (Cards, Buttons, Inputs)
+  - Responsive Regeln und Accessibility-Hilfen
+
+  Änderungen an globalen Variablen können das gesamte UI beeinflussen.
+*/
 
 /* ==========================================
   THEME VARIABLEN
@@ -3150,6 +3163,14 @@ html[dir="rtl"] #ergebnis-container .result-extension-arrow {
   min-width: 0;
   overflow-wrap: normal;
 }
+
+/*
+  Info-Modal: Titel-Styling
+
+  Diese Sektion steuert die Darstellung des Titels im "Was ist das?"-Modal.
+  Beachtet: Schriftgröße und Wrapping sind wichtig für Accessibility und
+  sollten beim Anpassen von Variablen getestet werden.
+*/
 
 /* Modal Body */
 .vk-info-body {
