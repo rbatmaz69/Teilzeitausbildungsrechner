@@ -21,6 +21,12 @@ _LOGGING_CONFIGURED: bool = False
 
 
 def _resolve_level(default: str = "INFO") -> int:
+    """Ermittelt und gibt das passende `logging`-Level zurück.
+
+    Liest die Umgebungsvariable `LOG_LEVEL` und liefert das zugehörige
+    `logging`-Konstanten-Level. Wenn `PYTEST_CURRENT_TEST` gesetzt ist,
+    wird standardmäßig `WARNING` zurückgegeben, um Test-Logs zu reduzieren.
+    """
     level_name = os.getenv("LOG_LEVEL")
     if not level_name:
         # In Pytest standardmäßig weniger Lärm erzeugen

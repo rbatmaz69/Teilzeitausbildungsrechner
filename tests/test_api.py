@@ -188,9 +188,9 @@ def test_berechnung_mit_vorkenntnissen_erfolgreich(client):
     data = resp.get_json()
     
     result = data["result"]
-    # Fixtures include newer beruf_* keys; current implementation treats
-    # those as the authoritative schema and does not map legacy
-    # 'vorkenntnisse_monate' -> 12 when the new keys are present.
+    # Die Fixtures enthalten neuere beruf_*-Keys; die aktuelle Implementierung
+    # behandelt diese als maßgebliches Schema und mapped das legacy-Feld
+    # 'vorkenntnisse_monate' nicht automatisch auf 12, wenn die neuen Keys vorhanden sind.
     assert result["verkuerzung_gesamt_monate"] == 0
 
 
@@ -272,7 +272,7 @@ def test_teilweise_fehlende_felder_gibt_400_zurueck(client):
             "beruf_q2": False,
             "beruf_q2_dauer_monate": 0,
             "beruf_q3": False,
-            "beruf_q6": False,
+            "beruf_q4": False,
             "berufliche_verkuerzung_monate": 0,
         },
     }
@@ -441,7 +441,7 @@ def test_validierungsfehler_ungueltige_datentypen_gibt_422_zurueck(client):
             "beruf_q2": False,
             "beruf_q2_dauer_monate": 0,
             "beruf_q3": False,
-            "beruf_q6": False,
+            "beruf_q4": False,
             "berufliche_verkuerzung_monate": 0,
         },
     }
@@ -475,7 +475,7 @@ def test_api_akzeptiert_dezimalkomma_in_numeric_strings(client):
             "beruf_q2": False,
             "beruf_q2_dauer_monate": "0",
             "beruf_q3": False,
-            "beruf_q6": False,
+            "beruf_q4": False,
             "berufliche_verkuerzung_monate": "0",
         },
     }
@@ -512,7 +512,7 @@ def test_validierungsfehler_negative_werte_gibt_422_zurueck(client):
             "beruf_q2": False,
             "beruf_q2_dauer_monate": 0,
             "beruf_q3": False,
-            "beruf_q6": False,
+            "beruf_q4": False,
             "berufliche_verkuerzung_monate": 0,
         },
     }
@@ -549,7 +549,7 @@ def test_validierungsfehler_null_basis_dauer_gibt_422_zurueck(client):
             "beruf_q2": False,
             "beruf_q2_dauer_monate": 0,
             "beruf_q3": False,
-            "beruf_q6": False,
+            "beruf_q4": False,
             "berufliche_verkuerzung_monate": 0,
         },
     }
@@ -585,7 +585,7 @@ def test_validierungsfehler_negative_vollzeit_stunden_gibt_422_zurueck(client):
             "beruf_q2": False,
             "beruf_q2_dauer_monate": 0,
             "beruf_q3": False,
-            "beruf_q6": False,
+            "beruf_q4": False,
             "berufliche_verkuerzung_monate": 0,
         },
     }

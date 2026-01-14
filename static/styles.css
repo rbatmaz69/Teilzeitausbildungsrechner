@@ -1,5 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap');
 
+/*
+  styles.css — Hauptstylesheet für die Anwendung
+
+  Enthält:
+  - CSS-Variablen für Theme-Farben (Light/Dark)
+  - Layout- und Komponentenstile (Cards, Buttons, Inputs)
+  - Responsive Regeln und Accessibility-Hilfen
+
+  Änderungen an globalen Variablen können das gesamte UI beeinflussen.
+*/
+
 /* ==========================================
   THEME VARIABLEN
   ========================================== */
@@ -148,7 +159,7 @@ img, svg, video, canvas {
   height: auto;
 }
 
-/* Ensure the HTML 'hidden' attribute reliably hides elements */
+/* Sicherstellen, dass das HTML-Attribut 'hidden' Elemente zuverlässig verbirgt */
 [hidden] {
   display: none !important;
 }
@@ -276,7 +287,7 @@ header h1 {
   min-width: 0;
 }
 
-/* Keep cards/category elements from overflowing their container */
+/* Karten-/Kategorien-Elemente daran hindern, aus ihrem Container herauszulaufen */
 .rechner-grid .card,
 .rechner-grid .card-collapsible,
 .rechner-column > * {
@@ -1159,7 +1170,7 @@ select:-ms-input-placeholder {
   min-width: 0;
 }
 
-/* Verkürzungen list (moved up to keep selector ordering consistent) */
+/* Verkürzungen-Liste (nach oben verschoben, um die Selektor-Reihenfolge konsistent zu halten) */
 .verkuerzungen-list {
   list-style: none;
   padding: 0;
@@ -1349,9 +1360,9 @@ input.error,
 }
 
 /*
-  Bidirectional text helper:
-  In RTL languages (e.g. Arabic) numeric values, formulas, URLs, and mixed strings
-  should remain left-to-right to avoid confusing reordering.
+  Bidirektionaler Text-Helfer:
+  In RTL-Sprachen (z. B. Arabisch) sollten numerische Werte, Formeln, URLs und gemischte
+  Zeichenketten weiterhin von links nach rechts bleiben, um verwirrende Umordnungen zu vermeiden.
 */
 .bidi-ltr {
   direction: ltr;
@@ -1466,7 +1477,7 @@ html[dir="rtl"] #ergebnis-container .result-extension-total {
   text-align: left; /* Inhalt der Zahl linksbündig innerhalb des eigenen Feldes */
 }
 
-/* Ensure big number and years are right-aligned and remain readable in RTL */
+/* Sicherstellen, dass große Zahlen und Jahre rechtsbündig ausgerichtet und in RTL lesbar bleiben */
 html[dir="rtl"] .highlight-main .big-number,
 html[dir="rtl"] .highlight-main .result-years {
   width: 100%;
@@ -2259,7 +2270,7 @@ html[dir="rtl"] #ergebnis-container .result-extension-arrow {
   }
 
   .startseite {
-    /* Use the #startseite min-height rules above; keep layout flexible. */
+    /* Nutze die #startseite min-height-Regeln oben; Layout flexibel halten. */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2294,7 +2305,7 @@ html[dir="rtl"] #ergebnis-container .result-extension-arrow {
     position: relative;
   }
 
-  /* Ensure start section spans full width on desktop */
+  /* Sicherstellen, dass der Startbereich auf Desktop die volle Breite einnimmt */
   #startseite {
     max-width: 100% !important;
     width: 100% !important;
@@ -2863,7 +2874,7 @@ html[dir="rtl"] #ergebnis-container .result-extension-arrow {
       margin-bottom: 1rem;
     }
 
-    /* Calendar: keep look identical, only relax height slightly on short screens. */
+    /* Kalender: Erscheinungsbild beibehalten, Höhe auf kleinen Bildschirmen nur leicht entspannen. */
     .startseite-container .calendar-screen {
       min-height: clamp(440px, 62vh, 640px);
     }
@@ -2985,7 +2996,7 @@ html[dir="rtl"] #ergebnis-container .result-extension-arrow {
   background: var(--panel);
 }
 
-/* Dark-mode: hover/active should match light-mode (turn red) */
+/* Dark-Mode: Hover/Active sollten dem Light-Mode entsprechen (rot) */
 :root[data-theme="dark"] .vk-info-btn:hover {
   background: var(--primary);
   color: white;
@@ -3093,7 +3104,7 @@ html[dir="rtl"] #ergebnis-container .result-extension-arrow {
   outline-offset: 2px;
 }
 
-/* Dark-mode: close button background should match panel (grey) */
+/* Dark-Mode: Hintergrund des Schließen-Buttons sollte zum Panel passen (grau) */
 
 .vk-info-close-icon {
   display: inline-flex;
@@ -3150,6 +3161,14 @@ html[dir="rtl"] #ergebnis-container .result-extension-arrow {
   min-width: 0;
   overflow-wrap: normal;
 }
+
+/*
+  Info-Modal: Titel-Styling
+
+  Diese Sektion steuert die Darstellung des Titels im "Was ist das?"-Modal.
+  Beachtet: Schriftgröße und Wrapping sind wichtig für Accessibility und
+  sollten beim Anpassen von Variablen getestet werden.
+*/
 
 /* Modal Body */
 .vk-info-body {
@@ -3388,7 +3407,7 @@ body.modal-open {
   border-top: 2px solid var(--primary); 
 }
 
-/* Keep berufliche Fragen vertically stacked like the family section */
+/* Berufliche Fragen vertikal gestapelt halten wie den Familien-Abschnitt */
 .vk-category.vk-beruf .vk-category-body {
   flex-direction: column !important;
 }
@@ -3842,7 +3861,7 @@ body.modal-open {
   flex-direction: column;
 }
 
-/* Stagger animation for menu items */
+/* Gestaffelte Animation für Menüeinträge */
 .a11y-menu[aria-hidden="false"] .a11y-row,
 .a11y-menu[aria-hidden="false"] .a11y-btn,
 .a11y-menu[aria-hidden="false"] .a11y-label,
@@ -3871,7 +3890,7 @@ body.modal-open {
   animation-delay: 0.2s;
 }
 
-/* Ensure base selector exists before more-specific animation selectors */
+/* Sicherstellen, dass der Basis-Selektor existiert, bevor spezifischere Animationsselektoren greifen */
 
 /* base .a11y-font-section defined later */
 
@@ -4044,7 +4063,7 @@ body.modal-open {
   transform: scale(1.2);
 }
 
-/* Keep old styles for backwards compatibility if needed */
+/* Alte Styles für Rückwärtskompatibilität beibehalten, falls nötig */
 .a11y-theme-controls {
   display: flex;
   gap: 8px;
@@ -4181,7 +4200,7 @@ body.modal-open {
   display: none;
 }
 
-/* ensure high contrast for text when increased */
+/* Sicherstellen, dass bei vergrößerter Schrift ein hoher Kontrast für Text gegeben ist */
 .a11y-menu strong {
   color: #0b5cff;
 }
@@ -4452,7 +4471,7 @@ body.modal-open {
   color: var(--primary);
 }
 
-/* Ensure hover in dark mode turns the close button red (applies after other dark-mode rules) */
+/* Sicherstellen, dass Hover im Dark-Mode den Close-Button rot färbt (wirkt nach anderen Dark-Mode-Regeln) */
 :root[data-theme="dark"] .vk-info-close:hover {
   background: var(--primary);
   border-color: var(--primary);
@@ -4477,8 +4496,8 @@ html[dir="rtl"] .startseite-header {
   justify-content: flex-start;
 }
 
-/* Startseite: layout should not mirror in RTL (calendar left, description right)
-   but keep RTL text semantics inside the content column. */
+/* Startseite: Layout darf in RTL nicht gespiegelt werden (Kalender links, Beschreibung rechts)
+  jedoch die RTL-Textsemantik innerhalb der Inhalts-Spalte beibehalten. */
 @media (width >= 1024px) {
   html[dir="rtl"] .startseite-desktop {
     direction: ltr;
@@ -4524,13 +4543,13 @@ html[dir="rtl"] .input-with-unit {
 }
 
 /*
-  Keep unit badge INSIDE the input (like LTR), but on the left.
-  Reserve enough left padding so long unit labels don't overlap with typed numbers.
+  Einheitsschild INSIDE des Eingabefeldes halten (wie bei LTR), jedoch links positioniert.
+  Genügend linker Innenabstand reservieren, damit lange Einheitstexte nicht mit den eingegebenen Zahlen überlappen.
 */
 html[dir="rtl"] .input-with-unit input {
   padding-right: 0.75rem;
-  padding-left: 5.25rem; /* space for unit label inside the field */
-  text-align: right; /* keep numeric entry visually on the right in RTL UI */
+  padding-left: 5.25rem; /* Platz für Einheitsetikett innerhalb des Feldes */
+  text-align: right; /* numerische Eingabe optisch rechtsbündig in RTL-UI belassen */
 }
 
 html[dir="rtl"] .input-with-unit .unit {
@@ -4564,7 +4583,7 @@ html[dir="rtl"][data-theme="dark"] #vk-school-select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23e5e5e5' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
 }
 
-/* Language switchers: keep text aligned naturally in RTL */
+/* Sprachumschalter: Text in RTL natürlich ausgerichtet lassen */
 html[dir="rtl"] #lang-switcher,
 html[dir="rtl"] #lang-switcher-desktop {
   text-align: right;
@@ -4617,13 +4636,13 @@ html[dir="rtl"] .vk-info-body ul {
 /* Ergebnis-Header: Monate/Jahre rechtsbündig unter der Beschreibung (RTL) */
  
 
-/* A11Y theme slider: keep icon order/indicator consistent in RTL */
+/* A11Y Theme-Slider: Icon-Reihenfolge/Anzeige in RTL konsistent halten */
 html[dir="rtl"] .a11y-theme-slider-container,
 html[dir="rtl"] .a11y-theme-slider-track {
   direction: ltr;
 }
 
-/* Accessibility widget: keep bottom-right even in RTL (like other languages) */
+/* Accessibility-Widget: in der rechten unteren Ecke belassen, auch in RTL (wie in anderen Sprachen) */
 html[dir="rtl"] .a11y-toggle {
   left: auto;
   right: 16px;
