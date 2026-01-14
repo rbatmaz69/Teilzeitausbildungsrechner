@@ -226,6 +226,22 @@
     "notesTitle_easy": "Important",
     "notes": "<li>Acest calcul este doar un <strong>ajutor</strong> și o <strong>orientare</strong>.</li><li>Rezultatul <strong>nu este obligatoriu</strong>.</li><li>Discută rezultatul cu <strong>firma de formare</strong>.</li><li>Formarea în timp parțial este posibilă doar dacă lucrezi <strong>cel puțin jumătate</strong> din orele normale de formare.</li>",
     "notes_easy": "<li>Acest calcul este doar un <strong>ajutor</strong>.</li><li>Rezultatul <strong>nu este obligatoriu</strong>.</li><li>Vorbește despre rezultat cu <strong>firma</strong>.</li><li>Trebuie să lucrezi <strong>cel puțin jumătate</strong> din orele normale.</li>",
+    "helpfulLinksTitle": "Informații suplimentare",
+    "helpfulLinksTitle_easy": "Mai multe informații",
+    "helpfulLinks": {
+      "arbeitsagentur": {
+        "title": "Agenția Federală pentru Ocuparea Forței de Muncă",
+        "title_easy": "Agenția pentru Ocupare",
+        "desc": "Informații generale despre formare și consiliere profesională.",
+        "desc_easy": "Informații despre formare și consiliere."
+      },
+      "netzwerk": {
+        "title": "Rețeaua de Formare cu Fracțiune de Normă",
+        "title_easy": "Rețeaua de Formare",
+        "desc": "Consiliere specializată și suport pentru formarea cu fracțiune de normă.",
+        "desc_easy": "Consiliere pentru formarea cu fracțiune de normă."
+      }
+    },
     "legalTitle": "Bază legală",
     "legalTitle_easy": "Legi",
     "legalToggleLabel": "Afișează detalii",

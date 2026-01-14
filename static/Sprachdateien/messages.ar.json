@@ -230,6 +230,22 @@
     "notesTitle_easy": "مهم",
     "notes": "<li>هذا الحساب هو فقط <strong>مساعدة</strong> و<strong>توجيه</strong>.</li><li>النتيجة <strong>غير ملزمة</strong>.</li><li>ناقش النتيجة مع <strong>جهة التدريب</strong>.</li><li>التدريب بدوام جزئي ممكن فقط إذا كنت تعمل <strong>على الأقل نصف</strong> ساعات التدريب المعتادة.</li>",
     "notes_easy": "<li>هذا الحساب هو فقط <strong>مساعدة</strong>.</li><li>النتيجة <strong>غير ملزمة</strong>.</li><li>تحدث عن النتيجة مع <strong>جهة التدريب</strong>.</li><li>يجب أن تعمل <strong>على الأقل النصف</strong> من الساعات المعتادة.</li>",
+    "helpfulLinksTitle": "معلومات إضافية",
+    "helpfulLinksTitle_easy": "مزيد من المعلومات",
+    "helpfulLinks": {
+      "arbeitsagentur": {
+        "title": "وكالة التوظيف الفيدرالية",
+        "title_easy": "وكالة التوظيف",
+        "desc": "معلومات عامة عن التدريب والإرشاد المهني.",
+        "desc_easy": "معلومات عن التدريب والإرشاد."
+      },
+      "netzwerk": {
+        "title": "شبكة التدريب بدوام جزئي",
+        "title_easy": "شبكة التدريب بدوام جزئي",
+        "desc": "استشارات متخصصة ودعم للتدريب بدوام جزئي.",
+        "desc_easy": "استشارات للتدريب بدوام جزئي."
+      }
+    },
     "legalTitle": "الأساس القانوني",
     "legalTitle_easy": "القوانين",
     "legalToggleLabel": "إظهار التفاصيل",

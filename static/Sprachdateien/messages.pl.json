@@ -226,6 +226,22 @@
     "notesTitle_easy": "Ważne",
     "notes": "<li>To obliczenie jest tylko <strong>pomocą</strong> i <strong>orientacją</strong>.</li><li>Wynik <strong>nie jest wiążący</strong>.</li><li>Omów wynik ze swoją <strong>firmą szkolącą</strong>.</li><li>Kształcenie w niepełnym wymiarze jest możliwe tylko wtedy, gdy pracujesz <strong>co najmniej połowę</strong> normalnych godzin kształcenia.</li>",
     "notes_easy": "<li>To obliczenie jest tylko <strong>pomocą</strong>.</li><li>Wynik <strong>nie jest wiążący</strong>.</li><li>Porozmawiaj o wyniku z <strong>firmą</strong>.</li><li>Musisz pracować <strong>co najmniej połowę</strong> normalnych godzin.</li>",
+    "helpfulLinksTitle": "Dalsze informacje",
+    "helpfulLinksTitle_easy": "Więcej informacji",
+    "helpfulLinks": {
+      "arbeitsagentur": {
+        "title": "Federalna Agencja Pracy",
+        "title_easy": "Agencja Pracy",
+        "desc": "Ogólne informacje o szkoleniu i doradztwie zawodowym.",
+        "desc_easy": "Informacje o szkoleniu i doradztwie."
+      },
+      "netzwerk": {
+        "title": "Sieć Szkolenia w Niepełnym Wymiarze Godzin",
+        "title_easy": "Sieć Szkolenia w Niepełnym Wymiarze",
+        "desc": "Specjalistyczne doradztwo i wsparcie dla szkolenia w niepełnym wymiarze godzin.",
+        "desc_easy": "Doradztwo dla szkolenia w niepełnym wymiarze."
+      }
+    },
     "legalTitle": "Podstawa prawna",
     "legalTitle_easy": "Prawo",
     "legalToggleLabel": "Pokaż szczegóły",

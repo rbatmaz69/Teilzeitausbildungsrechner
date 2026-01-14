@@ -230,6 +230,22 @@
     "notesTitle_easy": "Wichtige Hinweise",
     "notes": "<li>Die Berechnung ist nur eine <strong>Hilfe</strong> und reine <strong>Orientierung</strong>.</li><li>Das Ergebnis ist <strong>nicht verbindlich</strong>.</li><li>Sprechen Sie das Ergebnis mit Ihrem <strong>Ausbildungsbetrieb</strong> ab.</li><li>Eine Teilzeitausbildung ist nur dann möglich, wenn Sie <strong>mindestens die Hälfte</strong> der normalen Ausbildungszeit arbeiten.</li>",
     "notes_easy": "<li>Die Berechnung ist nur eine <strong>Hilfe</strong>.</li><li>Das Ergebnis ist <strong>nicht verbindlich</strong>.</li><li>Bitte mit dem <strong>Ausbildungsbetrieb</strong> besprechen.</li><li>Teilzeit geht nur, wenn Sie <strong>mindestens die Hälfte</strong> der normalen Zeit arbeiten.</li>",
+    "helpfulLinksTitle": "Weiterführende Informationen",
+    "helpfulLinksTitle_easy": "Weitere Infos",
+    "helpfulLinks": {
+      "arbeitsagentur": {
+        "title": "Bundesagentur für Arbeit",
+        "title_easy": "Arbeitsagentur",
+        "desc": "Allgemeine Informationen zu Ausbildung und Berufsberatung.",
+        "desc_easy": "Infos zu Ausbildung und Beratung."
+      },
+      "netzwerk": {
+        "title": "Netzwerk Teilzeitausbildung",
+        "title_easy": "Netzwerk Teilzeitausbildung",
+        "desc": "Spezialisierte Beratung und Unterstützung zur Teilzeitausbildung.",
+        "desc_easy": "Beratung zur Teilzeitausbildung."
+      }
+    },
     "legalTitle": "Gesetzliche Grundlagen",
     "legalTitle_easy": "Gesetzliche Grundlagen",
     "legalToggleLabel": "Details anzeigen",
