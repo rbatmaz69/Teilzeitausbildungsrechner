@@ -27,6 +27,18 @@ function uebersetzung(schluessel, fallback) {
   return fallback ?? schluessel;
 }
 
+// Formatiert Zahl + Einheit als HTML, setzt Richtung so dass in RTL die Einheit rechts steht.
+function formatValueUnitHtml(value, unitKey) {
+  const unit = uebersetzung(unitKey) || "";
+  // keep unit rendering simple; wrapper will enforce LTR order
+  // const dir = document.documentElement.getAttribute("dir") || "ltr";
+  const numHtml = `<span class="i18n-num" dir="ltr">${String(value)}</span>`;
+  const unitHtml = `<span class="i18n-unit" dir="auto">${String(unit)}</span>`;
+  // Wrap both in an explicit LTR container so the internal order is always "number then unit",
+  // which makes the unit appear to the right of the number even on RTL pages.
+  return `<span class="i18n-value-unit" dir="ltr">${numHtml}&nbsp;${unitHtml}</span>`;
+}
+
 function aktuelleSprache() {
   return (window.I18N && window.I18N.lang) || "de";
 }
@@ -665,15 +677,15 @@ function fuelleEingabenliste(eingaben, berechnung) {
   const zeilen = [
     [
       uebersetzung("inputs.dauer.labelShort", "Ausbildung (Vollzeit)"),
-      `${eingaben.basisMonate} ${uebersetzung("units.months.short", "M")}`
+      { type: 'valueUnit', value: eingaben.basisMonate, unitKey: 'units.months.short' }
     ],
     [
       uebersetzung("inputs.stunden.labelShort", "Wochenstunden (Vollzeit)"),
-      `${eingaben.wochenstunden} ${uebersetzung("units.hours.short", "Std")}`
+      { type: 'valueUnit', value: eingaben.wochenstunden, unitKey: 'units.hours.short' }
     ],
     [
       uebersetzung("inputs.teilzeit.labelShort", "Teilzeit"),
-      `${eingaben.teilzeitProzent}% ↔ ${teilzeitStunden} ${uebersetzung("units.hours.short", "Std")}`
+      { type: 'percentCompare', percent: eingaben.teilzeitProzent, compareValue: teilzeitStunden, unitKey: 'units.hours.short' }
     ]
   ];
 
@@ -682,7 +694,16 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const dt = document.createElement("dt");
     dt.textContent = schluessel;
     const dd = document.createElement("dd");
-    dd.textContent = wert;
+    if (typeof wert === 'object' && wert.type === 'valueUnit') {
+      dd.innerHTML = formatValueUnitHtml(wert.value, wert.unitKey);
+    } else if (typeof wert === 'object' && wert.type === 'percentCompare') {
+      const percent = String(wert.percent) + "%";
+      const compareHtml = formatValueUnitHtml(wert.compareValue, wert.unitKey);
+      // Example: "60% ↔ 24 س" — percent on left, then arrow, then number+unit
+      dd.innerHTML = `${percent} ↔ ${compareHtml}`;
+    } else {
+      dd.textContent = String(wert);
+    }
     wrapper.append(dt, dd);
     liste.append(wrapper);
   }
@@ -763,8 +784,10 @@ function fuelleEingabenliste(eingaben, berechnung) {
         
         const valueSpan = document.createElement("span");
         valueSpan.className = "verkuerzung-value";
+        valueSpan.classList.add("bidi-ltr");
+        valueSpan.setAttribute("dir", "ltr");
         // Einheitlich vollständige Form "Monate" für alle Geräte
-        valueSpan.textContent = `${verkuerzung.months} ${uebersetzung("units.months.short", "M")}`;
+        valueSpan.innerHTML = formatValueUnitHtml(verkuerzung.months, "units.months.short");
         
         li.appendChild(labelSpan);
         li.appendChild(valueSpan);
@@ -793,7 +816,9 @@ function fuelleEingabenliste(eingaben, berechnung) {
     const nachVerkuerzungDt = document.createElement("dt");
     nachVerkuerzungDt.textContent = nachVerkuerzungBeschriftung;
     const nachVerkuerzungDd = document.createElement("dd");
-    nachVerkuerzungDd.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.short", "M")}`;
+    nachVerkuerzungDd.classList.add("bidi-ltr");
+    nachVerkuerzungDd.setAttribute("dir", "ltr");
+    nachVerkuerzungDd.innerHTML = formatValueUnitHtml(berechnung.neueBasis, "units.months.short");
     nachVerkuerzungWrapper.append(nachVerkuerzungDt, nachVerkuerzungDd);
     liste.append(nachVerkuerzungWrapper);
     
@@ -806,22 +831,25 @@ function fuelleEingabenliste(eingaben, berechnung) {
     
     // Strukturiertes Format: Formel in separaten Elementen für Mobile/Desktop
     const formulaContainer = document.createElement("div");
-    formulaContainer.className = "teilzeit-formula-container";
+    formulaContainer.className = "teilzeit-formula-container bidi-ltr";
+    formulaContainer.setAttribute("dir", "ltr");
     
     // Zeile 1: "24 Monate / 75%"
     const formulaLine1 = document.createElement("span");
-    formulaLine1.className = "teilzeit-formula-line1";
-    formulaLine1.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.short", "M")} / ${eingaben.teilzeitProzent}%`;
+    formulaLine1.className = "teilzeit-formula-line1 bidi-ltr";
+    formulaLine1.setAttribute("dir", "ltr");
+    formulaLine1.textContent = `${berechnung.neueBasis} ${uebersetzung("units.months.short")} / ${eingaben.teilzeitProzent}%`;
     
     // Zeile 2: "= 48 Monate"
     const formulaLine2 = document.createElement("span");
-    formulaLine2.className = "teilzeit-formula-line2";
-    formulaLine2.textContent = ` = ${berechnung.gesamtMonate} ${uebersetzung("units.months.short", "M")}`;
+    formulaLine2.className = "teilzeit-formula-line2 bidi-ltr";
+    formulaLine2.setAttribute("dir", "ltr");
+      formulaLine1.innerHTML = `${formatValueUnitHtml(berechnung.neueBasis, "units.months.short")} / ${String(eingaben.teilzeitProzent)}%`;
     
     formulaContainer.appendChild(formulaLine1);
     formulaContainer.appendChild(formulaLine2);
     inTeilzeitDd.appendChild(formulaContainer);
-    
+      formulaLine2.innerHTML = ` = ${formatValueUnitHtml(berechnung.gesamtMonate, "units.months.short")}`;
     inTeilzeitWrapper.append(inTeilzeitDt, inTeilzeitDd);
     liste.append(inTeilzeitWrapper);
     
@@ -847,7 +875,8 @@ function fuelleEingabenliste(eingaben, berechnung) {
 
   // Einheiten-Legende
   const legende = document.createElement("p");
-  legende.className = "units-legend";
+  legende.className = "units-legend bidi-ltr";
+  legende.setAttribute("dir", "ltr");
   legende.textContent = uebersetzung(
     "inputs.unitsLegend",
     "Std = Stunden, M = Monate"
@@ -935,7 +964,7 @@ function fuelleErgebnisse(eingaben, berechnung) {
         "#res-extension-verkuerzungsdauer",
         `${vorzeichen}${Math.abs(
           verkuerzungMonate
-        )} ${uebersetzung("units.months.short", "M")}`
+        )} ${uebersetzung("units.months.short")}`
       );
 
       // z.B. "30 Monate"
@@ -1015,14 +1044,48 @@ function setzeDatumstempel() {
   const element = $("#stamp-date");
   if (!element) return;
   const sprache = aktuelleSprache();
-  const localeMap = { en: "en-US", de: "de-DE", uk: "uk-UA", tr: "tr-TR" };
-  const locale = localeMap[sprache] || "de-DE";
+  const localeMap = {
+    ar: "ar",
+    de: "de-DE",
+    en: "en-US",
+    fr: "fr-FR",
+    pl: "pl-PL",
+    ro: "ro-RO",
+    ru: "ru-RU",
+    tr: "tr-TR",
+    uk: "uk-UA"
+  };
+
+  const locale = localeMap[sprache] || sprache || "de-DE";
   const format = new Intl.DateTimeFormat(locale, { dateStyle: "long" });
-  const defaultLabel = sprache === "en" ? "As of" : "Stand";
+
+  const defaultLabelMap = {
+    ar: "اعتبارًا من",
+    de: "Stand",
+    en: "As of",
+    fr: "En date du",
+    pl: "Stan na",
+    ro: "Valabil la data de",
+    ru: "Сегодня",
+    tr: "Tarih itibarıyla",
+    uk: "Станом на"
+  };
+  const defaultLabel = defaultLabelMap[sprache] || "As of";
   const beschriftung = window.I18N && typeof window.I18N.t === "function"
     ? window.I18N.t("meta.stampLabel", defaultLabel)
     : defaultLabel;
-  element.textContent = `${beschriftung}: ${format.format(new Date())}`;
+  
+  // Für Arabisch: Label zuerst (wird rechts angezeigt), dann Datum LTR (wird links angezeigt)
+  if (sprache === "ar") {
+    const datumText = format.format(new Date());
+    element.innerHTML = `${beschriftung}: <span dir="ltr" style="display: inline-block; direction: ltr; unicode-bidi: embed;">${datumText}</span>`;
+    element.removeAttribute("dir");
+    element.style.direction = "";
+  } else {
+    element.textContent = `${beschriftung}: ${format.format(new Date())}`;
+    element.removeAttribute("dir");
+    element.style.direction = "";
+  }
 }
 
 /* ------------------------------

@@ -9,15 +9,29 @@
     "aria": "Dil seçin",
     "aria_easy": "Dil seçin",
     "de": "Deutsch",
+    "de_easy": "Deutsch",
     "en": "English",
+    "en_easy": "English",
     "uk": "Українська",
-    "tr": "Türkçe"
+    "uk_easy": "Українська",
+    "tr": "Türkçe",
+    "tr_easy": "Türkçe",
+    "ar": "العربية",
+    "ar_easy": "العربية",
+    "fr": "Français",
+    "fr_easy": "Français",
+    "ru": "Русский",
+    "ru_easy": "Русский",
+    "pl": "Polski",
+    "pl_easy": "Polski",
+    "ro": "Română",
+    "ro_easy": "Română"
   },
   "inputs": {
     "title": "Hesabınız",
     "title_easy": "Hesaplama",
-    "unitsLegend": "Std = saat, M = ay",
-    "unitsLegend_easy": "Std = saat, M = ay",
+    "unitsLegend": "s = saat, ay = ay",
+    "unitsLegend_easy": "s = saat, ay = ay",
     "dauer": {
       "label": "Tam zamanlı eğitim süreniz ne kadar?",
       "label_easy": "Tam zamanlı eğitim ne kadar sürer?",
@@ -47,14 +61,10 @@
       "hours_easy": "Saat",
       "separator": "veya",
       "separator_easy": "veya",
-      "button24h": "24 saat (3 gün)",
-      "button24h_easy": "24 saat (3 gün)",
-      "button32h": "32 saat (4 gün)",
-      "button32h_easy": "32 saat (4 gün)"
-    },
-    "verkuerzungen": {
-      "labelShort": "Kısaltmalar",
-      "labelShort_easy": "Kısaltmalar"
+      "button24h": "24 saat (3-gün)",
+      "button24h_easy": "24 saat (3-gün)",
+      "button32h": "32 saat (4-gün)",
+      "button32h_easy": "32 saat (4-gün)"
     },
     "afterShortening": "Kısaltma sonrası süre",
     "afterShortening_easy": "Kısaltma sonrası",
@@ -143,6 +153,8 @@
       "nichtAbgeschlosseneAusbildung_sr_easy": "Başlanmış ama bitmemiş eğitim",
       "nichtAbgeschlosseneAusbildung_dauer": "Tamamlanmamış eğitim kaç ay sürdü?",
       "nichtAbgeschlosseneAusbildung_dauer_easy": "Eğitim kaç ay sürdü?",
+      "nichtAbgeschlosseneAusbildung_placeholder": "örn. 12",
+      "nichtAbgeschlosseneAusbildung_placeholder_easy": "örn. 12",
       "nichtAbgeschlosseneAusbildung_short": "Tamamlanmamış eğitim",
       "nichtAbgeschlosseneAusbildung_short_easy": "Bitmemiş eğitim",
       "praktischeErfahrung": "Benzer bir alanda çalıştınız veya eğitim için faydalı pratik deneyim kazandınız mı?",
@@ -166,15 +178,21 @@
       "label": "Mesleki deneyim",
       "label_easy": "İş deneyimi",
       "label1": "Tamamlanmış mesleki eğitim",
+      "label1_easy": "Tamamlanmış mesleki eğitim",
       "label2": "İlgili temel mesleki eğitim kanıtı",
+      "label2_easy": "Uygun temel eğitim kanıtı",
       "label3": "İlgili mesleki çalışma",
+      "label3_easy": "Uygun iş deneyimi",
       "label4": "Mesleki alanda iş deneyimi",
+      "label4_easy": "Meslek alanında iş deneyimi",
       "sr": "Mesleki ön bilgi eğitim sürenizi kısaltabilir.",
       "sr_easy": "İş deneyimi eğitimi kısaltabilir."
     },
     "other": {
       "question": "Eğitim sırasında kaç yaşındasınız?",
-      "question_easy": "Kaç yaşındasınız?"
+      "question_easy": "Kaç yaşındasınız?",
+      "placeholder": "örn. 25",
+      "placeholder_easy": "örn. 25"
     },
     "alter21": {
       "label": "21 yaşından büyük",
@@ -430,8 +448,10 @@
       "suffix": " kolayca",
       "suffix_easy": " kolay"
     },
-    "description": "Çalışma süresi ve eğitim arasında en uygun dağılımı hesaplayın. Hesaplayıcımız ihtiyaçlarınıza uygun çözümü bulmanıza yardımcı olur.",
-    "description_easy": "Yarı zamanlı eğitim için saatleri hesaplayın. Bu hesaplayıcı size yardım eder.",
+    "description": "Hesaplayıcımız, eğitiminizi yarı zamanlı olarak tamamlayıp tamamlayamayacağınızı ve eğitim süresinin kısaltılmasına yönelik olası seçeneklerin olup olmadığını kontrol etmenize yardımcı olur.",
+    "description_easy": "Hesaplayıcımız, eğitiminizi yarı zamanlı yapıp yapamayacağınızı gösterir. Ayrıca eğitim süresinin kısaltılmasının mümkün olup olmadığını kontrol eder.",
+    "benefitsTitle": "Hesaplayıcının avantajları",
+    "benefitsTitle_easy": "Avantajlar",
     "card1": {
       "title": "Esnek zamanlar",
       "title_easy": "Esnek zamanlar",

@@ -15,7 +15,17 @@
     "uk": "Українська",
     "uk_easy": "Українська",
     "tr": "Türkçe",
-    "tr_easy": "Türkçe"
+    "tr_easy": "Türkçe",
+    "ar": "العربية",
+    "ar_easy": "العربية",
+    "fr": "Français",
+    "fr_easy": "Français",
+    "ru": "Русский",
+    "ru_easy": "Русский",
+    "pl": "Polski",
+    "pl_easy": "Polski",
+    "ro": "Română",
+    "ro_easy": "Română"
   },
   "inputs": {
     "title": "Ihre Berechnung",
@@ -147,6 +157,8 @@
       "nichtAbgeschlosseneAusbildung_sr_easy": "Begonnene, aber nicht abgeschlossene Ausbildung",
       "nichtAbgeschlosseneAusbildung_dauer": "Wie viele Monate hat die nicht abgeschlossene Ausbildung gedauert?",
       "nichtAbgeschlosseneAusbildung_dauer_easy": "Wie viele Monate hat diese Ausbildung gedauert?",
+      "nichtAbgeschlosseneAusbildung_placeholder": "z.B. 12",
+      "nichtAbgeschlosseneAusbildung_placeholder_easy": "z.B. 12",
       "nichtAbgeschlosseneAusbildung_short": "Nicht abgeschlossene Ausbildung",
       "nichtAbgeschlosseneAusbildung_short_easy": "Nicht abgeschlossene Ausbildung",
       "praktischeErfahrung": "Haben Sie bereits in einem ähnlichen Bereich gearbeitet oder praktische Erfahrungen gesammelt, die für die Ausbildung nützlich sind?",
@@ -167,6 +179,8 @@
       "question_easy": "Was haben Sie vorher gemacht?"
     },
     "vork": {
+      "label": "Berufliche Vorerfahrung",
+      "label_easy": "Vorerfahrung",
       "label1": "Abgeschlossene Berufsausbildung",
       "label1_easy": "Abgeschlossene Berufsausbildung",
       "label2": "Nachweis einer einschlägigen beruflichen Grundausbildung",
@@ -180,7 +194,9 @@
     },
     "other": {
       "question": "Wie alt sind Sie zum Zeitpunkt der Ausbildung?",
-      "question_easy": "Wie alt sind Sie zu Beginn der Ausbildung?"
+      "question_easy": "Wie alt sind Sie zu Beginn der Ausbildung?",
+      "placeholder": "z.B. 25",
+      "placeholder_easy": "z.B. 25"
     },
     "alter21": {
       "label": "Über 21 Jahre alt",
@@ -436,8 +452,10 @@
       "suffix": " ganz einfach",
       "suffix_easy": " ganz einfach"
     },
-    "description": "Berechnen Sie die optimale Aufteilung zwischen Arbeitszeit und Ausbildung. Unser Rechner hilft Ihnen dabei, die passende Teilzeitlösung für Ihre Bedürfnisse zu finden.",
-    "description_easy": "Hier können Sie berechnen, wie Arbeit und Ausbildung in Teilzeit passen können.",
+    "description": "Unser Rechner hilft Ihnen dabei zu prüfen, ob Sie Ihre Ausbildung in Teilzeit absolvieren können und ob sich Möglichkeiten zur Verkürzung der Ausbildungsdauer ergeben.",
+    "description_easy": "Unser Rechner zeigt Ihnen, ob Sie Ihre Ausbildung in Teilzeit machen können. Er prüft auch, ob eine Verkürzung der Ausbildungsdauer möglich ist.",
+    "benefitsTitle": "Vorteile des Rechners",
+    "benefitsTitle_easy": "Vorteile",
     "card1": {
       "title": "Flexible Zeiten",
       "title_easy": "Flexible Zeiten",
