@@ -4574,7 +4574,6 @@ html[dir="rtl"] .a11y-toggle-input:checked + .a11y-toggle-slider::before {
   .helper {
     overflow-wrap: anywhere;
     word-break: normal;
-    -webkit-hyphens: auto;
     hyphens: auto;
   }
 
@@ -4593,12 +4592,11 @@ html[dir="rtl"] .a11y-toggle-input:checked + .a11y-toggle-slider::before {
   .summary-pill-label {
     white-space: normal;
     overflow-wrap: anywhere;
-    -webkit-hyphens: auto;
     hyphens: auto;
   }
 
   /* AUSNAHME: Numerische Metriken bleiben atomisch */
-  .kv dd:not(.verkuerzungen-content):not(.teilzeit-formula),
+  .kv dd:not(.verkuerzungen-content, .teilzeit-formula),
   .verkuerzung-value,
   .big-number,
   .result-years,
