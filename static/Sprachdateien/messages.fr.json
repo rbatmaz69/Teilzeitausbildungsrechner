@@ -448,8 +448,8 @@
       "suffix": " facilement",
       "suffix_easy": " facilement"
     },
-    "description": "Calculez la répartition d’heures adaptée pour votre formation à temps partiel. Notre calculateur vous aide à trouver la solution à temps partiel qui correspond à vos besoins.",
-    "description_easy": "Calculez combien d’heures travailler et se former. Ce calculateur vous aide.",
+      "description": "Notre calculateur vous aide à vérifier si vous pouvez suivre votre formation à temps partiel et s'il existe des possibilités de raccourcir la durée de la formation.",
+      "description_easy": "Notre calculateur vous montre si vous pouvez faire votre formation à temps partiel. Il vérifie également si une réduction de la durée de la formation est possible.",
     "benefitsTitle": "Avantages du calculateur",
     "benefitsTitle_easy": "Avantages",
     "card1": {

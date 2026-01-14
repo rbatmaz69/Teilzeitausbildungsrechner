@@ -448,8 +448,8 @@
       "suffix": " kolayca",
       "suffix_easy": " kolay"
     },
-    "description": "Yarı zamanlı eğitiminiz için uygun saat dağılımını hesaplayın. Hesaplayıcımız, ihtiyaçlarınıza uygun yarı zamanlı çözümü bulmanıza yardımcı olur.",
-    "description_easy": "Çalışma ve eğitim saatlerini hesaplayın. Bu hesaplayıcı size yardımcı olur.",
+    "description": "Hesaplayıcımız, eğitiminizi yarı zamanlı olarak tamamlayıp tamamlayamayacağınızı ve eğitim süresinin kısaltılmasına yönelik olası seçeneklerin olup olmadığını kontrol etmenize yardımcı olur.",
+    "description_easy": "Hesaplayıcımız, eğitiminizi yarı zamanlı yapıp yapamayacağınızı gösterir. Ayrıca eğitim süresinin kısaltılmasının mümkün olup olmadığını kontrol eder.",
     "benefitsTitle": "Hesaplayıcının avantajları",
     "benefitsTitle_easy": "Avantajlar",
     "card1": {
