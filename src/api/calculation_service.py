@@ -293,8 +293,8 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
         "beruf_q1",
         "beruf_q2",
         "beruf_q2_dauer_monate",
-            "beruf_q3",
-            "beruf_q4",
+        "beruf_q3",
+        "beruf_q4",
         "berufliche_verkuerzung_monate",
     }
     unexpected_keys = sorted(set(data.keys()) - allowed_keys)
