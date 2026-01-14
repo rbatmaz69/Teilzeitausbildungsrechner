@@ -1044,10 +1044,33 @@ function setzeDatumstempel() {
   const element = $("#stamp-date");
   if (!element) return;
   const sprache = aktuelleSprache();
-  const localeMap = { en: "en-US", de: "de-DE", uk: "uk-UA", tr: "tr-TR" };
-  const locale = localeMap[sprache] || "de-DE";
+  const localeMap = {
+    ar: "ar",
+    de: "de-DE",
+    en: "en-US",
+    fr: "fr-FR",
+    pl: "pl-PL",
+    ro: "ro-RO",
+    ru: "ru-RU",
+    tr: "tr-TR",
+    uk: "uk-UA"
+  };
+
+  const locale = localeMap[sprache] || sprache || "de-DE";
   const format = new Intl.DateTimeFormat(locale, { dateStyle: "long" });
-  const defaultLabel = sprache === "en" ? "As of" : "Stand";
+
+  const defaultLabelMap = {
+    ar: "اعتبارًا من",
+    de: "Stand",
+    en: "As of",
+    fr: "En date du",
+    pl: "Stan na",
+    ro: "Valabil la data de",
+    ru: "Сегодня",
+    tr: "Tarih itibarıyla",
+    uk: "Станом на"
+  };
+  const defaultLabel = defaultLabelMap[sprache] || "As of";
   const beschriftung = window.I18N && typeof window.I18N.t === "function"
     ? window.I18N.t("meta.stampLabel", defaultLabel)
     : defaultLabel;
