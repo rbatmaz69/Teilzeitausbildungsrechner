@@ -133,7 +133,7 @@ body {
   max-width: 100vw;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-wrap: break-word;
+  overflow-wrap: normal;
 }
 
 /* Verhindere Overflow bei allen direkten Kindern */
@@ -175,6 +175,21 @@ p.helper {
   color: var(--muted);
   margin-bottom: 1rem;
   font-size: .95rem;
+}
+
+/* ==========================================
+   I18N / A11Y: Robust text wrapping
+   - Prevent clipped words/overflow in longer translations.
+   - Hyphenation uses the active <html lang="…">.
+   ========================================== */
+h1, h2, h3, h4,
+p, li,
+label, summary,
+button, select,
+dt, dd {
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: manual;
 }
 
 /* ==========================================
@@ -390,7 +405,7 @@ header h1 {
 .legal-disclaimer-content,
 .legal-disclaimer-text {
   min-width: 0;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 .legal-disclaimer-title {
@@ -494,7 +509,7 @@ header h1 {
   
   /* Allow wrapping when font-size is increased for accessibility (mobile) */
   white-space: normal;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 /* ==========================================
@@ -684,7 +699,7 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
   z-index: 10;
   min-width: 180px;
   max-width: var(--tooltip-max-width, min(280px, calc(100vw - 40px)));
-  overflow-wrap: break-word;
+  overflow-wrap: normal;
   white-space: normal;
   text-align: left;
   box-sizing: border-box;
@@ -1234,6 +1249,23 @@ input.error,
   color: var(--primary);
 }
 
+/*
+  Bidirectional text helper:
+  In RTL languages (e.g. Arabic) numeric values, formulas, URLs, and mixed strings
+  should remain left-to-right to avoid confusing reordering.
+*/
+.bidi-ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
+}
+
+input[dir="ltr"],
+textarea[dir="ltr"] {
+  direction: ltr;
+  text-align: left;
+}
+
 .result-years {
   font-size: .95rem;
   color: var(--muted);
@@ -1302,6 +1334,67 @@ input.error,
   white-space: nowrap;
 }
 
+/* ==========================================
+   RTL: Ergebnis-Anpassungen (arabisch etc.)
+   - gesamte Ergebnis-Zeile rechtsbündig am Container
+   - Pfeil grafisch spiegeln
+   - Reihenfolge der Items tauschen (rechts ← links), Zahlenposition beibehalten
+   ========================================== */
+html[dir="rtl"] #ergebnis-container .highlight-main {
+  width: 100%;
+  text-align: right; /* Inhalt an rechte Kante des Containers anheften */
+}
+
+/* Vertausche visuell die Reihenfolge der drei Items (Basis, Pfeil, Total)
+   und pinne die Gruppe an die rechte Seite */
+html[dir="rtl"] #ergebnis-container .result-extension-values {
+  display: flex;
+  flex-direction: row-reverse; /* tauscht links/rechts */
+  justify-content: flex-end;   /* Gruppe am rechten Container-Rand anheften */
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+
+
+/* Zahlen bleiben in LTR-Reading innerhalb ihrer Box (Schreibrichtung korrekt),
+   aber die Platzierung wird durch row-reverse getauscht */
+html[dir="rtl"] #ergebnis-container .result-extension-basis,
+html[dir="rtl"] #ergebnis-container .result-extension-total {
+  direction: ltr;
+  unicode-bidi: isolate-override;
+  text-align: left; /* Inhalt der Zahl linksbündig innerhalb des eigenen Feldes */
+}
+
+/* Ensure big number and years are right-aligned and remain readable in RTL */
+html[dir="rtl"] .highlight-main .big-number,
+html[dir="rtl"] .highlight-main .result-years {
+  width: 100%;
+  text-align: right;
+  direction: rtl;
+  unicode-bidi: plaintext;
+}
+
+/* Explicit ordering for arrow row so the numbers visually swap in RTL */
+html[dir="rtl"] #ergebnis-container .result-extension-total {
+  order: 1; /* appears on the right edge */
+}
+
+html[dir="rtl"] #ergebnis-container .result-extension-arrow-wrapper {
+  order: 2;
+}
+
+html[dir="rtl"] #ergebnis-container .result-extension-basis {
+  order: 3; /* appears on the left in RTL layout */
+}
+
+/* Mirror the arrow graphic */
+html[dir="rtl"] #ergebnis-container .result-extension-arrow {
+  transform: scaleX(-1);
+}
+
+
 .muted{ color: var(--muted); }
 
 /* Key-Value (Definition List) */
@@ -1325,7 +1418,7 @@ input.error,
   font-weight: 600;
   font-size: 0.95rem;
   word-break: normal; /* Wörter werden nicht getrennt, bleiben immer zusammen */
-  overflow-wrap: normal; /* Umbrechen nur zwischen Wörtern, nicht innerhalb */
+  overflow-wrap: normal; /* Umbrechen nur zwischen Wörtern */
   min-width: 0; /* Ermöglicht Umbrechen in Grid */
 }
 
@@ -1340,7 +1433,7 @@ input.error,
   
   .kv dt {
     word-break: normal; /* Wörter bleiben immer zusammen in Firefox */
-    overflow-wrap: normal; /* Umbrechen nur zwischen Wörtern, nicht innerhalb */
+    overflow-wrap: normal; /* Umbrechen nur zwischen Wörtern */
   }
   
   /* Nur einfache Text-Werte (Metriken) sollen nicht umbrechen, nicht Container */
@@ -1352,7 +1445,7 @@ input.error,
   /* Warnungstext soll umbrechen können */
   .verkuerzungen-warning {
     white-space: normal;
-    overflow-wrap: break-word;
+    overflow-wrap: normal;
   }
   
   .verkuerzung-label {
@@ -1380,6 +1473,19 @@ input.error,
   font-size: 0.75rem;
   font-style: italic;
   text-align: right;
+}
+
+/* On small screens or when text size is large, avoid overlap between
+   the units legend and the timestamp: stack them vertically. */
+@media (width <= 640px) {
+  #inputs-section .inputs-stamp {
+    position: static;
+    margin-top: 0.5rem;
+  }
+  
+  .units-legend {
+    text-align: right;
+  }
 }
 
 /* Teilzeit-Formel: Mobile = vertikal, Desktop = horizontal */
@@ -1459,7 +1565,7 @@ input.error,
 .verkuerzung-label {
   flex: 1 1 auto;
   min-width: 0;
-  overflow-wrap: break-word;
+  overflow-wrap: normal;
   word-break: normal; /* Keine Worttrennung */
   max-width: calc(100% - 4rem); /* Begrenzt Breite, damit Text früher umbricht (Platz für Metrik) */
 }
@@ -1569,7 +1675,7 @@ input.error,
      Ergebnis/Hinweise bleiben bis zum Klick per `hidden` unsichtbar. */
   .rechner-grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: start;
+    grid-template-rows: auto 1fr;
 
     /* Vertikal wie bei den Cards; horizontal etwas luftiger. */
     gap: var(--space-3) clamp(1rem, 2vw, 1.75rem);
@@ -1578,16 +1684,20 @@ input.error,
   .rechner-grid .eingaben-column {
     grid-column: 1;
     grid-row: 1;
+    align-self: start;
   }
 
   .rechner-grid .vk-column {
     grid-column: 1;
     grid-row: 2;
+    align-self: start;
   }
 
   .rechner-grid #ergebnis-container {
     grid-column: 2;
     grid-row: 1 / 3;
+    align-self: start;
+    overflow-y: auto;
   }
 }
 
@@ -1748,13 +1858,89 @@ input.error,
   display: none;
 }
 
+/* New languages: Arabic, French, Russian, Polish, Romanian */
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-ar {
+  display: block;
+}
+
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-uk,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-tr,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-fr,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-ru,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-pl,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-ro {
+  display: none;
+}
+
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-fr {
+  display: block;
+}
+
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-uk,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-tr,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-ar,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-ru,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-pl,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-ro {
+  display: none;
+}
+
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-ru {
+  display: block;
+}
+
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-uk,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-tr,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-ar,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-fr,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-pl,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-ro {
+  display: none;
+}
+
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-pl {
+  display: block;
+}
+
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-uk,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-tr,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-ar,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-fr,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-ru,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-ro {
+  display: none;
+}
+
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-ro {
+  display: block;
+}
+
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-uk,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-tr,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-ar,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-fr,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-ru,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-pl {
+  display: none;
+}
+
 .startseite-title {
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.3;
   margin-bottom: 0;
   color: var(--text);
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 .startseite-title-accent {
@@ -1765,7 +1951,7 @@ input.error,
   color: var(--muted);
   margin-bottom: 0;
   line-height: 1.6;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 /* Zusammenhängendes Informationsfeld: direkt in Startseite integriert (kein separater Kasten) */
@@ -1843,6 +2029,7 @@ input.error,
 
 .info-item-content {
   flex: 1;
+  min-width: 0;
 }
 
 .info-item-title {
@@ -1876,6 +2063,9 @@ input.error,
   align-items: center;
   justify-content: center;
   gap: .35rem;
+  flex-wrap: wrap;
+  white-space: normal;
+  text-align: center;
 }
 
 .btn-start-calculate:hover {
@@ -1898,6 +2088,7 @@ input.error,
 .btn-start-calculate svg {
   width: 16px;
   height: 16px;
+  flex-shrink: 0;
 }
 
 /* ==========================================
@@ -2287,6 +2478,82 @@ input.error,
     display: none;
   }
 
+  /* New languages: Arabic, French, Russian, Polish, Romanian (desktop) */
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ar {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-fr,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ru,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-pl,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ro {
+    display: none;
+  }
+
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-fr {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ar,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ru,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-pl,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ro {
+    display: none;
+  }
+
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ru {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ar,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-fr,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-pl,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ro {
+    display: none;
+  }
+
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-pl {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ar,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-fr,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ru,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ro {
+    display: none;
+  }
+
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ro {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ar,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-fr,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ru,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-pl {
+    display: none;
+  }
+
   .startseite-title-desktop {
     font-size: 3.5rem;
     font-weight: 700;
@@ -2300,7 +2567,7 @@ input.error,
     color: var(--muted);
     margin-bottom: 2rem;
     line-height: 1.6;
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
   }
 
   /* Desktop Feature Cards - Als zusammenhängende Box */
@@ -2782,7 +3049,7 @@ input.error,
   line-height: 1.3;
   flex: 1 1 auto;
   min-width: 0;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 /* Modal Body */
@@ -4098,5 +4365,246 @@ body.modal-open {
   .a11y-toggle,
   .a11y-menu {
     transition: none;
+  }
+}
+
+/* ==========================================
+   RTL OVERRIDES (e.g. Arabic)
+   ========================================== */
+
+/* stylelint-disable no-descending-specificity */
+
+html[dir="rtl"] .startseite-header {
+  justify-content: flex-start;
+}
+
+/* Startseite: layout should not mirror in RTL (calendar left, description right)
+   but keep RTL text semantics inside the content column. */
+@media (width >= 1024px) {
+  html[dir="rtl"] .startseite-desktop {
+    direction: ltr;
+  }
+
+  html[dir="rtl"] .startseite-desktop-right {
+    direction: rtl;
+    text-align: right;
+  }
+}
+
+html[dir="rtl"] .language-switcher-desktop {
+  align-self: flex-start;
+}
+
+/* Mirror language switchers: caret left, flag right */
+html[dir="rtl"] #lang-switcher {
+  padding-left: 2rem;
+  padding-right: 2.2rem;
+  background-position: left 0.5rem center;
+}
+
+html[dir="rtl"] .lang-flags-overlay {
+  left: auto;
+  right: 0.5rem;
+}
+
+html[dir="rtl"] #lang-switcher-desktop {
+  padding: 0.5rem 2.2rem 0.5rem 2rem;
+  background-position: left 0.5rem center;
+}
+
+html[dir="rtl"] .lang-flags-overlay-desktop {
+  left: auto;
+  right: 0.5rem;
+}
+
+/* Inputs with unit badge: avoid overlaps by moving unit to left */
+html[dir="rtl"] .input-with-unit {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/*
+  Keep unit badge INSIDE the input (like LTR), but on the left.
+  Reserve enough left padding so long unit labels don't overlap with typed numbers.
+*/
+html[dir="rtl"] .input-with-unit input {
+  padding-right: 0.75rem;
+  padding-left: 5.25rem; /* space for unit label inside the field */
+  text-align: right; /* keep numeric entry visually on the right in RTL UI */
+}
+
+html[dir="rtl"] .input-with-unit .unit {
+  position: absolute;
+  right: auto;
+  left: 0.6rem;
+  white-space: nowrap;
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Mirror two-column input rows */
+html[dir="rtl"] .input-row {
+  flex-direction: row-reverse;
+}
+
+/* School degree select: move caret to the left in RTL */
+html[dir="rtl"] #vk-school-select {
+  /* Use a real down-caret in RTL to avoid "sideways" gradient artifacts */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%239ca3af' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 0.85rem center;
+  background-size: 1.1em;
+  padding-left: 2.25rem;
+  padding-right: 0.75rem;
+}
+
+/* Dark mode caret color in RTL */
+html[dir="rtl"][data-theme="dark"] #vk-school-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23e5e5e5' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+}
+
+/* Language switchers: keep text aligned naturally in RTL */
+html[dir="rtl"] #lang-switcher,
+html[dir="rtl"] #lang-switcher-desktop {
+  text-align: right;
+}
+
+/* Lists/notes forced LTR in base styles */
+html[dir="rtl"] .notes {
+  padding-left: 0;
+  padding-right: 1.5rem;
+  text-align: right;
+}
+
+html[dir="rtl"] .notes li {
+  text-align: right;
+}
+
+/* Info tooltip: spacing + text alignment */
+html[dir="rtl"] .info-icon {
+  margin-left: 0;
+  margin-right: 6px;
+}
+
+html[dir="rtl"] .info-icon::after {
+  text-align: right;
+}
+
+/* Info modal: mirror close button and header padding */
+html[dir="rtl"] .vk-info-close {
+  right: auto;
+  left: 1rem;
+}
+
+html[dir="rtl"] .vk-info-header {
+  padding-right: var(--space-5);
+  padding-left: 3.5rem;
+}
+
+@media (width >= 900px) {
+  html[dir="rtl"] .vk-info-header {
+    padding-right: var(--space-6);
+    padding-left: 4rem;
+  }
+}
+
+html[dir="rtl"] .vk-info-body ul {
+  padding-left: 0;
+  padding-right: 1.5rem;
+}
+
+/* Ergebnis-Header: Monate/Jahre rechtsbündig unter der Beschreibung (RTL) */
+ 
+
+/* A11Y theme slider: keep icon order/indicator consistent in RTL */
+html[dir="rtl"] .a11y-theme-slider-container,
+html[dir="rtl"] .a11y-theme-slider-track {
+  direction: ltr;
+}
+
+/* Accessibility widget: keep bottom-right even in RTL (like other languages) */
+html[dir="rtl"] .a11y-toggle {
+  left: auto;
+  right: 16px;
+}
+
+html[dir="rtl"] .a11y-menu {
+  left: auto !important;
+  right: 16px !important;
+  transform: translateX(20px) scale(0.95) !important;
+}
+
+html[dir="rtl"] .a11y-menu[aria-hidden="false"] {
+  transform: translateX(0) scale(1) !important;
+  animation: menu-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html[dir="rtl"] .a11y-menu[aria-hidden="true"] {
+  transform: translateX(20px) scale(0.95) !important;
+}
+
+/* Toggle switch knob direction */
+html[dir="rtl"] .a11y-toggle-slider::before {
+  left: auto;
+  right: 3px;
+}
+
+html[dir="rtl"] .a11y-toggle-input:checked + .a11y-toggle-slider::before {
+  transform: translateX(-22px);
+}
+
+/* stylelint-enable no-descending-specificity */
+
+/* ==========================================
+   MOBILE: Textumbruch bei großer Schrift
+   Verhindert Overflow langer Wörter überall
+   ========================================== */
+@media (width <= 640px) {
+  /* Globaler Override: Alle Text-Elemente dürfen umbrechen */
+  h1, h2, h3, h4,
+  p, li,
+  label, summary,
+  button, select,
+  dt, dd,
+  span, a,
+  .tile-body,
+  .vk-category-body,
+  .helper {
+    overflow-wrap: anywhere;
+    word-break: normal;
+    hyphens: auto;
+  }
+
+  /* Flex/Grid-Kinder: min-width 0 damit sie schrumpfen können */
+  .summary-toggle,
+  .kv > div,
+  .legal-disclaimer,
+  .vk-info-header,
+  .tile,
+  .info-item {
+    min-width: 0;
+  }
+
+  /* Pill-Button: darf umbrechen */
+  .summary-pill,
+  .summary-pill-label {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+
+  /* AUSNAHME: Numerische Metriken bleiben atomisch */
+  .kv dd:not(.verkuerzungen-content, .teilzeit-formula),
+  .verkuerzung-value,
+  .big-number,
+  .result-years,
+  .result-extension-basis,
+  .result-extension-delta,
+  .result-extension-total {
+    white-space: nowrap;
+    overflow-wrap: normal;
+    hyphens: manual;
   }
 }

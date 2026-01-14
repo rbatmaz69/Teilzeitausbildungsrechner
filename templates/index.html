@@ -4,6 +4,23 @@
   <!-- Zeichensatz und Responsive-Meta, wichtig für korrekte Darstellung -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Early RTL setup to avoid LTR flash when Arabic is stored in session/local storage -->
+  <script>
+    (() => {
+      try {
+        const lang = sessionStorage.getItem("lang") || localStorage.getItem("lang");
+        if (!lang) return;
+
+        document.documentElement.setAttribute("lang", lang);
+        const rtlSprachen = ["ar", "he", "fa", "ur"];
+        document.documentElement.setAttribute("dir", rtlSprachen.includes(lang) ? "rtl" : "ltr");
+      } catch {
+        // ignore
+      }
+    })();
+  </script>
+
   <title data-i18n="app.title">Teilzeitausbildungsrechner</title>
 
   <!-- externe CSS-Datei mit Styles -->
@@ -31,10 +48,15 @@
           <label id="label-lang" class="sr-only" for="lang-switcher" data-i18n="lang.label">Sprache</label>
           <div class="language-switcher">
             <select id="lang-switcher" aria-label="Sprache wählen" aria-labelledby="label-lang" data-i18n-attr="aria-label:lang.aria">
-              <option value="de" data-flag="de" data-i18n="lang.de"></option>
-              <option value="en" data-flag="en" data-i18n="lang.en"></option>
-              <option value="uk" data-flag="uk" data-i18n="lang.uk"></option>
-              <option value="tr" data-flag="tr" data-i18n="lang.tr"></option>
+              <option value="de" data-flag="de" data-i18n="lang.de">Deutsch</option>
+              <option value="en" data-flag="en" data-i18n="lang.en">Englisch</option>
+              <option value="uk" data-flag="uk" data-i18n="lang.uk">Ukrainisch</option>
+              <option value="tr" data-flag="tr" data-i18n="lang.tr">Türkisch</option>
+              <option value="ar" data-flag="ar" data-i18n="lang.ar">Arabisch</option>
+              <option value="fr" data-flag="fr" data-i18n="lang.fr">Französisch</option>
+              <option value="ru" data-flag="ru" data-i18n="lang.ru">Russisch</option>
+              <option value="pl" data-flag="pl" data-i18n="lang.pl">Polnisch</option>
+              <option value="ro" data-flag="ro" data-i18n="lang.ro">Rumänisch</option>
             </select>
             <!-- SVG flags displayed via CSS -->
             <div class="lang-flags-overlay">
@@ -66,6 +88,33 @@
                 <!-- star: simple 5-point star -->
                 <polygon fill="#fff" points="21.5,9.5 20.1,12.0 17.5,12.0 19.6,13.5 18.8,15.9 21.5,14.5 24.2,15.9 23.4,13.5 25.5,12.0 22.9,12.0" />
               </svg>
+
+              <!-- Arabic (UAE flag used as language indicator) -->
+              <svg class="lang-flag lang-flag-ar" viewBox="0 0 3 2" width="16" height="11" aria-hidden="true">
+                <rect width="0.75" height="2" x="0" y="0" fill="#ff0000"/>
+                <rect width="2.25" height="0.6667" x="0.75" y="0" fill="#00732f"/>
+                <rect width="2.25" height="0.6667" x="0.75" y="0.6667" fill="#ffffff"/>
+                <rect width="2.25" height="0.6666" x="0.75" y="1.3334" fill="#000000"/>
+              </svg>
+              <svg class="lang-flag lang-flag-fr" viewBox="0 0 3 2" width="16" height="11" aria-hidden="true">
+                <rect width="1" height="2" x="0" y="0" fill="#0055a4"/>
+                <rect width="1" height="2" x="1" y="0" fill="#ffffff"/>
+                <rect width="1" height="2" x="2" y="0" fill="#ef4135"/>
+              </svg>
+              <svg class="lang-flag lang-flag-ru" viewBox="0 0 3 2" width="16" height="11" aria-hidden="true">
+                <rect width="3" height="2" fill="#ffffff"/>
+                <rect width="3" height="0.6667" y="0.6667" fill="#0039a6"/>
+                <rect width="3" height="0.6666" y="1.3334" fill="#d52b1e"/>
+              </svg>
+              <svg class="lang-flag lang-flag-pl" viewBox="0 0 3 2" width="16" height="11" aria-hidden="true">
+                <rect width="3" height="1" y="0" fill="#ffffff"/>
+                <rect width="3" height="1" y="1" fill="#dc143c"/>
+              </svg>
+              <svg class="lang-flag lang-flag-ro" viewBox="0 0 3 2" width="16" height="11" aria-hidden="true">
+                <rect width="1" height="2" x="0" y="0" fill="#002b7f"/>
+                <rect width="1" height="2" x="1" y="0" fill="#fcd116"/>
+                <rect width="1" height="2" x="2" y="0" fill="#ce1126"/>
+              </svg>
             </div>
           </div>
         </div>
@@ -74,11 +123,12 @@
           <span data-i18n="start.title.prefix">Planen Sie Ihre </span><span class="startseite-title-accent" data-i18n="start.title.accent">Teilzeitausbildung</span><span data-i18n="start.title.suffix"> ganz einfach</span>
         </h1>
         <p class="startseite-description" data-i18n="start.description">
-          Berechnen Sie die optimale Aufteilung zwischen Arbeitszeit und Ausbildung. Unser Rechner hilft Ihnen dabei, die passende Teilzeitlösung für Ihre Bedürfnisse zu finden.
+          Unser Rechner hilft Ihnen dabei zu prüfen, ob Sie Ihre Ausbildung in Teilzeit absolvieren können und ob sich Möglichkeiten zur Verkürzung der Ausbildungsdauer ergeben.
         </p>
 
         <!-- Zusammenhängendes Informationsfeld statt separater Karten -->
-        <div class="info-section" role="region" aria-label="Vorteile des Rechners">
+        <h2 id="start-benefits-title-mobile" class="sr-only" data-i18n="start.benefitsTitle">Vorteile des Rechners</h2>
+        <div class="info-section" role="region" aria-labelledby="start-benefits-title-mobile">
           <div class="info-item">
             <div class="info-item-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -220,10 +270,15 @@
           <div class="language-switcher-desktop">
             <label id="label-lang-desktop" class="sr-only" for="lang-switcher-desktop" data-i18n="lang.label">Sprache</label>
             <select id="lang-switcher-desktop" aria-label="Sprache wählen" aria-labelledby="label-lang-desktop" data-i18n-attr="aria-label:lang.aria">
-              <option value="de" data-flag="de" data-i18n="lang.de"></option>
-              <option value="en" data-flag="en" data-i18n="lang.en"></option>
-              <option value="uk" data-flag="uk" data-i18n="lang.uk"></option>
-              <option value="tr" data-flag="tr" data-i18n="lang.tr"></option>
+              <option value="de" data-flag="de" data-i18n="lang.de">Deutsch</option>
+              <option value="en" data-flag="en" data-i18n="lang.en">Englisch</option>
+              <option value="uk" data-flag="uk" data-i18n="lang.uk">Ukrainisch</option>
+              <option value="tr" data-flag="tr" data-i18n="lang.tr">Türkisch</option>
+              <option value="ar" data-flag="ar" data-i18n="lang.ar">Arabisch</option>
+              <option value="fr" data-flag="fr" data-i18n="lang.fr">Französisch</option>
+              <option value="ru" data-flag="ru" data-i18n="lang.ru">Russisch</option>
+              <option value="pl" data-flag="pl" data-i18n="lang.pl">Polnisch</option>
+              <option value="ro" data-flag="ro" data-i18n="lang.ro">Rumänisch</option>
             </select>
             <!-- SVG flags displayed via CSS -->
             <div class="lang-flags-overlay-desktop">
@@ -251,6 +306,33 @@
                 <circle cx="16.2" cy="12" r="3.6" fill="#e30a17" />
                 <polygon fill="#fff" points="21.5,9.5 20.1,12.0 17.5,12.0 19.6,13.5 18.8,15.9 21.5,14.5 24.2,15.9 23.4,13.5 25.5,12.0 22.9,12.0" />
               </svg>
+
+              <!-- Arabic (UAE flag used as language indicator) -->
+              <svg class="lang-flag lang-flag-ar" viewBox="0 0 3 2" width="16" height="11" aria-hidden="true">
+                <rect width="0.75" height="2" x="0" y="0" fill="#ff0000"/>
+                <rect width="2.25" height="0.6667" x="0.75" y="0" fill="#00732f"/>
+                <rect width="2.25" height="0.6667" x="0.75" y="0.6667" fill="#ffffff"/>
+                <rect width="2.25" height="0.6666" x="0.75" y="1.3334" fill="#000000"/>
+              </svg>
+              <svg class="lang-flag lang-flag-fr" viewBox="0 0 3 2" width="16" height="11" aria-hidden="true">
+                <rect width="1" height="2" x="0" y="0" fill="#0055a4"/>
+                <rect width="1" height="2" x="1" y="0" fill="#ffffff"/>
+                <rect width="1" height="2" x="2" y="0" fill="#ef4135"/>
+              </svg>
+              <svg class="lang-flag lang-flag-ru" viewBox="0 0 3 2" width="16" height="11" aria-hidden="true">
+                <rect width="3" height="2" fill="#ffffff"/>
+                <rect width="3" height="0.6667" y="0.6667" fill="#0039a6"/>
+                <rect width="3" height="0.6666" y="1.3334" fill="#d52b1e"/>
+              </svg>
+              <svg class="lang-flag lang-flag-pl" viewBox="0 0 3 2" width="16" height="11" aria-hidden="true">
+                <rect width="3" height="1" y="0" fill="#ffffff"/>
+                <rect width="3" height="1" y="1" fill="#dc143c"/>
+              </svg>
+              <svg class="lang-flag lang-flag-ro" viewBox="0 0 3 2" width="16" height="11" aria-hidden="true">
+                <rect width="1" height="2" x="0" y="0" fill="#002b7f"/>
+                <rect width="1" height="2" x="1" y="0" fill="#fcd116"/>
+                <rect width="1" height="2" x="2" y="0" fill="#ce1126"/>
+              </svg>
             </div>
           </div>
 
@@ -258,10 +340,11 @@
             <span data-i18n="start.title.prefix">Planen Sie Ihre </span><span class="startseite-title-accent" data-i18n="start.title.accent">Teilzeitausbildung</span><span data-i18n="start.title.suffix"> ganz einfach</span>
           </h1>
           <p class="startseite-description-desktop" data-i18n="start.description">
-            Berechnen Sie die optimale Aufteilung zwischen Arbeitszeit und Ausbildung. Unser Rechner hilft Ihnen dabei, die passende Teilzeitlösung für Ihre Bedürfnisse zu finden.
+            Unser Rechner hilft Ihnen dabei zu prüfen, ob Sie Ihre Ausbildung in Teilzeit absolvieren können und ob sich Möglichkeiten zur Verkürzung der Ausbildungsdauer ergeben.
           </p>
 
-          <div class="info-cards-desktop" role="region" aria-label="Vorteile des Rechners">
+          <h2 id="start-benefits-title-desktop" class="sr-only" data-i18n="start.benefitsTitle">Vorteile des Rechners</h2>
+          <div class="info-cards-desktop" role="region" aria-labelledby="start-benefits-title-desktop">
             <div class="info-card-desktop">
               <div class="info-card-icon-desktop">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -331,7 +414,7 @@
                   aria-hidden="true">i</span>
           </label>
           <div class="input-with-unit">
-            <input type="text" inputmode="numeric" autocomplete="off" id="dauer" placeholder="z.B. 36" data-i18n-attr="placeholder:inputs.placeholders.dauer" step="1" required aria-labelledby="label-dauer" aria-describedby="hint-dauer">
+            <input type="text" inputmode="numeric" autocomplete="off" id="dauer" dir="ltr" placeholder="z.B. 36" data-i18n-attr="placeholder:inputs.placeholders.dauer" step="1" required aria-labelledby="label-dauer" aria-describedby="hint-dauer">
             <span class="unit" data-i18n="units.months.full">Monate</span>
           </div>
           <span class="error-message" id="errorDauer"></span>
@@ -351,7 +434,7 @@
                   aria-hidden="true">i</span>
           </label>
           <div class="input-with-unit">
-            <input type="text" inputmode="decimal" autocomplete="off" id="stunden" placeholder="z.B. 40" data-i18n-attr="placeholder:inputs.placeholders.stunden" step="1" required aria-labelledby="label-stunden" aria-describedby="hint-stunden">
+            <input type="text" inputmode="decimal" autocomplete="off" id="stunden" dir="ltr" placeholder="z.B. 40" data-i18n-attr="placeholder:inputs.placeholders.stunden" step="1" required aria-labelledby="label-stunden" aria-describedby="hint-stunden">
             <span class="unit" data-i18n="units.hours.full">Stunden</span>
           </div>
           <span class="error-message" id="errorStunden"></span>
@@ -371,7 +454,7 @@
           <!-- Stundenanteil (primär) -->
           <div class="input-group">
             <div class="input-with-unit">
-              <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitStunden" placeholder="z.B. 30" data-i18n-attr="placeholder:inputs.placeholders.teilzeitStunden" step="1" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
+              <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitStunden" dir="ltr" placeholder="z.B. 30" data-i18n-attr="placeholder:inputs.placeholders.teilzeitStunden" step="1" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
               <span class="unit" data-i18n="units.hours.full">Stunden</span>
             </div>
             <span class="error-message" id="errorTeilStunden"></span>
@@ -389,7 +472,7 @@
           <!-- Prozentanteil -->
           <div class="input-group">
             <div class="input-with-unit">
-              <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitProzent" placeholder="z.B. 75" data-i18n-attr="placeholder:inputs.placeholders.teilzeitProzent" step="5" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
+              <input type="text" inputmode="decimal" autocomplete="off" id="teilzeitProzent" dir="ltr" placeholder="z.B. 75" data-i18n-attr="placeholder:inputs.placeholders.teilzeitProzent" step="5" aria-labelledby="label-teilzeit" aria-describedby="hint-teilzeit">
               <span class="unit" data-i18n="units.percent">Prozent</span>
             </div>
             <span class="error-message" id="errorProzent"></span>
@@ -464,7 +547,7 @@
 
             <div class="vk-category-body vk-stack">
               <div class="input-with-unit">
-                <input type="number" id="alter" step="1" min="0" max="99" placeholder="z.B. 25">
+                <input type="number" id="alter" dir="ltr" step="1" min="0" max="99" placeholder="z.B. 25" data-i18n-attr="placeholder:vk.other.placeholder">
                 <span class="unit" data-i18n="units.years.full">Jahre</span>
               </div>
 
@@ -611,7 +694,7 @@
           <div id="vk_beruf_q2_duration_container" style="display:none;margin-top:.5rem;">
             <label for="vk_beruf_q2_dauer_months" style="display:block;margin-bottom:.5rem;font-weight:500;" data-i18n="vk.qual.nichtAbgeschlosseneAusbildung_dauer">Wie lange hat Ihre nicht abgeschlossene Ausbildung gedauert? (Monate)</label>
             <div class="input-with-unit">
-              <input type="number" id="vk_beruf_q2_dauer_months" min="0" max="50" step="1" inputmode="numeric" placeholder="z.B. 12">
+              <input type="number" id="vk_beruf_q2_dauer_months" dir="ltr" min="0" max="50" step="1" inputmode="numeric" placeholder="z.B. 12" data-i18n-attr="placeholder:vk.qual.nichtAbgeschlosseneAusbildung_placeholder">
               <span class="unit" data-i18n="vk.qual.months">Monate</span>
             </div>
             <span class="error-message" id="errorBerufQ2Dauer"></span>
@@ -685,20 +768,20 @@
           <!-- Grid-Layout für Haupt- und Meta-Ergebnisse -->
           <div class="grid">
             <div class="highlight-main">
-              <p class="big-number" id="res-total-months" aria-live="polite">–</p>
-              <p class="result-years" id="res-total-years">–</p>
+              <p class="big-number bidi-ltr" id="res-total-months" dir="ltr" aria-live="polite">–</p>
+              <p class="result-years bidi-ltr" id="res-total-years" dir="ltr">–</p>
               <span class="error-message" id="errorTotalMonths" data-i18n="errors.placeholder"></span>
               
               <!-- Verlängerungsanzeige: Ausbildung(Vollzeit) → Pfeil mit Verkürzungsdauer → Basis -->
               <div class="result-extension-wrapper" id="res-shortening-wrapper" hidden>
                 <p class="result-extension-label" data-i18n="res.extension.label1">1. Verkürzung durch Verkürzungründe</p>
                 <div class="result-extension-values">
-                  <span class="result-extension-basis" id="res-extension-vollzeit">–</span>
+                  <span class="result-extension-basis bidi-ltr" id="res-extension-vollzeit" dir="ltr">–</span>
                   <div class="result-extension-arrow-wrapper">
                     <span class="result-extension-arrow">→</span>
-                    <span class="result-extension-delta" id="res-extension-verkuerzungsdauer">+–</span>
+                    <span class="result-extension-delta bidi-ltr" id="res-extension-verkuerzungsdauer" dir="ltr">+–</span>
                   </div>
-                  <span class="result-extension-total" id="res-shortening-total">–</span>
+                  <span class="result-extension-total bidi-ltr" id="res-shortening-total" dir="ltr">–</span>
                 </div>
               </div>
 
@@ -706,12 +789,12 @@
               <div class="result-extension-wrapper" id="res-extension-wrapper" hidden>
                 <p class="result-extension-label" data-i18n="res.extension.label2">2. Verlängerung durch Teilzeit:</p>
                 <div class="result-extension-values">
-                  <span class="result-extension-basis" id="res-extension-basis">–</span>
+                  <span class="result-extension-basis bidi-ltr" id="res-extension-basis" dir="ltr">–</span>
                   <div class="result-extension-arrow-wrapper">
                     <span class="result-extension-arrow">→</span>
-                    <span class="result-extension-delta" id="res-extension-delta">+–</span>
+                    <span class="result-extension-delta bidi-ltr" id="res-extension-delta" dir="ltr">+–</span>
                   </div>
-                  <span class="result-extension-total" id="res-extension-total">–</span>
+                  <span class="result-extension-total bidi-ltr" id="res-extension-total" dir="ltr">–</span>
                 </div>
               </div>
             </div>
@@ -914,13 +997,14 @@
     <span class="sr-only" data-i18n="a11y.button">Barrierefreiheit</span>
   </button>
 
-  <div id="a11y-menu" class="a11y-menu" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Barrierefreiheitsmenü">
+  <div id="a11y-menu" class="a11y-menu" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="a11y-menu-title">
+    <h2 id="a11y-menu-title" class="sr-only" data-i18n="a11y.button">Barrierefreiheit</h2>
     <div class="a11y-menu-body">
       <!-- Dark/Auto/Light mode ganz nach oben -->
       <div class="a11y-row a11y-toggle-row">
-        <div class="a11y-theme-slider-container" role="slider" tabindex="0" aria-label="Darstellungsmodus auswählen" aria-valuenow="1" aria-valuemin="0" aria-valuemax="2" aria-valuetext="Auto" id="a11y-theme-slider">
+        <div class="a11y-theme-slider-container" role="slider" tabindex="0" aria-valuenow="1" aria-valuemin="0" aria-valuemax="2" aria-valuetext="Auto" id="a11y-theme-slider" data-i18n-attr="aria-label:a11y.themeLabel,aria-valuetext:a11y.themeAuto">
           <div class="a11y-theme-slider-track">
-            <div class="a11y-theme-option" data-theme="light" role="button" tabindex="-1" aria-label="Helles Design">
+            <div class="a11y-theme-option" data-theme="light" role="button" tabindex="-1" data-i18n-attr="aria-label:a11y.themeLightAria">
               <svg class="a11y-theme-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
                 <circle cx="12" cy="12" r="5"/>
                 <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -933,12 +1017,12 @@
                 <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               </svg>
             </div>
-            <div class="a11y-theme-option" data-theme="auto" role="button" tabindex="-1" aria-label="Automatisches Design">
+            <div class="a11y-theme-option" data-theme="auto" role="button" tabindex="-1" data-i18n-attr="aria-label:a11y.themeAutoAria">
               <svg class="a11y-theme-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
               </svg>
             </div>
-            <div class="a11y-theme-option" data-theme="dark" role="button" tabindex="-1" aria-label="Dunkles Design">
+            <div class="a11y-theme-option" data-theme="dark" role="button" tabindex="-1" data-i18n-attr="aria-label:a11y.themeDarkAria">
               <svg class="a11y-theme-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
               </svg>
