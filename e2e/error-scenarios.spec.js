@@ -29,7 +29,7 @@ async function gotoCalculator(page) {
   if (await page.$('#alter') !== null) {
     await page.fill('#alter', '20');
     await page.locator('#alter').blur();
-    const neinSelectors = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q2_nein','vk_beruf_q3_nein','vk_beruf_q6_nein'];
+    const neinSelectors = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q2_nein','vk_beruf_q3_nein','vk_beruf_q4_nein'];
     for (const id of neinSelectors) {
       await page.evaluate((elId) => {
         const el = document.getElementById(elId);
@@ -393,7 +393,7 @@ test.describe('Error Scenarios: English Language Tests', () => {
       await page.fill('#alter', '20');
       // Programmatically set all 'nein' answers to avoid flaky clicks
       await page.evaluate(() => {
-        const ids = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q2_nein','vk_beruf_q3_nein','vk_beruf_q6_nein'];
+        const ids = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q2_nein','vk_beruf_q3_nein','vk_beruf_q4_nein'];
         ids.forEach(id => {
           try {
             const el = document.getElementById(id);
@@ -454,7 +454,7 @@ test.describe('Q2: Nicht abgeschlossene Ausbildung (Dauer)', () => {
     await page.fill('#stunden', '40');
     // baseline: set other yes/no groups to 'nein' programmatically
     await page.evaluate(() => {
-      const neinIds = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q3_nein','vk_beruf_q6_nein'];
+      const neinIds = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q3_nein','vk_beruf_q4_nein'];
       neinIds.forEach(id => {
         try {
           const el = document.getElementById(id);

@@ -631,8 +631,7 @@ function generiereShareLink() {
     { ja: 'vk_beruf_q2_ja', nein: 'vk_beruf_q2_nein', field: 'beruf_q2' },
     { ja: 'vk_beruf_q3_ja', nein: 'vk_beruf_q3_nein', field: 'beruf_q3' },
     { ja: 'vk_beruf_q4_ja', nein: 'vk_beruf_q4_nein', field: 'beruf_q4' },
-    { ja: 'vk_beruf_q5_ja', nein: 'vk_beruf_q5_nein', field: 'beruf_q5' },
-    { ja: 'vk_beruf_q6_ja', nein: 'vk_beruf_q6_nein', field: 'beruf_q6' }
+    { ja: 'vk_beruf_q5_ja', nein: 'vk_beruf_q5_nein', field: 'beruf_q5' }
   ];
 
   yesNoQuestions.forEach(({ ja, nein, field }) => {
@@ -805,8 +804,7 @@ function loadSharedData() {
           { ja: 'vk_beruf_q2_ja', nein: 'vk_beruf_q2_nein', field: 'beruf_q2' },
           { ja: 'vk_beruf_q3_ja', nein: 'vk_beruf_q3_nein', field: 'beruf_q3' },
           { ja: 'vk_beruf_q4_ja', nein: 'vk_beruf_q4_nein', field: 'beruf_q4' },
-          { ja: 'vk_beruf_q5_ja', nein: 'vk_beruf_q5_nein', field: 'beruf_q5' },
-          { ja: 'vk_beruf_q6_ja', nein: 'vk_beruf_q6_nein', field: 'beruf_q6' }
+          { ja: 'vk_beruf_q5_ja', nein: 'vk_beruf_q5_nein', field: 'beruf_q5' }
         ];
 
         yesNoQuestions.forEach(({ ja, nein, field }) => {

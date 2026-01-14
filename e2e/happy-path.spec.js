@@ -33,7 +33,7 @@ async function gotoCalculator(page) {
   if (await page.$('#alter') !== null) {
     await page.fill('#alter', '20');
     await page.locator('#alter').blur();
-    const neinSelectors = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q2_nein','vk_beruf_q3_nein','vk_beruf_q6_nein'];
+    const neinSelectors = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q2_nein','vk_beruf_q3_nein','vk_beruf_q4_nein'];
     for (const id of neinSelectors) {
       // ensure checkbox is checked even if not visible by toggling via JS
       await page.evaluate((elId) => {
@@ -230,7 +230,7 @@ test.describe('Happy Path: English Language Tests', () => {
     if (await page.$('#alter') !== null) {
       await page.fill('#alter', '20');
       await page.locator('#alter').blur();
-      const neinSelectors = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q2_nein','vk_beruf_q3_nein','vk_beruf_q6_nein'];
+      const neinSelectors = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q2_nein','vk_beruf_q3_nein','vk_beruf_q4_nein'];
       for (const id of neinSelectors) {
         await page.evaluate((elId) => {
           const el = document.getElementById(elId);
@@ -433,7 +433,7 @@ test.describe('Mobile Tests: Happy Path', () => {
     if (await page.$('#alter') !== null) {
       await page.fill('#alter', '20');
       await page.locator('#alter').blur();
-      const neinIds = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q2_nein','vk_beruf_q3_nein','vk_beruf_q6_nein'];
+      const neinIds = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q2_nein','vk_beruf_q3_nein','vk_beruf_q4_nein'];
       for (const id of neinIds) {
         await page.evaluate((elId) => {
           const el = document.getElementById(elId);

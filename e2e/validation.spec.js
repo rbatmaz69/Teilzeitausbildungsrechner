@@ -30,7 +30,7 @@ async function gotoCalculator(page) {
   if (await page.$('#alter') !== null) {
       await page.fill('#alter', '20');
       await page.locator('#alter').blur();
-      const neinSelectors = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q2_nein','vk_beruf_q3_nein','vk_beruf_q6_nein'];
+      const neinSelectors = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q2_nein','vk_beruf_q3_nein','vk_beruf_q4_nein'];
       for (const id of neinSelectors) {
         await page.evaluate((elId) => {
           const el = document.getElementById(elId);
@@ -199,7 +199,7 @@ test.describe('Validation: English Language Tests', () => {
     // Neue UI: Pflicht-Alter-Feld und Ja/Nein Fragen für Verkürzungsgründe
     if (await page.$('#alter') !== null) {
       await page.fill('#alter', '20');
-      const neinSelectors = ['#kinderbetreuung-nein','#pflege-nein','#vk_beruf_q1_nein','#vk_beruf_q2_nein','#vk_beruf_q3_nein','#vk_beruf_q6_nein'];
+      const neinSelectors = ['#kinderbetreuung-nein','#pflege-nein','#vk_beruf_q1_nein','#vk_beruf_q2_nein','#vk_beruf_q3_nein','#vk_beruf_q4_nein'];
       for (const sel of neinSelectors) {
         const locator = page.locator(sel);
         if ((await locator.count()) === 0) continue;

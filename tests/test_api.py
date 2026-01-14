@@ -272,7 +272,7 @@ def test_teilweise_fehlende_felder_gibt_400_zurueck(client):
             "beruf_q2": False,
             "beruf_q2_dauer_monate": 0,
             "beruf_q3": False,
-            "beruf_q6": False,
+            "beruf_q4": False,
             "berufliche_verkuerzung_monate": 0,
         },
     }
@@ -441,7 +441,7 @@ def test_validierungsfehler_ungueltige_datentypen_gibt_422_zurueck(client):
             "beruf_q2": False,
             "beruf_q2_dauer_monate": 0,
             "beruf_q3": False,
-            "beruf_q6": False,
+            "beruf_q4": False,
             "berufliche_verkuerzung_monate": 0,
         },
     }
@@ -475,7 +475,7 @@ def test_api_akzeptiert_dezimalkomma_in_numeric_strings(client):
             "beruf_q2": False,
             "beruf_q2_dauer_monate": "0",
             "beruf_q3": False,
-            "beruf_q6": False,
+            "beruf_q4": False,
             "berufliche_verkuerzung_monate": "0",
         },
     }
@@ -512,7 +512,7 @@ def test_validierungsfehler_negative_werte_gibt_422_zurueck(client):
             "beruf_q2": False,
             "beruf_q2_dauer_monate": 0,
             "beruf_q3": False,
-            "beruf_q6": False,
+            "beruf_q4": False,
             "berufliche_verkuerzung_monate": 0,
         },
     }
@@ -549,7 +549,7 @@ def test_validierungsfehler_null_basis_dauer_gibt_422_zurueck(client):
             "beruf_q2": False,
             "beruf_q2_dauer_monate": 0,
             "beruf_q3": False,
-            "beruf_q6": False,
+            "beruf_q4": False,
             "berufliche_verkuerzung_monate": 0,
         },
     }
@@ -585,7 +585,7 @@ def test_validierungsfehler_negative_vollzeit_stunden_gibt_422_zurueck(client):
             "beruf_q2": False,
             "beruf_q2_dauer_monate": 0,
             "beruf_q3": False,
-            "beruf_q6": False,
+            "beruf_q4": False,
             "berufliche_verkuerzung_monate": 0,
         },
     }
