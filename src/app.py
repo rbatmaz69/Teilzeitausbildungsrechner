@@ -24,8 +24,11 @@ venv_path = project_root / "venv"
 if venv_path.exists():
     # Finde site-packages in venv
     python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
-    venv_site_packages = venv_path / "lib" / f"python{python_version}" / "site-packages"
-
+    venv_site_packages = (
+        venv_path / "lib" /
+        f"python{python_version}" /
+        "site-packages"
+    )
     if venv_site_packages.exists():
         # Füge venv site-packages zum Python-Pfad hinzu
         if str(venv_site_packages) not in sys.path:
@@ -72,11 +75,21 @@ def create_app() -> Flask:
     # Request-Lifecycle-Logging (PII-sicher)
     @app.before_request
     def _log_request_start():  # pragma: no cover - trivial
+        """Speichert den Startzeitpunkt der Anfrage in `g._start_time`.
+
+        Dient der Messung der Request-Dauer (Performance-Metriken). Es werden
+        keine personenbezogenen Daten (PII) gespeichert.
+        """
         # Nur Startzeit speichern, keine Request-Daten loggen
         g._start_time = time.perf_counter()
 
     @app.after_request
     def _log_request_end(response):  # pragma: no cover - trivial
+        """Berechnet und protokolliert die Dauer der Anfrage sowie Methode/Pfad/Status.
+
+        Protokolliert ausschließlich Metadaten (Methode, Pfad, Status, Dauer)
+        und keine PII. Fehler im Logging dürfen den Responsefluss nicht stören.
+        """
         try:
             start = getattr(g, "_start_time", None)
             duration_ms = None
@@ -185,39 +198,53 @@ def create_app() -> Flask:
 
 
 # ============================================================
-# Lokaler Entwicklungsstart
+# Exportiere das Flask-App-Objekt für Tests und WSGI
 # ============================================================
-# Wenn diese Datei direkt ausgeführt wird (nicht importiert),
-# startet der Flask-Entwicklungsserver
-#
-# Verwendung:
-#   python -m src.app
-#   oder
-#   python src/app.py
-#
-# Der Development-Server läuft dann auf http://localhost:8000/
-# Falls Port 8000 belegt ist, wird automatisch ein anderer Port verwendet
-# debug=True aktiviert automatisches Neuladen bei Code-Änderungen
-if __name__ == "__main__":
-    app = create_app()
+app = create_app()
+
+
+# Lokaler Entwicklungsstart
+
+def setup_venv():
+    """Venv-Setup-Logik als Funktion für bessere Testbarkeit."""
+    project_root = Path(__file__).parent.parent
+    venv_path = project_root / "venv"
+    if venv_path.exists():
+        python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
+        venv_site_packages = (
+            venv_path / "lib" /
+            f"python{python_version}" /
+            "site-packages"
+        )
+        if venv_site_packages.exists():
+            if str(venv_site_packages) not in sys.path:
+                sys.path.insert(0, str(venv_site_packages))
+        os.environ["VIRTUAL_ENV"] = str(venv_path)
+
+
+setup_venv()
+
+
+def run_app_main():
+    """__main__-Block als Funktion für bessere Testbarkeit."""
     port = int(os.getenv("PORT", 8000))
-
-    # Für Handy-Testing: HOST auf 0.0.0.0 setzen (von außen erreichbar)
-    # Später einfach diese Zeile entfernen oder HOST=127.0.0.1 setzen
-    host = os.getenv("HOST", "0.0.0.0")  # 0.0.0.0 = von außen erreichbar
-
-    # Prüfe ob Port bereits belegt ist (z.B. AirPlay auf macOS)
-    # Falls ja, versuche alternativen Port
+    host = os.getenv("HOST", "0.0.0.0")
     if len(sys.argv) > 1:
         try:
             port = int(sys.argv[1])
         except ValueError:
             pass
-
     try:
         app.run(host=host, port=port, debug=True)
     except OSError:
-        # Port belegt, versuche alternativen Port
         fallback_port = port + 1
-        print(f"⚠️  Port {port} ist belegt, verwende Port {fallback_port}")
+        print(
+            f"⚠️  Port {port} ist belegt, "
+            f"verwende Port {fallback_port}"
+        )
         app.run(host=host, port=fallback_port, debug=True)
+
+
+# Lokaler Entwicklungsstart
+if __name__ == "__main__":
+    run_app_main()
