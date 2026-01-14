@@ -1475,6 +1475,19 @@ html[dir="rtl"] #ergebnis-container .result-extension-arrow {
   text-align: right;
 }
 
+/* On small screens or when text size is large, avoid overlap between
+   the units legend and the timestamp: stack them vertically. */
+@media (width <= 640px) {
+  #inputs-section .inputs-stamp {
+    position: static;
+    margin-top: 0.5rem;
+  }
+  
+  .units-legend {
+    text-align: right;
+  }
+}
+
 /* Teilzeit-Formel: Mobile = vertikal, Desktop = horizontal */
 .teilzeit-formula-container {
   display: flex;
