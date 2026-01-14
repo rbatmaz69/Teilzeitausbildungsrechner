@@ -226,6 +226,22 @@
     "notesTitle_easy": "Önemli",
     "notes": "<li>Hesaplama sadece <strong>yardımcı</strong> ve bir <strong>kılavuz</strong> niteliğindedir.</li><li>Sonuç <strong>bağlayıcı değildir</strong>.</li><li>Sonucu <strong>eğitim yerinizle</strong> görüşün.</li><li>Yarı zamanlı eğitim, normal çalışma süresinin <strong>en az yarısını</strong> çalıştığınızda mümkündür.</li>",
     "notes_easy": "<li>Hesaplama sadece <strong>yardımcıdır</strong>.</li><li>Sonuç <strong>bağlayıcı değildir</strong>.</li><li>Sonucu <strong>eğitim yerinizle</strong> konuşun.</li><li><strong>En az yarı</strong> normal saat çalışmalısınız.</li>",
+    "helpfulLinksTitle": "Daha Fazla Bilgi",
+    "helpfulLinksTitle_easy": "Daha Fazla Bilgi",
+    "helpfulLinks": {
+      "arbeitsagentur": {
+        "title": "Federal İstihdam Ajansı",
+        "title_easy": "İstihdam Ajansı",
+        "desc": "Eğitim ve kariyer danışmanlığı hakkında genel bilgiler.",
+        "desc_easy": "Eğitim ve danışmanlık hakkında bilgi."
+      },
+      "netzwerk": {
+        "title": "Yarı Zamanlı Eğitim Ağı",
+        "title_easy": "Yarı Zamanlı Eğitim Ağı",
+        "desc": "Yarı zamanlı eğitim için özel danışmanlık ve destek.",
+        "desc_easy": "Yarı zamanlı eğitim için danışmanlık."
+      }
+    },
     "legalTitle": "Yasal Dayanak",
     "legalTitle_easy": "Yasalar",
     "legalToggleLabel": "Detayları Göster",
