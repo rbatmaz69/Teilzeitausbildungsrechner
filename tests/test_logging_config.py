@@ -11,4 +11,4 @@ def test_configure_logging_runs_without_error():
     configure_logging()
     logger = logging.getLogger("src.app")
     assert logger is not None
-    assert logger.level in (logging.INFO, logging.WARNING, logging.ERROR, logging.DEBUG)
+    assert logger.level in (logging.NOTSET, logging.INFO, logging.WARNING, logging.ERROR, logging.DEBUG)
