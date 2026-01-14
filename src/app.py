@@ -194,45 +194,24 @@ def create_app() -> Flask:
     return app
 
 
+
 # ============================================================
+# Exportiere das Flask-App-Objekt für Tests und WSGI
+# ============================================================
+app = create_app()
+
 # Lokaler Entwicklungsstart
-# ============================================================
-# Wenn diese Datei direkt ausgeführt wird (nicht importiert),
-# startet der Flask-Entwicklungsserver
-#
-# Verwendung:
-#   python -m src.app
-#   oder
-#   python src/app.py
-#
-# Der Development-Server läuft dann auf http://localhost:8000/
-# Falls Port 8000 belegt ist, wird automatisch ein anderer Port verwendet
-# debug=True aktiviert automatisches Neuladen bei Code-Änderungen
 if __name__ == "__main__":
-    """Development-Entrypoint
-
-    Startet die Flask-Entwicklungsinstanz via `create_app()` auf dem in
-    `PORT`/`HOST` konfigurierten Socket. Nur für lokale Entwicklungszwecke.
-    """
-    app = create_app()
     port = int(os.getenv("PORT", 8000))
-
-    # Für Handy-Testing: HOST auf 0.0.0.0 setzen (von außen erreichbar)
-    # Später einfach diese Zeile entfernen oder HOST=127.0.0.1 setzen
-    host = os.getenv("HOST", "0.0.0.0")  # 0.0.0.0 = von außen erreichbar
-
-    # Prüfe ob Port bereits belegt ist (z.B. AirPlay auf macOS)
-    # Falls ja, versuche alternativen Port
+    host = os.getenv("HOST", "0.0.0.0")
     if len(sys.argv) > 1:
         try:
             port = int(sys.argv[1])
         except ValueError:
             pass
-
     try:
         app.run(host=host, port=port, debug=True)
     except OSError:
-        # Port belegt, versuche alternativen Port
         fallback_port = port + 1
         print(f"⚠️  Port {port} ist belegt, verwende Port {fallback_port}")
         app.run(host=host, port=fallback_port, debug=True)
