@@ -28,8 +28,10 @@
     "ro_easy": "Română"
   },
   "inputs": {
-    "title": "Your Calculation",
-    "title_easy": "Your Calculation",
+    "title": "Calculation",
+    "title_easy": "Calculation",
+    "heading": "Input",
+    "heading_easy": "Input",
     "unitsLegend": "h = hours, mo = months",
     "unitsLegend_easy": "h = hours, mo = months",
     "dauer": {
@@ -222,8 +224,8 @@
     }
   },
   "res": {
-    "headline": "Overview of Your Part-Time Training",
-    "headline_easy": "Overview of Your Part-Time Training",
+    "headline": "Results overview",
+    "headline_easy": "Results overview",
     "helper": "Here you can see your details and the result.",
     "helper_easy": "Here is your result.",
     "notesTitle": "Important information",
@@ -289,10 +291,10 @@
       "workPerWeek_easy": "Work per week"
     },
     "extension": {
-      "label1": "Shortening due to reasons for shorter training:",
-      "label1_easy": "Shorter because of reasons:",
-      "label2": "Extension due to part-time work:",
-      "label2_easy": "Longer because of part-time:",
+      "label1": "Step 1: Shortening",
+      "label1_easy": "Step 1: Shortening",
+      "label2": "Step 2: Part-time",
+      "label2_easy": "Step 2: Part-time",
       "plus": "+{n} months",
       "plus_easy": "+{n} months",
       "none": "No extension",
@@ -468,8 +470,8 @@
       "suffix": " easily",
       "suffix_easy": " easily"
     },
-      "description": "Our calculator helps you check whether you can complete your vocational training part-time and whether options exist to shorten the training period.",
-      "description_easy": "Our calculator shows whether you can do your vocational training part-time. It also checks whether shortening the training period may be possible.",
+      "description": "The calculator helps you check whether you can complete your vocational training part-time and whether options exist to shorten the training period.",
+      "description_easy": "The calculator shows whether you can do your vocational training part-time. It also checks whether shortening the training period may be possible.",
     "benefitsTitle": "Benefits of the calculator",
     "benefitsTitle_easy": "Benefits",
     "card1": {

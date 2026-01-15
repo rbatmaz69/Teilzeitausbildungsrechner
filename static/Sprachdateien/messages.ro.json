@@ -28,8 +28,10 @@
     "ro_easy": "Română"
   },
   "inputs": {
-    "title": "Calculul tău",
-    "title_easy": "Calculul tău",
+    "title": "Calcul",
+    "title_easy": "Calcul",
+    "heading": "Date de intrare",
+    "heading_easy": "Date de intrare",
     "unitsLegend": "h = ore, lun. = luni",
     "unitsLegend_easy": "h = ore, lun. = luni",
     "dauer": {
@@ -218,8 +220,8 @@
     }
   },
   "res": {
-    "headline": "Prezentare generală a formării tale în timp parțial",
-    "headline_easy": "Prezentare generală",
+    "headline": "Rezumatul rezultatelor",
+    "headline_easy": "Rezumatul rezultatelor",
     "helper": "Aici poți vedea datele tale și rezultatul.",
     "helper_easy": "Aici este rezultatul tău.",
     "notesTitle": "Informații importante",
@@ -285,10 +287,10 @@
       "workPerWeek_easy": "Muncă pe săptămână"
     },
     "extension": {
-      "label1": "Reducere datorită motivelor de reducere:",
-      "label1_easy": "Mai scurt din cauza motivelor:",
-      "label2": "Prelungire datorită muncii în timp parțial:",
-      "label2_easy": "Mai lung din cauza timpului parțial:",
+      "label1": "Pasul 1: Reducere",
+      "label1_easy": "Pasul 1: Reducere",
+      "label2": "Pasul 2: Timp parțial",
+      "label2_easy": "Pasul 2: Timp parțial",
       "plus": "+{n} luni",
       "plus_easy": "+{n} luni",
       "none": "Fără prelungire",
@@ -464,8 +466,8 @@
       "suffix": " ușor",
       "suffix_easy": " ușor"
     },
-    "description": "Calculatorul nostru vă ajută să verificați dacă vă puteți desfășura pregătirea profesională cu normă redusă și dacă există opțiuni pentru scurtarea duratei pregătirii.",
-    "description_easy": "Calculatorul nostru vă arată dacă vă puteți face pregătirea profesională în regim part-time. De asemenea, verifică dacă este posibilă scurtarea duratei pregătirii.",
+    "description": "Calculatorul vă ajută să verificați dacă vă puteți desfășura pregătirea profesională cu normă redusă și dacă există opțiuni pentru scurtarea duratei pregătirii.",
+    "description_easy": "Calculatorul vă arată dacă vă puteți face pregătirea profesională în regim part-time. De asemenea, verifică dacă este posibilă scurtarea duratei pregătirii.",
     "benefitsTitle": "Avantajele calculatorului",
     "benefitsTitle_easy": "Avantaje",
     "card1": {

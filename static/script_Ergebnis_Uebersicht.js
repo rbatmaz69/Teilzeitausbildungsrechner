@@ -38,9 +38,10 @@ function formatValueUnitHtml(value, unitKey) {
   // const dir = document.documentElement.getAttribute("dir") || "ltr";
   const numHtml = `<span class="i18n-num" dir="ltr">${String(value)}</span>`;
   const unitHtml = `<span class="i18n-unit" dir="auto">${String(unit)}</span>`;
-  // Wrap both in an explicit LTR container so the internal order is always "number then unit",
-  // which makes the unit appear to the right of the number even on RTL pages.
-  return `<span class="i18n-value-unit" dir="ltr">${numHtml}&nbsp;${unitHtml}</span>`;
+  // Wrap both in an explicit LTR container so the internal order is always "number then unit".
+  // Use a normal space (not &nbsp;) so the browser can break the line between number and unit if needed
+  // when the unit would overflow the container (helps on mobile with large text sizes).
+  return `<span class="i18n-value-unit" dir="ltr">${numHtml} ${unitHtml}</span>`;
 }
 
 function aktuelleSprache() {
@@ -911,7 +912,10 @@ function fuelleErgebnisse(eingaben, berechnung) {
   // Monate mit Einheit ("32 Monate" / "32 months")
   if (totalMonths !== null) {
     const unitMonths = uebersetzung("units.months.full", "Monate");
-    setzeText("#res-total-months", `${totalMonths} ${unitMonths}`);
+    const elMonths = document.getElementById('res-total-months');
+    if (elMonths) {
+      elMonths.innerHTML = `<span class="result-value-unit" dir="ltr"><span class="i18n-num" dir="ltr">${String(totalMonths)}</span> <span class="i18n-unit" dir="auto">${String(unitMonths)}</span></span>`;
+    }
   } else {
     setzeText("#res-total-months", "–");
   }
@@ -925,7 +929,10 @@ function fuelleErgebnisse(eingaben, berechnung) {
     );
     const formattedYears = formatter.format(totalYears);
     const unitYears = uebersetzung("units.years.full", "Jahre");
-    setzeText("#res-total-years", `${formattedYears} ${unitYears}`);
+    const elYears = document.getElementById('res-total-years');
+    if (elYears) {
+      elYears.innerHTML = `<span class="result-value-unit" dir="ltr"><span class="i18n-num" dir="ltr">${String(formattedYears)}</span> <span class="i18n-unit" dir="auto">${String(unitYears)}</span></span>`;
+    }
   } else {
     setzeText("#res-total-years", "–");
   }

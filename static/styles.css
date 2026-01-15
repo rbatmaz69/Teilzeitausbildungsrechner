@@ -1437,11 +1437,160 @@ textarea[dir="ltr"] {
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translate(-50%, 1px); /* leicht nach unten, wie im Rechner */
-  padding: 0.22rem 0.55rem 0.26rem; /* etwas mehr unten als oben */
+  transform: translate(-50%, 1px);
+  padding: 0.22rem 0.55rem 0.26rem;
   border-radius: 4px;
   line-height: 1;
   white-space: nowrap;
+}
+
+/* Neue Ergebnisübersicht Styles */
+.result-main-box {
+  background: rgb(224 0 0 / 8%);
+  border-radius: 12px;
+  padding: 1.5rem 1rem;
+  margin: 1rem 0;
+  text-align: center;
+  border: 1px solid rgb(224 0 0 / 12%); /* thin colored border */
+}
+
+.result-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.result-step-box {
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid rgb(0 0 0 / 4%);
+  padding-bottom: 0.25rem; /* default mobile-bottom padding */
+}
+
+.result-step-green {
+  background: rgb(16 185 129 / 8%);
+  border-color: rgb(16 185 129 / 14%);
+}
+
+.result-step-red {
+  background: rgb(224 0 0 / 8%);
+  border-color: rgb(224 0 0 / 14%);
+}
+
+.result-step-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+  color: var(--text);
+}
+
+.result-step-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.result-step-value {
+  font-size: .95rem; /* match `.vk-question` */
+  font-weight: 500; /* match `.vk-question` */
+  color: var(--text);
+}
+
+.result-step-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  min-width: 3.5rem; /* reduced so values can sit closer to arrows */
+  margin-bottom: 0.25rem; /* reduce space below arrow */
+}
+
+.result-step-green .arrow-line {
+  color: #10b981;
+  font-size: 4.2rem; /* longer arrow */
+  line-height: 1;
+  position: relative;
+  display: inline-block;
+}
+
+.result-step-red .arrow-line {
+  color: #e00000;
+  font-size: 4.2rem;
+  line-height: 1;
+  position: relative;
+  display: inline-block;
+}
+
+/* small colored center dot on the arrow */
+.arrow-line::after {
+  display: none; /* center dot removed as requested */
+}
+
+.arrow-tooltip {
+  position: absolute;
+  top: -0.05rem; /* bring tooltip very close to arrow on mobile */
+  font-size: 0.75rem; /* small button size */
+  font-weight: 700; /* bold small button */
+  color: #fff;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 10; /* ensure tooltip and triangle sit above arrow */
+}
+
+/* small triangular pointer under tooltip */
+.arrow-tooltip::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -6px; /* triangle moved with tooltip, closer to arrow */
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid transparent; /* default transparent; colored per-variant below */
+}
+
+/* Desktop adjustments: lift arrow lines and bring tooltips down so triangle nearly touches the line */
+@media (width >= 700px) {
+  .result-step-green .arrow-line,
+  .result-step-red .arrow-line {
+    transform: translateY(-6px); /* lift arrows on desktop to align with side text */
+  }
+
+  .arrow-tooltip {
+    top: -0.15rem; /* fine-tune position on desktop */
+  }
+
+  .arrow-tooltip::after {
+    bottom: -4px; /* triangle position follows tooltip */
+  }
+
+  .result-step-box {
+    padding-bottom: 0.2rem; /* significantly reduce space under arrow */
+  }
+}
+
+/* color the tooltip pointer according to the box color */
+.result-step-green .arrow-tooltip::after { border-top-color: #10b981; }
+.result-step-red .arrow-tooltip::after { border-top-color: #e00000; }
+
+.result-step-green .arrow-tooltip {
+  background: #10b981;
+}
+
+.result-step-red .arrow-tooltip {
+  background: #e00000;
+}
+
+@media (width <= 768px) {
+  .result-steps-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ==========================================
@@ -1502,6 +1651,20 @@ html[dir="rtl"] #ergebnis-container .result-extension-basis {
 /* Mirror the arrow graphic */
 html[dir="rtl"] #ergebnis-container .result-extension-arrow {
   transform: scaleX(-1);
+}
+
+/* Mirror the step arrow glyphs used in the result-step boxes (same visual effect)
+   and preserve the desktop vertical translation when in RTL. */
+html[dir="rtl"] .result-step-green .arrow-line,
+html[dir="rtl"] .result-step-red .arrow-line {
+  transform: scaleX(-1);
+}
+
+@media (width >= 700px) {
+  html[dir="rtl"] .result-step-green .arrow-line,
+  html[dir="rtl"] .result-step-red .arrow-line {
+    transform: translateY(-6px) scaleX(-1);
+  }
 }
 
 
@@ -1567,11 +1730,34 @@ html[dir="rtl"] #ergebnis-container .result-extension-arrow {
 
 
 
+.result-main-box .result-value-unit {
+  white-space: normal;
+}
+
+.result-main-box .i18n-num,
+.result-main-box .i18n-unit {
+  display: inline-block;
+}
+
+/* Allow formatted value+unit to wrap when space is constrained (number and unit
+   are separate inline elements produced by formatValueUnitHtml). This enables
+   breaking into two lines like "36\nMonate" when the unit would overflow. */
+
 .kv dd{
   margin: 0;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   font-size: .95rem;
+}
+
+.kv dd .i18n-value-unit {
+  white-space: normal;
+}
+
+.kv dd .i18n-num,
+.kv dd .i18n-unit {
+  display: inline-block; /* keep each piece as a unit while allowing a break between them */
+  vertical-align: baseline;
 }
 
 /* Legende für Abkürzungen */
@@ -2212,14 +2398,14 @@ html[dir="rtl"] #ergebnis-container .result-extension-arrow {
 
 .startseite-desktop {
   display: none;
-}
 
 /* Tablet Optimierungen (≥600px) */
-@media (width >= 600px) {
-  .startseite-title {
-    font-size: 2rem;
-    margin-bottom: 0.75rem;
+@media (width >= 1200px) {
+  .rechner-grid .card,
+  .rechner-grid .card-collapsible {
+    padding: 1rem;
   }
+}
 
   .startseite-description {
     font-size: 1.1rem;
@@ -3269,6 +3455,23 @@ body.modal-open {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Titel „Ihre Eingaben“ – groß und fett */
+.summary-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  flex: 1 1 auto;
+  min-width: 0; /* allow shrinking without forcing letter-wrapping */
+}
+
+/* Ensure title can shrink/wrap and pill moves below on small/zoomed screens */
+.inputs-collapsible > .summary-toggle .summary-title,
+.legal-collapsible > .summary-toggle .summary-title {
+  min-width: 0; /* allow flex item to shrink */
+  white-space: normal; /* allow normal wrapping */
+  word-break: normal; /* don't break inside words/letters */
+  overflow-wrap: break-word; /* allow breaking at word boundaries for long strings */
+}
+
 /* Summary als großer Click-Bereich */
 .inputs-collapsible > .summary-toggle,
 .legal-collapsible > .summary-toggle {
@@ -3289,11 +3492,23 @@ body.modal-open {
 }
 
 
-/* Titel „Ihre Eingaben“ – groß und fett */
-.summary-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  flex: 1;
+/* (moved above) */
+
+/* Small primary-colored inline icon used before headings */
+.icon-primary {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  line-height: 1;
+  vertical-align: -0.125rem;
+  margin-right: 0.5rem;
+  color: #e00000; /* primary red used elsewhere in the UI */
+}
+
+.headline-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 
@@ -3326,6 +3541,7 @@ body.modal-open {
   box-shadow: 0 6px 20px rgb(224 0 0 / 25%);
   transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
   white-space: nowrap;
+  flex: 0 0 auto; /* keep pill its intrinsic size and let title take remaining space */
 }
 
 /* Gesetzliche Grundlagen - Blauer Button für Gesetzliche Grundlagen */

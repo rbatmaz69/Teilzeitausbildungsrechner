@@ -28,8 +28,10 @@
     "ro_easy": "Română"
   },
   "inputs": {
-    "title": "Votre calcul",
-    "title_easy": "Votre calcul",
+    "title": "Calcul",
+    "title_easy": "Calcul",
+    "heading": "Saisie",
+    "heading_easy": "Saisie",
     "unitsLegend": "h = heures, m = mois",
     "unitsLegend_easy": "h = heures, m = mois",
     "dauer": {
@@ -218,8 +220,8 @@
     }
   },
   "res": {
-    "headline": "Aperçu de votre formation à temps partiel",
-    "headline_easy": "Aperçu de votre formation à temps partiel",
+    "headline": "Aperçu des résultats",
+    "headline_easy": "Aperçu des résultats",
     "helper": "Ici, vous pouvez voir vos informations et le résultat.",
     "helper_easy": "Voici votre résultat.",
     "notesTitle": "Informations importantes",
@@ -285,10 +287,10 @@
       "workPerWeek_easy": "Travail par semaine"
     },
     "extension": {
-      "label1": "Réduction liée aux raisons de réduction :",
-      "label1_easy": "Plus court à cause des raisons :",
-      "label2": "Prolongation liée au temps partiel :",
-      "label2_easy": "Plus long à cause du temps partiel :",
+      "label1": "Étape 1 : Réduction",
+      "label1_easy": "Étape 1 : Réduction",
+      "label2": "Étape 2 : Temps partiel",
+      "label2_easy": "Étape 2 : Temps partiel",
       "plus": "+{n} mois",
       "plus_easy": "+{n} mois",
       "none": "Aucune prolongation",
@@ -464,8 +466,8 @@
       "suffix": " facilement",
       "suffix_easy": " facilement"
     },
-      "description": "Notre calculateur vous aide à vérifier si vous pouvez suivre votre formation à temps partiel et s'il existe des possibilités de raccourcir la durée de la formation.",
-      "description_easy": "Notre calculateur vous montre si vous pouvez faire votre formation à temps partiel. Il vérifie également si une réduction de la durée de la formation est possible.",
+      "description": "Le calculateur vous aide à vérifier si vous pouvez suivre votre formation à temps partiel et s'il existe des possibilités de raccourcir la durée de la formation.",
+      "description_easy": "Le calculateur vous montre si vous pouvez faire votre formation à temps partiel. Il vérifie également si une réduction de la durée de la formation est possible.",
     "benefitsTitle": "Avantages du calculateur",
     "benefitsTitle_easy": "Avantages",
     "card1": {

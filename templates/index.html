@@ -128,7 +128,7 @@
           <span data-i18n="start.title.prefix">Planen Sie Ihre </span><span class="startseite-title-accent" data-i18n="start.title.accent">Teilzeitausbildung</span><span data-i18n="start.title.suffix"> ganz einfach</span>
         </h1>
         <p class="startseite-description" data-i18n="start.description">
-          Unser Rechner hilft Ihnen dabei zu prüfen, ob Sie Ihre Ausbildung in Teilzeit absolvieren können und ob sich Möglichkeiten zur Verkürzung der Ausbildungsdauer ergeben.
+          Der Rechner hilft Ihnen dabei zu prüfen, ob Sie Ihre Ausbildung in Teilzeit absolvieren können und ob sich Möglichkeiten zur Verkürzung der Ausbildungsdauer ergeben.
         </p>
 
         <!-- Zusammenhängendes Informationsfeld statt separater Karten -->
@@ -345,7 +345,7 @@
             <span data-i18n="start.title.prefix">Planen Sie Ihre </span><span class="startseite-title-accent" data-i18n="start.title.accent">Teilzeitausbildung</span><span data-i18n="start.title.suffix"> ganz einfach</span>
           </h1>
           <p class="startseite-description-desktop" data-i18n="start.description">
-            Unser Rechner hilft Ihnen dabei zu prüfen, ob Sie Ihre Ausbildung in Teilzeit absolvieren können und ob sich Möglichkeiten zur Verkürzung der Ausbildungsdauer ergeben.
+            Der Rechner hilft Ihnen dabei zu prüfen, ob Sie Ihre Ausbildung in Teilzeit absolvieren können und ob sich Möglichkeiten zur Verkürzung der Ausbildungsdauer ergeben.
           </p>
 
           <h2 id="start-benefits-title-desktop" class="sr-only" data-i18n="start.benefitsTitle">Vorteile des Rechners</h2>
@@ -408,7 +408,21 @@
       <!-- ================================ EINGABEN DES RECHNERS ================================ -->
       <div class="rechner-column eingaben-column" aria-labelledby="input-heading">
       <section class="card rechner-card" aria-labelledby="input-heading">
-        <h1 id="input-heading" class="sr-only" data-i18n="inputs.heading">Eingaben</h1>
+        <h1 id="input-heading">
+          <span class="headline-icon icon-primary" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
+              <rect x="3" y="2" width="18" height="20" rx="2" stroke="currentColor" stroke-width="1.5" fill="none" />
+              <rect x="7" y="5" width="10" height="3" rx="0.5" fill="currentColor" />
+              <circle cx="8.5" cy="12" r="0.8" fill="currentColor" />
+              <circle cx="11.5" cy="12" r="0.8" fill="currentColor" />
+              <circle cx="14.5" cy="12" r="0.8" fill="currentColor" />
+              <circle cx="8.5" cy="15" r="0.8" fill="currentColor" />
+              <circle cx="11.5" cy="15" r="0.8" fill="currentColor" />
+              <circle cx="14.5" cy="15" r="0.8" fill="currentColor" />
+            </svg>
+          </span>
+          <span data-i18n="inputs.heading">Eingabe</span>
+        </h1>
 
         <div class="input-group">
           <label id="label-dauer">
@@ -763,44 +777,51 @@
       <div class="rechner-column ergebnis-column" id="ergebnis-container" hidden>
         <!-- Hauptkarte, optisch hervorgehoben -->
         <div class="card highlight" aria-labelledby="res-headline">
-          <h1 id="res-headline" data-i18n="res.headline">Ihre Teilzeitausbildung</h1>
+          <h1 id="res-headline">
+            <span class="headline-icon icon-primary" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8" fill="none" />
+                <polyline points="12 6 12 12 16 14" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+            <span data-i18n="res.headline">Ergebnisübersicht</span>
+          </h1>
           <p class="helper" data-i18n="res.helper">
-            Hier sehen Sie Ihre Eingaben und das berechnete Ergebnis auf einen Blick.
+            Hier sehen Sie Ihre Angaben und das Ergebnis.
           </p>
 
-          <!-- calculate button moved to Verkürzungsgründe column -->
+          <!-- Hauptergebnis-Box mit leicht rotem Hintergrund -->
+          <div class="result-main-box">
+            <p class="big-number bidi-ltr" id="res-total-months" dir="ltr" aria-live="polite">–</p>
+            <p class="result-years bidi-ltr" id="res-total-years" dir="ltr">–</p>
+            <span class="error-message" id="errorTotalMonths" data-i18n="errors.placeholder"></span>
+          </div>
 
-          <!-- Grid-Layout für Haupt- und Meta-Ergebnisse -->
-          <div class="grid">
-            <div class="highlight-main">
-              <p class="big-number bidi-ltr" id="res-total-months" dir="ltr" aria-live="polite">–</p>
-              <p class="result-years bidi-ltr" id="res-total-years" dir="ltr">–</p>
-              <span class="error-message" id="errorTotalMonths" data-i18n="errors.placeholder"></span>
-              
-              <!-- Verlängerungsanzeige: Ausbildung(Vollzeit) → Pfeil mit Verkürzungsdauer → Basis -->
-              <div class="result-extension-wrapper" id="res-shortening-wrapper" hidden>
-                <p class="result-extension-label" data-i18n="res.extension.label1">1. Verkürzung durch Verkürzungründe</p>
-                <div class="result-extension-values">
-                  <span class="result-extension-basis bidi-ltr" id="res-extension-vollzeit" dir="ltr">–</span>
-                  <div class="result-extension-arrow-wrapper">
-                    <span class="result-extension-arrow">→</span>
-                    <span class="result-extension-delta bidi-ltr" id="res-extension-verkuerzungsdauer" dir="ltr">+–</span>
-                  </div>
-                  <span class="result-extension-total bidi-ltr" id="res-shortening-total" dir="ltr">–</span>
+          <!-- Schritt-Boxen Container -->
+          <div class="result-steps-grid">
+            <!-- Schritt 1: Verkürzung (grün) -->
+            <div class="result-step-box result-step-green" id="res-shortening-wrapper" hidden>
+              <h3 class="result-step-title" data-i18n="res.extension.label1">Schritt 1: Verkürzung</h3>
+              <div class="result-step-content">
+                <span class="result-step-value bidi-ltr" id="res-extension-vollzeit" dir="ltr">–</span>
+                <div class="result-step-arrow">
+                  <span class="arrow-line">→</span>
+                  <span class="arrow-tooltip bidi-ltr" id="res-extension-verkuerzungsdauer" dir="ltr">-12 M</span>
                 </div>
+                <span class="result-step-value bidi-ltr" id="res-shortening-total" dir="ltr">–</span>
               </div>
+            </div>
 
-              <!-- Verlängerungsanzeige: Basis → Pfeil mit Delta → Ziel -->
-              <div class="result-extension-wrapper" id="res-extension-wrapper" hidden>
-                <p class="result-extension-label" data-i18n="res.extension.label2">2. Verlängerung durch Teilzeit:</p>
-                <div class="result-extension-values">
-                  <span class="result-extension-basis bidi-ltr" id="res-extension-basis" dir="ltr">–</span>
-                  <div class="result-extension-arrow-wrapper">
-                    <span class="result-extension-arrow">→</span>
-                    <span class="result-extension-delta bidi-ltr" id="res-extension-delta" dir="ltr">+–</span>
-                  </div>
-                  <span class="result-extension-total bidi-ltr" id="res-extension-total" dir="ltr">–</span>
+            <!-- Schritt 2: Teilzeit (rot) -->
+            <div class="result-step-box result-step-red" id="res-extension-wrapper" hidden>
+              <h3 class="result-step-title" data-i18n="res.extension.label2">Schritt 2: Teilzeit</h3>
+              <div class="result-step-content">
+                <span class="result-step-value bidi-ltr" id="res-extension-basis" dir="ltr">–</span>
+                <div class="result-step-arrow">
+                  <span class="arrow-line">→</span>
+                  <span class="arrow-tooltip bidi-ltr" id="res-extension-delta" dir="ltr">+– M</span>
                 </div>
+                <span class="result-step-value bidi-ltr" id="res-extension-total" dir="ltr">–</span>
               </div>
             </div>
           </div>
@@ -810,7 +831,7 @@
         <details class="card-collapsible inputs-collapsible" id="inputs-section">
           <summary class="summary-toggle">
             <span class="summary-title" id="inputs-title" data-i18n="inputs.title">
-              Ihre Berechnung
+              Berechnung
             </span>
             <span class="summary-pill">
               <span class="summary-pill-label" data-i18n="inputs.toggleLabel" data-i18n-open="inputs.toggleLabelOpen">

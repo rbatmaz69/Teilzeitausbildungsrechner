@@ -28,8 +28,10 @@
     "ro_easy": "Română"
   },
   "inputs": {
-    "title": "Ihre Berechnung",
-    "title_easy": "Ihre Berechnung",
+    "heading": "Eingabe",
+    "heading_easy": "Eingabe",
+    "title": "Berechnung",
+    "title_easy": "Berechnung",
     "unitsLegend": "Std = Stunden, M = Monate",
     "unitsLegend_easy": "Std = Stunden, M = Monate",
     "dauer": {
@@ -222,8 +224,8 @@
     }
   },
   "res": {
-    "headline": "Übersicht über Ihre Teilzeitausbildung",
-    "headline_easy": "Übersicht über Ihre Teilzeitausbildung",
+    "headline": "Ergebnisübersicht",
+    "headline_easy": "Ergebnisübersicht",
     "helper": "Hier sehen Sie Ihre Angaben und das Ergebnis.",
     "helper_easy": "Hier stehen Ihre Angaben und das Ergebnis.",
     "notesTitle": "Wichtige Hinweise",
@@ -289,10 +291,10 @@
       "workPerWeek_easy": "Arbeit pro Woche"
     },
     "extension": {
-      "label1": "1. Verkürzung durch Verkürzungsgründe:",
-      "label1_easy": "1. Verkürzung durch Gründe:",
-      "label2": "2. Verlängerung durch Teilzeit:",
-      "label2_easy": "2. Verlängerung durch Teilzeit:",
+      "label1": "Schritt 1: Verkürzung",
+      "label1_easy": "Schritt 1: Verkürzung",
+      "label2": "Schritt 2: Teilzeit",
+      "label2_easy": "Schritt 2: Teilzeit",
       "plus": "+{n} Monate",
       "plus_easy": "+{n} Monate",
       "none": "Keine Verlängerung",
@@ -468,8 +470,8 @@
       "suffix": " ganz einfach",
       "suffix_easy": " ganz einfach"
     },
-    "description": "Unser Rechner hilft Ihnen dabei zu prüfen, ob Sie Ihre Ausbildung in Teilzeit absolvieren können und ob sich Möglichkeiten zur Verkürzung der Ausbildungsdauer ergeben.",
-    "description_easy": "Unser Rechner zeigt Ihnen, ob Sie Ihre Ausbildung in Teilzeit machen können. Er prüft auch, ob eine Verkürzung der Ausbildungsdauer möglich ist.",
+    "description": "Der Rechner hilft Ihnen dabei zu prüfen, ob Sie Ihre Ausbildung in Teilzeit absolvieren können und ob sich Möglichkeiten zur Verkürzung der Ausbildungsdauer ergeben.",
+    "description_easy": "Der Rechner zeigt Ihnen, ob Sie Ihre Ausbildung in Teilzeit machen können. Er prüft auch, ob eine Verkürzung der Ausbildungsdauer möglich ist.",
     "benefitsTitle": "Vorteile des Rechners",
     "benefitsTitle_easy": "Vorteile",
     "card1": {

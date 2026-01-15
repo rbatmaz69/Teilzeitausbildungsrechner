@@ -28,8 +28,10 @@
     "ro_easy": "Română"
   },
   "inputs": {
-    "title": "Twoje obliczenie",
-    "title_easy": "Twoje obliczenie",
+    "title": "Obliczenia",
+    "title_easy": "Obliczenia",
+    "heading": "Dane wejściowe",
+    "heading_easy": "Dane wejściowe",
     "unitsLegend": "godz. = godziny, mies. = miesiące",
     "unitsLegend_easy": "godz. = godziny, mies. = miesiące",
     "dauer": {
@@ -218,8 +220,8 @@
     }
   },
   "res": {
-    "headline": "Podsumowanie Twojego kształcenia w niepełnym wymiarze",
-    "headline_easy": "Podsumowanie Twojego kształcenia",
+    "headline": "Przegląd wyników",
+    "headline_easy": "Przegląd wyników",
     "helper": "Tutaj widzisz swoje dane i wynik.",
     "helper_easy": "Tutaj jest Twój wynik.",
     "notesTitle": "Ważne informacje",
@@ -285,10 +287,10 @@
       "workPerWeek_easy": "Praca na tydzień"
     },
     "extension": {
-      "label1": "Skrócenie z powodu powodów skrócenia:",
-      "label1_easy": "Krócej z powodu powodów:",
-      "label2": "Wydłużenie z powodu pracy w niepełnym wymiarze:",
-      "label2_easy": "Dłużej przez niepełny wymiar:",
+      "label1": "Krok 1: Skrócenie",
+      "label1_easy": "Krok 1: Skrócenie",
+      "label2": "Krok 2: Praca w niepełnym wymiarze",
+      "label2_easy": "Krok 2: Praca w niepełnym wymiarze",
       "plus": "+{n} miesięcy",
       "plus_easy": "+{n} miesięcy",
       "none": "Brak wydłużenia",
@@ -464,8 +466,8 @@
       "suffix": " łatwo",
       "suffix_easy": " łatwo"
     },
-    "description": "Nasz kalkulator pomaga sprawdzić, czy możesz odbyć kształcenie w formie częściowego etatu oraz czy istnieją możliwości skrócenia czasu trwania kształcenia.",
-    "description_easy": "Nasz kalkulator pokazuje, czy możesz odbyć kształcenie w niepełnym wymiarze godzin. Sprawdza również, czy możliwe jest skrócenie czasu trwania kształcenia.",
+    "description": "Kalkulator pomaga sprawdzić, czy możesz odbyć kształcenie w formie częściowego etatu oraz czy istnieją możliwości skrócenia czasu trwania kształcenia.",
+    "description_easy": "Kalkulator pokazuje, czy możesz odbyć kształcenie w niepełnym wymiarze godzin. Sprawdza również, czy możliwe jest skrócenie czasu trwania kształcenia.",
     "benefitsTitle": "Zalety kalkulatora",
     "benefitsTitle_easy": "Zalety",
     "card1": {

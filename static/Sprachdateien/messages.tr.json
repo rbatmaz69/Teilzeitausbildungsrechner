@@ -28,8 +28,10 @@
     "ro_easy": "Română"
   },
   "inputs": {
-    "title": "Hesabınız",
+    "title": "Hesaplama",
     "title_easy": "Hesaplama",
+    "heading": "Girdi",
+    "heading_easy": "Girdi",
     "unitsLegend": "s = saat, ay = ay",
     "unitsLegend_easy": "s = saat, ay = ay",
     "dauer": {
@@ -218,8 +220,8 @@
     }
   },
   "res": {
-    "headline": "Yarı Zamanlı Eğitiminize Genel Bakış",
-    "headline_easy": "Yarı Zamanlı Eğitiminize Genel Bakış",
+    "headline": "Sonuç Özeti",
+    "headline_easy": "Sonuç Özeti",
     "helper": "Burada girdileriniz ve sonuç gösterilir.",
     "helper_easy": "Burada sonucunuz var.",
     "notesTitle": "Önemli notlar",
@@ -285,10 +287,10 @@
       "workPerWeek_easy": "Haftalık iş"
     },
     "extension": {
-      "label1": "Kısaltma sebeplerinden dolayı kısaltma:",
-      "label1_easy": "Sebepler nedeniyle daha kısa:",
-      "label2": "Yarı zamanlı çalışmadan dolayı uzatma:",
-      "label2_easy": "Yarı zamanlı nedeniyle daha uzun:",
+      "label1": "Adım 1: Kısaltma",
+      "label1_easy": "Adım 1: Kısaltma",
+      "label2": "Adım 2: Yarı zamanlı",
+      "label2_easy": "Adım 2: Yarı zamanlı",
       "plus": "+{n} ay",
       "plus_easy": "+{n} ay",
       "none": "Uzatma yok",
@@ -464,8 +466,8 @@
       "suffix": " kolayca",
       "suffix_easy": " kolay"
     },
-    "description": "Hesaplayıcımız, eğitiminizi yarı zamanlı olarak tamamlayıp tamamlayamayacağınızı ve eğitim süresinin kısaltılmasına yönelik olası seçeneklerin olup olmadığını kontrol etmenize yardımcı olur.",
-    "description_easy": "Hesaplayıcımız, eğitiminizi yarı zamanlı yapıp yapamayacağınızı gösterir. Ayrıca eğitim süresinin kısaltılmasının mümkün olup olmadığını kontrol eder.",
+    "description": "Hesaplayıcı, eğitiminizi yarı zamanlı olarak tamamlayıp tamamlayamayacağınızı ve eğitim süresinin kısaltılmasına yönelik olası seçeneklerin olup olmadığını kontrol etmenize yardımcı olur.",
+    "description_easy": "Hesaplayıcı, eğitiminizi yarı zamanlı yapıp yapamayacağınızı gösterir. Ayrıca eğitim süresinin kısaltılmasının mümkün olup olmadığını kontrol eder.",
     "benefitsTitle": "Hesaplayıcının avantajları",
     "benefitsTitle_easy": "Avantajlar",
     "card1": {
