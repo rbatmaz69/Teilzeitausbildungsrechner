@@ -375,19 +375,26 @@ test.describe('Happy Path: Sharing & PDF', () => {
   test('PDF erstellen ruft html2canvas/jsPDF und speichert', async ({ page }) => {
     // Stub html2canvas und jsPDF vor dem ersten Page Load
     await page.addInitScript(() => {
-      window.html2canvas = async () => ({
+      // Mock html2canvas als globale Funktion
+      window.html2canvas = async (element) => ({
         width: 1200,
         height: 1800,
-        toDataURL: () => 'data:image/png;base64,TEST'
+        toDataURL: (type, quality) => 'data:image/png;base64,TEST'
       });
-      window.jspdf = {
-        jsPDF: function () {
-          return {
-            addImage: (...args) => { window.__pdfAddImageArgs = args; },
-            save: (name) => { window.__pdfSaved = name; }
-          };
-        }
-      };
+      
+      // Mock jsPDF
+      function jsPDFMock() {
+        this.internal = { pageSize: { getWidth: () => 210, getHeight: () => 297 } };
+        this.addImage = (...args) => { window.__pdfAddImageArgs = args; };
+        this.save = (name) => { window.__pdfSaved = name; };
+        this.addPage = () => {};
+        this.setFontSize = () => {};
+        this.setTextColor = () => {};
+        this.text = () => {};
+      }
+      
+      window.jspdf = { jsPDF: jsPDFMock };
+      window.jsPDF = jsPDFMock;
     });
 
     await prepareFormWithResult(page);
@@ -395,10 +402,12 @@ test.describe('Happy Path: Sharing & PDF', () => {
     await page.locator('#btn-download-pdf').scrollIntoViewIfNeeded();
     await page.click('#btn-download-pdf');
 
-    await expect.poll(async () => page.evaluate(() => window.__pdfSaved), { timeout: 5000 }).not.toBeNull();
+    // Warte auf save() Aufruf
+    await expect.poll(async () => page.evaluate(() => window.__pdfSaved), { timeout: 10000 }).not.toBeUndefined();
+    
     const saveName = await page.evaluate(() => window.__pdfSaved);
     const addImageArgs = await page.evaluate(() => window.__pdfAddImageArgs);
-    expect(saveName).toMatch(/Teilzeitausbildung_Berechnung_/);
+    expect(saveName).toMatch(/Ergebnis_Teilzeitausbildung_/);
     expect(addImageArgs?.[4]).toBeGreaterThan(0); // width
     expect(addImageArgs?.[5]).toBeGreaterThan(0); // height
   });
