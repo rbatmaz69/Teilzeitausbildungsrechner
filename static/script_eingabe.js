@@ -5,13 +5,6 @@
  * reagieren. Die Funktion wird automatisch nach dem Laden des DOMs ausgeführt.
  */
 
-// i18n Helfer (nutzt die globale API aus script_Sprache_Auswaehlen.js)
-function uebersetzung(schluessel, fallback) {
-  if (window.I18N && typeof window.I18N.t === "function") {
-    return window.I18N.t(schluessel, fallback);
-  }
-  return fallback ?? schluessel;
-}
 
 document.addEventListener("DOMContentLoaded", () => {
 

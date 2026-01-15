@@ -180,6 +180,18 @@
         return wert != null ? (Array.isArray(wert) ? wert : String(wert)) : (ersatzwert ?? "");
       }
     };
+
+    // Globale Hilfsfunktionen für alle Scripts
+    window.uebersetzung = (schluessel, fallback) => {
+      if (window.I18N && typeof window.I18N.t === "function") {
+        return window.I18N.t(schluessel, fallback);
+      }
+      return fallback ?? schluessel;
+    };
+
+    window.aktuelleSprache = () => {
+      return (window.I18N && window.I18N.lang) || "de";
+    };
   };
 
   /** Sendet ein benutzerdefiniertes Event, wenn sich die Sprache ändert. */

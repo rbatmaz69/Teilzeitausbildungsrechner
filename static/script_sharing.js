@@ -1,20 +1,8 @@
-/* global html2canvas, jsPDF */
+/* global html2canvas, jsPDF, uebersetzung, aktuelleSprache */
 /**
  * script_sharing.js – PDF-Export und Link-Sharing
  * Implementiert clientseitige PDF-Generierung und URL-basiertes Teilen von Berechnungen
  */
-
-// i18n Helfer (nutzt die globale API aus script_Sprache_Auswaehlen.js)
-function uebersetzung(schluessel, fallback) {
-  if (window.I18N && typeof window.I18N.t === "function") {
-    return window.I18N.t(schluessel, fallback);
-  }
-  return fallback ?? schluessel;
-}
-
-function aktuelleSprache() {
-  return (window.I18N && window.I18N.lang) || "de";
-}
 
 // CDN-Fallback-Loader für PDF-Bibliotheken (mehrere Hosts, falls geblockt)
 const PDF_LIB_SOURCES = {
