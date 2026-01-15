@@ -1,4 +1,18 @@
 // ../static/script_Sprache_Auswaehlen.js
+
+// Globale Hilfsfunktionen sofort definieren
+// Diese werden später von registriereGlobaleAPI() aktualisiert wenn I18N geladen ist
+window.uebersetzung = (schluessel, fallback) => {
+  if (window.I18N && typeof window.I18N.t === "function") {
+    return window.I18N.t(schluessel, fallback);
+  }
+  return fallback ?? schluessel;
+};
+
+window.aktuelleSprache = () => {
+  return (window.I18N && window.I18N.lang) || "de";
+};
+
 (() => {
   const STANDARD_SPRACHE = "de";
   const UNTERSTUETZT = ["de", "en", "uk", "tr", "ar", "fr", "ru", "pl", "ro"];

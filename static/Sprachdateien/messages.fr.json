@@ -178,17 +178,7 @@
     },
     "vork": {
       "label": "Expérience professionnelle",
-      "label_easy": "Expérience",
-      "label1": "Formation professionnelle terminée",
-      "label1_easy": "Formation terminée",
-      "label2": "Justificatif d’une formation professionnelle de base pertinente",
-      "label2_easy": "Preuve d’une formation de base pertinente",
-      "label3": "Activité professionnelle pertinente",
-      "label3_easy": "Travail pertinent",
-      "label4": "Expérience de travail dans le domaine professionnel",
-      "label4_easy": "Expérience dans le domaine",
-      "sr": "L’expérience professionnelle peut réduire la durée de formation.",
-      "sr_easy": "L’expérience peut réduire la durée."
+      "label_easy": "Expérience"
     },
     "other": {
       "question": "Quel âge avez-vous au moment de la formation ?",
@@ -218,6 +208,12 @@
       "content": "<p><strong>Les raisons de réduction</strong> sont des situations ou des qualifications qui vous permettent de raccourcir la durée normale de la formation. Cela peut vous aider à terminer plus rapidement.</p><p><strong>Comment sont-elles appliquées ?</strong></p><p>Les raisons de réduction sont déduites de la durée normale de la formation. Selon le type de raison, des réductions différentes peuvent être accordées. Les réductions s’additionnent jusqu’à un maximum.</p><p><strong>Combien peut-on en utiliser en même temps ?</strong></p><p>Vous pouvez indiquer <strong>plusieurs raisons de réduction simultanément</strong>. La réduction totale est calculée à partir de toutes les raisons sélectionnées. Attention : il existe une réduction maximale de 12 mois qui ne peut pas être dépassée.</p>",
       "content_easy": "<p><strong>Les raisons pour une formation plus courte</strong> sont des choses qui peuvent réduire la durée. Par exemple : un diplôme scolaire ou de l’expérience.</p><p><strong>Comment ça marche ?</strong></p><p>Chaque raison réduit la formation de quelques mois. Toutes les raisons s’additionnent.</p><p><strong>Combien de raisons puis-je utiliser ?</strong></p><p>Vous pouvez utiliser <strong>plusieurs raisons</strong>. Elles s’additionnent. Mais la formation peut être au maximum 12 mois plus courte.</p>"
     }
+  },
+  "pdf": {
+    "filename": "Résultat_Formation-temps-partiel_{date}.pdf",
+    "filename_easy": "Résultat_Formation-temps-partiel_{date}.pdf",
+    "headline": "Aperçu de votre calcul",
+    "headline_easy": "Aperçu de votre calcul"
   },
   "res": {
     "headline": "Aperçu des résultats",
@@ -290,28 +286,8 @@
       "label1": "Étape 1 : Réduction",
       "label1_easy": "Étape 1 : Réduction",
       "label2": "Étape 2 : Temps partiel",
-      "label2_easy": "Étape 2 : Temps partiel",
-      "plus": "+{n} mois",
-      "plus_easy": "+{n} mois",
-      "none": "Aucune prolongation",
-      "none_easy": "Aucune prolongation"
-    },
-    "placeholders": {
-      "months": "–",
-      "months_easy": "–",
-      "extension": "–",
-      "extension_easy": "–"
+      "label2_easy": "Étape 2 : Temps partiel"
     }
-  },
-  "cuts": {
-    "title": "Raisons de réduction",
-    "title_easy": "Formation plus courte",
-    "total": "Total",
-    "total_easy": "Total",
-    "newBase": "Nouvelle base",
-    "newBase_easy": "Nouvelle base",
-    "sumAll": "Somme de toutes les réductions",
-    "sumAll_easy": "Somme de toutes"
   },
   "units": {
     "hours": {

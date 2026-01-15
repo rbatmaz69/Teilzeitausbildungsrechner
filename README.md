@@ -592,10 +592,10 @@ npm run lint     # Führt ESLint, Stylelint und HTMLHint parallel aus
 
 **Einzelne Linter:**
 ```bash
-npm run lint:js      # JavaScript (ESLint 9)
-npm run lint:css     # CSS (Stylelint)
-npm run lint:html    # HTML (HTMLHint)
-flake8 src/          # Python (Flake8)
+npm run lint:js          # JavaScript (ESLint 9)
+npm run lint:css         # CSS (Stylelint)
+npm run lint:html        # HTML (HTMLHint)
+python3 -m flake8 src/   # Python (Flake8)
 isort --check-only src/  # Python Import-Sortierung
 ```
 

@@ -178,17 +178,7 @@
     },
     "vork": {
       "label": "Mesleki deneyim",
-      "label_easy": "İş deneyimi",
-      "label1": "Tamamlanmış mesleki eğitim",
-      "label1_easy": "Tamamlanmış mesleki eğitim",
-      "label2": "İlgili temel mesleki eğitim kanıtı",
-      "label2_easy": "Uygun temel eğitim kanıtı",
-      "label3": "İlgili mesleki çalışma",
-      "label3_easy": "Uygun iş deneyimi",
-      "label4": "Mesleki alanda iş deneyimi",
-      "label4_easy": "Meslek alanında iş deneyimi",
-      "sr": "Mesleki ön bilgi eğitim sürenizi kısaltabilir.",
-      "sr_easy": "İş deneyimi eğitimi kısaltabilir."
+      "label_easy": "İş deneyimi"
     },
     "other": {
       "question": "Eğitim sırasında kaç yaşındasınız?",
@@ -218,6 +208,12 @@
       "content": "<p><strong>Kısaltma sebepleri</strong>, normal eğitim süresini kısaltmaya imkan veren durumlar veya niteliklerdir. Bu sayede eğitiminizi daha hızlı tamamlayabilirsiniz.</p><p><strong>Nasıl uygulanır?</strong></p><p>Kısaltma sebepleri normal eğitim süresine eklenir. Sebebe bağlı olarak farklı süreler kısaltılabilir. Kısaltmalar maksimum değere ulaşana kadar toplanır.</p><p><strong>Aynı anda kaç tanesi mümkün?</strong></p><p><strong>Birkaç kısaltma sebebi</strong> belirtilebilir. Toplam kısaltma seçilen sebeplerin toplamından hesaplanır. Ancak en fazla 12 ay kısaltma olabileceğini unutmayın.</p>",
       "content_easy": "<p><strong>Kısaltma sebepleri</strong> eğitimi kısa yapan şeylerdir. Örneğin: okul diploması veya iş deneyimi.</p><p><strong>Nasıl çalışır?</strong></p><p>Her sebep eğitimi birkaç ay kısa yapar. Bütün sebepler toplanır.</p><p><strong>Kaç sebep kullanabilirim?</strong></p><p><strong>Birçok sebep birlikte</strong> kullanabilirsiniz. Bütün sebepler toplanır. Ama eğitim en fazla 12 ay kısa olabilir.</p>"
     }
+  },
+  "pdf": {
+    "filename": "Sonuc_Yarı-zamanlı-egitim_{date}.pdf",
+    "filename_easy": "Sonuc_Yarı-zamanlı-egitim_{date}.pdf",
+    "headline": "Hesabınızın özeti",
+    "headline_easy": "Hesabınızın özeti"
   },
   "res": {
     "headline": "Sonuç Özeti",
@@ -290,28 +286,8 @@
       "label1": "Adım 1: Kısaltma",
       "label1_easy": "Adım 1: Kısaltma",
       "label2": "Adım 2: Yarı zamanlı",
-      "label2_easy": "Adım 2: Yarı zamanlı",
-      "plus": "+{n} ay",
-      "plus_easy": "+{n} ay",
-      "none": "Uzatma yok",
-      "none_easy": "Uzatma yok"
-    },
-    "placeholders": {
-      "months": "–",
-      "months_easy": "–",
-      "extension": "–",
-      "extension_easy": "–"
+      "label2_easy": "Adım 2: Yarı zamanlı"
     }
-  },
-  "cuts": {
-    "title": "Kısaltma sebepleri",
-    "title_easy": "Daha kısa eğitim",
-    "total": "Toplam",
-    "total_easy": "Toplam",
-    "newBase": "Yeni temel",
-    "newBase_easy": "Yeni temel",
-    "sumAll": "Tüm kısaltmaların toplamı",
-    "sumAll_easy": "Toplam"
   },
   "units": {
     "hours": {

@@ -178,17 +178,7 @@
     },
     "vork": {
       "label": "Experiență profesională",
-      "label_easy": "Experiență",
-      "label1": "Formare profesională finalizată",
-      "label1_easy": "Formare finalizată",
-      "label2": "Dovadă de formare profesională de bază relevantă",
-      "label2_easy": "Dovadă de formare de bază potrivită",
-      "label3": "Activitate profesională relevantă",
-      "label3_easy": "Muncă potrivită",
-      "label4": "Experiență de lucru în domeniul profesional",
-      "label4_easy": "Experiență în domeniu",
-      "sr": "Experiența profesională poate scurta durata formării.",
-      "sr_easy": "Experiența poate scurta formarea."
+      "label_easy": "Experiență"
     },
     "other": {
       "question": "Câți ani ai în momentul formării?",
@@ -218,6 +208,12 @@
       "content": "<p><strong>Motivele de reducere</strong> sunt situații sau calificări care pot permite scurtarea duratei normale a formării. Acest lucru te poate ajuta să termini mai repede.</p><p><strong>Cum se aplică?</strong></p><p>Motivele de reducere se scad din durata normală a formării. În funcție de tipul motivului, se pot acorda reduceri diferite. Reducerile se adună până la un maximum.</p><p><strong>Câte pot fi folosite simultan?</strong></p><p>Poți indica <strong>mai multe motive de reducere simultan</strong>. Reducerea totală se calculează din toate motivele selectate. Atenție: reducerea maximă este de 12 luni și nu poate fi depășită.</p>",
       "content_easy": "<p><strong>Motive pentru formare mai scurtă</strong> sunt lucruri care pot scurta formarea. De exemplu: studii sau experiență.</p><p><strong>Cum funcționează?</strong></p><p>Fiecare motiv scurtează formarea cu câteva luni. Toate motivele se adună.</p><p><strong>Câte motive pot alege?</strong></p><p>Poți alege <strong>mai multe motive</strong>. Ele se adună. Dar maximum este 12 luni mai scurt.</p>"
     }
+  },
+  "pdf": {
+    "filename": "Rezultat_Formare-timp-parțial_{date}.pdf",
+    "filename_easy": "Rezultat_Formare-timp-parțial_{date}.pdf",
+    "headline": "Prezentare generală a calculului",
+    "headline_easy": "Prezentare generală a calculului"
   },
   "res": {
     "headline": "Rezumatul rezultatelor",
@@ -290,28 +286,8 @@
       "label1": "Pasul 1: Reducere",
       "label1_easy": "Pasul 1: Reducere",
       "label2": "Pasul 2: Timp parțial",
-      "label2_easy": "Pasul 2: Timp parțial",
-      "plus": "+{n} luni",
-      "plus_easy": "+{n} luni",
-      "none": "Fără prelungire",
-      "none_easy": "Fără prelungire"
-    },
-    "placeholders": {
-      "months": "–",
-      "months_easy": "–",
-      "extension": "–",
-      "extension_easy": "–"
+      "label2_easy": "Pasul 2: Timp parțial"
     }
-  },
-  "cuts": {
-    "title": "Motive de reducere",
-    "title_easy": "Reduceri",
-    "total": "Total",
-    "total_easy": "Total",
-    "newBase": "Bază nouă",
-    "newBase_easy": "Bază nouă",
-    "sumAll": "Suma tuturor reducerilor",
-    "sumAll_easy": "Suma tuturor"
   },
   "units": {
     "hours": {
