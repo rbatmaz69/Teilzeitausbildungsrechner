@@ -142,8 +142,8 @@ Args:
         - 'abitur' (bool): Hat Abitur/Hochschulreife
         - 'realschule' (bool): Hat Realschulabschluss/Fachoberschulreife
         - 'alter_ueber_21' (bool): Ist über 21 Jahre alt
-        - 'familien_pflegeverantwortung' (bool): Hat Familien- oder
-          Pflegeverantwortung
+        - 'familien_kinderbetreuung' (bool): Hat Kinderbetreuungsverantwortung
+        - 'familien_pflegeverantwortung' (bool): Hat Pflegeverantwortung
         - 'vorkenntnisse_monate' (int): Berufliche Vorkenntnisse,
           wird auf einen festen Wert von 12 Monaten abgebildet, sobald > 0
 
@@ -242,11 +242,19 @@ Repräsentiert einen Fehler, der für die API-Antwort serialisiert wird.
 
 ### FehlendeFelderFehler
 
-Basisklasse für Service-spezifische Ausnahmen.
+Fehler für fehlende Pflichtfelder im Request.
+
+Dieses Exception-Objekt enthält das Attribut `missing` mit der Liste
+der nicht vorhandenen Felder, damit die API eine strukturierte
+Fehlermeldung zurückgeben kann.
 
 ### NutzlastValidierungsFehler
 
-Basisklasse für Service-spezifische Ausnahmen.
+Validierungsfehler für ungültige Request-Werte.
+
+Beinhaltet einen optionalen `code` und `details`, die in der
+API-Antwort zurückgegeben werden können, um die Ursache strukturiert
+darzustellen.
 
 ### verarbeite_berechnungsanfrage(payload: 'Mapping[str, Any]') -> 'BerechnungsDienstAntwort'
 
@@ -282,3 +290,14 @@ Das Factory-Pattern ermöglicht:
 
 Returns:
     Flask: Konfigurierte Flask-Applikation mit allen Routen
+
+### run_app_main()
+
+__main__-Block als Funktion für bessere Testbarkeit.
+
+### setup_venv()
+
+Venv-Setup-Logik für automatische venv-Aktivierung.
+
+Fügt venv site-packages zum Python-Pfad hinzu, damit Flask gefunden wird.
+Muss VOR den Flask-Imports aufgerufen werden.
