@@ -1,3 +1,4 @@
+/* global uebersetzung */
 /**
  * Initialisiert alle Formularelemente und synchronisiert Prozent- und Stunden-Eingaben.
  *

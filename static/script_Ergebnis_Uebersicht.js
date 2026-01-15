@@ -1,3 +1,4 @@
+/* global uebersetzung, aktuelleSprache */
 /* script_Ergebnis_Übersicht.js – i18n-fähige Ergebnislogik */
 
 // Kurz-Helfer
