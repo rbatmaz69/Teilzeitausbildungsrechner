@@ -194,8 +194,6 @@ window.aktuelleSprache = () => {
         return wert != null ? (Array.isArray(wert) ? wert : String(wert)) : (ersatzwert ?? "");
       }
     };
-    // Hinweis: window.uebersetzung und window.aktuelleSprache sind bereits
-    // am Anfang der Datei definiert und nutzen automatisch window.I18N
   };
 
   /** Sendet ein benutzerdefiniertes Event, wenn sich die Sprache ändert. */
