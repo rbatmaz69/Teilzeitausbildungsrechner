@@ -178,17 +178,7 @@
     },
     "vork": {
       "label": "Doświadczenie zawodowe",
-      "label_easy": "Doświadczenie",
-      "label1": "Ukończone wykształcenie zawodowe",
-      "label1_easy": "Ukończone wykształcenie zawodowe",
-      "label2": "Potwierdzenie odpowiedniego podstawowego przygotowania zawodowego",
-      "label2_easy": "Potwierdzenie podstawowego przygotowania",
-      "label3": "Odpowiednie doświadczenie zawodowe",
-      "label3_easy": "Odpowiednia praca",
-      "label4": "Doświadczenie w danej branży",
-      "label4_easy": "Doświadczenie w branży",
-      "sr": "Doświadczenie zawodowe może skrócić czas kształcenia.",
-      "sr_easy": "Doświadczenie może skrócić czas."
+      "label_easy": "Doświadczenie"
     },
     "other": {
       "question": "Ile masz lat w czasie kształcenia?",
@@ -218,6 +208,12 @@
       "content": "<p><strong>Powody skrócenia</strong> to sytuacje lub kwalifikacje, które mogą pozwolić skrócić zwykły czas kształcenia. Dzięki temu możesz szybciej ukończyć kształcenie.</p><p><strong>Jak to działa?</strong></p><p>Powody skrócenia są zaliczane do standardowego czasu kształcenia. W zależności od rodzaju powodu można przyznać różne skrócenia. Skrócenia sumują się do określonego maksimum.</p><p><strong>Ile powodów można użyć jednocześnie?</strong></p><p>Możesz wskazać <strong>kilka powodów skrócenia jednocześnie</strong>. Łączne skrócenie jest obliczane ze wszystkich wybranych powodów. Uwaga: maksymalne skrócenie wynosi 12 miesięcy i nie można go przekroczyć.</p>",
       "content_easy": "<p><strong>Powody krótszej nauki</strong> to rzeczy, które mogą skrócić kształcenie. Na przykład: szkoła albo doświadczenie.</p><p><strong>Jak to działa?</strong></p><p>Każdy powód skraca kształcenie o kilka miesięcy. Wszystko się sumuje.</p><p><strong>Ile powodów mogę wybrać?</strong></p><p>Możesz wybrać <strong>kilka powodów</strong>. One się sumują. Ale maksymalnie można skrócić o 12 miesięcy.</p>"
     }
+  },
+  "pdf": {
+    "filename": "Wynik_Ksztalcenie-czesc-etatu_{date}.pdf",
+    "filename_easy": "Wynik_Ksztalcenie-czesc-etatu_{date}.pdf",
+    "headline": "Przegląd Twojego obliczenia",
+    "headline_easy": "Przegląd Twojego obliczenia"
   },
   "res": {
     "headline": "Przegląd wyników",
@@ -290,28 +286,8 @@
       "label1": "Krok 1: Skrócenie",
       "label1_easy": "Krok 1: Skrócenie",
       "label2": "Krok 2: Praca w niepełnym wymiarze",
-      "label2_easy": "Krok 2: Praca w niepełnym wymiarze",
-      "plus": "+{n} miesięcy",
-      "plus_easy": "+{n} miesięcy",
-      "none": "Brak wydłużenia",
-      "none_easy": "Brak wydłużenia"
-    },
-    "placeholders": {
-      "months": "–",
-      "months_easy": "–",
-      "extension": "–",
-      "extension_easy": "–"
+      "label2_easy": "Krok 2: Praca w niepełnym wymiarze"
     }
-  },
-  "cuts": {
-    "title": "Powody skrócenia",
-    "title_easy": "Krótsza nauka",
-    "total": "Suma",
-    "total_easy": "Suma",
-    "newBase": "Nowa podstawa",
-    "newBase_easy": "Nowa podstawa",
-    "sumAll": "Suma wszystkich skróceń",
-    "sumAll_easy": "Suma wszystkich"
   },
   "units": {
     "hours": {

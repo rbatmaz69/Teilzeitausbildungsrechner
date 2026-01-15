@@ -182,17 +182,7 @@
     },
     "vork": {
       "label": "Professional experience",
-      "label_easy": "Work experience",
-      "label1": "Completed vocational training",
-      "label1_easy": "Completed vocational training",
-      "label2": "Proof of relevant basic vocational training",
-      "label2_easy": "Proof of relevant basic training",
-      "label3": "Relevant professional activity",
-      "label3_easy": "Relevant work",
-      "label4": "Work experience in the occupational field",
-      "label4_easy": "Work experience in the field",
-      "sr": "Professional experience can shorten your training duration.",
-      "sr_easy": "Work experience can make training shorter."
+      "label_easy": "Work experience"
     },
     "other": {
       "question": "How old are you at the time of training?",
@@ -222,6 +212,12 @@
       "content": "<p><strong>Reduction reasons</strong> are circumstances or qualifications that allow you to shorten the regular training duration. This can help you complete your training faster.</p><p><strong>How are they applied?</strong></p><p>Reduction reasons are credited to the regular training duration. Depending on the type of reason, different reductions may be granted. The reductions are added together until a maximum is reached.</p><p><strong>How many can be used simultaneously?</strong></p><p>You can specify <strong>multiple reduction reasons simultaneously</strong>. The total reduction is calculated from all selected reasons. However, note that there is a maximum reduction of 12 months that cannot be exceeded.</p>",
       "content_easy": "<p><strong>Reasons for shorter training</strong> are things that can make your training shorter. For example: a school degree or work experience.</p><p><strong>How does it work?</strong></p><p>Each reason makes training shorter by some months. All reasons are added together.</p><p><strong>How many reasons can I use?</strong></p><p>You can use <strong>many reasons together</strong>. All reasons are added up. But training can be at most 12 months shorter.</p>"
     }
+  },
+  "pdf": {
+    "filename": "Result_Part-time-training_{date}.pdf",
+    "filename_easy": "Result_Part-time-training_{date}.pdf",
+    "headline": "Overview of your calculation",
+    "headline_easy": "Overview of your calculation"
   },
   "res": {
     "headline": "Results overview",
@@ -294,28 +290,8 @@
       "label1": "Step 1: Shortening",
       "label1_easy": "Step 1: Shortening",
       "label2": "Step 2: Part-time",
-      "label2_easy": "Step 2: Part-time",
-      "plus": "+{n} months",
-      "plus_easy": "+{n} months",
-      "none": "No extension",
-      "none_easy": "No extension"
-    },
-    "placeholders": {
-      "months": "–",
-      "months_easy": "–",
-      "extension": "–",
-      "extension_easy": "–"
+      "label2_easy": "Step 2: Part-time"
     }
-  },
-  "cuts": {
-    "title": "Reasons for shortening",
-    "title_easy": "Shorter training",
-    "total": "Total",
-    "total_easy": "Total",
-    "newBase": "New base",
-    "newBase_easy": "New base",
-    "sumAll": "Sum of all shortenings",
-    "sumAll_easy": "Sum of all"
   },
   "units": {
     "hours": {

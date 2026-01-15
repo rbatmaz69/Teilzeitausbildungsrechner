@@ -24,7 +24,17 @@
   // 3 Stufen in beide Richtungen, so dass MIN/MAX exakt beim 3. Klick erreicht werden.
   const STEP_DOWN_PX = (DEFAULT_ROOT_FONT - MIN_FONT) / Math.max(1, Math.abs(MIN_LEVEL));
   const STEP_UP_PX = (MAX_FONT - DEFAULT_ROOT_FONT) / Math.max(1, MAX_LEVEL);
+  const FONT_SIZE_KEY = 'fontSizeLevel';
+  
   let currentLevel = 0; // 0 = default
+  try {
+    const savedLevel = localStorage.getItem(FONT_SIZE_KEY);
+    if (savedLevel !== null) {
+      currentLevel = parseInt(savedLevel, 10);
+    }
+  } catch (e) {
+    console.warn('Could not load font size preference:', e);
+  }
 
   // ==========================================
   // THEME (DARK MODE) - Verwaltung
@@ -520,6 +530,13 @@
     const clampedPx = Math.min(Math.max(nextPx, MIN_FONT), MAX_FONT);
     rootEl.style.fontSize = clampedPx + 'px';
     currentLevel = level;
+    
+    try {
+      localStorage.setItem(FONT_SIZE_KEY, String(currentLevel));
+    } catch (e) {
+      console.warn('Could not save font size preference:', e);
+    }
+
     updateStepLabels();
     updateFontButtonStates();
   }
@@ -574,14 +591,12 @@
     }
   });
   if(resetBtn) resetBtn.addEventListener('click', ()=>{
-    rootEl.style.fontSize = '';
-    currentLevel = 0;
-    updateStepLabels();
-    updateFontButtonStates();
+    applyZoomForLevel(0);
     announceToScreenReader('Schriftgröße zurückgesetzt');
   });
 
-  // Labels und Button-Zustände initialisieren
+  // Labels, Button-Zustände und gespeicherten Zoom initialisieren
+  applyZoomForLevel(currentLevel);
   updateStepLabels();
   updateFontButtonStates();
 

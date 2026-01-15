@@ -13,29 +13,35 @@ Die Flask-App stellt folgende Funktionen bereit:
 
 import os
 import sys
-import time
 from pathlib import Path
 
-# Automatische venv-Aktivierung: Füge venv site-packages zum Python-Pfad hinzu
-# Muss VOR den Imports passieren, damit Flask gefunden wird
-project_root = Path(__file__).parent.parent
-venv_path = project_root / "venv"
 
-if venv_path.exists():
-    # Finde site-packages in venv
-    python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
-    venv_site_packages = (
-        venv_path / "lib" /
-        f"python{python_version}" /
-        "site-packages"
-    )
-    if venv_site_packages.exists():
-        # Füge venv site-packages zum Python-Pfad hinzu
-        if str(venv_site_packages) not in sys.path:
-            sys.path.insert(0, str(venv_site_packages))
+def setup_venv():
+    """
+    Venv-Setup-Logik für automatische venv-Aktivierung.
 
-    # Setze VIRTUAL_ENV für Kompatibilität
-    os.environ["VIRTUAL_ENV"] = str(venv_path)
+    Fügt venv site-packages zum Python-Pfad hinzu, damit Flask gefunden wird.
+    Muss VOR den Flask-Imports aufgerufen werden.
+    """
+    project_root = Path(__file__).parent.parent
+    venv_path = project_root / "venv"
+    if venv_path.exists():
+        python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
+        venv_site_packages = (
+            venv_path / "lib" /
+            f"python{python_version}" /
+            "site-packages"
+        )
+        if venv_site_packages.exists():
+            if str(venv_site_packages) not in sys.path:
+                sys.path.insert(0, str(venv_site_packages))
+        os.environ["VIRTUAL_ENV"] = str(venv_path)
+
+
+# Automatische venv-Aktivierung: Muss VOR den Imports passieren
+setup_venv()
+
+import time  # noqa: E402
 
 from flask import Flask, g, jsonify, render_template, request  # noqa: E402
 
@@ -204,26 +210,6 @@ app = create_app()
 
 
 # Lokaler Entwicklungsstart
-
-def setup_venv():
-    """Venv-Setup-Logik als Funktion für bessere Testbarkeit."""
-    project_root = Path(__file__).parent.parent
-    venv_path = project_root / "venv"
-    if venv_path.exists():
-        python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
-        venv_site_packages = (
-            venv_path / "lib" /
-            f"python{python_version}" /
-            "site-packages"
-        )
-        if venv_site_packages.exists():
-            if str(venv_site_packages) not in sys.path:
-                sys.path.insert(0, str(venv_site_packages))
-        os.environ["VIRTUAL_ENV"] = str(venv_path)
-
-
-setup_venv()
-
 
 def run_app_main():
     """__main__-Block als Funktion für bessere Testbarkeit."""

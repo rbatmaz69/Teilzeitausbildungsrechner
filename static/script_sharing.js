@@ -1,20 +1,8 @@
-/* global html2canvas, jsPDF */
+/* global html2canvas, jsPDF, uebersetzung, aktuelleSprache */
 /**
  * script_sharing.js – PDF-Export und Link-Sharing
  * Implementiert clientseitige PDF-Generierung und URL-basiertes Teilen von Berechnungen
  */
-
-// i18n Helfer (nutzt die globale API aus script_Sprache_Auswaehlen.js)
-function uebersetzung(schluessel, fallback) {
-  if (window.I18N && typeof window.I18N.t === "function") {
-    return window.I18N.t(schluessel, fallback);
-  }
-  return fallback ?? schluessel;
-}
-
-function aktuelleSprache() {
-  return (window.I18N && window.I18N.lang) || "de";
-}
 
 // CDN-Fallback-Loader für PDF-Bibliotheken (mehrere Hosts, falls geblockt)
 const PDF_LIB_SOURCES = {
@@ -97,6 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /**
  * Generiert ein PDF mit allen Berechnungsergebnissen
+ * Vereinfachte Implementierung: zeigt nur Ergebnisübersicht und Berechnung-Container
  */
 async function generierePDF() {
   try {
@@ -118,464 +107,221 @@ async function generierePDF() {
   button.innerHTML = `<svg class="sharing-btn-icon spinner" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg> <span>${uebersetzung("sharing.generating", "Erstelle PDF...")}</span>`;
 
   try {
-    // Sammle alle relevanten Ergebnis-Elemente
+    // Prüfe ob Ergebnisse vorhanden sind
     const ergebnisContainer = document.getElementById("ergebnis-container");
     const inputsSection = document.getElementById("inputs-section");
 
     if (!ergebnisContainer || ergebnisContainer.hidden) {
       alert(uebersetzung("sharing.error.noResults", "Bitte führen Sie zuerst eine Berechnung durch"));
+      button.innerHTML = originalText;
+      button.disabled = originalDisabled;
+      button.removeAttribute("aria-busy");
+      button.removeAttribute("aria-disabled");
       return;
     }
 
-    // Erstelle Clone für sauberes Rendering
-    const pdfContent = document.createElement("div");
-    pdfContent.style.position = "absolute";
-    pdfContent.style.left = "-9999px";
-    pdfContent.style.width = "760px"; // etwas schlanker für kompakteren Fit
-    pdfContent.style.padding = "12px"; // weniger Padding spart Höhe
-    pdfContent.style.backgroundColor = "#ffffff";
-    pdfContent.style.fontFamily = "system-ui, -apple-system, sans-serif";
-    pdfContent.style.lineHeight = "1.25"; // kompaktere Zeilenhöhe
-    
-    // Light Mode Werte dynamisch aus CSS auslesen und auf pdfContent anwenden
+    // Speichere aktuelle Accessibility-Einstellungen
     const root = document.documentElement;
-    const currentTheme = root.getAttribute("data-theme");
-    
-    // Kurz auf Light Mode schalten um Werte auszulesen (unsichtbar)
-    if (currentTheme === "dark") {
-      root.setAttribute("data-theme", "light");
-    }
-    
-    const computedStyle = getComputedStyle(root);
-    const lightModeVars = [
-      "--background", "--bg", "--panel", "--card-bg", "--card",
-      "--text", "--muted", "--border", "--info-bg", "--info-border",
-      "--disclaimer-title", "--disclaimer-text"
-    ];
-    
-    lightModeVars.forEach(varName => {
-      const value = computedStyle.getPropertyValue(varName).trim();
-      if (value) pdfContent.style.setProperty(varName, value);
-    });
-    
-    pdfContent.style.color = computedStyle.getPropertyValue("--text").trim();
-    // Set language and direction so RTL languages (z.B. Arabic) render correctly in the PDF
-    const lang = aktuelleSprache();
-    pdfContent.setAttribute('lang', lang);
-    const dir = ["ar", "he", "fa", "ur"].includes(lang) ? 'rtl' : 'ltr';
-    pdfContent.setAttribute('dir', dir);
-    // Sicherstellen, dass Inline-Richtung für html2canvas gesetzt ist
-    pdfContent.style.direction = dir;
-    
-    // Theme sofort wiederherstellen
-    if (currentTheme === "dark") {
-      root.setAttribute("data-theme", "dark");
-    }
+    const originalTheme = root.getAttribute("data-theme");
+    const originalFontSize = root.style.fontSize;
 
-    const currentDate = new Date().toLocaleDateString(aktuelleSprache() === "de" ? "de-DE" : "en-US");
-    const currentTime = new Date().toLocaleTimeString(aktuelleSprache() === "de" ? "de-DE" : "en-US");
-
-    // Titel und Zeitstempel als Teil des gerenderten Canvas, damit Unicode-Schriften korrekt sind
-    const header = document.createElement("div");
-    header.style.display = "flex";
-    header.style.flexDirection = "column";
-    header.style.alignItems = "center";
-    header.style.marginBottom = "12px";
-
-    const titleEl = document.createElement("h1");
-    titleEl.textContent = uebersetzung("res.headline", "Übersicht über Ihre Teilzeitausbildung");
-    titleEl.style.margin = "0";
-    titleEl.style.fontSize = "1.75rem";
-    titleEl.style.fontWeight = "700";
-    header.appendChild(titleEl);
-
-    const metaEl = document.createElement("p");
-    metaEl.textContent = `${currentDate} ${currentTime}`;
-    metaEl.style.margin = "0";
-    metaEl.style.fontSize = "0.9rem";
-    metaEl.style.color = "#808080";
-    header.appendChild(metaEl);
-
-    pdfContent.appendChild(header);
-
-    // Kopiere Ergebnis-Container
-    const ergebnisCopy = ergebnisContainer.cloneNode(true);
-    ergebnisCopy.style.display = "block";
-    ergebnisCopy.hidden = false;
-    
-    // Entferne Sharing-Menü aus PDF
-    const sharingMenu = ergebnisCopy.querySelector(".sharing-menu");
-    if (sharingMenu) {
-      sharingMenu.remove();
-    }
-    
-    // Entferne inputs-section aus PDF (wird separat eingefügt)
-    const inputsSectionInCopy = ergebnisCopy.querySelector("#inputs-section");
-    if (inputsSectionInCopy) {
-      inputsSectionInCopy.remove();
-    }
-    
-    // Entferne Hinweise-Karte aus PDF (optional - nur Ergebnisse)
-    const notesCard = ergebnisCopy.querySelector("[aria-labelledby='notes-title']");
-    if (notesCard) {
-      notesCard.remove();
-    }
-    
-    // Entferne Gesetzliche Grundlagen aus PDF
-    const legalSection = ergebnisCopy.querySelector(".legal-collapsible");
-    if (legalSection) {
-      legalSection.remove();
-    }
-    
-    // Vertikale Abstände im Ergebnis-Clone reduzieren
-    ergebnisCopy.querySelectorAll("h1,h2,h3,p,li,dl,dt,dd").forEach(el => {
-      el.style.marginTop = el.style.marginTop || "0.25rem";
-      el.style.marginBottom = el.style.marginBottom || "0.25rem";
-    });
-
-    // Badge-Text minimal nach oben verschieben (nur PDF, beeinflusst das Original-DOM nicht)
-    ergebnisCopy.querySelectorAll(".result-extension-delta").forEach(badge => {
-      badge.style.setProperty("transform", "translate(-50%, 6px)", "important");
-      let textSpan = badge.querySelector("span.__pdf-badge-text") || badge.querySelector("span");
-      if (!textSpan) {
-        const span = document.createElement("span");
-        span.textContent = badge.textContent;
-        badge.textContent = "";
-        badge.appendChild(span);
-        textSpan = span;
-      }
-      textSpan.classList.add("__pdf-badge-text");
-      textSpan.style.setProperty("display", "inline-block", "important");
-      textSpan.style.setProperty("transform", "translateY(-6px)", "important");
-      textSpan.style.setProperty("lineHeight", "1", "important");
-    });
-
-    // Pfeil und Rahmen in der PDF auf gleiche Höhe wie im Rechner
-    ergebnisCopy.querySelectorAll(".result-extension-arrow-wrapper").forEach(wrapper => {
-      wrapper.style.setProperty("padding", "0.3rem 0", "important"); // kompakteres Padding für PDF
-      wrapper.style.setProperty("min-width", "4.5rem", "important");
-    });
-
-    ergebnisCopy.querySelectorAll(".result-extension-arrow").forEach(arrow => {
-      arrow.style.setProperty("font-size", "2.5rem", "important"); // etwas kleiner für PDF-Fit
-      arrow.style.setProperty("line-height", "1", "important");
-      arrow.style.setProperty("transform", "translateY(-6px)", "important");
-    });
-
-    // Leere Absätze/Listelemente entfernen
-    ergebnisCopy.querySelectorAll("p,li").forEach(el => {
-      if (!el.textContent.trim() && el.children.length === 0) el.remove();
-    });
-
-    // "Dauer in Teilzeit" Zeile im PDF auf eine Zeile packen (genügend Platz in PDF)
-    ergebnisCopy.querySelectorAll("dt").forEach(dt => {
-      if (dt.textContent.includes("Dauer in Teilzeit")) {
-        dt.style.setProperty("white-space", "nowrap", "important");
-        dt.style.setProperty("font-size", "0.9rem", "important");
-      }
-    });
-
-    pdfContent.appendChild(ergebnisCopy);
-
-    // Kopiere Input-Details
-    if (inputsSection) {
-      const inputsCopy = inputsSection.cloneNode(true);
-      inputsCopy.style.display = "block";
-      inputsCopy.style.marginTop = "0"; // keine Leerzeile über der Überschrift
-      inputsCopy.style.paddingTop = "0";
-      inputsCopy.open = true; // Öffne Details für PDF
-      // Entferne den Summary/Toggle und ersetze ihn durch eine Überschrift
-      const summaryToggle = inputsCopy.querySelector('summary');
-      if (summaryToggle) {
-        const titleEl = document.createElement('h2');
-        const headingText = uebersetzung('inputs.title', 'Ihre Berechnung');
-        titleEl.textContent = headingText;
-        titleEl.style.margin = '0 0 0.5rem 0'; // kein oberer Abstand
-        titleEl.style.fontSize = '1.35rem';
-        titleEl.style.fontWeight = '700';
-        titleEl.style.display = 'flex';
-        titleEl.style.alignItems = 'center';
-        titleEl.style.minHeight = '44px';
-        titleEl.style.lineHeight = '1.2';
-        summaryToggle.replaceWith(titleEl);
-      }
-      
-      // Abstände in der Inputs-Box reduzieren
-      inputsCopy.querySelectorAll("h1,h2,h3,p,li,dl,dt,dd").forEach(el => {
-        el.style.marginTop = el.style.marginTop || "0.2rem";
-        el.style.marginBottom = el.style.marginBottom || "0.2rem";
-      });
-      inputsCopy.querySelectorAll("p,li").forEach(el => {
-        if (!el.textContent.trim() && el.children.length === 0) el.remove();
-      });
-      pdfContent.appendChild(inputsCopy);
-    }
-
-    // Entferne ALLE Legenden und Datumsstempel aus dem gesamten PDF-Content (nach dem Zusammenbau)
-    pdfContent.querySelectorAll(".units-legend").forEach(el => el.remove());
-    pdfContent.querySelectorAll('[data-i18n="inputs.unitsLegend"]').forEach(el => el.remove());
-    pdfContent.querySelectorAll('#stamp-date').forEach(el => el.remove());
-
-    // Für PDF: Ersetze alle Kurz-Units durch ausgeschriebene Units via Text-Ersetzung
-    
-    // Hilfsfunktion zum Ersetzen von Text in allen Text-Knoten (mit Kontextmustern)
-    function walkAndReplaceText(node, replacements) {
-      if (node.nodeType === Node.TEXT_NODE) {
-        let text = node.textContent;
-        Object.entries(replacements).forEach(([from, to]) => {
-          // Ersetze Muster wie " м ", " м,", "м " etc.
-          // Für kyrillische und andere Zeichen: Ersetze mit Kontext-Patterns
-          const patterns = [
-            new RegExp(`\\s${from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s`, 'g'),  // " м "
-            new RegExp(`\\s${from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([,.]?)$`, 'gm'), // " м" am Ende
-            new RegExp(`^${from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s`, 'gm'),  // "м " am Anfang
-            new RegExp(`([,(/])${from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s`, 'g'),  // ",м " oder "(м "
-          ];
-          
-          patterns.forEach(pattern => {
-            text = text.replace(pattern, (match) => {
-              // Erhalte Kontext (Leerzeichen, Komma etc.) und ersetze nur die Unit
-              if (match.includes(from)) {
-                return match.replace(from, to);
-              }
-              return match;
-            });
-          });
-        });
-        if (text !== node.textContent) {
-          node.textContent = text;
-        }
-      } else if (node.nodeType === Node.ELEMENT_NODE) {
-        // Durchsuche alle Kinder
-        const childrenArray = Array.from(node.childNodes);
-        childrenArray.forEach(child => walkAndReplaceText(child, replacements));
-      }
-    }
-
-    // Build unit replacements from translations for the current language.
-    function buildUnitReplacements() {
-      const hoursShort = uebersetzung('units.hours.short') || '';
-      const hoursFull = uebersetzung('units.hours.full') || '';
-      const monthsShort = uebersetzung('units.months.short') || '';
-      const monthsFull = uebersetzung('units.months.full') || '';
-
-      const replacements = {};
-      function addKeyVariants(key, value) {
-        if (!key) return;
-        replacements[key] = value;
-        const noDot = key.replace(/\./g, '');
-        if (noDot !== key) replacements[noDot] = value;
-        const lower = key.toLowerCase();
-        const upper = key.toUpperCase();
-        if (lower !== key) replacements[lower] = value;
-        if (upper !== key) replacements[upper] = value;
-      }
-
-      addKeyVariants(monthsShort, monthsFull);
-      addKeyVariants(hoursShort, hoursFull);
-
-      return replacements;
-    }
-
-    // Build replacements and apply
-    walkAndReplaceText(pdfContent, buildUnitReplacements());
-
-    // Erstelle Overlay um Layout-Änderungen während des Renderings zu verbergen
+    // Erstelle Overlay (Bildschirm für kurze Zeit verdecken)
     const overlay = document.createElement('div');
-    overlay.style.position = 'fixed';
-    overlay.style.top = '0';
-    overlay.style.left = '0';
-    overlay.style.width = '100%';
-    overlay.style.height = '100%';
-    overlay.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--background') || '#f6f7fb';
-    overlay.style.zIndex = '9998';
-    overlay.style.display = 'flex';
-    overlay.style.alignItems = 'center';
-    overlay.style.justifyContent = 'center';
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: ${getComputedStyle(root).getPropertyValue('--background') || '#ffffff'};
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    `;
     document.body.appendChild(overlay);
 
-    document.body.appendChild(pdfContent);
+    // Warte kurz damit das Overlay sichtbar ist
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    // Deaktiviere Accessibility-Features temporär
+    root.removeAttribute("data-theme"); // Force Light Theme
+    root.style.fontSize = "16px"; // Force Standard Font Size
+
+    // Öffne "Berechnung" Container falls geschlossen
+    const wasInputsClosed = inputsSection && !inputsSection.open;
+    if (inputsSection) {
+      inputsSection.open = true;
+    }
+
+    // Warte kurz damit die Änderungen gerendert werden
+    await new Promise(resolve => setTimeout(resolve, 50));
+
+    // Finde nur die beiden gewünschten Container
+    const resultCard = ergebnisContainer.querySelector('.card.highlight');
     
-    // Speichere originale Root-Schriftgröße und setze temporär auf Standard für PDF
-    const originalRootFontSize = root.style.fontSize;
-    root.style.fontSize = '16px';
-    // Vor dem Rendern: erzwinge korrekte BIDI-Darstellung für nummer+einheit und RTL-Blocks
-    // Damit html2canvas die visuelle Reihenfolge wie im UI übernimmt.
-    pdfContent.style.unicodeBidi = 'isolate';
-    // i18n wrappers (number+unit) sollen LTR bleiben
-    pdfContent.querySelectorAll('.i18n-value-unit').forEach(el => {
-      el.style.direction = 'ltr';
-      el.style.unicodeBidi = 'isolate-override';
-      el.style.display = 'inline-block';
-    });
-    // Elemente, die explizit bidi-ltr/ltr wrappers tragen
-    pdfContent.querySelectorAll('.bidi-ltr').forEach(el => {
-      el.style.direction = 'ltr';
-      el.style.unicodeBidi = 'isolate-override';
-    });
-    // Stelle sicher, dass RTL-Blocks korrekt gesetzt sind
-    pdfContent.querySelectorAll('.bidi-rtl').forEach(el => {
-      el.style.direction = 'rtl';
-      el.style.unicodeBidi = 'isolate-override';
-    });
+    // Erstelle Container für PDF-Inhalt
+    const pdfWrapper = document.createElement('div');
+    pdfWrapper.style.cssText = `
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 800px;
+      padding: 20px;
+      background: #ffffff;
+      font-family: system-ui, -apple-system, sans-serif;
+      z-index: -1;
+    `;
 
-    // Korrigiere Klammer-Richtung/-Position, indem ganze Klammergruppen zuerst
-    // in einen einzelnen LTR Inline-Container gewrappt werden
-    // (z. B. "(دوام كامل)", "(ألمانيا: Abitur / Hochschulreife)").
-    // So bleiben Klammern und ihr Inhalt zusammen und es werden Umordnungen/Spiegelungen verhindert.
-    (function wrapParenGroups(root) {
-      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false);
-      const textNodes = [];
-      while (walker.nextNode()) {
-        const n = walker.currentNode;
-        if (n.nodeValue && /\([^)]*\)/.test(n.nodeValue)) textNodes.push(n);
+    // --- PDF-Desktop-Layout und Pfeil/Tooltip-Overrides ---
+    const style = document.createElement('style');
+    style.textContent = `
+      /* Erzwinge Desktop-Layout für PDF-Export */
+      @media all {
+        .result-steps-grid {
+          display: grid !important;
+          grid-template-columns: 1fr 1fr !important;
+          gap: 1rem !important;
+        }
+        .result-step-content {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          gap: 0.25rem !important;
+          flex-wrap: wrap !important;
+        }
+        .result-step-arrow {
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;
+          position: relative !important;
+          min-width: 3.5rem !important;
+          margin-bottom: 0.25rem !important;
+        }
+        .result-step-green .arrow-line,
+        .result-step-red .arrow-line {
+          transform: translateY(-10px) !important;
+        }
+        .arrow-tooltip {
+          top: -0.35rem !important;
+        }
+        .arrow-tooltip::after {
+          bottom: -4px !important;
+        }
+        .result-step-box {
+          padding-bottom: 0.2rem !important;
+        }
+        /* Überschriften direkt am oberen Rand */
+        .card.highlight h1,
+        #inputs-section h2 {
+          margin-top: 0 !important;
+          margin-bottom: 0.25rem !important;
+        }
       }
-      textNodes.forEach(textNode => {
-        const parent = textNode.parentNode;
-        if (!parent) return;
-        const str = textNode.nodeValue;
-        const parts = [];
-        let lastIndex = 0;
-        const re = /\([^)]*\)/g;
-        let m;
-        while ((m = re.exec(str)) !== null) {
-          const idx = m.index;
-          if (idx > lastIndex) parts.push(document.createTextNode(str.slice(lastIndex, idx)));
-          const span = document.createElement('span');
-          span.className = '__pdf-paren-group';
-          span.style.direction = 'ltr';
-          span.style.unicodeBidi = 'isolate-override';
-          span.style.display = 'inline-block';
-          span.textContent = m[0];
-          parts.push(span);
-          lastIndex = idx + m[0].length;
-        }
-        if (lastIndex < str.length) parts.push(document.createTextNode(str.slice(lastIndex)));
-        if (parts.length) {
-          const frag = document.createDocumentFragment();
-          parts.forEach(p => frag.appendChild(p));
-          parent.replaceChild(frag, textNode);
-        }
-      });
-    })(pdfContent);
+    `;
+    pdfWrapper.appendChild(style);
+    pdfWrapper.style.minWidth = '900px';
+    pdfWrapper.style.width = '1024px';
+    pdfWrapper.style.paddingBottom = '48px'; // Abstand zum unteren Rand
+    // --- ENDE PDF-Desktop-Layout-Overrides ---
 
-    // Fallback: wrap lone '(' and ')' in LTR spans if any remain (preserves previous behavior)
-    (function wrapParens(root) {
-      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false);
-      const nodes = [];
-      while (walker.nextNode()) {
-        const n = walker.currentNode;
-        if (/[()]/.test(n.nodeValue)) nodes.push(n);
+    // Füge Titel und Datum hinzu
+    const header = document.createElement('div');
+    header.style.cssText = 'margin-bottom: 20px; text-align: center;';
+    const title = document.createElement('h1');
+    title.textContent = uebersetzung('pdf.headline', 'Übersicht über Ihre Berechnung');
+    title.style.cssText = 'font-size: 24px; margin: 0 0 8px 0; font-weight: 700;';
+    const dateTime = document.createElement('p');
+    const now = new Date();
+    dateTime.textContent = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+    dateTime.style.cssText = 'font-size: 14px; color: #666; margin: 0;';
+    header.appendChild(title);
+    header.appendChild(dateTime);
+    pdfWrapper.appendChild(header);
+
+    // Klone Ergebnisübersicht-Card
+    if (resultCard) {
+      const resultClone = resultCard.cloneNode(true);
+      resultClone.style.cssText = 'margin-bottom: 20px;';
+      pdfWrapper.appendChild(resultClone);
+    }
+
+    // Klone Berechnung-Container
+    if (inputsSection) {
+      const inputsClone = inputsSection.cloneNode(true);
+      inputsClone.open = true;
+      // Entferne Summary/Toggle und ersetze durch Überschrift
+      const summary = inputsClone.querySelector('summary');
+      if (summary) {
+        const h2 = document.createElement('h2');
+        h2.textContent = uebersetzung('inputs.title', 'Ihre Berechnung');
+        h2.style.cssText = 'font-size: 20px; margin: 0 0 16px 0; font-weight: 700;';
+        summary.replaceWith(h2);
       }
-      nodes.forEach(textNode => {
-        const parent = textNode.parentNode;
-        if (!parent) return;
-        const parts = [];
-        let last = 0;
-        const str = textNode.nodeValue;
-        const re = /[()]/g;
-        let m;
-        while ((m = re.exec(str)) !== null) {
-          const idx = m.index;
-          if (idx > last) parts.push(document.createTextNode(str.slice(last, idx)));
-          const span = document.createElement('span');
-          span.className = '__pdf-paren';
-          span.style.direction = 'ltr';
-          span.style.unicodeBidi = 'isolate-override';
-          span.style.display = 'inline-block';
-          span.textContent = m[0];
-          parts.push(span);
-          last = idx + 1;
-        }
-        if (last < str.length) parts.push(document.createTextNode(str.slice(last)));
-        if (parts.length) {
-          const frag = document.createDocumentFragment();
-          parts.forEach(p => frag.appendChild(p));
-          parent.replaceChild(frag, textNode);
-        }
-      });
-    })(pdfContent);
+      pdfWrapper.appendChild(inputsClone);
+    }
 
-    // Zusätzlich: wenn das PDF in einer RTL-Sprache ist, repliziere die RTL-spezifischen
-    // Layout-Regeln, die im CSS auf `html[dir="rtl"]` basieren, da der pdfContent
-    // außerhalb des Haupt-`html` liegt und diese Selektoren nicht greifen.
-    if (dir === 'rtl') {
-      // Reihenfolge und Ausrichtung der Extension-Values (Basis, Pfeil, Total)
-      pdfContent.querySelectorAll('.result-extension-values').forEach(el => {
-        el.style.display = 'flex';
-        el.style.flexDirection = 'row-reverse';
-        el.style.justifyContent = 'flex-end';
-        el.style.alignItems = 'center';
-        el.style.gap = getComputedStyle(document.documentElement).getPropertyValue('--space-2') || '0.75rem';
-        el.style.width = '100%';
-      });
-
-      // Setze Orders so die Items in der gleichen logischen Reihenfolge wie UI erscheinen
-      pdfContent.querySelectorAll('.result-extension-total').forEach(el => { el.style.order = '1'; el.style.direction = 'ltr'; el.style.unicodeBidi = 'isolate-override'; el.style.textAlign = 'left'; });
-      pdfContent.querySelectorAll('.result-extension-arrow-wrapper').forEach(el => { el.style.order = '2'; el.style.minWidth = '4.5rem'; el.style.padding = '0.3rem 0'; el.style.display = 'flex'; el.style.flexDirection = 'column'; el.style.alignItems = 'center'; el.style.justifyContent = 'center'; });
-      pdfContent.querySelectorAll('.result-extension-basis').forEach(el => { el.style.order = '3'; el.style.direction = 'ltr'; el.style.unicodeBidi = 'isolate-override'; el.style.textAlign = 'left'; });
-
-      // Mirror the arrow glyph for visual parity
-      pdfContent.querySelectorAll('.result-extension-arrow').forEach(el => {
-        el.style.transform = 'scaleX(-1)';
-        el.style.fontSize = '2.5rem';
-        el.style.lineHeight = '1';
-        el.style.display = 'block';
-      });
-
-      // Sicherstellen, dass Delta-Badges LTR-Inhalt behalten und Klammern nicht spiegeln
-      pdfContent.querySelectorAll('.result-extension-delta').forEach(el => {
-        el.style.direction = 'ltr';
-        el.style.unicodeBidi = 'isolate-override';
-        el.style.left = '50%';
-        el.style.transform = 'translate(-50%, 1px)';
+    // --- Pfeile im PDF bei arabisch umdrehen ---
+    if (aktuelleSprache() === 'ar') {
+      // Nur im PDF-Wrapper, nicht global!
+      const arrows = pdfWrapper.querySelectorAll('.arrow-line');
+      arrows.forEach(el => {
+        if (el.textContent.trim() === '→') el.textContent = '←';
       });
     }
 
-    // Canvas aus HTML erstellen (pdfContent ist bei -9999px, also unsichtbar)
-    const canvas = await html2canvas(pdfContent, {
-      scale: 2,
+    document.body.appendChild(pdfWrapper);
+
+    // Warte kurz damit Styles angewendet werden
+    await new Promise(resolve => setTimeout(resolve, 50));
+
+
+    // Erstelle Canvas mit html2canvas (optimiert: scale 1)
+    const canvas = await html2canvas(pdfWrapper, {
+      scale: 1,
       useCORS: true,
       logging: false,
       backgroundColor: "#ffffff",
-      allowTaint: true
+      windowWidth: 800
     });
 
-    // Root-Schriftgröße sofort wiederherstellen und Overlay entfernen
-    root.style.fontSize = originalRootFontSize;
+    // Entferne PDF-Wrapper
+    document.body.removeChild(pdfWrapper);
+
+    // Stelle Accessibility-Einstellungen wieder her
+    if (originalTheme) {
+      root.setAttribute("data-theme", originalTheme);
+    } else {
+      root.removeAttribute("data-theme");
+    }
+    root.style.fontSize = originalFontSize;
+
+    // Schließe "Berechnung" Container wieder falls er vorher geschlossen war
+    if (wasInputsClosed && inputsSection) {
+      inputsSection.open = false;
+    }
+
+    // Entferne Overlay
     document.body.removeChild(overlay);
 
-    document.body.removeChild(pdfContent);
-
-    // PDF erstellen (jsPDF)
+    // Erstelle PDF mit jsPDF
     const { jsPDF } = window.jspdf || window;
-    const pageWidth = 210;   // A4 Breite in mm
-    const pageHeight = 297;  // A4 Höhe in mm
-    const marginTop = 10;    // kleinerer Rand, da Header im Canvas enthalten ist
-    const marginBottom = 10; // Platz für Footer
-    const availableHeight = pageHeight - marginTop - marginBottom;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    
+    const pageWidth = 210; // A4 width in mm
+    const margin = 10;
+    
+    // Berechne Bildabmessungen
+    const imgWidth = pageWidth - (margin * 2);
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    
+    // Füge Bild als JPEG mit Qualität 1.0 ein (deutlich kleinere Datei)
+    pdf.addImage(canvas.toDataURL('image/jpeg', 1.0), 'JPEG', margin, margin, imgWidth, imgHeight);
 
-    const pdf = new jsPDF("p", "mm", "a4");
-    // Header ist bereits im Canvas enthalten, kein separater Text nötig
-
-    // Füge Canvas als Bild ein und skaliere, so dass alles in EINE Seite passt
-    const fullWidthHeight = (canvas.height * pageWidth) / canvas.width; // Höhe bei voller Seitenbreite
-    let drawWidth = pageWidth;
-    let drawHeight = fullWidthHeight;
-    if (drawHeight > availableHeight) {
-      const scale = availableHeight / drawHeight;
-      drawHeight = availableHeight;
-      drawWidth = drawWidth * scale; // proportional verkleinern
-    }
-    const xCentered = (pageWidth - drawWidth) / 2;
-    const yTop = marginTop;
-    pdf.addImage(canvas.toDataURL("image/png"), "PNG", xCentered, yTop, drawWidth, drawHeight);
-
-    // Kein Footer (Seitenangaben entfernt)
-
-    // Speichere PDF mit Timestamp
-    const timestamp = new Date().toISOString().split("T")[0];
-    const fileName = `Teilzeitausbildung_Berechnung_${timestamp}.pdf`;
+    // Speichere PDF
+    const timestamp = new Date().toISOString().split('T')[0];
+    let fileName = uebersetzung('pdf.filename', 'Ergebnis_Teilzeitausbildung_{date}.pdf');
+    fileName = fileName.replace('{date}', timestamp);
     pdf.save(fileName);
 
     // Erfolgs-Feedback
@@ -587,6 +333,7 @@ async function generierePDF() {
       button.removeAttribute("aria-busy");
       button.removeAttribute("aria-disabled");
     }, 2000);
+
   } catch (error) {
     console.error("PDF-Generierung fehlgeschlagen:", error);
     alert(uebersetzung("sharing.error.generation", "Fehler beim Erstellen der PDF-Datei"));
@@ -594,6 +341,12 @@ async function generierePDF() {
     button.disabled = originalDisabled;
     button.removeAttribute("aria-busy");
     button.removeAttribute("aria-disabled");
+    
+    // Stelle sicher dass Overlay entfernt wird im Fehlerfall
+    const overlay = document.querySelector('div[style*="z-index: 99999"]');
+    if (overlay && overlay.parentNode) {
+      document.body.removeChild(overlay);
+    }
   }
 }
 
