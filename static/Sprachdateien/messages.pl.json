@@ -219,6 +219,10 @@
       "content_easy": "<p><strong>Powody krótszej nauki</strong> to rzeczy, które mogą skrócić kształcenie. Na przykład: szkoła albo doświadczenie.</p><p><strong>Jak to działa?</strong></p><p>Każdy powód skraca kształcenie o kilka miesięcy. Wszystko się sumuje.</p><p><strong>Ile powodów mogę wybrać?</strong></p><p>Możesz wybrać <strong>kilka powodów</strong>. One się sumują. Ale maksymalnie można skrócić o 12 miesięcy.</p>"
     }
   },
+  "pdf": {
+    "headline": "Przegląd Twojego obliczenia",
+    "headline_easy": "Przegląd Twojego obliczenia"
+  },
   "res": {
     "headline": "Przegląd wyników",
     "headline_easy": "Przegląd wyników",

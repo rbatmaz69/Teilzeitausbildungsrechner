@@ -219,6 +219,10 @@
       "content_easy": "<p><strong>Kısaltma sebepleri</strong> eğitimi kısa yapan şeylerdir. Örneğin: okul diploması veya iş deneyimi.</p><p><strong>Nasıl çalışır?</strong></p><p>Her sebep eğitimi birkaç ay kısa yapar. Bütün sebepler toplanır.</p><p><strong>Kaç sebep kullanabilirim?</strong></p><p><strong>Birçok sebep birlikte</strong> kullanabilirsiniz. Bütün sebepler toplanır. Ama eğitim en fazla 12 ay kısa olabilir.</p>"
     }
   },
+  "pdf": {
+    "headline": "Hesabınızın özeti",
+    "headline_easy": "Hesabınızın özeti"
+  },
   "res": {
     "headline": "Sonuç Özeti",
     "headline_easy": "Sonuç Özeti",

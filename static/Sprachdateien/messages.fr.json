@@ -219,6 +219,10 @@
       "content_easy": "<p><strong>Les raisons pour une formation plus courte</strong> sont des choses qui peuvent réduire la durée. Par exemple : un diplôme scolaire ou de l’expérience.</p><p><strong>Comment ça marche ?</strong></p><p>Chaque raison réduit la formation de quelques mois. Toutes les raisons s’additionnent.</p><p><strong>Combien de raisons puis-je utiliser ?</strong></p><p>Vous pouvez utiliser <strong>plusieurs raisons</strong>. Elles s’additionnent. Mais la formation peut être au maximum 12 mois plus courte.</p>"
     }
   },
+  "pdf": {
+    "headline": "Aperçu de votre calcul",
+    "headline_easy": "Aperçu de votre calcul"
+  },
   "res": {
     "headline": "Aperçu des résultats",
     "headline_easy": "Aperçu des résultats",

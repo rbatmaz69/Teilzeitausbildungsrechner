@@ -241,7 +241,7 @@ async function generierePDF() {
     const header = document.createElement('div');
     header.style.cssText = 'margin-bottom: 20px; text-align: center;';
     const title = document.createElement('h1');
-    title.textContent = uebersetzung('res.headline', 'Ergebnisübersicht');
+    title.textContent = uebersetzung('pdf.headline', 'Übersicht über Ihre Berechnung');
     title.style.cssText = 'font-size: 24px; margin: 0 0 8px 0; font-weight: 700;';
     const dateTime = document.createElement('p');
     const now = new Date();
@@ -287,9 +287,10 @@ async function generierePDF() {
     // Warte kurz damit Styles angewendet werden
     await new Promise(resolve => setTimeout(resolve, 50));
 
-    // Erstelle Canvas mit html2canvas
+
+    // Erstelle Canvas mit html2canvas (optimiert: scale 1)
     const canvas = await html2canvas(pdfWrapper, {
-      scale: 2,
+      scale: 1,
       useCORS: true,
       logging: false,
       backgroundColor: "#ffffff",
@@ -326,7 +327,8 @@ async function generierePDF() {
     const imgWidth = pageWidth - (margin * 2);
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
     
-    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', margin, margin, imgWidth, imgHeight);
+    // Füge Bild als JPEG mit Qualität 1.0 ein (deutlich kleinere Datei)
+    pdf.addImage(canvas.toDataURL('image/jpeg', 1.0), 'JPEG', margin, margin, imgWidth, imgHeight);
 
     // Speichere PDF
     const timestamp = new Date().toISOString().split('T')[0];

@@ -223,6 +223,10 @@
       "content_easy": "<p><strong>Reasons for shorter training</strong> are things that can make your training shorter. For example: a school degree or work experience.</p><p><strong>How does it work?</strong></p><p>Each reason makes training shorter by some months. All reasons are added together.</p><p><strong>How many reasons can I use?</strong></p><p>You can use <strong>many reasons together</strong>. All reasons are added up. But training can be at most 12 months shorter.</p>"
     }
   },
+  "pdf": {
+    "headline": "Overview of your calculation",
+    "headline_easy": "Overview of your calculation"
+  },
   "res": {
     "headline": "Results overview",
     "headline_easy": "Results overview",

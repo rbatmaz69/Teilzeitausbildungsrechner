@@ -219,6 +219,10 @@
       "content_easy": "<p><strong>Motive pentru formare mai scurtă</strong> sunt lucruri care pot scurta formarea. De exemplu: studii sau experiență.</p><p><strong>Cum funcționează?</strong></p><p>Fiecare motiv scurtează formarea cu câteva luni. Toate motivele se adună.</p><p><strong>Câte motive pot alege?</strong></p><p>Poți alege <strong>mai multe motive</strong>. Ele se adună. Dar maximum este 12 luni mai scurt.</p>"
     }
   },
+  "pdf": {
+    "headline": "Prezentare generală a calculului",
+    "headline_easy": "Prezentare generală a calculului"
+  },
   "res": {
     "headline": "Rezumatul rezultatelor",
     "headline_easy": "Rezumatul rezultatelor",

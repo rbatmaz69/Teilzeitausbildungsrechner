@@ -223,6 +223,10 @@
       "content_easy": "<p><strong>Verkürzungsgründe</strong> sind Gründe, warum die Ausbildung kürzer sein kann. So können Sie früher fertig werden.</p><p><strong>Wie werden sie angewendet?</strong></p><p>Die Verkürzungen werden von der normalen Ausbildungsdauer abgezogen. Je nach Grund gibt es unterschiedliche Monate. Alles wird zusammengezählt, bis ein Maximum erreicht ist.</p><p><strong>Wie viele gleichzeitig möglich?</strong></p><p>Sie können <strong>mehrere Verkürzungsgründe gleichzeitig</strong> auswählen. Die Monate werden zusammen gerechnet. Insgesamt sind aber höchstens 12 Monate Verkürzung möglich.</p>"
     }
   },
+  "pdf": {
+    "headline": "Übersicht über Ihre Berechnung",
+    "headline_easy": "Übersicht über Ihre Berechnung"
+  },
   "res": {
     "headline": "Ergebnisübersicht",
     "headline_easy": "Ergebnisübersicht",
