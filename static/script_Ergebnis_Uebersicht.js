@@ -1350,12 +1350,26 @@ function setzeDatenZurueck() {
     console.warn("Konnte calculatorState nicht löschen:", fehler);
   }
   
-  // Alles andere löschen (außer Sprache)
+  // Alles andere löschen (außer Sprache und Barrierefreiheit-Einstellungen)
   try {
     const gespeicherteSprache = localStorage.getItem(SPRACH_SCHLUESSEL);
+    const gespeichertesTheme = localStorage.getItem('theme');
+    const gespeicherteLeichteSprache = localStorage.getItem('easyLanguage');
+    const gespeichertesFontSizeLevel = localStorage.getItem('fontSizeLevel');
+
     localStorage.clear();
+
     if (gespeicherteSprache) {
       localStorage.setItem(SPRACH_SCHLUESSEL, gespeicherteSprache);
+    }
+    if (gespeichertesTheme) {
+      localStorage.setItem('theme', gespeichertesTheme);
+    }
+    if (gespeicherteLeichteSprache) {
+      localStorage.setItem('easyLanguage', gespeicherteLeichteSprache);
+    }
+    if (gespeichertesFontSizeLevel) {
+      localStorage.setItem('fontSizeLevel', gespeichertesFontSizeLevel);
     }
   } catch (fehler) {
     console.warn("Konnte localStorage nicht löschen:", fehler);
