@@ -1,5 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap');
 
+/*
+  styles.css — Hauptstylesheet für die Anwendung
+
+  Enthält:
+  - CSS-Variablen für Theme-Farben (Light/Dark)
+  - Layout- und Komponentenstile (Cards, Buttons, Inputs)
+  - Responsive Regeln und Accessibility-Hilfen
+
+  Änderungen an globalen Variablen können das gesamte UI beeinflussen.
+*/
+
 /* ==========================================
   THEME VARIABLEN
   ========================================== */
@@ -133,7 +144,7 @@ body {
   max-width: 100vw;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-wrap: break-word;
+  overflow-wrap: normal;
 }
 
 /* Verhindere Overflow bei allen direkten Kindern */
@@ -148,7 +159,7 @@ img, svg, video, canvas {
   height: auto;
 }
 
-/* Ensure the HTML 'hidden' attribute reliably hides elements */
+/* Sicherstellen, dass das HTML-Attribut 'hidden' Elemente zuverlässig verbirgt */
 [hidden] {
   display: none !important;
 }
@@ -175,6 +186,21 @@ p.helper {
   color: var(--muted);
   margin-bottom: 1rem;
   font-size: .95rem;
+}
+
+/* ==========================================
+   I18N / A11Y: Robust text wrapping
+   - Prevent clipped words/overflow in longer translations.
+   - Hyphenation uses the active <html lang="…">.
+   ========================================== */
+h1, h2, h3, h4,
+p, li,
+label, summary,
+button, select,
+dt, dd {
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: manual;
 }
 
 /* ==========================================
@@ -261,7 +287,7 @@ header h1 {
   min-width: 0;
 }
 
-/* Keep cards/category elements from overflowing their container */
+/* Karten-/Kategorien-Elemente daran hindern, aus ihrem Container herauszulaufen */
 .rechner-grid .card,
 .rechner-grid .card-collapsible,
 .rechner-column > * {
@@ -364,6 +390,105 @@ header h1 {
   margin-top: 2px;
 }
 
+/* Helpful Links Section */
+.helpful-links-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--info-border);
+}
+
+.helpful-links-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 1rem;
+}
+
+.helpful-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.helpful-link-item {
+  margin: 0;
+}
+
+.helpful-link {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--info-bg);
+  border: 1px solid var(--info-border);
+  border-radius: 8px;
+  color: var(--link-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  width: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.helpful-link:hover {
+  background: var(--info-border);
+  border-color: var(--link-hover);
+  color: var(--link-hover);
+}
+
+.helpful-link:focus-visible {
+  outline: 2px solid var(--link-focus);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.helpful-link-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.helpful-link-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.helpful-link-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.helpful-link-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.helpful-link:hover .helpful-link-title {
+  color: var(--link-hover);
+}
+
+/* Light Mode: dunklere Hintergrundfarbe für besseren Kontrast */
+:root:not([data-theme="dark"]) .helpful-link {
+  background: #e3f2fd;
+}
+
+:root:not([data-theme="dark"]) .helpful-link:hover {
+  background: #bbdefb;
+  color: #1565c0; /* Dunkleres Blau für bessere Lesbarkeit */
+  border-color: #1976d2;
+}
+
+:root:not([data-theme="dark"]) .helpful-link:hover .helpful-link-title {
+  color: #0d47a1; /* Noch dunkleres Blau für Titel */
+}
+
 /* Disclaimer Box */
 .legal-disclaimer {
   display: flex;
@@ -390,7 +515,7 @@ header h1 {
 .legal-disclaimer-content,
 .legal-disclaimer-text {
   min-width: 0;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 .legal-disclaimer-title {
@@ -494,7 +619,7 @@ header h1 {
   
   /* Allow wrapping when font-size is increased for accessibility (mobile) */
   white-space: normal;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 /* ==========================================
@@ -684,7 +809,7 @@ input[type="checkbox"]:checked ~ .tile-body .slider-container {
   z-index: 10;
   min-width: 180px;
   max-width: var(--tooltip-max-width, min(280px, calc(100vw - 40px)));
-  overflow-wrap: break-word;
+  overflow-wrap: normal;
   white-space: normal;
   text-align: left;
   box-sizing: border-box;
@@ -1045,7 +1170,7 @@ select:-ms-input-placeholder {
   min-width: 0;
 }
 
-/* Verkürzungen list (moved up to keep selector ordering consistent) */
+/* Verkürzungen-Liste (nach oben verschoben, um die Selektor-Reihenfolge konsistent zu halten) */
 .verkuerzungen-list {
   list-style: none;
   padding: 0;
@@ -1234,6 +1359,23 @@ input.error,
   color: var(--primary);
 }
 
+/*
+  Bidirektionaler Text-Helfer:
+  In RTL-Sprachen (z. B. Arabisch) sollten numerische Werte, Formeln, URLs und gemischte
+  Zeichenketten weiterhin von links nach rechts bleiben, um verwirrende Umordnungen zu vermeiden.
+*/
+.bidi-ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
+}
+
+input[dir="ltr"],
+textarea[dir="ltr"] {
+  direction: ltr;
+  text-align: left;
+}
+
 .result-years {
   font-size: .95rem;
   color: var(--muted);
@@ -1295,12 +1437,236 @@ input.error,
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translate(-50%, 1px); /* leicht nach unten, wie im Rechner */
-  padding: 0.22rem 0.55rem 0.26rem; /* etwas mehr unten als oben */
+  transform: translate(-50%, 1px);
+  padding: 0.22rem 0.55rem 0.26rem;
   border-radius: 4px;
   line-height: 1;
   white-space: nowrap;
 }
+
+/* Neue Ergebnisübersicht Styles */
+.result-main-box {
+  background: rgb(224 0 0 / 8%);
+  border-radius: 12px;
+  padding: 1.5rem 1rem;
+  margin: 1rem 0;
+  text-align: center;
+  border: 1px solid rgb(224 0 0 / 12%); /* thin colored border */
+}
+
+.result-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.result-step-box {
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid rgb(0 0 0 / 4%);
+  padding-bottom: 0.25rem; /* default mobile-bottom padding */
+}
+
+.result-step-green {
+  background: rgb(16 185 129 / 8%);
+  border-color: rgb(16 185 129 / 14%);
+}
+
+.result-step-red {
+  background: rgb(224 0 0 / 8%);
+  border-color: rgb(224 0 0 / 14%);
+}
+
+.result-step-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+  color: var(--text);
+}
+
+.result-step-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.result-step-value {
+  font-size: .95rem; /* match `.vk-question` */
+  font-weight: 500; /* match `.vk-question` */
+  color: var(--text);
+}
+
+.result-step-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  min-width: 3.5rem; /* reduced so values can sit closer to arrows */
+  margin-bottom: 0.25rem; /* reduce space below arrow */
+}
+
+.result-step-green .arrow-line {
+  color: #10b981;
+  font-size: 4.2rem; /* longer arrow */
+  line-height: 1;
+  position: relative;
+  display: inline-block;
+}
+
+.result-step-red .arrow-line {
+  color: #e00000;
+  font-size: 4.2rem;
+  line-height: 1;
+  position: relative;
+  display: inline-block;
+}
+
+/* small colored center dot on the arrow */
+.arrow-line::after {
+  display: none; /* center dot removed as requested */
+}
+
+.arrow-tooltip {
+  position: absolute;
+  top: -0.05rem; /* bring tooltip very close to arrow on mobile */
+  font-size: 0.75rem; /* small button size */
+  font-weight: 700; /* bold small button */
+  color: #fff;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 10; /* ensure tooltip and triangle sit above arrow */
+}
+
+/* small triangular pointer under tooltip */
+.arrow-tooltip::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -6px; /* triangle moved with tooltip, closer to arrow */
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid transparent; /* default transparent; colored per-variant below */
+}
+
+/* Desktop adjustments: lift arrow lines and bring tooltips down so triangle nearly touches the line */
+@media (width >= 700px) {
+  .result-step-green .arrow-line,
+  .result-step-red .arrow-line {
+    transform: translateY(-6px); /* lift arrows on desktop to align with side text */
+  }
+
+  .arrow-tooltip {
+    top: -0.15rem; /* fine-tune position on desktop */
+  }
+
+  .arrow-tooltip::after {
+    bottom: -4px; /* triangle position follows tooltip */
+  }
+
+  .result-step-box {
+    padding-bottom: 0.2rem; /* significantly reduce space under arrow */
+  }
+}
+
+/* color the tooltip pointer according to the box color */
+.result-step-green .arrow-tooltip::after { border-top-color: #10b981; }
+.result-step-red .arrow-tooltip::after { border-top-color: #e00000; }
+
+.result-step-green .arrow-tooltip {
+  background: #10b981;
+}
+
+.result-step-red .arrow-tooltip {
+  background: #e00000;
+}
+
+@media (width <= 768px) {
+  .result-steps-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================
+   RTL: Ergebnis-Anpassungen (arabisch etc.)
+   - gesamte Ergebnis-Zeile rechtsbündig am Container
+   - Pfeil grafisch spiegeln
+   - Reihenfolge der Items tauschen (rechts ← links), Zahlenposition beibehalten
+   ========================================== */
+html[dir="rtl"] #ergebnis-container .highlight-main {
+  width: 100%;
+  text-align: right; /* Inhalt an rechte Kante des Containers anheften */
+}
+
+/* Vertausche visuell die Reihenfolge der drei Items (Basis, Pfeil, Total)
+   und pinne die Gruppe an die rechte Seite */
+html[dir="rtl"] #ergebnis-container .result-extension-values {
+  display: flex;
+  flex-direction: row-reverse; /* tauscht links/rechts */
+  justify-content: flex-end;   /* Gruppe am rechten Container-Rand anheften */
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+
+
+/* Zahlen bleiben in LTR-Reading innerhalb ihrer Box (Schreibrichtung korrekt),
+   aber die Platzierung wird durch row-reverse getauscht */
+html[dir="rtl"] #ergebnis-container .result-extension-basis,
+html[dir="rtl"] #ergebnis-container .result-extension-total {
+  direction: ltr;
+  unicode-bidi: isolate-override;
+  text-align: left; /* Inhalt der Zahl linksbündig innerhalb des eigenen Feldes */
+}
+
+/* Sicherstellen, dass große Zahlen und Jahre rechtsbündig ausgerichtet und in RTL lesbar bleiben */
+html[dir="rtl"] .highlight-main .big-number,
+html[dir="rtl"] .highlight-main .result-years {
+  width: 100%;
+  text-align: right;
+  direction: rtl;
+  unicode-bidi: plaintext;
+}
+
+/* Explicit ordering for arrow row so the numbers visually swap in RTL */
+html[dir="rtl"] #ergebnis-container .result-extension-total {
+  order: 1; /* appears on the right edge */
+}
+
+html[dir="rtl"] #ergebnis-container .result-extension-arrow-wrapper {
+  order: 2;
+}
+
+html[dir="rtl"] #ergebnis-container .result-extension-basis {
+  order: 3; /* appears on the left in RTL layout */
+}
+
+/* Mirror the arrow graphic */
+html[dir="rtl"] #ergebnis-container .result-extension-arrow {
+  transform: scaleX(-1);
+}
+
+/* Mirror the step arrow glyphs used in the result-step boxes (same visual effect)
+   and preserve the desktop vertical translation when in RTL. */
+html[dir="rtl"] .result-step-green .arrow-line,
+html[dir="rtl"] .result-step-red .arrow-line {
+  transform: scaleX(-1);
+}
+
+@media (width >= 700px) {
+  html[dir="rtl"] .result-step-green .arrow-line,
+  html[dir="rtl"] .result-step-red .arrow-line {
+    transform: translateY(-6px) scaleX(-1);
+  }
+}
+
 
 .muted{ color: var(--muted); }
 
@@ -1325,7 +1691,7 @@ input.error,
   font-weight: 600;
   font-size: 0.95rem;
   word-break: normal; /* Wörter werden nicht getrennt, bleiben immer zusammen */
-  overflow-wrap: normal; /* Umbrechen nur zwischen Wörtern, nicht innerhalb */
+  overflow-wrap: normal; /* Umbrechen nur zwischen Wörtern */
   min-width: 0; /* Ermöglicht Umbrechen in Grid */
 }
 
@@ -1340,7 +1706,7 @@ input.error,
   
   .kv dt {
     word-break: normal; /* Wörter bleiben immer zusammen in Firefox */
-    overflow-wrap: normal; /* Umbrechen nur zwischen Wörtern, nicht innerhalb */
+    overflow-wrap: normal; /* Umbrechen nur zwischen Wörtern */
   }
   
   /* Nur einfache Text-Werte (Metriken) sollen nicht umbrechen, nicht Container */
@@ -1352,7 +1718,7 @@ input.error,
   /* Warnungstext soll umbrechen können */
   .verkuerzungen-warning {
     white-space: normal;
-    overflow-wrap: break-word;
+    overflow-wrap: normal;
   }
   
   .verkuerzung-label {
@@ -1364,11 +1730,34 @@ input.error,
 
 
 
+.result-main-box .result-value-unit {
+  white-space: normal;
+}
+
+.result-main-box .i18n-num,
+.result-main-box .i18n-unit {
+  display: inline-block;
+}
+
+/* Allow formatted value+unit to wrap when space is constrained (number and unit
+   are separate inline elements produced by formatValueUnitHtml). This enables
+   breaking into two lines like "36\nMonate" when the unit would overflow. */
+
 .kv dd{
   margin: 0;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   font-size: .95rem;
+}
+
+.kv dd .i18n-value-unit {
+  white-space: normal;
+}
+
+.kv dd .i18n-num,
+.kv dd .i18n-unit {
+  display: inline-block; /* keep each piece as a unit while allowing a break between them */
+  vertical-align: baseline;
 }
 
 /* Legende für Abkürzungen */
@@ -1380,6 +1769,19 @@ input.error,
   font-size: 0.75rem;
   font-style: italic;
   text-align: right;
+}
+
+/* On small screens or when text size is large, avoid overlap between
+   the units legend and the timestamp: stack them vertically. */
+@media (width <= 640px) {
+  #inputs-section .inputs-stamp {
+    position: static;
+    margin-top: 0.5rem;
+  }
+  
+  .units-legend {
+    text-align: right;
+  }
 }
 
 /* Teilzeit-Formel: Mobile = vertikal, Desktop = horizontal */
@@ -1459,7 +1861,7 @@ input.error,
 .verkuerzung-label {
   flex: 1 1 auto;
   min-width: 0;
-  overflow-wrap: break-word;
+  overflow-wrap: normal;
   word-break: normal; /* Keine Worttrennung */
   max-width: calc(100% - 4rem); /* Begrenzt Breite, damit Text früher umbricht (Platz für Metrik) */
 }
@@ -1569,7 +1971,7 @@ input.error,
      Ergebnis/Hinweise bleiben bis zum Klick per `hidden` unsichtbar. */
   .rechner-grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: start;
+    grid-template-rows: auto 1fr;
 
     /* Vertikal wie bei den Cards; horizontal etwas luftiger. */
     gap: var(--space-3) clamp(1rem, 2vw, 1.75rem);
@@ -1578,16 +1980,20 @@ input.error,
   .rechner-grid .eingaben-column {
     grid-column: 1;
     grid-row: 1;
+    align-self: start;
   }
 
   .rechner-grid .vk-column {
     grid-column: 1;
     grid-row: 2;
+    align-self: start;
   }
 
   .rechner-grid #ergebnis-container {
     grid-column: 2;
     grid-row: 1 / 3;
+    align-self: start;
+    overflow-y: auto;
   }
 }
 
@@ -1748,13 +2154,89 @@ input.error,
   display: none;
 }
 
+/* New languages: Arabic, French, Russian, Polish, Romanian */
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-ar {
+  display: block;
+}
+
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-uk,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-tr,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-fr,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-ru,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-pl,
+#lang-switcher:has(option[value="ar"]:checked) ~ .lang-flags-overlay .lang-flag-ro {
+  display: none;
+}
+
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-fr {
+  display: block;
+}
+
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-uk,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-tr,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-ar,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-ru,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-pl,
+#lang-switcher:has(option[value="fr"]:checked) ~ .lang-flags-overlay .lang-flag-ro {
+  display: none;
+}
+
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-ru {
+  display: block;
+}
+
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-uk,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-tr,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-ar,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-fr,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-pl,
+#lang-switcher:has(option[value="ru"]:checked) ~ .lang-flags-overlay .lang-flag-ro {
+  display: none;
+}
+
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-pl {
+  display: block;
+}
+
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-uk,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-tr,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-ar,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-fr,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-ru,
+#lang-switcher:has(option[value="pl"]:checked) ~ .lang-flags-overlay .lang-flag-ro {
+  display: none;
+}
+
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-ro {
+  display: block;
+}
+
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-de,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-en,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-uk,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-tr,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-ar,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-fr,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-ru,
+#lang-switcher:has(option[value="ro"]:checked) ~ .lang-flags-overlay .lang-flag-pl {
+  display: none;
+}
+
 .startseite-title {
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.3;
   margin-bottom: 0;
   color: var(--text);
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 .startseite-title-accent {
@@ -1765,7 +2247,7 @@ input.error,
   color: var(--muted);
   margin-bottom: 0;
   line-height: 1.6;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
 
 /* Zusammenhängendes Informationsfeld: direkt in Startseite integriert (kein separater Kasten) */
@@ -1843,6 +2325,7 @@ input.error,
 
 .info-item-content {
   flex: 1;
+  min-width: 0;
 }
 
 .info-item-title {
@@ -1876,6 +2359,9 @@ input.error,
   align-items: center;
   justify-content: center;
   gap: .35rem;
+  flex-wrap: wrap;
+  white-space: normal;
+  text-align: center;
 }
 
 .btn-start-calculate:hover {
@@ -1898,6 +2384,7 @@ input.error,
 .btn-start-calculate svg {
   width: 16px;
   height: 16px;
+  flex-shrink: 0;
 }
 
 /* ==========================================
@@ -1911,14 +2398,14 @@ input.error,
 
 .startseite-desktop {
   display: none;
-}
 
 /* Tablet Optimierungen (≥600px) */
-@media (width >= 600px) {
-  .startseite-title {
-    font-size: 2rem;
-    margin-bottom: 0.75rem;
+@media (width >= 1200px) {
+  .rechner-grid .card,
+  .rechner-grid .card-collapsible {
+    padding: 1rem;
   }
+}
 
   .startseite-description {
     font-size: 1.1rem;
@@ -1969,7 +2456,7 @@ input.error,
   }
 
   .startseite {
-    /* Use the #startseite min-height rules above; keep layout flexible. */
+    /* Nutze die #startseite min-height-Regeln oben; Layout flexibel halten. */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2004,7 +2491,7 @@ input.error,
     position: relative;
   }
 
-  /* Ensure start section spans full width on desktop */
+  /* Sicherstellen, dass der Startbereich auf Desktop die volle Breite einnimmt */
   #startseite {
     max-width: 100% !important;
     width: 100% !important;
@@ -2287,6 +2774,82 @@ input.error,
     display: none;
   }
 
+  /* New languages: Arabic, French, Russian, Polish, Romanian (desktop) */
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ar {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-fr,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ru,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-pl,
+  #lang-switcher-desktop:has(option[value="ar"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ro {
+    display: none;
+  }
+
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-fr {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ar,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ru,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-pl,
+  #lang-switcher-desktop:has(option[value="fr"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ro {
+    display: none;
+  }
+
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ru {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ar,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-fr,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-pl,
+  #lang-switcher-desktop:has(option[value="ru"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ro {
+    display: none;
+  }
+
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-pl {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ar,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-fr,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ru,
+  #lang-switcher-desktop:has(option[value="pl"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ro {
+    display: none;
+  }
+
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ro {
+    display: block;
+  }
+
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-de,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-en,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-uk,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-tr,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ar,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-fr,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-ru,
+  #lang-switcher-desktop:has(option[value="ro"]:checked) ~ .lang-flags-overlay-desktop .lang-flag-pl {
+    display: none;
+  }
+
   .startseite-title-desktop {
     font-size: 3.5rem;
     font-weight: 700;
@@ -2300,7 +2863,7 @@ input.error,
     color: var(--muted);
     margin-bottom: 2rem;
     line-height: 1.6;
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
   }
 
   /* Desktop Feature Cards - Als zusammenhängende Box */
@@ -2497,7 +3060,7 @@ input.error,
       margin-bottom: 1rem;
     }
 
-    /* Calendar: keep look identical, only relax height slightly on short screens. */
+    /* Kalender: Erscheinungsbild beibehalten, Höhe auf kleinen Bildschirmen nur leicht entspannen. */
     .startseite-container .calendar-screen {
       min-height: clamp(440px, 62vh, 640px);
     }
@@ -2619,7 +3182,7 @@ input.error,
   background: var(--panel);
 }
 
-/* Dark-mode: hover/active should match light-mode (turn red) */
+/* Dark-Mode: Hover/Active sollten dem Light-Mode entsprechen (rot) */
 :root[data-theme="dark"] .vk-info-btn:hover {
   background: var(--primary);
   color: white;
@@ -2727,7 +3290,7 @@ input.error,
   outline-offset: 2px;
 }
 
-/* Dark-mode: close button background should match panel (grey) */
+/* Dark-Mode: Hintergrund des Schließen-Buttons sollte zum Panel passen (grau) */
 
 .vk-info-close-icon {
   display: inline-flex;
@@ -2782,8 +3345,16 @@ input.error,
   line-height: 1.3;
   flex: 1 1 auto;
   min-width: 0;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
 }
+
+/*
+  Info-Modal: Titel-Styling
+
+  Diese Sektion steuert die Darstellung des Titels im "Was ist das?"-Modal.
+  Beachtet: Schriftgröße und Wrapping sind wichtig für Accessibility und
+  sollten beim Anpassen von Variablen getestet werden.
+*/
 
 /* Modal Body */
 .vk-info-body {
@@ -2884,6 +3455,23 @@ body.modal-open {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Titel „Ihre Eingaben“ – groß und fett */
+.summary-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  flex: 1 1 auto;
+  min-width: 0; /* allow shrinking without forcing letter-wrapping */
+}
+
+/* Ensure title can shrink/wrap and pill moves below on small/zoomed screens */
+.inputs-collapsible > .summary-toggle .summary-title,
+.legal-collapsible > .summary-toggle .summary-title {
+  min-width: 0; /* allow flex item to shrink */
+  white-space: normal; /* allow normal wrapping */
+  word-break: normal; /* don't break inside words/letters */
+  overflow-wrap: break-word; /* allow breaking at word boundaries for long strings */
+}
+
 /* Summary als großer Click-Bereich */
 .inputs-collapsible > .summary-toggle,
 .legal-collapsible > .summary-toggle {
@@ -2904,11 +3492,23 @@ body.modal-open {
 }
 
 
-/* Titel „Ihre Eingaben“ – groß und fett */
-.summary-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  flex: 1;
+/* (moved above) */
+
+/* Small primary-colored inline icon used before headings */
+.icon-primary {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  line-height: 1;
+  vertical-align: -0.125rem;
+  margin-right: 0.5rem;
+  color: #e00000; /* primary red used elsewhere in the UI */
+}
+
+.headline-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 
@@ -2941,6 +3541,7 @@ body.modal-open {
   box-shadow: 0 6px 20px rgb(224 0 0 / 25%);
   transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
   white-space: nowrap;
+  flex: 0 0 auto; /* keep pill its intrinsic size and let title take remaining space */
 }
 
 /* Gesetzliche Grundlagen - Blauer Button für Gesetzliche Grundlagen */
@@ -3019,10 +3620,10 @@ body.modal-open {
 .inputs-collapsible > dl {
   margin-top: 1rem;            
   padding-top: 1rem;             
-  border-top: 2px solid #f66; 
+  border-top: 2px solid var(--primary); 
 }
 
-/* Keep berufliche Fragen vertically stacked like the family section */
+/* Berufliche Fragen vertikal gestapelt halten wie den Familien-Abschnitt */
 .vk-category.vk-beruf .vk-category-body {
   flex-direction: column !important;
 }
@@ -3476,7 +4077,7 @@ body.modal-open {
   flex-direction: column;
 }
 
-/* Stagger animation for menu items */
+/* Gestaffelte Animation für Menüeinträge */
 .a11y-menu[aria-hidden="false"] .a11y-row,
 .a11y-menu[aria-hidden="false"] .a11y-btn,
 .a11y-menu[aria-hidden="false"] .a11y-label,
@@ -3505,7 +4106,7 @@ body.modal-open {
   animation-delay: 0.2s;
 }
 
-/* Ensure base selector exists before more-specific animation selectors */
+/* Sicherstellen, dass der Basis-Selektor existiert, bevor spezifischere Animationsselektoren greifen */
 
 /* base .a11y-font-section defined later */
 
@@ -3678,7 +4279,7 @@ body.modal-open {
   transform: scale(1.2);
 }
 
-/* Keep old styles for backwards compatibility if needed */
+/* Alte Styles für Rückwärtskompatibilität beibehalten, falls nötig */
 .a11y-theme-controls {
   display: flex;
   gap: 8px;
@@ -3815,7 +4416,7 @@ body.modal-open {
   display: none;
 }
 
-/* ensure high contrast for text when increased */
+/* Sicherstellen, dass bei vergrößerter Schrift ein hoher Kontrast für Text gegeben ist */
 .a11y-menu strong {
   color: #0b5cff;
 }
@@ -4086,7 +4687,7 @@ body.modal-open {
   color: var(--primary);
 }
 
-/* Ensure hover in dark mode turns the close button red (applies after other dark-mode rules) */
+/* Sicherstellen, dass Hover im Dark-Mode den Close-Button rot färbt (wirkt nach anderen Dark-Mode-Regeln) */
 :root[data-theme="dark"] .vk-info-close:hover {
   background: var(--primary);
   border-color: var(--primary);
@@ -4098,5 +4699,246 @@ body.modal-open {
   .a11y-toggle,
   .a11y-menu {
     transition: none;
+  }
+}
+
+/* ==========================================
+   RTL OVERRIDES (e.g. Arabic)
+   ========================================== */
+
+/* stylelint-disable no-descending-specificity */
+
+html[dir="rtl"] .startseite-header {
+  justify-content: flex-start;
+}
+
+/* Startseite: Layout darf in RTL nicht gespiegelt werden (Kalender links, Beschreibung rechts)
+  jedoch die RTL-Textsemantik innerhalb der Inhalts-Spalte beibehalten. */
+@media (width >= 1024px) {
+  html[dir="rtl"] .startseite-desktop {
+    direction: ltr;
+  }
+
+  html[dir="rtl"] .startseite-desktop-right {
+    direction: rtl;
+    text-align: right;
+  }
+}
+
+html[dir="rtl"] .language-switcher-desktop {
+  align-self: flex-start;
+}
+
+/* Mirror language switchers: caret left, flag right */
+html[dir="rtl"] #lang-switcher {
+  padding-left: 2rem;
+  padding-right: 2.2rem;
+  background-position: left 0.5rem center;
+}
+
+html[dir="rtl"] .lang-flags-overlay {
+  left: auto;
+  right: 0.5rem;
+}
+
+html[dir="rtl"] #lang-switcher-desktop {
+  padding: 0.5rem 2.2rem 0.5rem 2rem;
+  background-position: left 0.5rem center;
+}
+
+html[dir="rtl"] .lang-flags-overlay-desktop {
+  left: auto;
+  right: 0.5rem;
+}
+
+/* Inputs with unit badge: avoid overlaps by moving unit to left */
+html[dir="rtl"] .input-with-unit {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/*
+  Einheitsschild INSIDE des Eingabefeldes halten (wie bei LTR), jedoch links positioniert.
+  Genügend linker Innenabstand reservieren, damit lange Einheitstexte nicht mit den eingegebenen Zahlen überlappen.
+*/
+html[dir="rtl"] .input-with-unit input {
+  padding-right: 0.75rem;
+  padding-left: 5.25rem; /* Platz für Einheitsetikett innerhalb des Feldes */
+  text-align: right; /* numerische Eingabe optisch rechtsbündig in RTL-UI belassen */
+}
+
+html[dir="rtl"] .input-with-unit .unit {
+  position: absolute;
+  right: auto;
+  left: 0.6rem;
+  white-space: nowrap;
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Mirror two-column input rows */
+html[dir="rtl"] .input-row {
+  flex-direction: row-reverse;
+}
+
+/* School degree select: move caret to the left in RTL */
+html[dir="rtl"] #vk-school-select {
+  /* Use a real down-caret in RTL to avoid "sideways" gradient artifacts */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%239ca3af' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 0.85rem center;
+  background-size: 1.1em;
+  padding-left: 2.25rem;
+  padding-right: 0.75rem;
+}
+
+/* Dark mode caret color in RTL */
+html[dir="rtl"][data-theme="dark"] #vk-school-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23e5e5e5' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+}
+
+/* Sprachumschalter: Text in RTL natürlich ausgerichtet lassen */
+html[dir="rtl"] #lang-switcher,
+html[dir="rtl"] #lang-switcher-desktop {
+  text-align: right;
+}
+
+/* Lists/notes forced LTR in base styles */
+html[dir="rtl"] .notes {
+  padding-left: 0;
+  padding-right: 1.5rem;
+  text-align: right;
+}
+
+html[dir="rtl"] .notes li {
+  text-align: right;
+}
+
+/* Info tooltip: spacing + text alignment */
+html[dir="rtl"] .info-icon {
+  margin-left: 0;
+  margin-right: 6px;
+}
+
+html[dir="rtl"] .info-icon::after {
+  text-align: right;
+}
+
+/* Info modal: mirror close button and header padding */
+html[dir="rtl"] .vk-info-close {
+  right: auto;
+  left: 1rem;
+}
+
+html[dir="rtl"] .vk-info-header {
+  padding-right: var(--space-5);
+  padding-left: 3.5rem;
+}
+
+@media (width >= 900px) {
+  html[dir="rtl"] .vk-info-header {
+    padding-right: var(--space-6);
+    padding-left: 4rem;
+  }
+}
+
+html[dir="rtl"] .vk-info-body ul {
+  padding-left: 0;
+  padding-right: 1.5rem;
+}
+
+/* Ergebnis-Header: Monate/Jahre rechtsbündig unter der Beschreibung (RTL) */
+ 
+
+/* A11Y Theme-Slider: Icon-Reihenfolge/Anzeige in RTL konsistent halten */
+html[dir="rtl"] .a11y-theme-slider-container,
+html[dir="rtl"] .a11y-theme-slider-track {
+  direction: ltr;
+}
+
+/* Accessibility-Widget: in der rechten unteren Ecke belassen, auch in RTL (wie in anderen Sprachen) */
+html[dir="rtl"] .a11y-toggle {
+  left: auto;
+  right: 16px;
+}
+
+html[dir="rtl"] .a11y-menu {
+  left: auto !important;
+  right: 16px !important;
+  transform: translateX(20px) scale(0.95) !important;
+}
+
+html[dir="rtl"] .a11y-menu[aria-hidden="false"] {
+  transform: translateX(0) scale(1) !important;
+  animation: menu-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html[dir="rtl"] .a11y-menu[aria-hidden="true"] {
+  transform: translateX(20px) scale(0.95) !important;
+}
+
+/* Toggle switch knob direction */
+html[dir="rtl"] .a11y-toggle-slider::before {
+  left: auto;
+  right: 3px;
+}
+
+html[dir="rtl"] .a11y-toggle-input:checked + .a11y-toggle-slider::before {
+  transform: translateX(-22px);
+}
+
+/* stylelint-enable no-descending-specificity */
+
+/* ==========================================
+   MOBILE: Textumbruch bei großer Schrift
+   Verhindert Overflow langer Wörter überall
+   ========================================== */
+@media (width <= 640px) {
+  /* Globaler Override: Alle Text-Elemente dürfen umbrechen */
+  h1, h2, h3, h4,
+  p, li,
+  label, summary,
+  button, select,
+  dt, dd,
+  span, a,
+  .tile-body,
+  .vk-category-body,
+  .helper {
+    overflow-wrap: anywhere;
+    word-break: normal;
+    hyphens: auto;
+  }
+
+  /* Flex/Grid-Kinder: min-width 0 damit sie schrumpfen können */
+  .summary-toggle,
+  .kv > div,
+  .legal-disclaimer,
+  .vk-info-header,
+  .tile,
+  .info-item {
+    min-width: 0;
+  }
+
+  /* Pill-Button: darf umbrechen */
+  .summary-pill,
+  .summary-pill-label {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+
+  /* AUSNAHME: Numerische Metriken bleiben atomisch */
+  .kv dd:not(.verkuerzungen-content, .teilzeit-formula),
+  .verkuerzung-value,
+  .big-number,
+  .result-years,
+  .result-extension-basis,
+  .result-extension-delta,
+  .result-extension-total {
+    white-space: nowrap;
+    overflow-wrap: normal;
+    hyphens: manual;
   }
 }

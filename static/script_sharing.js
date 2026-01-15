@@ -159,6 +159,13 @@ async function generierePDF() {
     });
     
     pdfContent.style.color = computedStyle.getPropertyValue("--text").trim();
+    // Set language and direction so RTL languages (z.B. Arabic) render correctly in the PDF
+    const lang = aktuelleSprache();
+    pdfContent.setAttribute('lang', lang);
+    const dir = ["ar", "he", "fa", "ur"].includes(lang) ? 'rtl' : 'ltr';
+    pdfContent.setAttribute('dir', dir);
+    // Sicherstellen, dass Inline-Richtung für html2canvas gesetzt ist
+    pdfContent.style.direction = dir;
     
     // Theme sofort wiederherstellen
     if (currentTheme === "dark") {
@@ -310,7 +317,6 @@ async function generierePDF() {
     pdfContent.querySelectorAll('#stamp-date').forEach(el => el.remove());
 
     // Für PDF: Ersetze alle Kurz-Units durch ausgeschriebene Units via Text-Ersetzung
-    const sprache = aktuelleSprache();
     
     // Hilfsfunktion zum Ersetzen von Text in allen Text-Knoten (mit Kontextmustern)
     function walkAndReplaceText(node, replacements) {
@@ -346,29 +352,33 @@ async function generierePDF() {
       }
     }
 
-    // Definiere Unit-Ersetzungen für alle Sprachen
-    const unitReplacements = {
-      'de': {
-        'M': 'Monate',
-        'Std': 'Stunden',
-      },
-      'en': {
-        'm': 'months',
-        'h': 'hours',
-      },
-      'uk': {
-        'М': 'місяці',      // kyrillisches М (Großbuchstabe)
-        'м': 'місяці',      // kyrillisches м (Kleinbuchstabe)
-        'M': 'місяці',      // lateinisches M (Fallback)
-        'год': 'години',
-        'тиж': 'тижні',
-      },
-      'tr': {
-        's': 'saat',
-      }
-    };
+    // Build unit replacements from translations for the current language.
+    function buildUnitReplacements() {
+      const hoursShort = uebersetzung('units.hours.short') || '';
+      const hoursFull = uebersetzung('units.hours.full') || '';
+      const monthsShort = uebersetzung('units.months.short') || '';
+      const monthsFull = uebersetzung('units.months.full') || '';
 
-    walkAndReplaceText(pdfContent, unitReplacements[sprache] || {});
+      const replacements = {};
+      function addKeyVariants(key, value) {
+        if (!key) return;
+        replacements[key] = value;
+        const noDot = key.replace(/\./g, '');
+        if (noDot !== key) replacements[noDot] = value;
+        const lower = key.toLowerCase();
+        const upper = key.toUpperCase();
+        if (lower !== key) replacements[lower] = value;
+        if (upper !== key) replacements[upper] = value;
+      }
+
+      addKeyVariants(monthsShort, monthsFull);
+      addKeyVariants(hoursShort, hoursFull);
+
+      return replacements;
+    }
+
+    // Build replacements and apply
+    walkAndReplaceText(pdfContent, buildUnitReplacements());
 
     // Erstelle Overlay um Layout-Änderungen während des Renderings zu verbergen
     const overlay = document.createElement('div');
@@ -389,6 +399,138 @@ async function generierePDF() {
     // Speichere originale Root-Schriftgröße und setze temporär auf Standard für PDF
     const originalRootFontSize = root.style.fontSize;
     root.style.fontSize = '16px';
+    // Vor dem Rendern: erzwinge korrekte BIDI-Darstellung für nummer+einheit und RTL-Blocks
+    // Damit html2canvas die visuelle Reihenfolge wie im UI übernimmt.
+    pdfContent.style.unicodeBidi = 'isolate';
+    // i18n wrappers (number+unit) sollen LTR bleiben
+    pdfContent.querySelectorAll('.i18n-value-unit').forEach(el => {
+      el.style.direction = 'ltr';
+      el.style.unicodeBidi = 'isolate-override';
+      el.style.display = 'inline-block';
+    });
+    // Elemente, die explizit bidi-ltr/ltr wrappers tragen
+    pdfContent.querySelectorAll('.bidi-ltr').forEach(el => {
+      el.style.direction = 'ltr';
+      el.style.unicodeBidi = 'isolate-override';
+    });
+    // Stelle sicher, dass RTL-Blocks korrekt gesetzt sind
+    pdfContent.querySelectorAll('.bidi-rtl').forEach(el => {
+      el.style.direction = 'rtl';
+      el.style.unicodeBidi = 'isolate-override';
+    });
+
+    // Korrigiere Klammer-Richtung/-Position, indem ganze Klammergruppen zuerst
+    // in einen einzelnen LTR Inline-Container gewrappt werden
+    // (z. B. "(دوام كامل)", "(ألمانيا: Abitur / Hochschulreife)").
+    // So bleiben Klammern und ihr Inhalt zusammen und es werden Umordnungen/Spiegelungen verhindert.
+    (function wrapParenGroups(root) {
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false);
+      const textNodes = [];
+      while (walker.nextNode()) {
+        const n = walker.currentNode;
+        if (n.nodeValue && /\([^)]*\)/.test(n.nodeValue)) textNodes.push(n);
+      }
+      textNodes.forEach(textNode => {
+        const parent = textNode.parentNode;
+        if (!parent) return;
+        const str = textNode.nodeValue;
+        const parts = [];
+        let lastIndex = 0;
+        const re = /\([^)]*\)/g;
+        let m;
+        while ((m = re.exec(str)) !== null) {
+          const idx = m.index;
+          if (idx > lastIndex) parts.push(document.createTextNode(str.slice(lastIndex, idx)));
+          const span = document.createElement('span');
+          span.className = '__pdf-paren-group';
+          span.style.direction = 'ltr';
+          span.style.unicodeBidi = 'isolate-override';
+          span.style.display = 'inline-block';
+          span.textContent = m[0];
+          parts.push(span);
+          lastIndex = idx + m[0].length;
+        }
+        if (lastIndex < str.length) parts.push(document.createTextNode(str.slice(lastIndex)));
+        if (parts.length) {
+          const frag = document.createDocumentFragment();
+          parts.forEach(p => frag.appendChild(p));
+          parent.replaceChild(frag, textNode);
+        }
+      });
+    })(pdfContent);
+
+    // Fallback: wrap lone '(' and ')' in LTR spans if any remain (preserves previous behavior)
+    (function wrapParens(root) {
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false);
+      const nodes = [];
+      while (walker.nextNode()) {
+        const n = walker.currentNode;
+        if (/[()]/.test(n.nodeValue)) nodes.push(n);
+      }
+      nodes.forEach(textNode => {
+        const parent = textNode.parentNode;
+        if (!parent) return;
+        const parts = [];
+        let last = 0;
+        const str = textNode.nodeValue;
+        const re = /[()]/g;
+        let m;
+        while ((m = re.exec(str)) !== null) {
+          const idx = m.index;
+          if (idx > last) parts.push(document.createTextNode(str.slice(last, idx)));
+          const span = document.createElement('span');
+          span.className = '__pdf-paren';
+          span.style.direction = 'ltr';
+          span.style.unicodeBidi = 'isolate-override';
+          span.style.display = 'inline-block';
+          span.textContent = m[0];
+          parts.push(span);
+          last = idx + 1;
+        }
+        if (last < str.length) parts.push(document.createTextNode(str.slice(last)));
+        if (parts.length) {
+          const frag = document.createDocumentFragment();
+          parts.forEach(p => frag.appendChild(p));
+          parent.replaceChild(frag, textNode);
+        }
+      });
+    })(pdfContent);
+
+    // Zusätzlich: wenn das PDF in einer RTL-Sprache ist, repliziere die RTL-spezifischen
+    // Layout-Regeln, die im CSS auf `html[dir="rtl"]` basieren, da der pdfContent
+    // außerhalb des Haupt-`html` liegt und diese Selektoren nicht greifen.
+    if (dir === 'rtl') {
+      // Reihenfolge und Ausrichtung der Extension-Values (Basis, Pfeil, Total)
+      pdfContent.querySelectorAll('.result-extension-values').forEach(el => {
+        el.style.display = 'flex';
+        el.style.flexDirection = 'row-reverse';
+        el.style.justifyContent = 'flex-end';
+        el.style.alignItems = 'center';
+        el.style.gap = getComputedStyle(document.documentElement).getPropertyValue('--space-2') || '0.75rem';
+        el.style.width = '100%';
+      });
+
+      // Setze Orders so die Items in der gleichen logischen Reihenfolge wie UI erscheinen
+      pdfContent.querySelectorAll('.result-extension-total').forEach(el => { el.style.order = '1'; el.style.direction = 'ltr'; el.style.unicodeBidi = 'isolate-override'; el.style.textAlign = 'left'; });
+      pdfContent.querySelectorAll('.result-extension-arrow-wrapper').forEach(el => { el.style.order = '2'; el.style.minWidth = '4.5rem'; el.style.padding = '0.3rem 0'; el.style.display = 'flex'; el.style.flexDirection = 'column'; el.style.alignItems = 'center'; el.style.justifyContent = 'center'; });
+      pdfContent.querySelectorAll('.result-extension-basis').forEach(el => { el.style.order = '3'; el.style.direction = 'ltr'; el.style.unicodeBidi = 'isolate-override'; el.style.textAlign = 'left'; });
+
+      // Mirror the arrow glyph for visual parity
+      pdfContent.querySelectorAll('.result-extension-arrow').forEach(el => {
+        el.style.transform = 'scaleX(-1)';
+        el.style.fontSize = '2.5rem';
+        el.style.lineHeight = '1';
+        el.style.display = 'block';
+      });
+
+      // Sicherstellen, dass Delta-Badges LTR-Inhalt behalten und Klammern nicht spiegeln
+      pdfContent.querySelectorAll('.result-extension-delta').forEach(el => {
+        el.style.direction = 'ltr';
+        el.style.unicodeBidi = 'isolate-override';
+        el.style.left = '50%';
+        el.style.transform = 'translate(-50%, 1px)';
+      });
+    }
 
     // Canvas aus HTML erstellen (pdfContent ist bei -9999px, also unsichtbar)
     const canvas = await html2canvas(pdfContent, {
@@ -490,8 +632,7 @@ function generiereShareLink() {
     { ja: 'vk_beruf_q2_ja', nein: 'vk_beruf_q2_nein', field: 'beruf_q2' },
     { ja: 'vk_beruf_q3_ja', nein: 'vk_beruf_q3_nein', field: 'beruf_q3' },
     { ja: 'vk_beruf_q4_ja', nein: 'vk_beruf_q4_nein', field: 'beruf_q4' },
-    { ja: 'vk_beruf_q5_ja', nein: 'vk_beruf_q5_nein', field: 'beruf_q5' },
-    { ja: 'vk_beruf_q6_ja', nein: 'vk_beruf_q6_nein', field: 'beruf_q6' }
+    { ja: 'vk_beruf_q5_ja', nein: 'vk_beruf_q5_nein', field: 'beruf_q5' }
   ];
 
   yesNoQuestions.forEach(({ ja, nein, field }) => {
@@ -664,8 +805,7 @@ function loadSharedData() {
           { ja: 'vk_beruf_q2_ja', nein: 'vk_beruf_q2_nein', field: 'beruf_q2' },
           { ja: 'vk_beruf_q3_ja', nein: 'vk_beruf_q3_nein', field: 'beruf_q3' },
           { ja: 'vk_beruf_q4_ja', nein: 'vk_beruf_q4_nein', field: 'beruf_q4' },
-          { ja: 'vk_beruf_q5_ja', nein: 'vk_beruf_q5_nein', field: 'beruf_q5' },
-          { ja: 'vk_beruf_q6_ja', nein: 'vk_beruf_q6_nein', field: 'beruf_q6' }
+          { ja: 'vk_beruf_q5_ja', nein: 'vk_beruf_q5_nein', field: 'beruf_q5' }
         ];
 
         yesNoQuestions.forEach(({ ja, nein, field }) => {
