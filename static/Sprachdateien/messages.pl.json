@@ -178,17 +178,7 @@
     },
     "vork": {
       "label": "Doświadczenie zawodowe",
-      "label_easy": "Doświadczenie",
-      "label1": "Ukończone wykształcenie zawodowe",
-      "label1_easy": "Ukończone wykształcenie zawodowe",
-      "label2": "Potwierdzenie odpowiedniego podstawowego przygotowania zawodowego",
-      "label2_easy": "Potwierdzenie podstawowego przygotowania",
-      "label3": "Odpowiednie doświadczenie zawodowe",
-      "label3_easy": "Odpowiednia praca",
-      "label4": "Doświadczenie w danej branży",
-      "label4_easy": "Doświadczenie w branży",
-      "sr": "Doświadczenie zawodowe może skrócić czas kształcenia.",
-      "sr_easy": "Doświadczenie może skrócić czas."
+      "label_easy": "Doświadczenie"
     },
     "other": {
       "question": "Ile masz lat w czasie kształcenia?",
@@ -296,28 +286,8 @@
       "label1": "Krok 1: Skrócenie",
       "label1_easy": "Krok 1: Skrócenie",
       "label2": "Krok 2: Praca w niepełnym wymiarze",
-      "label2_easy": "Krok 2: Praca w niepełnym wymiarze",
-      "plus": "+{n} miesięcy",
-      "plus_easy": "+{n} miesięcy",
-      "none": "Brak wydłużenia",
-      "none_easy": "Brak wydłużenia"
-    },
-    "placeholders": {
-      "months": "–",
-      "months_easy": "–",
-      "extension": "–",
-      "extension_easy": "–"
+      "label2_easy": "Krok 2: Praca w niepełnym wymiarze"
     }
-  },
-  "cuts": {
-    "title": "Powody skrócenia",
-    "title_easy": "Krótsza nauka",
-    "total": "Suma",
-    "total_easy": "Suma",
-    "newBase": "Nowa podstawa",
-    "newBase_easy": "Nowa podstawa",
-    "sumAll": "Suma wszystkich skróceń",
-    "sumAll_easy": "Suma wszystkich"
   },
   "units": {
     "hours": {
