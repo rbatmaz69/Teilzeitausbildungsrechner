@@ -29,7 +29,7 @@ async function gotoCalculator(page) {
   if (await page.$('#alter') !== null) {
     await page.fill('#alter', '20');
     await page.locator('#alter').blur();
-    const neinSelectors = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q2_nein','vk_beruf_q3_nein','vk_beruf_q6_nein'];
+    const neinSelectors = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q2_nein','vk_beruf_q3_nein','vk_beruf_q4_nein'];
     for (const id of neinSelectors) {
       await page.evaluate((elId) => {
         const el = document.getElementById(elId);
@@ -64,7 +64,7 @@ test.describe('Error Handling: API Fehler', () => {
     // Setze gültigen Wert für Ausbildungsdauer und Wochenstunden, damit alle Felder aktiv sind
     await page.fill('#dauer', '36');
     await page.fill('#stunden', '40');
-    // Ensure full-time (100%) so shortening calculations are straightforward
+    // Sicherstellen, dass 100% (Vollzeit) gesetzt sind, damit die Verkürzungsberechnungen einfach sind
     await page.fill('#teilzeitProzent', '100');
     // Berechnen-Button sollte disabled sein wenn keine Verkürzung gewählt
     // Wähle eine Verkürzung aus Dropdown
@@ -132,7 +132,7 @@ test.describe('Edge Cases: Grenzwerte', () => {
     await page.locator('#vk-school-select').scrollIntoViewIfNeeded();
     await page.selectOption('#vk-school-select', 'abitur');
     // 2. Familie/Pflegeverantwortung (neue UI: klick 'Ja')
-    // Programmatically set checkbox to avoid visibility/click issues in CI
+    // Checkbox programmatisch setzen, um Sichtbarkeits-/Klick-Probleme in CI zu vermeiden
     await page.evaluate(() => {
       const el = document.getElementById('pflege-ja');
       if (el) { el.checked = true; el.dispatchEvent(new Event('change', { bubbles: true })); el.dispatchEvent(new Event('input', { bubbles: true })); }
@@ -391,9 +391,9 @@ test.describe('Error Scenarios: English Language Tests', () => {
     // Neue UI: Pflicht-Alter-Feld und Ja/Nein Fragen für Verkürzungsgründe
     if (await page.$('#alter') !== null) {
       await page.fill('#alter', '20');
-      // Programmatically set all 'nein' answers to avoid flaky clicks
+      // Alle 'nein'-Antworten programmatisch setzen, um flüchtige Klick-Probleme zu vermeiden
       await page.evaluate(() => {
-        const ids = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q2_nein','vk_beruf_q3_nein','vk_beruf_q6_nein'];
+        const ids = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q2_nein','vk_beruf_q3_nein','vk_beruf_q4_nein'];
         ids.forEach(id => {
           try {
             const el = document.getElementById(id);
@@ -418,24 +418,24 @@ test.describe('Error Scenarios: English Language Tests', () => {
   test('Part-time 50% with shortening in English', async ({ page }) => {
     await gotoCalculatorEnglish(page);
     
-    // Ensure required inputs are set so percent buttons are enabled
+    // Pflichtfelder setzen, damit die Prozent-Buttons aktiviert werden
     await page.fill('#dauer', '36');
     await page.fill('#stunden', '40');
     
-    // Set part-time to 50%
+    // Teilzeit auf 50% setzen
     await page.click('[data-value="50"][data-type="percent"]');
     
-    // Add Abitur shortening
+    // Abitur-Verkürzung hinzufügen
     await page.selectOption('#vk-school-select', 'abitur');
     
-    // Calculate
+    // Berechnen
     await clickButton(page, '#berechnenBtn');
     
-    // Wait for result
+    // Auf Ergebnis warten
     await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
     
-    // Check: (36 - 12) * 100/50 = 48 months
-    // Note: Shortening is applied BEFORE part-time multiplication
+    // Prüfen: (36 - 12) * 100/50 = 48 Monate
+    // Hinweis: Verkürzung wird VOR der Teilzeit-Multiplikation angewendet
     await expect(page.locator('#res-total-months')).toContainText('48');
   });
 });
@@ -447,14 +447,14 @@ test.describe('Q2: Nicht abgeschlossene Ausbildung (Dauer)', () => {
   async function prepareBase(page) {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    // Ensure German UI for deterministic messages/behavior
+    // Deutsch UI sicherstellen für deterministische Meldungen/Verhalten
     await page.selectOption('#lang-switcher', 'de', { force: true });
     await page.waitForTimeout(200);
     await page.fill('#dauer', '36');
     await page.fill('#stunden', '40');
-    // baseline: set other yes/no groups to 'nein' programmatically
+    // Basiszustand: Andere Ja/Nein-Gruppen programmatisch auf 'nein' setzen
     await page.evaluate(() => {
-      const neinIds = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q3_nein','vk_beruf_q6_nein'];
+      const neinIds = ['kinderbetreuung-nein','pflege-nein','vk_beruf_q1_nein','vk_beruf_q3_nein','vk_beruf_q4_nein'];
       neinIds.forEach(id => {
         try {
           const el = document.getElementById(id);
@@ -464,16 +464,16 @@ test.describe('Q2: Nicht abgeschlossene Ausbildung (Dauer)', () => {
       // set a safe default age <21 so age-based shortening not applied
       try { const a = document.getElementById('alter'); if (a) { a.value = '20'; a.dispatchEvent(new Event('input', { bubbles: true })); } } catch (e) {}
     });
-    // Ensure full-time (100%) so shortening calculations are deterministic in tests
+    // Sicherstellen, dass Vollzeit (100%) gesetzt ist, damit Verkürzungsberechnungen in Tests deterministisch sind
     await page.fill('#teilzeitProzent', '100');
-    // Give UI listeners a short moment to react to the percent change
+    // UI-Listener kurz Zeit geben, auf Prozent-Änderung zu reagieren
     await page.waitForTimeout(100);
   }
 
   test('Q2 <6 Monate → keine Verkürzung (0 Monate)', async ({ page }) => {
     await prepareBase(page);
 
-    // Activate Q2=Ja and set duration to 5 months (should map to 0 months shortening)
+    // Q2=Ja aktivieren und Dauer auf 5 Monate setzen (führt zu 0 Monaten Verkürzung)
     await page.evaluate(() => {
       const q2yes = document.getElementById('vk_beruf_q2_ja');
       if (q2yes) { q2yes.checked = true; q2yes.dispatchEvent(new Event('change', { bubbles: true })); }
@@ -482,11 +482,11 @@ test.describe('Q2: Nicht abgeschlossene Ausbildung (Dauer)', () => {
     });
 
     await page.locator('#berechnenBtn').scrollIntoViewIfNeeded();
-    // Allow UI listeners to react to the programmatic changes
+    // UI-Listener reagieren lassen auf die programmgesteuerten Änderungen
     await page.waitForTimeout(100);
     await page.click('#berechnenBtn');
 
-    // No shortening expected → result remains 36 months
+    // Keine Verkürzung erwartet → Ergebnis bleibt 36 Monate
     await page.waitForSelector('#ergebnis-container:not([hidden])', { state: 'visible', timeout: 5000 });
     await expect(page.locator('#res-total-months')).toContainText('36');
   });
@@ -609,7 +609,7 @@ test.describe('Mobile: Edge Cases Grenzwerte', () => {
   test('Mobile: 51% Teilzeit (knapp über Minimum)', async ({ page }) => {
     await gotoCalculator(page);
     
-    // Set required inputs so percent controls are enabled
+    // Erforderliche Eingaben setzen, damit Prozent-Controls aktiviert sind
     await page.fill('#dauer', '36');
     await page.fill('#stunden', '40');
     // Setze manuelle Prozente
@@ -630,7 +630,7 @@ test.describe('Mobile: Edge Cases Grenzwerte', () => {
   test('Mobile: 99% Teilzeit (knapp unter Maximum)', async ({ page }) => {
     await gotoCalculator(page);
     
-    // Set required inputs so percent controls are enabled
+    // Erforderliche Eingaben setzen, damit Prozent-Controls aktiviert sind
     await page.fill('#dauer', '36');
     await page.fill('#stunden', '40');
     // Setze manuelle Prozente
@@ -678,7 +678,7 @@ test.describe('Mobile: Business Rules Verkürzungen', () => {
   test('Mobile: Teilzeit 75% mit Abitur: (36-12) * 100/75 = 32 Monate', async ({ page }) => {
     await gotoCalculator(page);
     
-    // Set required inputs so percent controls are enabled
+    // Erforderliche Eingaben setzen, damit Prozent-Controls aktiviert sind
     await page.fill('#dauer', '36');
     await page.fill('#stunden', '40');
     // Teilzeit 75% über Preset-Button

@@ -30,7 +30,8 @@ PFLICHTFELDER = (
 )
 
 # Historische Felder, die jetzt ignoriert werden (werden entfernt, bevor validiert wird)
-LEGACY_IGNORED_KEYS = {"beruf_q4", "beruf_q5"}
+# `beruf_q4` wurde reaktiviert; `beruf_q5` bleibt legacy
+LEGACY_IGNORED_KEYS = {"beruf_q5"}
 
 
 @dataclass(frozen=True)
@@ -45,6 +46,19 @@ class BerechnungsAnfrage:
 
     @staticmethod
     def from_dict(payload: Mapping[str, Any]) -> "BerechnungsAnfrage":
+        """Erzeuge ein validiertes `BerechnungsAnfrage`-Objekt aus rohem Payload.
+
+        Validiert Pflichtfelder, normalisiert `verkuerzungsgruende` und konvertiert
+        numerische Werte. Wirft `FehlendeFelderFehler` oder
+        `NutzlastValidierungsFehler` bei Problemen.
+
+        Args:
+            payload: Rohes Mapping (z.B. von JSON-parsing)
+
+        Returns:
+            BerechnungsAnfrage: Instanz mit typisierten Feldern.
+        """
+
         missing = [field for field in PFLICHTFELDER if field not in payload]
         if missing:
             raise FehlendeFelderFehler(missing)
@@ -94,6 +108,12 @@ class DienstFehler:
     details: Optional[Dict[str, Any]] = None
 
     def to_dict(self) -> Dict[str, Any]:
+        """Serialisiert die Fehlerinformationen als Dict für API-Antworten.
+
+        Gibt `code`, `message` und optional `details` zurück, damit
+        die HTTP-Response eine strukturierte Fehlerbeschreibung enthält.
+        """
+
         payload = {"code": self.code, "message": self.message}
         if self.details:
             payload["details"] = self.details
@@ -118,6 +138,12 @@ class BerechnungsDienstFehler(Exception):
 
 
 class FehlendeFelderFehler(BerechnungsDienstFehler):
+    """Fehler für fehlende Pflichtfelder im Request.
+
+    Dieses Exception-Objekt enthält das Attribut `missing` mit der Liste
+    der nicht vorhandenen Felder, damit die API eine strukturierte
+    Fehlermeldung zurückgeben kann.
+    """
     def __init__(self, missing: Any) -> None:
         self.missing = list(missing)
         message = f"Fehlende Felder: {', '.join(self.missing)}"
@@ -125,6 +151,12 @@ class FehlendeFelderFehler(BerechnungsDienstFehler):
 
 
 class NutzlastValidierungsFehler(BerechnungsDienstFehler):
+    """Validierungsfehler für ungültige Request-Werte.
+
+    Beinhaltet einen optionalen `code` und `details`, die in der
+    API-Antwort zurückgegeben werden können, um die Ursache strukturiert
+    darzustellen.
+    """
     def __init__(
         self,
         message: str,
@@ -218,6 +250,18 @@ def verarbeite_berechnungsanfrage(
 
 
 def _benoetige_dictionary(value: Any, field_name: str) -> Dict[str, Any]:
+    """Stellt sicher, dass ein Feld ein Mapping/Objekt ist.
+
+    Args:
+        value: Der zu prüfende Wert aus der Nutzlast.
+        field_name: Name des Feldes (für die Fehlermeldung).
+
+    Returns:
+        dict: Ein normales Python-`dict`, erzeugt aus dem Mapping.
+
+    Raises:
+        NutzlastValidierungsFehler: Falls `value` kein Mapping ist.
+    """
     if not isinstance(value, Mapping):
         raise NutzlastValidierungsFehler(
             f"{field_name} muss ein Objekt sein",
@@ -227,6 +271,13 @@ def _benoetige_dictionary(value: Any, field_name: str) -> Dict[str, Any]:
 
 
 def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
+    """Validiert die Struktur und Typen in `verkuerzungsgruende`.
+
+    Prüft erlaubte Keys, entfernt Legacy-Felder und stellt sicher, dass
+    erwartete Felder den korrekten Typ (bool oder Zahl) haben. Wirft eine
+    `NutzlastValidierungsFehler` bei unerwarteten oder falsch typisierten
+    Feldern.
+    """
     # Entferne Alt-Felder laut User Story 2.3
     data = dict(data)
     for legacy_key in LEGACY_IGNORED_KEYS:
@@ -243,7 +294,7 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
         "beruf_q2",
         "beruf_q2_dauer_monate",
         "beruf_q3",
-        "beruf_q6",
+        "beruf_q4",
         "berufliche_verkuerzung_monate",
     }
     unexpected_keys = sorted(set(data.keys()) - allowed_keys)
@@ -263,7 +314,7 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
         "beruf_q1",
         "beruf_q2",
         "beruf_q3",
-        "beruf_q6",
+        "beruf_q4",
     }
     for key in bool_keys:
         value = data.get(key, False)
@@ -295,6 +346,15 @@ def _validiere_verkuerzungsgruende(data: Mapping[str, Any]) -> None:
 
 
 def _normalisiere_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]:
+    """Normalisiert und coerce't Eingabewerte in `verkuerzungsgruende`.
+
+    Wandelt optionale Felder in konsistente Typen um (bools, ints) und
+    bildet freie Angaben wie `vorkenntnisse_monate` auf die internen
+    Repräsentationen (z.B. 12 Monate) ab.
+
+    Returns:
+        dict: Normalisiertes Dictionary mit erwarteten Keys und Typen.
+    """
     data = dict(data)
     for legacy_key in LEGACY_IGNORED_KEYS:
         data.pop(legacy_key, None)
@@ -314,7 +374,8 @@ def _normalisiere_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]
         "verkuerzungsgruende.beruf_q2_dauer_monate",
     )
     beruf_q3 = bool(data.get("beruf_q3", False))
-    beruf_q6 = bool(data.get("beruf_q6", False))
+    # beruf_q4: direkt aus dem Payload (default False)
+    beruf_q4 = bool(data.get("beruf_q4", False))
     wert = data.get("berufliche_verkuerzung_monate", 0) or 0
     berufliche_verkuerzung_monate = _coerce_int(
         wert,
@@ -337,7 +398,8 @@ def _normalisiere_verkuerzungsgruende(data: Mapping[str, Any]) -> Dict[str, Any]
         "beruf_q2": beruf_q2,
         "beruf_q2_dauer_monate": beruf_q2_dauer,
         "beruf_q3": beruf_q3,
-        "beruf_q6": beruf_q6,
+        # Verwende `beruf_q4` als Standard-Key intern
+        "beruf_q4": beruf_q4,
         "berufliche_verkuerzung_monate": berufliche_verkuerzung_monate,
     }
 
@@ -357,6 +419,12 @@ def _normalize_numeric_string(raw: str) -> str:
 
 
 def _coerce_float(value: Any, field_name: str) -> float:
+    """Konvertiert `value` sicher zu `float`.
+
+    Unterstützt ints, floats und Strings mit deutscher Formatierung
+    (Tausenderpunkte, Komma als Dezimaltrennzeichen). Bei ungültigen
+    Eingaben wird `NutzlastValidierungsFehler` geworfen.
+    """
     if isinstance(value, bool):
         raise NutzlastValidierungsFehler(
             f"{field_name} muss eine Zahl sein",
@@ -381,6 +449,12 @@ def _coerce_float(value: Any, field_name: str) -> float:
 
 
 def _coerce_int(value: Any, field_name: str) -> int:
+    """Konvertiert `value` zu `int`, nur wenn ganzzahlig.
+
+    Akzeptiert ints sowie numerische Strings (inkl. deutscher Formatierung).
+    Bei Nicht-Ganzzahlen oder ungültigen Werten wird
+    `NutzlastValidierungsFehler` geworfen.
+    """
     if isinstance(value, bool):
         raise NutzlastValidierungsFehler(
             f"{field_name} muss eine ganze Zahl sein",

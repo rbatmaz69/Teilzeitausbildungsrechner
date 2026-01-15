@@ -9,15 +9,31 @@
     "aria": "Choose language",
     "aria_easy": "Choose language",
     "de": "Deutsch",
+    "de_easy": "Deutsch",
     "en": "English",
+    "en_easy": "English",
     "uk": "Українська",
-    "tr": "Türkçe"
+    "uk_easy": "Українська",
+    "tr": "Türkçe",
+    "tr_easy": "Türkçe",
+    "ar": "العربية",
+    "ar_easy": "العربية",
+    "fr": "Français",
+    "fr_easy": "Français",
+    "ru": "Русский",
+    "ru_easy": "Русский",
+    "pl": "Polski",
+    "pl_easy": "Polski",
+    "ro": "Română",
+    "ro_easy": "Română"
   },
   "inputs": {
-    "title": "Your Calculation",
-    "title_easy": "Your Calculation",
-    "unitsLegend": "h = hours, m = months",
-    "unitsLegend_easy": "h = hours, m = months",
+    "title": "Calculation",
+    "title_easy": "Calculation",
+    "heading": "Input",
+    "heading_easy": "Input",
+    "unitsLegend": "h = hours, mo = months",
+    "unitsLegend_easy": "h = hours, mo = months",
     "dauer": {
       "label": "How long is your training in full-time?",
       "label_easy": "How long is full-time training?",
@@ -74,9 +90,13 @@
     "roundingHint_easy": "Rounded from {original} to {rounded} months",
     "placeholders": {
       "dauer": "e.g. 36",
+      "dauer_easy": "e.g. 36",
       "stunden": "e.g. 40",
+      "stunden_easy": "e.g. 40",
       "teilzeitProzent": "e.g. 75",
-      "teilzeitStunden": "e.g. 30"
+      "teilzeitProzent_easy": "e.g. 75",
+      "teilzeitStunden": "e.g. 30",
+      "teilzeitStunden_easy": "e.g. 30"
     }
   },
   "vk": {
@@ -139,6 +159,8 @@
       "nichtAbgeschlosseneAusbildung_sr_easy": "Started but not finished training",
       "nichtAbgeschlosseneAusbildung_dauer": "How many months did the incomplete vocational training last?",
       "nichtAbgeschlosseneAusbildung_dauer_easy": "How many months did the training last?",
+      "nichtAbgeschlosseneAusbildung_placeholder": "e.g. 12",
+      "nichtAbgeschlosseneAusbildung_placeholder_easy": "e.g. 12",
       "nichtAbgeschlosseneAusbildung_short": "Incomplete vocational training",
       "nichtAbgeschlosseneAusbildung_short_easy": "Unfinished training",
       "praktischeErfahrung": "Have you already worked in a similar field or gained practical experience that is useful for the training?",
@@ -161,12 +183,22 @@
     "vork": {
       "label": "Professional experience",
       "label_easy": "Work experience",
+      "label1": "Completed vocational training",
+      "label1_easy": "Completed vocational training",
+      "label2": "Proof of relevant basic vocational training",
+      "label2_easy": "Proof of relevant basic training",
+      "label3": "Relevant professional activity",
+      "label3_easy": "Relevant work",
+      "label4": "Work experience in the occupational field",
+      "label4_easy": "Work experience in the field",
       "sr": "Professional experience can shorten your training duration.",
       "sr_easy": "Work experience can make training shorter."
     },
     "other": {
       "question": "How old are you at the time of training?",
-      "question_easy": "How old are you?"
+      "question_easy": "How old are you?",
+      "placeholder": "e.g. 25",
+      "placeholder_easy": "e.g. 25"
     },
     "alter21": {
       "label": "Over 21 years old",
@@ -187,19 +219,35 @@
       "closeAria_easy": "Close",
       "title": "What are reduction reasons?",
       "title_easy": "What are reasons for shorter training?",
-      "content": "<p><strong>Reduction reasons</strong> are circumstances or qualifications that allow you to shorten the regular training duration. This can help you complete your training faster.</p><p><strong>How are they applied?</strong></p><p>Reduction reasons are credited to the regular training duration. Depending on the type of reason, different reductions may be granted. The reductions are added together until a maximum is reached.</p><p><strong>How many can be used simultaneously?</strong></p><p>You can specify <strong>multiple reduction reasons simultaneously</strong>. The total reduction is calculated from all selected reasons. However, note that there is a maximum reduction of 21 months that cannot be exceeded.</p>",
-      "content_easy": "<p><strong>Reasons for shorter training</strong> are things that can make your training shorter. For example: a school degree or work experience.</p><p><strong>How does it work?</strong></p><p>Each reason makes training shorter by some months. All reasons are added together.</p><p><strong>How many reasons can I use?</strong></p><p>You can use <strong>many reasons together</strong>. All reasons are added up. But training can be at most 21 months shorter.</p>"
+      "content": "<p><strong>Reduction reasons</strong> are circumstances or qualifications that allow you to shorten the regular training duration. This can help you complete your training faster.</p><p><strong>How are they applied?</strong></p><p>Reduction reasons are credited to the regular training duration. Depending on the type of reason, different reductions may be granted. The reductions are added together until a maximum is reached.</p><p><strong>How many can be used simultaneously?</strong></p><p>You can specify <strong>multiple reduction reasons simultaneously</strong>. The total reduction is calculated from all selected reasons. However, note that there is a maximum reduction of 12 months that cannot be exceeded.</p>",
+      "content_easy": "<p><strong>Reasons for shorter training</strong> are things that can make your training shorter. For example: a school degree or work experience.</p><p><strong>How does it work?</strong></p><p>Each reason makes training shorter by some months. All reasons are added together.</p><p><strong>How many reasons can I use?</strong></p><p>You can use <strong>many reasons together</strong>. All reasons are added up. But training can be at most 12 months shorter.</p>"
     }
   },
   "res": {
-    "headline": "Overview of Your Part-Time Training",
-    "headline_easy": "Overview of Your Part-Time Training",
+    "headline": "Results overview",
+    "headline_easy": "Results overview",
     "helper": "Here you can see your details and the result.",
     "helper_easy": "Here is your result.",
     "notesTitle": "Important information",
     "notesTitle_easy": "Important",
     "notes": "<li>This calculation is only a <strong>help</strong> and an <strong>orientation</strong>.</li><li>The result is <strong>not binding</strong>.</li><li>Discuss the result with your <strong>training company</strong>.</li><li>Part-time training is only possible if you work <strong>at least half</strong> of the normal training hours.</li>",
     "notes_easy": "<li>This calculation is only a <strong>help</strong>.</li><li>The result is <strong>not binding</strong>.</li><li>Talk about the result with your <strong>training company</strong>.</li><li>You must work <strong>at least half</strong> of normal hours.</li>",
+    "helpfulLinksTitle": "Further Information",
+    "helpfulLinksTitle_easy": "More Info",
+    "helpfulLinks": {
+      "arbeitsagentur": {
+        "title": "Federal Employment Agency",
+        "title_easy": "Employment Agency",
+        "desc": "General information about training and career counseling.",
+        "desc_easy": "Info about training and counseling."
+      },
+      "netzwerk": {
+        "title": "Part-Time Training Network",
+        "title_easy": "Part-Time Training Network",
+        "desc": "Specialized advice and support for part-time training.",
+        "desc_easy": "Advice for part-time training."
+      }
+    },
     "legalTitle": "Legal Basis",
     "legalTitle_easy": "Laws",
     "legalToggleLabel": "Show Details",
@@ -243,10 +291,10 @@
       "workPerWeek_easy": "Work per week"
     },
     "extension": {
-      "label1": "Shortening due to reasons for shorter training:",
-      "label1_easy": "Shorter because of reasons:",
-      "label2": "Extension due to part-time work:",
-      "label2_easy": "Longer because of part-time:",
+      "label1": "Step 1: Shortening",
+      "label1_easy": "Step 1: Shortening",
+      "label2": "Step 2: Part-time",
+      "label2_easy": "Step 2: Part-time",
       "plus": "+{n} months",
       "plus_easy": "+{n} months",
       "none": "No extension",
@@ -422,8 +470,10 @@
       "suffix": " easily",
       "suffix_easy": " easily"
     },
-    "description": "Calculate the optimal balance between working hours and training. Our calculator helps you find the right part-time solution for your needs.",
-    "description_easy": "Calculate hours for part-time training. This calculator helps you.",
+      "description": "The calculator helps you check whether you can complete your vocational training part-time and whether options exist to shorten the training period.",
+      "description_easy": "The calculator shows whether you can do your vocational training part-time. It also checks whether shortening the training period may be possible.",
+    "benefitsTitle": "Benefits of the calculator",
+    "benefitsTitle_easy": "Benefits",
     "card1": {
       "title": "Flexible hours",
       "title_easy": "Flexible hours",

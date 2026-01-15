@@ -91,18 +91,18 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
     # und q2-Dauer) – die ehemaligen Felder q4/q5 sind entfernt
     # oder ein bereits berechnetes Feld 'berufliche_verkuerzung_monate' vom Client.
     berufliche_total = 0
-    # Detect if any new beruf fields are present
+    # Prüfen, ob neue berufliche Felder vorhanden sind
     has_new_beruf_fields = any(k in verkuerzungsgruende for k in (
         "beruf_q1",
         "beruf_q2",
         "beruf_q2_dauer_monate",
         "beruf_q3",
-        "beruf_q6",
+        "beruf_q4",
         "berufliche_verkuerzung_monate",
     ))
 
     if has_new_beruf_fields:
-        # If client provided a precomputed aggregate, prefer it
+        # Wenn der Client eine vorkalkulierte Gesamtsumme liefert, diese bevorzugen
         if verkuerzungsgruende.get("berufliche_verkuerzung_monate", 0):
             berufliche_total += int(
                 verkuerzungsgruende.get("berufliche_verkuerzung_monate", 0)
@@ -113,8 +113,8 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
                 berufliche_total += 12
             if verkuerzungsgruende.get("beruf_q3", False):
                 berufliche_total += 12
-            # Q6 => 6 Monate
-            if verkuerzungsgruende.get("beruf_q6", False):
+            # Q4 => 6 Monate (früher Q6)
+            if verkuerzungsgruende.get("beruf_q4", False):
                 berufliche_total += 6
             # Q2 => duration mapping
             if verkuerzungsgruende.get("beruf_q2", False):
@@ -125,7 +125,7 @@ def berechne_verkuerzung(basis_dauer_monate, verkuerzungsgruende):
                     berufliche_total += 6
                 # else <6 => 0
     else:
-        # Legacy behavior: fallback to old 'vorkenntnisse_monate' field
+        # Legacy-Verhalten: Fallback auf altes Feld 'vorkenntnisse_monate'
         vorkenntnisse = verkuerzungsgruende.get("vorkenntnisse_monate", 0)
         if vorkenntnisse and vorkenntnisse > 0:
             berufliche_total += VERKUERZUNG_VORKENNTNISSE

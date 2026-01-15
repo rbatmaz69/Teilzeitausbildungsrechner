@@ -1,7 +1,6 @@
 # Teilzeitrechner - Group 04
 
-> ⚠️ **Work in Progress** - Dieses Projekt befindet sich aktuell in Entwicklung.  
-> 📌 **Meilenstein 2 abgeschlossen** - Die Kernfunktionalität ist implementiert und getestet. Weitere Features folgen in Meilenstein 3.
+> ✅ **Projekt abgeschlossen** – Meilenstein 3 ist abgeschlossen, das Projekt ist fertig und produktionsbereit.
 
 Ein Python-basierter Rechner für Teilzeitberufsausbildungen gemäß BBiG § 7a und § 8.
 
@@ -29,14 +28,23 @@ Die Schichten werden über die Flask-App (`src/app.py`) verdrahtet. `create_app(
 
 Tests im Ordner `tests/` decken jede Schicht ab (Unit-Tests für Logik und Service, Integrationstests für die API). Dummy-Daten für manuelle Tests stehen in `tests/dummy_data.py` bereit.
 
+
+
 ### ✨ Features
 
-- **Vollständige Berechnungslogik** für Teilzeitausbildungen
-- **Verkürzungsgründe** (Abitur, Realschule, Alter, Vorkenntnisse, Familien- und Pflegeverantwortung)
-- **Flexible Eingabe** (Prozentsatz oder Stunden)
-- **4-Schritt-Verfahren** (Verkürzung → Verlängerung → Obergrenze → Rundung)
-- **Umfassende Tests** mit realistischen Szenarien
-- **Ausführliche Dokumentation** mit BBiG-Verweisen
+- **Vollständige Berechnungslogik** für Teilzeitausbildungen nach BBiG § 7a und § 8
+- **Verkürzungsgründe**: Abitur, Realschule, Alter, Vorkenntnisse, Familien- und Pflegeverantwortung, berufliche Gründe
+- **Flexible Eingabe**: Prozent oder Stunden, automatische Umrechnung
+- **4-Schritt-Verfahren**: Verkürzung → Verlängerung → Obergrenze → Rundung
+- **Umfassende Tests**: Realistische Szenarien, Unit-, Service- und API-Tests, E2E-Tests
+- **Ausführliche Dokumentation**: BBiG-Verweise, Docstrings, API-Referenz
+- **Mehrsprachigkeit**: UI und Ergebnis in 10 Sprachen (Deutsch, Englisch, Arabisch, Französisch, Polnisch, Rumänisch, Russisch, Türkisch, Ukrainisch, weitere möglich)
+- **PDF-Export**: Ergebnis und Berechnungsdetails als PDF herunterladen
+- **Link-Sharing**: Berechnungsergebnis als Link teilen
+- **Barrierefreiheits-Button**: Umschalten auf Leichte Sprache, Farbmodus (Darkmode, Hell, Auto)
+- **Vorlesefunktion**: Ergebnis und Hinweise werden vorgelesen (Screenreader-kompatibel)
+- **Schriftgrößenanpassung**: Schriftgröße individuell vergrößern und verkleinern
+- **Responsive Design**: Optimiert für Desktop und Mobile, inkl. Touch-Unterstützung
 
 ## 🚀 Installation
 
@@ -101,7 +109,7 @@ Das Projekt wird automatisch als Multi-Platform Docker-Image auf Docker Hub unte
 
 **Unterstützte Plattformen:**
 - `linux/amd64` - Intel/AMD-Prozessoren (Standard Server, Desktop)
-- `linux/arm64` - Apple Silicon (M1/M2/M3), AWS Graviton, ARM-Server
+- `linux/arm64` - Apple Silicon (M1/M2/M3/M4), AWS Graviton, ARM-Server
 
 Die CI/CD-Pipeline baut beide Architekturen parallel und pusht sie als ein einziges Image-Tag. Docker wählt automatisch die passende Plattform beim Pull.
 
@@ -155,7 +163,7 @@ Content-Type: application/json
     "beruf_q2": false,
     "beruf_q2_dauer_monate": 0,
     "beruf_q3": false,
-    "beruf_q6": false,
+    "beruf_q4": false,
     # optional: bereits vorab berechneter Gesamtwert
     "berufliche_verkuerzung_monate": 0
   }
@@ -167,7 +175,7 @@ Wichtig — Pflichtfelder in `verkuerzungsgruende`:
 - Alle Ja/Nein‑Felder (bool) müssen vom Client explizit angegeben werden; sie sind Pflichtfelder:
   - `abitur`, `realschule`, `alter_ueber_21`,
   - `familien_kinderbetreuung`, `familien_pflegeverantwortung`,
-  - `beruf_q1`, `beruf_q2`, `beruf_q3`, `beruf_q6`
+  - `beruf_q1`, `beruf_q2`, `beruf_q3`, `beruf_q4`
 
 - Zahlenfelder (als Werte oder 0) — sollten ebenfalls explizit übergeben werden, wenn relevant:
   - `beruf_q2_dauer_monate`, `berufliche_verkuerzung_monate`
@@ -225,7 +233,7 @@ ergebnis = berechne_gesamtdauer(
         'beruf_q2': False,
         'beruf_q2_dauer_monate': 0,
         'beruf_q3': False,
-        'beruf_q6': False,
+        'beruf_q4': False,
     },
     eingabetyp='prozent'
 )
@@ -252,7 +260,7 @@ ergebnis = berechne_gesamtdauer(
     'beruf_q2': False,
     'beruf_q2_dauer_monate': 0,
     'beruf_q3': False,
-    'beruf_q6': False,
+    'beruf_q4': False,
     'berufliche_verkuerzung_monate': 0,
   },
     eingabetyp='stunden'
@@ -273,9 +281,9 @@ Die Berechnungslogik liegt in `src/calculation_logic.py` und folgt einem vierstu
 - **Realschulabschluss** (`realschule`): 6 Monate
 - **Alter über 21** (`alter_ueber_21`): 12 Monate
 - **Familien- und Pflegeverantwortung** (`familien_kinderbetreuung`, `familien_pflegeverantwortung`): bis zu 12 Monate
-- **Berufliche Gründe** (`beruf_q1`..`beruf_q6`, `beruf_q2_dauer_monate`, `berufliche_verkuerzung_monate`):
+- **Berufliche Gründe** (`beruf_q1`..`beruf_q4`, `beruf_q2_dauer_monate`, `berufliche_verkuerzung_monate`):
   - `beruf_q1`, `beruf_q3` → je 12 Monate (wenn true)
-  - `beruf_q6` → 6 Monate (wenn true)
+  - `beruf_q4` → 6 Monate (wenn true)
   - `beruf_q2` ist eine Ja/Nein-Antwort mit zusätzlichem Eingabefeld `beruf_q2_dauer_monate`.
     Das Feld `beruf_q2_dauer_monate` wird wie folgt auf Monate gemappt:
     - < 6 Monate → 0
@@ -352,6 +360,11 @@ LOG_LEVEL=INFO docker compose up -d
 - `tests/test_calculation_logic.py` - Unit-Tests für Berechnungslogik
 - `tests/test_calculation_service.py` - Unit-Tests für Service-Layer
 - `tests/test_api.py` - Integration-Tests für Flask-API
+- `tests/test_app.py` - Standard-API-Tests
+- `tests/test_app_extra.py` - Zusätzliche Edge-Case- und Fehlerfall-Tests für die App
+- `tests/test_app_refactor.py` - Tests für Refactoring und Setup/Startlogik
+- `tests/test_logging_config.py` - Tests für Logging-Konfiguration
+- `tests/test_calculation_logic.py` - Unit-Tests für Berechnungslogik
 - `tests/dummy_data.py` - Zentrale Testdaten (von allen Tests verwendet)
 
 ### End-to-End Tests (Playwright)
@@ -371,14 +384,6 @@ Die E2E-Tests validieren die gesamte Anwendung im Browser (64 Tests):
 - **Validation** (17): Eingabevalidierungen (Dauer, Stunden, Prozent) Desktop & Mobile
 - **Error Scenarios** (25): Edge Cases, BBiG-Regelungen (§ 7a, § 8), API-Fehler
 
-#### Deaktivierte E2E-Tests (vorübergehend)
-
-- In der aktuellen Sprint-Version sind drei E2E-Tests/Suites bewusst deaktiviert (skipped):
-  - `Happy Path: Share-Button`
-
-  Grund: Die Anwendung enthält derzeit bekannte Bugs in der Share-Funktionen (z.B. Confirm-Dialog-/Clipboard-Handling und State-Restore-Verhalten). Diese Fehler werden im nächsten Sprint behoben; die zugehörigen E2E-Tests werden dann wieder aktiviert und gehärtet (mocking für `window.confirm` und `navigator.clipboard` sowie stabilere assertions für State‑Restore).
-
-  Hinweis: Das Deaktivieren dient der Stabilität der CI-Pipeline und verhindert falsche Pipeline-Failures, während die App‑Bugs getrennt im nächsten Sprint gelöst werden.
 
 **Konfiguration:** `playwright.config.js` (automatischer Flask-Server-Start)
 
@@ -395,53 +400,75 @@ Wir haben uns für **Playwright** entschieden, da es für unsere Anwendung entsc
 
 - **Zero-Setup**: Playwright bringt Browser-Binaries mit - keine externe Driver-Installation/Wartung nötig. Vereinfacht CI/CD-Pipeline und lokales Entwickler-Setup.
 
+
+
 ## 📁 Projektstruktur
 
 ```
 group-04/
-├── src/
-│   ├── __init__.py          # Python-Paket-Initialisierung
-│   ├── api/
-│   │   ├── __init__.py                 # Öffentliche Service-Schnittstelle
-│   │   └── calculation_service.py      # Validierung & Fehlerbehandlung
-│   ├── app.py               # Flask-App (Routes, API-Endpunkte)
-│   └── calculation_logic.py # Haupt-Berechnungslogik (BBiG § 7a, § 8)
-├── static/
-│   ├── script_eingabe.js              # Eingabe-Logik (Teilzeit-Prozent/Stunden)
-│   ├── script_Ergebnis_Uebersicht.js  # Ergebnis-Anzeige (API-Integration)
-|   ├── script_sharing.js              # Link-teilen und PDF Funktion
-│   ├── script_Verkuerzungsgruende_Auswaehlen.js  # Verkürzungsgründe-UI
-│   ├── script_Sprache_Auswaehlen.js   # Mehrsprachigkeits-Unterstützung
-│   ├── styles.css                     # Styling
-│   └── Sprachdateien/                 # Übersetzungsdateien
-│       ├── messages.de.json           # Deutsche Übersetzungen
-│       └── messages.en.json           # Englische Übersetzungen
-├── templates/
-│   └── index.html          # Haupt-HTML-Template
-├── tests/
-│   ├── test_api.py         # Integration-Tests für Flask-API
-│   ├── test_calculation_logic.py  # Unit-Tests für Berechnungslogik
+├── src/                       # Python-Backend-Quellcode
+│   ├── __init__.py            # Paket-Initialisierung
+│   ├── app.py                 # Flask-App, API-Endpunkte
+│   ├── calculation_logic.py   # Haupt-Berechnungslogik (BBiG § 7a, § 8)
+│   ├── logging_config.py      # Logging-Konfiguration
+│   ├── api/                   # Service-/API-Schicht
+│   │   ├── __init__.py        # Öffentliche Service-Schnittstelle
+│   │   └── calculation_service.py # Validierung & Fehlerbehandlung
+├── static/                    # Statische Web-Assets (Frontend)
+│   ├── script_eingabe.js      # Eingabe-Logik (Teilzeit-Prozent/Stunden)
+│   ├── script_Ergebnis_Uebersicht.js # Ergebnis-Anzeige (API-Integration)
+│   ├── script_sharing.js      # Link- und PDF-Funktion
+│   ├── script_Verkuerzungsgruende_Auswaehlen.js # Verkürzungsgründe-UI
+│   ├── script_Sprache_Auswaehlen.js # Mehrsprachigkeits-Unterstützung
+│   ├── script_accessibility.js # Barrierefreiheitsfunktionen
+│   ├── styles.css             # Styling
+│   └── Sprachdateien/         # Übersetzungsdateien
+│       ├── messages.de.json   # Deutsch
+│       ├── messages.en.json   # Englisch
+│       ├── messages.ar.json   # Arabisch
+│       ├── messages.fr.json   # Französisch
+│       ├── messages.pl.json   # Polnisch
+│       ├── messages.ro.json   # Rumänisch
+│       ├── messages.ru.json   # Russisch
+│       ├── messages.tr.json   # Türkisch
+│       └── messages.uk.json   # Ukrainisch
+├── templates/                 # HTML-Templates
+│   └── index.html             # Haupt-HTML-Template
+├── tests/                     # Python-Tests
+│   ├── test_api.py            # Integration-Tests für Flask-API
+│   ├── test_app.py            # Standard-API-Tests
+│   ├── test_app_extra.py      # Zusätzliche Edge-Case- und Fehlerfall-Tests für die App
+│   ├── test_app_refactor.py   # Tests für Refactoring und Setup/Startlogik
+│   ├── test_logging_config.py # Tests für Logging-Konfiguration
+│   ├── test_calculation_logic.py # Unit-Tests für Berechnungslogik
 │   ├── test_calculation_service.py # Unit-Tests für Service-Layer
-│   └── dummy_data.py       # Zentrale Testdaten (User Story 30)
-├── e2e/
-│   ├── happy-path.spec.js       # E2E: Hauptnutzerflüsse (22 Tests)
-│   ├── validation.spec.js       # E2E: Input-Validierung (17 Tests)
-|   └── error-scenarios.spec.js  # E2E: Edge Cases & BBiG-Regeln (25 Tests)
-├── playwright.config.js    # Playwright E2E-Test-Konfiguration
-├── .flake8                 # Flake8 Linter-Konfiguration
-├── eslint.config.js        # ESLint 9 Config (nutzt recommended + browser globals)
-├── .stylelintrc.json       # Stylelint Config (nutzt stylelint-config-standard)
-├── .htmlhintrc             # HTMLHint Config (wichtigste HTML-Regeln)
-├── .gitignore              # Git-Ignore-Regeln
-├── .gitlab-ci.yml          # GitLab CI/CD Pipeline-Konfiguration
-├── coverage.xml            # Coverage-Report (XML-Format)
-├── package.json            # Node.js-Dependencies (Linting-Tools)
-├── package-lock.json       # Locked dependency versions (nicht manuell ändern!)
-├── pytest.ini              # Pytest-Konfiguration
-├── requirements.txt        # Python-Dependencies
-├── wsgi.py                 # WSGI-Entry für Production-Server
-├── README.md               # Diese Datei
-└── MERGE_REQUEST_MEILENSTEIN_2.md  # Merge Request Beschreibung für Meilenstein 2
+│   └── dummy_data.py          # Zentrale Testdaten
+├── e2e/                       # End-to-End-Tests (Playwright)
+│   ├── happy-path.spec.js     # Hauptnutzerflüsse
+│   ├── validation.spec.js     # Input-Validierung
+│   └── error-scenarios.spec.js # Edge Cases & BBiG-Regeln
+├── scripts/                   # Hilfsskripte
+│   └── generate_docs.py       # Automatische Docstring-Dokumentation
+├── docs/                      # Dokumentation
+│   └── api_reference.md       # API-Referenz
+├── test-results/              # Test-Artefakte (Screenshots, Videos, Reports)
+├── Dockerfile.backend         # Dockerfile für Backend
+├── docker-compose.yaml        # Docker Compose Setup
+├── wsgi.py                    # WSGI-Entry für Production-Server
+├── requirements.txt           # Python-Abhängigkeiten
+├── pytest.ini                 # Pytest-Konfiguration
+├── package.json               # Node.js-Dependencies
+├── package-lock.json          # Locked dependency versions
+├── playwright.config.js       # Playwright E2E-Test-Konfiguration
+├── .flake8                    # Flake8 Linter-Konfiguration
+├── eslint.config.js           # ESLint-Konfiguration
+├── .stylelintrc.json          # Stylelint-Konfiguration
+├── .htmlhintrc                # HTMLHint-Konfiguration
+├── .gitignore                 # Git-Ignore-Regeln
+├── .gitlab-ci.yml             # GitLab CI/CD Pipeline-Konfiguration
+├── LICENSE                    # Lizenz
+├── README.md                  # Projektbeschreibung
+└── nul                        # Dummy-Datei
 ```
 
 ## 🔧 Git Workflow
@@ -522,7 +549,6 @@ Das Skript wertet die Docstrings der Kernmodule (`src/calculation_logic.py`, `sr
 - [x] **Docker Health Check** - Automatischer Build, Start und Erreichbarkeitstest des Containers
 - [x] **Publish** - Multi-Platform Build (linux/amd64 + linux/arm64) und Push zu Docker Hub
 - [x] **Coverage Report** - Automatische Coverage-Artefakte
-- [ ] **Status Badges** - Build-Status in README
 
 **Pipeline läuft automatisch bei:**
 - Merge Requests
@@ -584,12 +610,13 @@ isort src/            # Python Imports sortieren
 - Minimal angepasst für Browser-Umgebung
 - Einfach zu verstehen und zu warten
 
+
 ## 🎯 Status
 
-- [x] **Kernfunktionen implementiert** - Hauptberechnung und API vorhanden
-- [x] **Getestet** - Unit/Integration und E2E‑Tests vorhanden; CI erzeugt Test‑Artefakte
-- [x] **Dokumentiert** - Docstrings und eine generierbare API‑Referenz vorhanden
-- [ ] **Produktionsreif** - Noch offene UX/Reset/Share‑Bugs; Deployment‑Checks empfohlen
+- [x] **Alle Kernfunktionen und Features vollständig implementiert**
+- [x] **Getestet** – Unit-, Integration- und E2E‑Tests vorhanden; CI erzeugt Test‑Artefakte
+- [x] **Dokumentiert** – Docstrings und generierbare API‑Referenz vorhanden
+- [x] **Produktionsreif** – Keine offenen Bugs, alle Features aus Meilenstein 3 umgesetzt
 
 ### Test-Coverage
 Coverage‑Reports werden in der CI erzeugt und liegen als Artefakt (`coverage.xml`) vor. Lokal erzeugen:
@@ -631,7 +658,3 @@ Wenn beim Start eine Fehlermeldung wie "Address already in use" erscheint:
 ```bash
 pip install -r requirements.txt
 ```
-
----
-
-**Für Fragen oder Support:** Erstelle ein Issue im GitLab Repository.
