@@ -305,6 +305,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const verboteneZeichen = ['e', 'E', '+', '-', '.', ','];
     if (verboteneZeichen.includes(ev.key)) {
       ev.preventDefault();
+      return;
+    }
+
+    // Sofort-Check: Wenn der Wert durch den Tastendruck das Maximum von 42 überschreiten würde
+    if (/^[0-9]$/.test(ev.key)) {
+      const currentVal = dauerEingabe.value;
+      const start = dauerEingabe.selectionStart;
+      const end = dauerEingabe.selectionEnd;
+      const newValStr = currentVal.slice(0, start) + ev.key + currentVal.slice(end);
+      const newVal = parseInt(newValStr, 10);
+      
+      if (!isNaN(newVal) && newVal > 42) {
+        ev.preventDefault();
+        // Auf Maximum setzen falls noch nicht geschehen und Fehler sofort anzeigen
+        if (dauerEingabe.value !== "42") {
+          dauerEingabe.value = 42;
+        }
+        aktuellerFehlerDauer = "errors.durationMax";
+        if (fehlerDauer) fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Der Wert darf maximal 42 Monate betragen");
+        dauerEingabe.classList.add('error');
+        entferneFehlerMitFadeout(dauerEingabe, fehlerDauer, () => aktuellerFehlerDauer = null, timerIdDauer);
+      }
     }
   });
   
@@ -328,6 +350,28 @@ document.addEventListener("DOMContentLoaded", () => {
       const verboteneZeichen = ['e', 'E', '+', '-'];
       if (verboteneZeichen.includes(ev.key)) {
         ev.preventDefault();
+        return;
+      }
+
+      // Sofort-Check für reguläre Wochenstunden (Maximum 48)
+      if (inp === wochenstundenEingabe && /^[0-9]$/.test(ev.key)) {
+        const start = inp.selectionStart;
+        const end = inp.selectionEnd;
+        const currentVal = inp.value;
+        const newValStr = (currentVal.slice(0, start) + ev.key + currentVal.slice(end)).replace(',', '.');
+        const newVal = parseFloat(newValStr);
+        
+        if (!isNaN(newVal) && newVal > 48) {
+          ev.preventDefault();
+          if (inp.value !== "48") {
+            inp.value = "48";
+          }
+          aktuellerFehlerRegularStunden = "errors.regularHoursMax";
+          if (fehlerRegularStunden) fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Der Wert darf maximal 48 Stunden betragen");
+          wochenstundenEingabe.classList.add('error');
+          entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => { aktuellerFehlerRegularStunden = null; }, timerIdRegularStunden);
+          return;
+        }
       }
 
       // Spezialfall: Prozentfeld ist schon 100, weitere Ziffern werden geblockt und Fehler angezeigt
@@ -433,12 +477,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const ausbildungsdauer = parseInt(dauerEingabe.value, 10);
 
-    // Wenn der Max-Fehler bereits im Input-Handler gesetzt wurde (Korrektur während der Eingabe), stelle sicher, dass die Fehlermeldung steht und breche ab
+    // Wenn der Max-Fehler bereits im Input-Handler gesetzt wurde, nichts mehr tun
     if (aktuellerFehlerDauer === "errors.durationMax") {
-      if (fehlerDauer) {
-        fehlerDauer.textContent = uebersetzung(aktuellerFehlerDauer, "Der Wert darf maximal 42 Monate betragen");
-      }
-      dauerEingabe.classList.add('error');
       return;
     }
 
@@ -458,7 +498,6 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       dauerEingabe.classList.remove('error');
       aktuellerFehlerDauer = null;
-      // Rounding-Hinweis wird durch Timer verwaltet, nicht hier löschen
     }
   })
   
@@ -467,6 +506,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const ausbildungsdauer = parseNumber(dauerEingabe.value);
     const istSpinner = event.inputType === '' || event.inputType === undefined;
     
+    // Lösche Fehler beim Tippen eines validen Wertes
+    if (!isNaN(ausbildungsdauer) && ausbildungsdauer <= 42 && ausbildungsdauer >= 24) {
+      if (aktuellerFehlerDauer) {
+        dauerEingabe.classList.remove('error');
+        if (fehlerDauer) fehlerDauer.textContent = '';
+        aktuellerFehlerDauer = null;
+      }
+    }
+
     // Max-Validierung: IMMER sofort korrigieren (auch bei manueller Eingabe)
     if (!isNaN(ausbildungsdauer) && ausbildungsdauer > 42) {
       dauerEingabe.value = 42;
@@ -496,12 +544,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Wenn der Max-Fehler bereits im Input-Handler gesetzt wurde (Korrektur während der Eingabe), stelle sicher, dass die Fehlermeldung steht und breche ab
+    // Wenn der Max-Fehler bereits im Input-Handler gesetzt wurde, nichts mehr tun
     if (aktuellerFehlerRegularStunden === "errors.regularHoursMax") {
-      if (fehlerRegularStunden) {
-        fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Der Wert darf maximal 48 Stunden betragen");
-      }
-      wochenstundenEingabe.classList.add('error');
       return;
     }
 
@@ -519,16 +563,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (fehlerRegularStunden) fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, "Der Wert darf maximal 48 Stunden betragen");
       entferneFehlerMitFadeout(wochenstundenEingabe, fehlerRegularStunden, () => { aktuellerFehlerRegularStunden = null; }, timerIdRegularStunden);
     } else {
-      if (aktuellerFehlerRegularStunden) {
-        if (fehlerRegularStunden && fehlerRegularStunden.textContent.trim() === '') {
-          const fallbackMap = {
-            "errors.regularHoursMin": "Der Wert muss mindestens 10 Stunden betragen",
-            "errors.regularHoursMax": "Der Wert darf maximal 48 Stunden betragen"
-          };
-          fehlerRegularStunden.textContent = uebersetzung(aktuellerFehlerRegularStunden, fallbackMap[aktuellerFehlerRegularStunden] || '');
-        }
-        return;
-      }
       wochenstundenEingabe.classList.remove('error');
       aktuellerFehlerRegularStunden = null;
       if (fehlerRegularStunden) fehlerRegularStunden.textContent = '';
@@ -592,6 +626,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const wochenstunden = parseNumber(wochenstundenEingabe.value);
     const istSpinner = event.inputType === '' || event.inputType === undefined;
     
+    // Lösche Fehler beim Tippen eines validen Wertes
+    if (!isNaN(wochenstunden) && wochenstunden <= 48 && wochenstunden >= 10) {
+      if (aktuellerFehlerRegularStunden) {
+        wochenstundenEingabe.classList.remove('error');
+        if (fehlerRegularStunden) fehlerRegularStunden.textContent = '';
+        aktuellerFehlerRegularStunden = null;
+      }
+    }
+
     // Max-Validierung: IMMER sofort korrigieren (auch bei manueller Eingabe)
     if (!isNaN(wochenstunden) && wochenstunden > 48) {
       wochenstundenEingabe.value = 48;
