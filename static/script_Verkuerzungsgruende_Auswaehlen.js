@@ -22,6 +22,96 @@ document.addEventListener('DOMContentLoaded', () => {
   const berufQ3Nein = document.getElementById('vk_beruf_q3_nein');
   const berufQ4Ja = document.getElementById('vk_beruf_q4_ja');
   const berufQ4Nein = document.getElementById('vk_beruf_q4_nein');
+  const vkSchoolSelect = document.getElementById('vk-school-select');
+
+  // ========== LOCALSTORAGE: LADEN UND SPEICHERN ==========
+  const STORAGE_KEY_VK = 'teilzeitrechner_verkuerzungsgruende';
+
+  /**
+   * Lade gespeicherte Verkürzungsgründe-Werte beim Start
+   */
+  const ladeGespeichertePersistenz = () => {
+    try {
+      const gespeichert = localStorage.getItem(STORAGE_KEY_VK);
+      if (gespeichert) {
+        const werte = JSON.parse(gespeichert);
+
+        // Lade Alter
+        if (werte.alter !== undefined && werte.alter !== null && werte.alter !== '') {
+          if (alter) alter.value = werte.alter;
+        }
+
+        // Lade Schulabschluss
+        if (werte.schoolSelect !== undefined && werte.schoolSelect !== null) {
+          if (vkSchoolSelect) vkSchoolSelect.value = werte.schoolSelect;
+        }
+
+        // Lade Checkboxen (Kinderbetreuung)
+        if (werte.kinderbetreuungJa && kinderbetreuungJa) kinderbetreuungJa.checked = true;
+        if (werte.kinderbetreuungNein && kinderbetreuungNein) kinderbetreuungNein.checked = true;
+
+        // Lade Checkboxen (Pflege)
+        if (werte.pflegeJa && pflegeJa) pflegeJa.checked = true;
+        if (werte.pflegeNein && pflegeNein) pflegeNein.checked = true;
+
+        // Lade Checkboxen (Berufliche Qualifikationen)
+        if (werte.berufQ1Ja && berufQ1Ja) berufQ1Ja.checked = true;
+        if (werte.berufQ1Nein && berufQ1Nein) berufQ1Nein.checked = true;
+
+        if (werte.berufQ2Ja && berufQ2Ja) berufQ2Ja.checked = true;
+        if (werte.berufQ2Nein && berufQ2Nein) berufQ2Nein.checked = true;
+        if (werte.berufQ2Duration !== undefined && werte.berufQ2Duration !== null && berufQ2Duration) {
+          berufQ2Duration.value = werte.berufQ2Duration;
+          // Zeige den Duration Container wenn Q2 = Ja geprüft ist
+          if (berufQ2Ja?.checked && berufQ2DurationContainer) {
+            berufQ2DurationContainer.style.display = 'block';
+          }
+        }
+
+        if (werte.berufQ3Ja && berufQ3Ja) berufQ3Ja.checked = true;
+        if (werte.berufQ3Nein && berufQ3Nein) berufQ3Nein.checked = true;
+
+        if (werte.berufQ4Ja && berufQ4Ja) berufQ4Ja.checked = true;
+        if (werte.berufQ4Nein && berufQ4Nein) berufQ4Nein.checked = true;
+      }
+    } catch (fehler) {
+      console.error('Fehler beim Laden der Verkürzungsgründe:', fehler);
+    }
+  };
+
+  /**
+   * Speichere Verkürzungsgründe-Werte in localStorage
+   */
+  const speichereVerkuerzungsgruende = () => {
+    try {
+      const werte = {
+        alter: alter ? alter.value : '',
+        schoolSelect: vkSchoolSelect ? vkSchoolSelect.value : 'none',
+        kinderbetreuungJa: kinderbetreuungJa ? kinderbetreuungJa.checked : false,
+        kinderbetreuungNein: kinderbetreuungNein ? kinderbetreuungNein.checked : false,
+        pflegeJa: pflegeJa ? pflegeJa.checked : false,
+        pflegeNein: pflegeNein ? pflegeNein.checked : false,
+        berufQ1Ja: berufQ1Ja ? berufQ1Ja.checked : false,
+        berufQ1Nein: berufQ1Nein ? berufQ1Nein.checked : false,
+        berufQ2Ja: berufQ2Ja ? berufQ2Ja.checked : false,
+        berufQ2Nein: berufQ2Nein ? berufQ2Nein.checked : false,
+        berufQ2Duration: berufQ2Duration ? berufQ2Duration.value : '',
+        berufQ3Ja: berufQ3Ja ? berufQ3Ja.checked : false,
+        berufQ3Nein: berufQ3Nein ? berufQ3Nein.checked : false,
+        berufQ4Ja: berufQ4Ja ? berufQ4Ja.checked : false,
+        berufQ4Nein: berufQ4Nein ? berufQ4Nein.checked : false
+      };
+      localStorage.setItem(STORAGE_KEY_VK, JSON.stringify(werte));
+    } catch (fehler) {
+      console.error('Fehler beim Speichern der Verkürzungsgründe:', fehler);
+    }
+  };
+
+  // Mache speichereVerkuerzungsgruende global verfügbar für script_eingabe.js
+  window.speichereVerkuerzungsgruende = speichereVerkuerzungsgruende;
+
+  // Lade gespeicherte Werte beim Start
+  ladeGespeichertePersistenz();
 
   /* ========== Tooltips (touch-optimiert) ========== */
   document.querySelectorAll('.info-btn').forEach(schaltflaeche => {
@@ -104,6 +194,13 @@ document.addEventListener('DOMContentLoaded', () => {
       alter.value = 99;
     }
   });
+
+  // Schulabschluss ändern
+  if (vkSchoolSelect) {
+    vkSchoolSelect.addEventListener('change', () => {
+      // Schulabschluss wird erst beim Button-Klick gespeichert
+    });
+  }
 
   // Ereignis-Listener für familiäre Verpflichtungen - Ja/Nein-Gruppen
   // Kinderbetreuung: Mutual exclusivity zwischen Ja und Nein
@@ -196,6 +293,10 @@ document.addEventListener('DOMContentLoaded', () => {
           if (errorBerufQ2Dauer) errorBerufQ2Dauer.textContent = '';
         }, 4000);
       }
+    });
+    
+    berufQ2Duration.addEventListener('blur', () => {
+      // Werte werden erst beim Button-Klick gespeichert
     });
   }
 

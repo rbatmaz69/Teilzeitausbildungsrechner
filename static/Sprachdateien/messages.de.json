@@ -182,17 +182,7 @@
     },
     "vork": {
       "label": "Berufliche Vorerfahrung",
-      "label_easy": "Vorerfahrung",
-      "label1": "Abgeschlossene Berufsausbildung",
-      "label1_easy": "Abgeschlossene Berufsausbildung",
-      "label2": "Nachweis einer einschlägigen beruflichen Grundausbildung",
-      "label2_easy": "Nachweis einer passenden Grundausbildung",
-      "label3": "Einschlägige Berufstätigkeit",
-      "label3_easy": "Passende Berufstätigkeit",
-      "label4": "Arbeitserfahrung im Berufsfeld",
-      "label4_easy": "Arbeitserfahrung im Berufsfeld",
-      "sr": "Berufliche Vorkenntnisse können Ihre Ausbildungsdauer verkürzen.",
-      "sr_easy": "Vorkenntnisse können die Ausbildung kürzer machen."
+      "label_easy": "Vorerfahrung"
     },
     "other": {
       "question": "Wie alt sind Sie zum Zeitpunkt der Ausbildung?",
@@ -300,28 +290,8 @@
       "label1": "Schritt 1: Verkürzung",
       "label1_easy": "Schritt 1: Verkürzung",
       "label2": "Schritt 2: Teilzeit",
-      "label2_easy": "Schritt 2: Teilzeit",
-      "plus": "+{n} Monate",
-      "plus_easy": "+{n} Monate",
-      "none": "Keine Verlängerung",
-      "none_easy": "Keine Verlängerung"
-    },
-    "placeholders": {
-      "months": "–",
-      "months_easy": "–",
-      "extension": "–",
-      "extension_easy": "–"
+      "label2_easy": "Schritt 2: Teilzeit"
     }
-  },
-  "cuts": {
-    "title": "Gründe für Verkürzung",
-    "title_easy": "Gründe für Verkürzung",
-    "total": "Gesamt",
-    "total_easy": "Gesamt",
-    "newBase": "Neue Grundlage",
-    "newBase_easy": "Neue Grundlage",
-    "sumAll": "Summe aller Verkürzungen",
-    "sumAll_easy": "Summe aller Verkürzungen"
   },
   "units": {
     "hours": {
