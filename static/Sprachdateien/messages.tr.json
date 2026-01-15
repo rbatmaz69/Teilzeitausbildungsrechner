@@ -220,6 +220,8 @@
     }
   },
   "pdf": {
+    "filename": "Sonuc_Yarı-zamanlı-egitim_{date}.pdf",
+    "filename_easy": "Sonuc_Yarı-zamanlı-egitim_{date}.pdf",
     "headline": "Hesabınızın özeti",
     "headline_easy": "Hesabınızın özeti"
   },

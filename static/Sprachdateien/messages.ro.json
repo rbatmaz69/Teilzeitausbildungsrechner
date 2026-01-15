@@ -220,6 +220,8 @@
     }
   },
   "pdf": {
+    "filename": "Rezultat_Formare-timp-parțial_{date}.pdf",
+    "filename_easy": "Rezultat_Formare-timp-parțial_{date}.pdf",
     "headline": "Prezentare generală a calculului",
     "headline_easy": "Prezentare generală a calculului"
   },

@@ -220,6 +220,8 @@
     }
   },
   "pdf": {
+    "filename": "Wynik_Ksztalcenie-czesc-etatu_{date}.pdf",
+    "filename_easy": "Wynik_Ksztalcenie-czesc-etatu_{date}.pdf",
     "headline": "Przegląd Twojego obliczenia",
     "headline_easy": "Przegląd Twojego obliczenia"
   },

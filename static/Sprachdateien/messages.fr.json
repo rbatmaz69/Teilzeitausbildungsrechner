@@ -220,6 +220,8 @@
     }
   },
   "pdf": {
+    "filename": "Résultat_Formation-temps-partiel_{date}.pdf",
+    "filename_easy": "Résultat_Formation-temps-partiel_{date}.pdf",
     "headline": "Aperçu de votre calcul",
     "headline_easy": "Aperçu de votre calcul"
   },

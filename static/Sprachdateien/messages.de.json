@@ -224,6 +224,8 @@
     }
   },
   "pdf": {
+    "filename": "Ergebnis_Teilzeitausbildung_{date}.pdf",
+    "filename_easy": "Ergebnis_Teilzeitausbildung_{date}.pdf",
     "headline": "Übersicht über Ihre Berechnung",
     "headline_easy": "Übersicht über Ihre Berechnung"
   },

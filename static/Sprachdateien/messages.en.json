@@ -224,6 +224,8 @@
     }
   },
   "pdf": {
+    "filename": "Result_Part-time-training_{date}.pdf",
+    "filename_easy": "Result_Part-time-training_{date}.pdf",
     "headline": "Overview of your calculation",
     "headline_easy": "Overview of your calculation"
   },

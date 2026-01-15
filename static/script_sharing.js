@@ -332,7 +332,8 @@ async function generierePDF() {
 
     // Speichere PDF
     const timestamp = new Date().toISOString().split('T')[0];
-    const fileName = `Teilzeitausbildung_${timestamp}.pdf`;
+    let fileName = uebersetzung('pdf.filename', 'Ergebnis_Teilzeitausbildung_{date}.pdf');
+    fileName = fileName.replace('{date}', timestamp);
     pdf.save(fileName);
 
     // Erfolgs-Feedback
