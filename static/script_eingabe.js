@@ -209,10 +209,21 @@ document.addEventListener("DOMContentLoaded", () => {
       const gespeichert = localStorage.getItem(STORAGE_KEY);
       if (gespeichert) {
         const werte = JSON.parse(gespeichert);
+        
+        // Lade alle Eingabe-Felder mit Validierung
         if (werte.dauer) dauerEingabe.value = werte.dauer;
         if (werte.stunden) wochenstundenEingabe.value = werte.stunden;
         if (werte.teilzeitProzent) teilzeitProzentEingabe.value = werte.teilzeitProzent;
         if (werte.teilzeitStunden) teilzeitStundenEingabe.value = werte.teilzeitStunden;
+        
+        // Lade Alter und berufliche Q2-Dauer (werden in script_Verkuerzungsgruende_Auswaehlen.js geladen)
+        if (werte.alter !== undefined && werte.alter !== null) {
+          localStorage.setItem('vk_alter', werte.alter);
+        }
+        if (werte.berufQ2Dauer !== undefined && werte.berufQ2Dauer !== null) {
+          localStorage.setItem('vk_beruf_q2_dauer', werte.berufQ2Dauer);
+        }
+        
         // Trigger Validierung für alle Felder nach Laden
         dauerEingabe.dispatchEvent(new Event('blur'));
         wochenstundenEingabe.dispatchEvent(new Event('blur'));
@@ -227,11 +238,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // Speichere Werte bei jeder Änderung
   const speichereWerte = () => {
     try {
+      const alterField = document.getElementById('alter');
+      const berufQ2DauerField = document.getElementById('vk_beruf_q2_dauer_months');
+      
       const werte = {
         dauer: dauerEingabe.value,
         stunden: wochenstundenEingabe.value,
         teilzeitProzent: teilzeitProzentEingabe.value,
-        teilzeitStunden: teilzeitStundenEingabe.value
+        teilzeitStunden: teilzeitStundenEingabe.value,
+        alter: alterField ? alterField.value : '',
+        berufQ2Dauer: berufQ2DauerField ? berufQ2DauerField.value : ''
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(werte));
     } catch (fehler) {
@@ -658,6 +674,7 @@ document.addEventListener("DOMContentLoaded", () => {
     pruefeMindestUndMaximalProzent();
     synchronisiereStunden();
     synchronisiereButtonMarkierung();
+    speichereWerte();
   })
   
   // Wird ausgeführt, nachdem ein neuer Teilzeit-wochenstundenwert eingegeben wurde (Echtzeit bei Pfeilen)
@@ -1381,6 +1398,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (berechnenBtn) {
     berechnenBtn.addEventListener('click', () => {
       speichereWerte();
+      // Speichere auch Verkürzungsgründe, wenn die Funktion verfügbar ist
+      if (typeof window.speichereVerkuerzungsgruende === 'function') {
+        window.speichereVerkuerzungsgruende();
+      }
       // Trigger Validierung für alle Felder
       dauerEingabe.dispatchEvent(new Event('blur'));
       wochenstundenEingabe.dispatchEvent(new Event('blur'));
