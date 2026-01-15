@@ -182,17 +182,7 @@
     },
     "vork": {
       "label": "Professional experience",
-      "label_easy": "Work experience",
-      "label1": "Completed vocational training",
-      "label1_easy": "Completed vocational training",
-      "label2": "Proof of relevant basic vocational training",
-      "label2_easy": "Proof of relevant basic training",
-      "label3": "Relevant professional activity",
-      "label3_easy": "Relevant work",
-      "label4": "Work experience in the occupational field",
-      "label4_easy": "Work experience in the field",
-      "sr": "Professional experience can shorten your training duration.",
-      "sr_easy": "Work experience can make training shorter."
+      "label_easy": "Work experience"
     },
     "other": {
       "question": "How old are you at the time of training?",
@@ -300,28 +290,8 @@
       "label1": "Step 1: Shortening",
       "label1_easy": "Step 1: Shortening",
       "label2": "Step 2: Part-time",
-      "label2_easy": "Step 2: Part-time",
-      "plus": "+{n} months",
-      "plus_easy": "+{n} months",
-      "none": "No extension",
-      "none_easy": "No extension"
-    },
-    "placeholders": {
-      "months": "–",
-      "months_easy": "–",
-      "extension": "–",
-      "extension_easy": "–"
+      "label2_easy": "Step 2: Part-time"
     }
-  },
-  "cuts": {
-    "title": "Reasons for shortening",
-    "title_easy": "Shorter training",
-    "total": "Total",
-    "total_easy": "Total",
-    "newBase": "New base",
-    "newBase_easy": "New base",
-    "sumAll": "Sum of all shortenings",
-    "sumAll_easy": "Sum of all"
   },
   "units": {
     "hours": {

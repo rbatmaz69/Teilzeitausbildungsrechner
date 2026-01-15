@@ -178,17 +178,7 @@
     },
     "vork": {
       "label": "Mesleki deneyim",
-      "label_easy": "İş deneyimi",
-      "label1": "Tamamlanmış mesleki eğitim",
-      "label1_easy": "Tamamlanmış mesleki eğitim",
-      "label2": "İlgili temel mesleki eğitim kanıtı",
-      "label2_easy": "Uygun temel eğitim kanıtı",
-      "label3": "İlgili mesleki çalışma",
-      "label3_easy": "Uygun iş deneyimi",
-      "label4": "Mesleki alanda iş deneyimi",
-      "label4_easy": "Meslek alanında iş deneyimi",
-      "sr": "Mesleki ön bilgi eğitim sürenizi kısaltabilir.",
-      "sr_easy": "İş deneyimi eğitimi kısaltabilir."
+      "label_easy": "İş deneyimi"
     },
     "other": {
       "question": "Eğitim sırasında kaç yaşındasınız?",
@@ -296,28 +286,8 @@
       "label1": "Adım 1: Kısaltma",
       "label1_easy": "Adım 1: Kısaltma",
       "label2": "Adım 2: Yarı zamanlı",
-      "label2_easy": "Adım 2: Yarı zamanlı",
-      "plus": "+{n} ay",
-      "plus_easy": "+{n} ay",
-      "none": "Uzatma yok",
-      "none_easy": "Uzatma yok"
-    },
-    "placeholders": {
-      "months": "–",
-      "months_easy": "–",
-      "extension": "–",
-      "extension_easy": "–"
+      "label2_easy": "Adım 2: Yarı zamanlı"
     }
-  },
-  "cuts": {
-    "title": "Kısaltma sebepleri",
-    "title_easy": "Daha kısa eğitim",
-    "total": "Toplam",
-    "total_easy": "Toplam",
-    "newBase": "Yeni temel",
-    "newBase_easy": "Yeni temel",
-    "sumAll": "Tüm kısaltmaların toplamı",
-    "sumAll_easy": "Toplam"
   },
   "units": {
     "hours": {

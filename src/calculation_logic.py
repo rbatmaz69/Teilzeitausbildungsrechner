@@ -369,10 +369,10 @@ def berechne_gesamtdauer(
     # Zusätzliche Validierung je nach eingabetyp
     if eingabetyp == "prozent":
         # Gemäß § 7a Abs. 1 Satz 3 BBiG: Mindestens 50% der Vollzeit
-        if teilzeit_eingabe < 50 or teilzeit_eingabe > 100:
+        if teilzeit_eingabe < MIN_TEILZEIT_PROZENT or teilzeit_eingabe > 100:
             raise ValueError(
-                "Teilzeit-Anteil muss zwischen 50% und 100% liegen "
-                "(§ 7a Abs. 1 Satz 3 BBiG)"
+                f"Teilzeit-Anteil muss zwischen {MIN_TEILZEIT_PROZENT}% "
+                f"und 100% liegen (§ 7a Abs. 1 Satz 3 BBiG)"
             )
     elif eingabetyp == "stunden":
         # Mindestens die Hälfte der Vollzeit-Stunden, maximal Vollzeit

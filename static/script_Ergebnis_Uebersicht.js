@@ -1,3 +1,4 @@
+/* global uebersetzung, aktuelleSprache */
 /* script_Ergebnis_Übersicht.js – i18n-fähige Ergebnislogik */
 
 // Kurz-Helfer
@@ -23,13 +24,6 @@ function setzeErgebnisBegleitUIVisible(visible) {
   if (btnShare) btnShare.hidden = !visible;
 }
 
-// i18n Helfer (nutzt die globale API aus script_Sprache_Auswaehlen.js)
-function uebersetzung(schluessel, fallback) {
-  if (window.I18N && typeof window.I18N.t === "function") {
-    return window.I18N.t(schluessel, fallback);
-  }
-  return fallback ?? schluessel;
-}
 
 // Formatiert Zahl + Einheit als HTML, setzt Richtung so dass in RTL die Einheit rechts steht.
 function formatValueUnitHtml(value, unitKey) {
@@ -42,10 +36,6 @@ function formatValueUnitHtml(value, unitKey) {
   // Use a normal space (not &nbsp;) so the browser can break the line between number and unit if needed
   // when the unit would overflow the container (helps on mobile with large text sizes).
   return `<span class="i18n-value-unit" dir="ltr">${numHtml} ${unitHtml}</span>`;
-}
-
-function aktuelleSprache() {
-  return (window.I18N && window.I18N.lang) || "de";
 }
 
 // Locale-aware Zahl parser: akzeptiert deutsches Komma und (optional) Tausenderpunkte.
@@ -1350,12 +1340,26 @@ function setzeDatenZurueck() {
     console.warn("Konnte calculatorState nicht löschen:", fehler);
   }
   
-  // Alles andere löschen (außer Sprache)
+  // Alles andere löschen (außer Sprache und Barrierefreiheit-Einstellungen)
   try {
     const gespeicherteSprache = localStorage.getItem(SPRACH_SCHLUESSEL);
+    const gespeichertesTheme = localStorage.getItem('theme');
+    const gespeicherteLeichteSprache = localStorage.getItem('easyLanguage');
+    const gespeichertesFontSizeLevel = localStorage.getItem('fontSizeLevel');
+
     localStorage.clear();
+
     if (gespeicherteSprache) {
       localStorage.setItem(SPRACH_SCHLUESSEL, gespeicherteSprache);
+    }
+    if (gespeichertesTheme) {
+      localStorage.setItem('theme', gespeichertesTheme);
+    }
+    if (gespeicherteLeichteSprache) {
+      localStorage.setItem('easyLanguage', gespeicherteLeichteSprache);
+    }
+    if (gespeichertesFontSizeLevel) {
+      localStorage.setItem('fontSizeLevel', gespeichertesFontSizeLevel);
     }
   } catch (fehler) {
     console.warn("Konnte localStorage nicht löschen:", fehler);
