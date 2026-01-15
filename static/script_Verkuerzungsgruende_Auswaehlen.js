@@ -71,8 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (werte.berufQ3Ja && berufQ3Ja) berufQ3Ja.checked = true;
         if (werte.berufQ3Nein && berufQ3Nein) berufQ3Nein.checked = true;
 
-        if (werte.berufQ6Ja && berufQ6Ja) berufQ6Ja.checked = true;
-        if (werte.berufQ6Nein && berufQ6Nein) berufQ6Nein.checked = true;
+        if (werte.berufQ4Ja && berufQ4Ja) berufQ4Ja.checked = true;
+        if (werte.berufQ4Nein && berufQ4Nein) berufQ4Nein.checked = true;
       }
     } catch (fehler) {
       console.error('Fehler beim Laden der Verkürzungsgründe:', fehler);
@@ -98,8 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
         berufQ2Duration: berufQ2Duration ? berufQ2Duration.value : '',
         berufQ3Ja: berufQ3Ja ? berufQ3Ja.checked : false,
         berufQ3Nein: berufQ3Nein ? berufQ3Nein.checked : false,
-        berufQ6Ja: berufQ6Ja ? berufQ6Ja.checked : false,
-        berufQ6Nein: berufQ6Nein ? berufQ6Nein.checked : false
+        berufQ4Ja: berufQ4Ja ? berufQ4Ja.checked : false,
+        berufQ4Nein: berufQ4Nein ? berufQ4Nein.checked : false
       };
       localStorage.setItem(STORAGE_KEY_VK, JSON.stringify(werte));
     } catch (fehler) {
